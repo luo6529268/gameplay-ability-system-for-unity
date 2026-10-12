@@ -54,10 +54,11 @@ namespace NTSD.Test.Editor
         private const string CandidateOutput = "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010";
         private const BindingFlags HiddenInstance = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public;
 
-        private static void SaveCandidate(string name, object value)
+        private static void SaveCandidate(string name, object value, string evidenceDirectory = null)
         {
-            Directory.CreateDirectory(CandidateOutput);
-            using var stream = new FileStream(Path.Combine(CandidateOutput, name), FileMode.CreateNew, FileAccess.Write);
+            string directory = evidenceDirectory ?? CandidateOutput;
+            Directory.CreateDirectory(directory);
+            using var stream = new FileStream(Path.Combine(directory, name), FileMode.CreateNew, FileAccess.Write);
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(value, Formatting.Indented));
             stream.Write(bytes, 0, bytes.Length);
         }
@@ -418,7 +419,7 @@ namespace NTSD.Test.Editor
         }
 
 
-        internal static Color32[] VerifySharedPublicationDraw(BattleSpriteCatalog catalog, string label)
+        internal static Color32[] VerifySharedPublicationDraw(BattleSpriteCatalog catalog, string label, string evidenceDirectory = null)
         {
             const int size = 96;
             Type oracle = typeof(BattleCentralSameSamplePixelEditorTests);
@@ -518,7 +519,7 @@ namespace NTSD.Test.Editor
                 Assert.That(backend.SegmentCount, Is.Zero);
                 SaveCandidate("overlap-" + label + ".json", new { status = "ACTUAL_DRAW_ORACLE_PASS", mode,
                     comparedPixels = actual.Length, contentPixels = content, reversedDifferentPixels = differences,
-                    exactPixels = true, publicationUnchanged = true, unresolvedSegments = backend.SegmentCount });
+                    exactPixels = true, publicationUnchanged = true, unresolvedSegments = backend.SegmentCount }, evidenceDirectory);
                 return actual;
             }
             finally

@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "C:\\Users\\Logan\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.EXE",
+    "-NoProfile",
+    "-NonInteractive",
+    "-File",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\Validate-ChangeLedger.ps1",
+    "-RepositoryRoot",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity"
+  ],
+  "exit_code": 0,
+  "bytes": 806233,
+  "summary": [
+    "Change ledger validation PASSED."
+  ],
+  "warning_lines": 4433
+}

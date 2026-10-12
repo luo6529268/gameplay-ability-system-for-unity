@@ -1,0 +1,98 @@
+[
+  {
+    "path": "ProjectSettings/EditorSettings.asset",
+    "bytes": 1502,
+    "sha256": "6f8761b516f06ff2f0373b6310571cf7951f63afb86c56bfd7be832e06a9987b",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/before/ProjectSettings/EditorSettings.asset"
+  },
+  {
+    "path": "ProjectSettings/ProjectSettings.asset",
+    "bytes": 24229,
+    "sha256": "25475e98ddf5ae903c1ce4685353715f843d004485d088e0bed33bea98792338",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/before/ProjectSettings/ProjectSettings.asset"
+  },
+  {
+    "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "bytes": 1675675,
+    "sha256": "ef00ab3ee876bb00e17618e0a37261d5c683460f30a21449e5d31e5ad8780112",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/before/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+  },
+  {
+    "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+    "bytes": 382775,
+    "sha256": "e7f4dda6ed3207076c0153a97fb66eabafd59463b81226090da51e06844e9272",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/before/Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md"
+  },
+  {
+    "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+    "bytes": 109282,
+    "sha256": "253b2ebad322aa6ec18488dfbbf555bb93ad897940a342e4130e77ce778f9010",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/before/Assets/NTSD/Scene/NTSD_Battle.unity"
+  },
+  {
+    "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "bytes": 652229,
+    "sha256": "f2ee25d075548b78380be817209152047b919c4c15da8743d75d2e0c165cbea1",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/before/Assets/NTSD/Scene/NTSD_Menu.unity"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+    "bytes": 230552,
+    "sha256": "936e8b499695594af5ddca652c82fdc0a073bf7b67d02ab6c79b1aafe66cdf8b",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/before/Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Runtime/BattleAtlasResources.cs",
+    "bytes": 32034,
+    "sha256": "c446bc6c74cb7b89b0c675465888914828812b3ce00a08e81cd421a0dabd92dc",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/before/Assets/NTSD/Scripts/Animation/Runtime/BattleAtlasResources.cs"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Runtime/BMPLoader.cs",
+    "bytes": 30413,
+    "sha256": "7c305c02f52a50acd109a1c3aea045e70dab5985b2345eba8dde6a7e8e86ab60",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/before/Assets/NTSD/Scripts/Animation/Runtime/BMPLoader.cs"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs",
+    "bytes": 135746,
+    "sha256": "d408f359324adedea3304ffc0b3c4b378f548872a27220cf133fb04336098bfa",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/before/Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs"
+  },
+  {
+    "path": "docs/ai/CHANGE-LEDGER.md",
+    "bytes": 803947,
+    "sha256": "270129002b9c38d01046a907f0c495aaf8ee495eb6fc0bfa4304f6d02c2e92b4",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/before/docs/ai/CHANGE-LEDGER.md"
+  },
+  {
+    "path": "docs/ai/CURRENT-AUTHORITY.md",
+    "bytes": 455457,
+    "sha256": "fa737b7f4f1a0fa627c77029a732312b547bbe22c00cb821e89f26df075a630f",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/before/docs/ai/CURRENT-AUTHORITY.md"
+  },
+  {
+    "path": "docs/ai/STATE.md",
+    "bytes": 1736830,
+    "sha256": "fadce678d6abf8baca72701dfa7e0d8d3a22338122d0531e61270b0e2a353ceb",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/before/docs/ai/STATE.md"
+  },
+  {
+    "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "bytes": 167230,
+    "sha256": "ec7ef24e39e2179c3cda3a1b439a91cccda7fd49d4e473f80b579141ac51d09a",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/before/docs/ai/FILE-OPERATIONS/INDEX.md"
+  },
+  {
+    "path": "Library/ScriptAssemblies/Assembly-CSharp-Editor.dll",
+    "bytes": 8019968,
+    "sha256": "200960e921955c0a93055590edee98065ed1f20193cf0c42566f3e1679581b12",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/before/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll"
+  },
+  {
+    "path": "Library/ScriptAssemblies/Assembly-CSharp.dll",
+    "bytes": 4327936,
+    "sha256": "a8874f8784d60efa30d627f61e4140a89ecc9466c6a80115024eae4e2c8cbb8b",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/before/Library/ScriptAssemblies/Assembly-CSharp.dll"
+  }
+]

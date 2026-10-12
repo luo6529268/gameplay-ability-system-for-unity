@@ -1,0 +1,16 @@
+{
+  "operation": "OP-NTSD-M12-IMPLEMENTATION-20261011",
+  "reason": "Finalize only newly introduced callback indentation and make waiter observation count a real third decode if erroneously granted",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/App/AppManager.cs",
+      "sha256": "0056f91c06990ca20ee6f7574653c4b04426c6049fb0191284b047a98fb2fc7e",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\focused-01\\backups\\revision-01-0.before.bin"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs",
+      "sha256": "2930f54b74a21b289d946de8e26ca9d7403869157403888f69390f9cf75b1908",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\focused-01\\backups\\revision-01-1.before.bin"
+    }
+  ]
+}

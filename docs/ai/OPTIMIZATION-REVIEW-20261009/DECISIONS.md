@@ -1,3 +1,7 @@
+> **2026-10-11 用户方向更正：Android 手机优先。** 后续先以手机的 CPU、内存与加载峰值约束共用实现，PC再提高表现规格；Android验收后置不等于设计标准后置。M-12先补手机预算建议和实际必要性，具体档位/数值未冻结。本次仅文档；H10保持CLOSED、已取消Player路线与其它hold不恢复。
+
+[Android-first decision](../DECISIONS/NTSD-ANDROID-FIRST-OPTIMIZATION-BASELINE-20261011.md)
+
 ## 2026-10-10 最新阶段与排程（NTSD-OPTIMIZATION-CURRENT-STAGE-PRIORITIES-20261010）
 
 2026-10-10 用户更正：Android真机/GPU认证、IL2CPP/ARM64属于后期；AB部署、Android构建和正式发布随平台交付后置。当前按战斗CPU、CPU侧渲染工作和驻留内存问题排序。原34项ID及历史12高/14中/8低保留，原风险重要性不再冒充当前执行顺序。

@@ -367,6 +367,20 @@ Simulation 层不得反向依赖 `BattleBootstrap`。正常编排 owner 应是 A
 
 ## 16. `Stopped` 与 Unity Destroy gate
 
+### M12 图片预热在原十一阶段中的映射（2026-10-11 限定扩域）
+
+用户已明确批准 `NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001` 增加 Driver 关闭/重建保护和 App 正常异步关闭接线。这里补充图片任务的映射，不改变原阶段顺序；实施与测试状态见该 Change Record。
+
+- 阶段1：捕获本次 CharacterAnimtorManager owner，取消 configured/native 世代，停止单 producer 的字节准入并唤醒唯一等待者；取消不等于线程已结束。
+- 阶段2：原 dedicated simulation worker Stop/Join 后，还必须等待这个 owner 已启动的 source qualification、body decode/prepare/upload、UI/common 图片任务实际返回并完成主线程 continuation。body 任务的调度异常仍须等待全部已启动任务；不得以第一个 fault 或计数清零伪造 drain。等待不依赖阶段5、地图清理或 Stopped，主线程不作阻塞 Join。
+- 阶段5：只有阶段2完成才执行原 staging/publication/central 清理。取消 operation 的自有 finally 回收仍幂等；其提前释放不能代替阶段2证据。
+
+pending 使用 AlreadyStopping：World、factory、pool、publication 保持，Unbind/Recreate/地图完成不得视为成功；重复请求共享本次等待，不重置诊断。正常异步等待超过30秒或失败保持 Stopping 并保留首次失败；迟到完成不得清除失败。正常 App 显式异步入口等待同一 Driver/Scene owner 后才能清 map 和卸载；原 UnloadBattle():AsyncOperation 未启动卸载时仍返回 null。返回选角的 bool 在需要 drain 时表示接受关闭请求，菜单更新只在实际卸载完成后执行。
+
+新增状态仅由 manager 当前 operation / Driver 本次关闭 / App 单一关闭请求拥有。字节门 waiter 容量1，leases 的数量由有限声明和字节额度共同约束，不能误写成最多6；retained atlas arrays 不占可归还额度。候选开关默认OFF，诊断 hook 默认null且由fixture恢复，不接入tick。operation结束归还全部lease，失效世代不允许物化/发布；Driver/App只保留本次请求句柄，不建立跨manager缓存。
+
+Editor ExitingPlayMode 和 OS 强退的同步 fallback 只维持取消/无晚发布，不具备正常异步 drain 完成保证。本项不修改 Editor bridge、不阻塞退出、不宣称 forced teardown 已通过新的关闭门。
+
 只有所有 hard gate 通过后才能写入 `Stopped`。随后才允许正常流程调用：
 
 - `SceneManager.UnloadSceneAsync`；

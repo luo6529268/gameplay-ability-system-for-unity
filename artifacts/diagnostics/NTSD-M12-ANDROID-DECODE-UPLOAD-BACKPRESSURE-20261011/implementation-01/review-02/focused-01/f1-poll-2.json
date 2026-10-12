@@ -1,0 +1,51 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "0f34276876e6494bb59a114811828a38",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791715311682,
+      "finished_unix_ms": 1791715317769,
+      "last_update_unix_ms": 1791715317769,
+      "progress": {
+        "completed": 1,
+        "total": 10735,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791715316961,
+        "last_finished_test_full_name": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.R02_AdmissionStopPrecedesFailureReturn",
+        "last_finished_unix_ms": 1791715317090,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.597652,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "R02_AdmissionStopPrecedesFailureReturn",
+            "fullName": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.R02_AdmissionStopPrecedesFailureReturn",
+            "state": "Passed",
+            "durationSeconds": 0.1255268,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

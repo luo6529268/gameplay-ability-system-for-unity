@@ -1,0 +1,32 @@
+{
+  "operation": "OP-NTSD-M12-IMPLEMENTATION-20261011",
+  "time": "2026-10-11T17:35:34.918739+08:00",
+  "purpose": "Original Editor authorized script import/compile and finite tests; generated assemblies may be overwritten; no second Editor, scene save or old diagnostic data cleanup",
+  "files": [
+    {
+      "path": "Library\\ScriptAssemblies\\Assembly-CSharp.dll",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\backups\\compile01-Assembly-CSharp.dll.before.bin",
+      "sha256": "2a8884669c54bebdb5747e7808778912d5aa5a0bf41cbedd271141027003ab69"
+    },
+    {
+      "path": "Library\\ScriptAssemblies\\Assembly-CSharp-Editor.dll",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\backups\\compile01-Assembly-CSharp-Editor.dll.before.bin",
+      "sha256": "1ac32f7bad57dcc6a28a8a6dc552f28b12c6bdb42fa9d07ab5fcd236f6d5f9c3"
+    },
+    {
+      "path": "Library\\ScriptAssemblies\\Assembly-CSharp.pdb",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\backups\\compile01-Assembly-CSharp.pdb.before.bin",
+      "sha256": "b40188b18b7a9587cda0d84e97671b93c43f907a891cc1c30fb214a48ca63ad4"
+    },
+    {
+      "path": "Library\\ScriptAssemblies\\Assembly-CSharp-Editor.pdb",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\backups\\compile01-Assembly-CSharp-Editor.pdb.before.bin",
+      "sha256": "24d31f0f79902f1b1addf75942ed328d13a43db4fb786b119da84860b40b6340"
+    },
+    {
+      "path": "Temp\\Goal18_LastTestResults.xml",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\backups\\compile01-Goal18_LastTestResults.xml.before.bin",
+      "sha256": "283efb2929c7b42a475b8de32475d9f8b05ae683a5ed6e7acee92f9c17582a50"
+    }
+  ]
+}

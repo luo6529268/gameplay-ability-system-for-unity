@@ -1,3 +1,18 @@
+> **2026-10-11 用户方向更正：Android 手机优先。** 后续先以手机的 CPU、内存与加载峰值约束共用实现，PC再提高表现规格；Android验收后置不等于设计标准后置。M-12先补手机预算建议和实际必要性，具体档位/数值未冻结。本次仅文档；H10保持CLOSED、已取消Player路线与其它hold不恢复。
+
+[Android-first decision](DECISIONS/NTSD-ANDROID-FIRST-OPTIMIZATION-BASELINE-20261011.md)
+
+> **2026-10-11 H10 CLOSED：按用户决定结束当前优化范围。** 用户取消新增Windows Player出包验收路线，未实施Task NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011与Change NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001均ABANDONED；原因是范围取消，不是运行失败。第四processor待批事项撤销，三个新脚本/两个meta不创建，兼容提案不实施。PCM有界/逐局formal owned、同输入320MiB对象门及resume03隔离Editor三轮音频门按原scope保留；Player、整进程2/3GiB、目标8GB型号、完整千人预算、人工听感仍未验证，但不再是本次H10 active待办或结项前置。旧compat13/14、成本尖峰、失败/事件不追溯改PASS。决定：docs/ai/DECISIONS/NTSD-H10-USER-SCOPE-CLOSEOUT-20261011.md；结项：artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/closeout-user-scope-01/REPORT.md。当前H10已结束，下一无自动启动项；H08/H07/M03/producer/H06等hold、33ms/十一阶段及全部原边界保持。下方旧OPEN/等待第四域/继续出包和旧统计只保留为被本决定替代的历史。
+
+# 2026-10-11 H10用户范围结项决定
+
+[NTSD-H10-USER-SCOPE-CLOSEOUT-20261011](DECISIONS/NTSD-H10-USER-SCOPE-CLOSEOUT-20261011.md) — ADOPTED：H10当前优化CLOSED；未实施Player包ABANDONED，第四processor待批撤销。用户取消新增出包门，未测项不改VERIFIED。下方旧决定保留历史。
+
+> **2026-10-11 H10：PC_TARGETS_ADOPTED；本轮 RUNTIME_CALIBRATION_FAILED，父项继续 OPEN。** 人类已批准暂定PC基础/推荐候选及AudioClip≤320MiB、游戏进程Private稳态≤2GiB/过渡采样峰≤3GiB，尚未认证硬件。Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 BLOCKED（本轮测量夹具）。1682项当前输入指纹匹配，旧228,918,567B对象账本可复用通过320MiB对象门；非整进程证书。原Editor编译通过、窄资格1/1 PASS；唯一Play组0/1 FAIL：byte[97]分配正控计数为0，正式热样本前停止，未重跑。第一轮22个owned clip准备后，失败清理公开关闭stage10/空地图完成stage11、drain/下一帧释放与精确generic016清理通过，Menu clean8恢复。三轮/热0GC/实际播放/取消等门未完成；不覆盖旧13/14、Menu UNKNOWN或既有事件。下一仅同H10测量夹具修正独立审阅及剩余Play门，Player仅已有只读方案，不自动build/改Settings。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/REPORT.md；预算决定 docs/ai/DECISIONS/NTSD-PC-TEMP-ENGINEERING-TARGETS-20261011.md。下方UNDECIDED等为历史时点；无H07/Android通过，无Goal/34队列恢复。
+
+
+> 2026-10-11 **PC_TARGETS_ADOPTED / H10 runtime acceptance IN_PROGRESS.** Human approved concrete provisional PC tiers and AudioClip<=320MiB / game-process private steady<=2GiB / transition sampled peak<=3GiB; not certified hardware. Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 PLANNED. Exact single diagnostic script; original production/old evidence retained. Decision: docs/ai/DECISIONS/NTSD-PC-TEMP-ENGINEERING-TARGETS-20261011.md. Old budget UNDECIDED below is historical, not current blocker. Three-session Play and process gates not yet verified; H10 parent OPEN, no H07/Android/Goal/queue.
+
 # NTSD 长期项目决策记录
 
 > 当前战斗规则版本决定：2026-09-30 的 [D-026](#d-026--336b44-正式发行晋升与战斗对齐重新基线) 已取代 D-021 的 B1E13 权威身份；D-023/D-024/D-025 的内容和用户例外继续有效。
@@ -363,3 +378,8 @@
 
 ## USER-ORIGINAL-COMMON-FIX-20261006
 User confirmed: using NTSD.exe to verify; Logan is restoration and should exhibit same behavior; fix Unity faults and inspect common impact to other roles. Scoped acceptance now original5EDA shared sound retrigger and hitclone skill consumption. No global source authority switch or candidate promotion; existing DAT/visual/background/nonbattle boundaries retained. PreviousREFERENCE_VERSION_PENDING resolved. User statement is expectation, not proof all two binaries equivalent. Fresh observed differences preserved.
+
+
+## 2026-10-11 用户范围结项（当前终态）
+
+H10 CLOSED；未实施Player路线ABANDONED。用户取消新增出包验收条件，第四processor待批事项撤销，不再等答复或完整实施派发。三个新脚本/两个meta不创建，全部preflight/proposal/FAIL保留。已实施PCM/逐局formal owned、320MiB同输入对象门/resume03限定音频门按原scope保留；Player/2与3GiB进程/8GB型号/完整千人/人工听感仍未验证，不列本次active后继。旧compat13/14/成本尖峰/失败不改PASS。决定见docs/ai/DECISIONS/NTSD-H10-USER-SCOPE-CLOSEOUT-20261011.md，报告见既有Player输出根closeout-user-scope-01/REPORT.md。仅治理检查，无源码/资源/Settings/Unity/编译/测试/测量/build/Player/sampler；无下一项/Goal，其他hold与所有原边界不变。此前PLANNED/OPEN/等待第四域/继续出包仅为被本决定替代的历史，不再授执行权限。

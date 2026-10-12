@@ -1,0 +1,29 @@
+## NTSD_2.8_C++...origin/NTSD_2.8_C++ [ahead 5]
+ M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+ M Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md
+ M Assets/NTSD/Docs/battle-optimization-progress-tracker.md
+ M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md
+ M Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs
+ M docs/ai/CHANGE-LEDGER.md
+ M docs/ai/CURRENT-AUTHORITY.md
+ M docs/ai/DECISIONS.md
+ M docs/ai/FILE-OPERATIONS/INDEX.md
+ M docs/ai/STATE.md
+?? artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010/windows/capture/
+?? artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/windows/capture/
+?? artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH39-CPU-GC-CAPTURE-20261007/windows-01/cpu-gc-samples-recovered.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH39-CPU-GC-CAPTURE-20261007/windows-01/cpu-gc.raw
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH42-CAMERA-GC-CALLSTACK-20261007/camera-01/cpu-gc.raw
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH42-CAMERA-GC-CALLSTACK-20261007/camera-02/cpu-gc.raw
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007/camera-01/cpu-gc.raw
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007/camera-01/profiler-history-before.raw
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/cpu-gc-samples.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/cpu-gc.raw
+?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl
+?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl
+?? docs/ai/CHANGE-RECORDS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001.md
+?? docs/ai/DECISIONS/
+?? docs/ai/FILE-OPERATIONS/OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/
+?? docs/ai/FILE-OPERATIONS/OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME01-20261011/
+?? docs/ai/TASKS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011.md

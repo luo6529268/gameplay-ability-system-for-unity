@@ -1,0 +1,8 @@
+git.exe : warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the 
+next time Git touches it
+At I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Tools\Validate-ChangeLedger.ps1:127 char:14
++     $lines = & git -C $RepositoryRoot @Arguments 2>$null
++              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (warning: in the... Git touches it:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

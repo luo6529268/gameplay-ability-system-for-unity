@@ -1,0 +1,125 @@
+{
+  "entry": "public PrewarmConfiguredLoganContentAsync",
+  "productionDefaultSetterUsed": false,
+  "root": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0",
+  "SourceCacheKey": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0|83465C4D356DBFEA0A64A78CD5412D8E127C91DAD024C872B26E66E9198DCD5E|49662C71C920421DA22E688A090D7680292C56DA2E51CD757907353A0D962A91",
+  "sameOwnerCacheReentryPreservedPublication": true,
+  "fullGeometryCatalogAndPixelsEqual": true,
+  "naturalDestroyCheckedBeforeFallback": true,
+  "phases": [
+    {
+      "shared": true,
+      "sourceKey": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0|83465C4D356DBFEA0A64A78CD5412D8E127C91DAD024C872B26E66E9198DCD5E|49662C71C920421DA22E688A090D7680292C56DA2E51CD757907353A0D962A91",
+      "cacheHits": 0,
+      "operationObservations": 6,
+      "spriteIds": [
+        -1269494,
+        -1269496,
+        -1269498,
+        -1269500,
+        -1269504,
+        -1269508
+      ],
+      "sourceIds": [
+        -1269492,
+        -1269492,
+        -1269492,
+        -1269492,
+        -1269502,
+        -1269506
+      ],
+      "catalog": [
+        "(56,0)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\vfs\\c\\body.png|0,2,2,2,1,0,100,0,0.01,0,0.02,0.02,0.2,-0.01,0.02,0.01,0.02,-0.01,0,0.01,0,0,1,0.25,1,0,0.5,0.25,0.5",
+        "(56,1)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\vfs\\c\\body.png|3,2,2,2,1,0,100,0,0.01,0,0.02,0.02,0.2,-0.01,0.02,0.01,0.02,-0.01,0,0.01,0,0.375,1,0.625,1,0.375,0.5,0.625,0.5",
+        "(57,0)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\vfs\\c\\body.png|0,2,3,2,1.5,0,100,0,0.01,0,0.03,0.02,0.2,-0.015,0.02,0.015,0.02,-0.015,0,0.015,0,0,1,0.375,1,0,0.5,0.375,0.5",
+        "(57,1)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\vfs\\c\\body.png|4,2,3,2,1.5,0,100,0,0.01,0,0.03,0.02,0.2,-0.015,0.02,0.015,0.02,-0.015,0,0.015,0,0.5,1,0.875,1,0.5,0.5,0.875,0.5",
+        "(57,2)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28NativeClampCells\\A00F3661B9D40C09775F676161E8C6F2204E77F0B979B546AAA750EF8F1678C6.rgba|0,0,3,2,1.5,0,100,0,0.01,0,0.03,0.02,0.2,-0.015,0.02,0.015,0.02,-0.015,0,0.015,0,0,1,1,1,0,0,1,0",
+        "(57,3)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28NativeClampCells\\48EA61DFE2CBF560625B1C931F4D61482B2060CA3169AA1B18BC92A06B518655.rgba|0,0,3,2,1.5,0,100,0,0.01,0,0.03,0.02,0.2,-0.015,0.02,0.015,0.02,-0.015,0,0.015,0,0,1,1,1,0,0,1,0",
+        "DefaultAdmission_A",
+        "0,0,8,4,4,2,100,0,0,0,0.08,0.04,0.2,-0.04,0.02,0.04,0.02,-0.04,-0.02,0.04,-0.02,0,1,1,1,0,0,1,0",
+        "0,0,8,4,4,2,100,0,0,0,0.08,0.04,0.2,-0.04,0.02,0.04,0.02,-0.04,-0.02,0.04,-0.02,0,1,1,1,0,0,1,0",
+        "DefaultAdmission_B",
+        "0,0,8,4,4,2,100,0,0,0,0.08,0.04,0.2,-0.04,0.02,0.04,0.02,-0.04,-0.02,0.04,-0.02,0,1,1,1,0,0,1,0",
+        "0,0,8,4,4,2,100,0,0,0,0.08,0.04,0.2,-0.04,0.02,0.04,0.02,-0.04,-0.02,0.04,-0.02,0,1,1,1,0,0,1,0"
+      ],
+      "pixelSets": 16,
+      "comparedPixels": 300
+    },
+    {
+      "shared": false,
+      "sourceKey": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0|83465C4D356DBFEA0A64A78CD5412D8E127C91DAD024C872B26E66E9198DCD5E|49662C71C920421DA22E688A090D7680292C56DA2E51CD757907353A0D962A91",
+      "cacheHits": 1,
+      "operationObservations": 6,
+      "spriteIds": [
+        -1269608,
+        -1269610,
+        -1269614,
+        -1269616,
+        -1269620,
+        -1269624
+      ],
+      "sourceIds": [
+        -1269606,
+        -1269606,
+        -1269612,
+        -1269612,
+        -1269618,
+        -1269622
+      ],
+      "catalog": [
+        "(56,0)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\vfs\\c\\body.png|0,2,2,2,1,0,100,0,0.01,0,0.02,0.02,0.2,-0.01,0.02,0.01,0.02,-0.01,0,0.01,0,0,1,0.25,1,0,0.5,0.25,0.5",
+        "(56,1)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\vfs\\c\\body.png|3,2,2,2,1,0,100,0,0.01,0,0.02,0.02,0.2,-0.01,0.02,0.01,0.02,-0.01,0,0.01,0,0.375,1,0.625,1,0.375,0.5,0.625,0.5",
+        "(57,0)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\vfs\\c\\body.png|0,2,3,2,1.5,0,100,0,0.01,0,0.03,0.02,0.2,-0.015,0.02,0.015,0.02,-0.015,0,0.015,0,0,1,0.375,1,0,0.5,0.375,0.5",
+        "(57,1)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\vfs\\c\\body.png|4,2,3,2,1.5,0,100,0,0.01,0,0.03,0.02,0.2,-0.015,0.02,0.015,0.02,-0.015,0,0.015,0,0.5,1,0.875,1,0.5,0.5,0.875,0.5",
+        "(57,2)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28NativeClampCells\\A00F3661B9D40C09775F676161E8C6F2204E77F0B979B546AAA750EF8F1678C6.rgba|0,0,3,2,1.5,0,100,0,0.01,0,0.03,0.02,0.2,-0.015,0.02,0.015,0.02,-0.015,0,0.015,0,0,1,1,1,0,0,1,0",
+        "(57,3)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28NativeClampCells\\48EA61DFE2CBF560625B1C931F4D61482B2060CA3169AA1B18BC92A06B518655.rgba|0,0,3,2,1.5,0,100,0,0.01,0,0.03,0.02,0.2,-0.015,0.02,0.015,0.02,-0.015,0,0.015,0,0,1,1,1,0,0,1,0",
+        "DefaultAdmission_A",
+        "0,0,8,4,4,2,100,0,0,0,0.08,0.04,0.2,-0.04,0.02,0.04,0.02,-0.04,-0.02,0.04,-0.02,0,1,1,1,0,0,1,0",
+        "0,0,8,4,4,2,100,0,0,0,0.08,0.04,0.2,-0.04,0.02,0.04,0.02,-0.04,-0.02,0.04,-0.02,0,1,1,1,0,0,1,0",
+        "DefaultAdmission_B",
+        "0,0,8,4,4,2,100,0,0,0,0.08,0.04,0.2,-0.04,0.02,0.04,0.02,-0.04,-0.02,0.04,-0.02,0,1,1,1,0,0,1,0",
+        "0,0,8,4,4,2,100,0,0,0,0.08,0.04,0.2,-0.04,0.02,0.04,0.02,-0.04,-0.02,0.04,-0.02,0,1,1,1,0,0,1,0"
+      ],
+      "pixelSets": 16,
+      "comparedPixels": 300
+    },
+    {
+      "shared": true,
+      "sourceKey": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0|83465C4D356DBFEA0A64A78CD5412D8E127C91DAD024C872B26E66E9198DCD5E|49662C71C920421DA22E688A090D7680292C56DA2E51CD757907353A0D962A91",
+      "cacheHits": 1,
+      "operationObservations": 6,
+      "spriteIds": [
+        -1269714,
+        -1269716,
+        -1269718,
+        -1269720,
+        -1269724,
+        -1269728
+      ],
+      "sourceIds": [
+        -1269712,
+        -1269712,
+        -1269712,
+        -1269712,
+        -1269722,
+        -1269726
+      ],
+      "catalog": [
+        "(56,0)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\vfs\\c\\body.png|0,2,2,2,1,0,100,0,0.01,0,0.02,0.02,0.2,-0.01,0.02,0.01,0.02,-0.01,0,0.01,0,0,1,0.25,1,0,0.5,0.25,0.5",
+        "(56,1)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\vfs\\c\\body.png|3,2,2,2,1,0,100,0,0.01,0,0.02,0.02,0.2,-0.01,0.02,0.01,0.02,-0.01,0,0.01,0,0.375,1,0.625,1,0.375,0.5,0.625,0.5",
+        "(57,0)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\vfs\\c\\body.png|0,2,3,2,1.5,0,100,0,0.01,0,0.03,0.02,0.2,-0.015,0.02,0.015,0.02,-0.015,0,0.015,0,0,1,0.375,1,0,0.5,0.375,0.5",
+        "(57,1)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\vfs\\c\\body.png|4,2,3,2,1.5,0,100,0,0.01,0,0.03,0.02,0.2,-0.015,0.02,0.015,0.02,-0.015,0,0.015,0,0.5,1,0.875,1,0.5,0.5,0.875,0.5",
+        "(57,2)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28NativeClampCells\\A00F3661B9D40C09775F676161E8C6F2204E77F0B979B546AAA750EF8F1678C6.rgba|0,0,3,2,1.5,0,100,0,0.01,0,0.03,0.02,0.2,-0.015,0.02,0.015,0.02,-0.015,0,0.015,0,0,1,1,1,0,0,1,0",
+        "(57,3)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28NativeClampCells\\48EA61DFE2CBF560625B1C931F4D61482B2060CA3169AA1B18BC92A06B518655.rgba|0,0,3,2,1.5,0,100,0,0.01,0,0.03,0.02,0.2,-0.015,0.02,0.015,0.02,-0.015,0,0.015,0,0,1,1,1,0,0,1,0",
+        "DefaultAdmission_A",
+        "0,0,8,4,4,2,100,0,0,0,0.08,0.04,0.2,-0.04,0.02,0.04,0.02,-0.04,-0.02,0.04,-0.02,0,1,1,1,0,0,1,0",
+        "0,0,8,4,4,2,100,0,0,0,0.08,0.04,0.2,-0.04,0.02,0.04,0.02,-0.04,-0.02,0.04,-0.02,0,1,1,1,0,0,1,0",
+        "DefaultAdmission_B",
+        "0,0,8,4,4,2,100,0,0,0,0.08,0.04,0.2,-0.04,0.02,0.04,0.02,-0.04,-0.02,0.04,-0.02,0,1,1,1,0,0,1,0",
+        "0,0,8,4,4,2,100,0,0,0,0.08,0.04,0.2,-0.04,0.02,0.04,0.02,-0.04,-0.02,0.04,-0.02,0,1,1,1,0,0,1,0"
+      ],
+      "pixelSets": 16,
+      "comparedPixels": 300
+    }
+  ]
+}

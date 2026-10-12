@@ -1,0 +1,72 @@
+{
+  "startedUtc": "2026-10-11T08:19:17.368315+00:00",
+  "endedUtc": "2026-10-11T08:19:17.389832+00:00",
+  "mutations": [
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "beforeSha256": "6a178836e4851eece2b034a819d880f5e230c2837f10731b78fc0a393bd7e01d",
+      "sha256": "a132380f7651e77ec8970feb90d619aebb60791cff796209593a025b820eab0f",
+      "bytes": 434870,
+      "prefixBytes": 465,
+      "bomBytes": 0
+    },
+    {
+      "path": "docs/ai/DECISIONS.md",
+      "beforeSha256": "27e1ab988dfaffecde3704de8d058a5ee937b2982e99de43aa60570dd76bd8a9",
+      "sha256": "36d087874e53ddfa397f3d639528670dc854e5b479ae5543c929ae1749700c22",
+      "bytes": 50353,
+      "prefixBytes": 465,
+      "bomBytes": 0
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "beforeSha256": "b5bf89db5d039b8492d0e28497a0a245fac3034f1ddfd5c704add6cb300294f0",
+      "sha256": "bc0c0f935f3337e4ff92f5bc0339f0f1d723c35cc9a2bcba48de157460f64d78",
+      "bytes": 1716243,
+      "prefixBytes": 465,
+      "bomBytes": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "beforeSha256": "f9927cc480cc7dd3433b57bbb8b355395ad8bd550154976728d49dc66fd62649",
+      "sha256": "26e94d2ff37ace9d49037c9cf7d1185b46f0d84b5a77aebc4a8783af6b6a2601",
+      "bytes": 1655082,
+      "prefixBytes": 482,
+      "bomBytes": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "beforeSha256": "a99a1bf496812f1c4240886291a49220a6edb259cc781dc2d7ae04f0c0c91764",
+      "sha256": "301455182bc2719d3b67468c39e9260b2ffb813763497d31384c8fde39681966",
+      "bytes": 60510,
+      "prefixBytes": 482,
+      "bomBytes": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "beforeSha256": "efa91f0551974355cce1f4b78b06888e8f86e452cf3d8d037b3c4ab29cfc7b95",
+      "sha256": "5e84fae5cf9050bf3a72e615d5406bb7a217536e61d03e85d15ce8948350ef58",
+      "bytes": 275996,
+      "prefixBytes": 482,
+      "bomBytes": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-12-decode-upload-byte-backpressure.md",
+      "beforeSha256": "8d379551fc194dcbff1a29cd933b4a069b73ed360280df8d5fcb1d0951912ba6",
+      "sha256": "6857bd5ea3d2e6de13f9b1fc5babf9e6557fc2a24447c518a2fc78ef67e7c245",
+      "bytes": 5491,
+      "prefixBytes": 798,
+      "bomBytes": 0
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md",
+      "beforeSha256": "07ab1a21876fc98c67c784f72143f6371db913e9e5da426cdd8b651c07f7489a",
+      "sha256": "63b8ae98f169215e7274683eebebbc063a4375865c291eb6cfb19e8cafcb9652",
+      "bytes": 17517,
+      "prefixBytes": 468,
+      "bomBytes": 0
+    }
+  ],
+  "decisionSha256": "600de09b1e57357f45f90eac7d7a14ec70d9678eb56cd9b19aaddfe83cfa619c",
+  "status": "APPLIED_PENDING_DOCUMENT_VERIFICATION"
+}

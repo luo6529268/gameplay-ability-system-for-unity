@@ -1,0 +1,28 @@
+{
+  "utc": "2026-10-11T15:36:45.863572+00:00",
+  "request": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "testNames": [
+        "NTSD.Test.M12DiagnosticRepairTests.R03_UninstalledCloneAndNeverReachedWarmupRelease"
+      ],
+      "includeDetails": true,
+      "includeFailedTests": true
+    }
+  },
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "569a1ad4cec1440e8dbded873b223a53",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": true
+      }
+    }
+  }
+}

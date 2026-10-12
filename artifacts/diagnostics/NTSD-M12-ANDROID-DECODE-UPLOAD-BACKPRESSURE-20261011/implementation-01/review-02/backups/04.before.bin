@@ -1,0 +1,88 @@
+> **2026-10-11 M12有限候选验证完成：FOCUSED_TEST_PASS / DEFAULT_OFF。** Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。原Editor编译通过，11项正确性/生命周期门通过（8复用、3续跑），首次且唯一ABBA1/1：worker像素payload峰值18.125→5MiB（-72.41%），retained3.625MiB不变，耗时比1.0496（非加速）。旧Q05 CreateNew冲突ERROR保留；获批仅修H08辅助证据路径后续跑。四生产/四测试文件，字节门OFF、H08共享ON；关闭保护已接线。真实Scene卸载/重入、30秒超时、强制退出、完整内容/进程/Android未验，M12父项OPEN。下一仅同M12原件审阅及准确缺失门，不恢复其他hold/Goal。报告 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/REPORT.md。以下保留此前时点。
+
+> **2026-10-11 M12实施 IN_PROGRESS。** 用户已明确批准Driver/App两个生产文件的限定关闭扩域。Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001：先阶段1取消、阶段2实际native drain、阶段5清理与pending恢复；再原128MiB/固定E字节准入及有限验证。原十一阶段/规则保持，强制Editor退出另报边界，不改其桥接脚本。Operation OP-NTSD-M12-IMPLEMENTATION-20261011；17真实前件已备份，候选默认OFF，其他hold/旧Goal不恢复。当前尚未编译/验证，不声明PASS。
+
+> **2026-10-11 M12继续授权／实际关闭链已核清：AWAITING_EXACT_SHUTDOWN_SCOPE_DECISION。** 用户已批准原M12实施与有限验证，但要求扩大关闭域前先报告。阶段1取消非drain，阶段2只管dedicated worker，阶段5/Stopped未检查图片任务；原同步App也不会await/resume。为保留真实drain后才关闭的门，现提出仅新增Driver关闭/重建guard与App正常异步关闭接线两个生产文件，关闭合同仅补原阶段映射；尚未修改这些文件或任何生产/测试脚本。Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001仍PLANNED；[准确证据和范围](../../../../artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/shutdown-review-01/REPORT.md)。本轮Unity/编译/测试0，M12 OPEN，其他hold保持。下方preflight-only授权说明为此前阶段，不覆盖本次附条件继续授权。
+
+> **2026-10-11 M12 手机优先有限预检：PLANNED / PRE_FLIGHT_READY_FOR_REVIEW。** Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011；Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。准确方案已形成：native PNG共享/显式OFF两路解码前按字节准入，128MiB普通权重＋超大单张独占上界439799644B为待审建议，非手机内存预算。703header/长度静态核验；真实clamp哈希临时字节另计，候选>128MiB为9项。M12不能单独解决大源/全量atlas驻留。主审需核准确Driver stage1/2/5与图片任务drain区别；本轮未读Driver/Q06方法体、未改脚本、未操作Unity/编译/测试/测量。10份真实治理前件已备份；[唯一完整方案](../../../../artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/PLAN.md)。M12保持OPEN，下一为同Task独立审阅后准确派实施，不默认暂停或关闭；H10 CLOSED／Player ABANDONED及其余hold不恢复。以下保留历史时点。
+
+## 2026-10-11 当前方向：手机优先的 M-12 评审
+
+用户已明确先适配 Android 手机、降低资源消耗，再扩展 PC 表现规格。下一步先形成手机整局预算分配与加载代价建议，再冻结本项在途字节上限；不能沿用开发机核数/余量或 PC 的2/3GiB门。
+
+分别核算解码中、待上传、图集仍持有的像素，包含 Color[] 和 Color32[]；异步字节额度、最大单资源、取消/失败归还及图集等待死锁要在准确方案中闭合。队列有界不等于全量驻留峰值有界。具体手机档位和数值未定，本轮没有代码、测试、测量或平台构建；既有原文保留，H10仍结项。
+
+[Android-first decision](../../../../docs/ai/DECISIONS/NTSD-ANDROID-FIRST-OPTIMIZATION-BASELINE-20261011.md)
+
+## 2026-10-10 当前阶段更正：M-12
+
+| 当前阶段 | 当前次序 | 原风险等级 |
+|---|---|---|
+| P2／当前后续评审 | 4 | 中 |
+
+第4项：核解码到上传间的字节占用与释放，存在实际高峰后才定背压。
+
+本表覆盖下方旧评审卡的建议优先级/排程，技术证据与原验收范围保留。当前排序不证明收益、不自动授权跨域实施。[完整34项当前排程](../android-mobile-readiness-priority-risk-register.md) · [唯一进度](../battle-optimization-progress-tracker.md)。
+
+---
+
+<!-- OPTIMIZATION-REVIEW-20261009 -->
+# M-12 当前评审卡（2026-10-09）
+
+文档角色：本优化点的唯一方案；当前事实与排程以本卡和[进度](../battle-optimization-progress-tracker.md)文首为准。原正文全部保留为详细设计/验收/历史证据。评审建议不覆盖未获批准的强制门，旧“立即继续/Goal active”不授予恢复执行权限。
+
+| 字段 | 本轮整理 |
+|---|---|
+| 类别 / 建议优先级 | 内存 / 中 |
+| 当前状态 | 有限候选已实现，11项正确性/生命周期＋唯一ABBA通过；字节门默认OFF，父项OPEN，真实Scene/手机完整门待验 |
+| 依赖的最小范围 | H-01/H-08所有权接口与容量；不要求视觉整个父项先通过 |
+| 下一步与具体方向 | 区分待上传和仍被atlas持有的像素；保留UniTask，取消归还reservation |
+| 完成边界 | 队列/峰值有界、无死锁/旧session回写，不能把队列缩小当全驻留解决 |
+| 方案成熟度 | 以下为文档评审；准确写域、当前代码与受影响验证须在Task中冻结，不能仅凭此卡开始修改 |
+| 范围与回滚 | 保留本项原不变量；脚本前Task/Change，保存当前dirty字节。只回滚本项增量，任何覆盖/删除依原授权审计，不从HEAD恢复用户工作 |
+
+[跨项依赖](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md) · [共同执行与证据复用规则](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/README.md) · [待用户决策](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md)
+
+## 原方案与历史证据（原始正文保留）
+
+# M-12 解码—上传按字节背压方案
+
+> 优先级：中
+> 状态：`OPEN / SOLUTION_DOCUMENTED / IMPLEMENTATION_NOT_STARTED / WAITING_USER_APPROVAL`
+> 最后更新：2026-10-06
+> 主登记表：[优化风险登记表](../android-mobile-readiness-priority-risk-register.md)
+> 共同合同与启动门：[本轮复核](../battle-optimization-rebaseline-and-start-gates-20261006.md)
+> 本文为待批方案；下面的测试全部是未来验收条件，本轮未执行。
+
+## 当前事实
+
+[已验证-代码] `CharacterAnimtorManager.cs:2505-2514`解码结束后先释放cpuSemaphore，
+再等待uploadSemaphore，并将processed pixels加入stagedAtlasSources。
+解码并发数不等于累计完成像素字节上限；当前全量staging本身仍线性增长。
+仅减少排队任务不能宣称解决H-08的全量驻留峰值。
+
+## 待批解决方案
+
+1. 统计每个sheet的解码前预估/实际像素字节及排队、上传、已提交staging字节。
+2. 建立有界字节reservations与背压；保留已有UniTask/主线程Unity上传路线，
+   不另建资源框架，不用持锁阻塞主线程等待后台释放。
+3. 最大单资源超过批次上限时启动前明确拒绝或走获批单资源策略；
+   失败/取消/迟到回调必须归还reservation，禁止泄露令牌和旧session发布。
+4. 分别限制“待上传队列”与“因atlas构建仍必须保留”的像素；后者仅在不再被消费者
+   使用时释放。最终通过H-08预烘焙移除全量组装，不偷偷在正式预印装载链增加运行时排版。
+5. reservation/staging归TransitionPeak账本；峰值与吞吐折中由获批M0决定。
+
+## 实施前门、验收与测试
+
+依赖H-08/H-01所有权清点、用户批准容量和Task/Change；数值未测不直接设置生产默认。
+
+| 测试 | 条件 | 通过标准 |
+|---|---|---|
+| 字节背压 | 大小sheet混合、慢上传、多CPU并发 | 排队/在途字节不超批准上限，加载不死锁 |
+| 全量staging | 现有atlas路径 | 单独报告保留总量，不伪称队列有界即全峰值有界 |
+| 大资源/错误 | 上限+1、坏图、主线程上传失败 | 明确reason，无截断像素，reservation完整归还 |
+| 取消/重进 | decode/upload各阶段取消和迟到 | 无旧发布、临时数据/令牌泄漏 |
+| A/B | 相同内容/配置/指纹 | rect/UV/pixel/目录一致，加载时间与CPU/Native/GPU峰值完整 |
+
+本项只影响加载成本，不改变逻辑结果、资源闭包、segment或fail-closed。
+2026-10-06登记；本轮无实现/测量。回滚到原加载链不等于低端内存通过。

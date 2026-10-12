@@ -1,0 +1,87 @@
+{
+  "schema": "ntsd.m12.real-scene-close.interface.v1",
+  "runGuid": "64935977fe0c414d8d0b7bafcf2a6e8b",
+  "status": "PASS",
+  "utc": "2026-10-11T12:28:10.8761931Z",
+  "editorPid": 39108,
+  "project": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity",
+  "sourceSha256": "e3e9324a032a62e5e173a46ea071e5e25b406a372597d26a0f5eb8c8ed39f9ce",
+  "runtimeSha256": "a8874f8784d60efa30d627f61e4140a89ecc9466c6a80115024eae4e2c8cbb8b",
+  "editorSha256": "86b1c83cc80f46e13038f5782e759ef70cc3f4be767c347797e0b670e1dabb66",
+  "loadedType": "NTSD.Test.M12RealSceneCloseDiagnostics, Assembly-CSharp-Editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+  "loadedAssemblyLocation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Library\\ScriptAssemblies\\Assembly-CSharp-Editor.dll",
+  "profile": "Authority400",
+  "capacity": 400,
+  "maximumActive": 400,
+  "backend": "CentralOnly",
+  "configuredAi": "DataOrientedCanonical",
+  "originalRoot": "Assets/NTSD/Content/LoganRuntime",
+  "prefab": "Assets/NTSD/Prefabs/Common/EntityObject.prefab",
+  "shadow": "Assets/NTSD/Prefabs/Common/Shadow.prefab",
+  "configGuid": "513170c32731baa449d4d0e9abf8c827",
+  "scenes": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "loaded": true,
+      "active": true,
+      "dirty": false,
+      "roots": 8
+    }
+  ],
+  "protectedFiles": [
+    {
+      "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+      "sha256": "25c8e08f4d1be55ee55d0404aaf4e46d099afc6c2ba3d9040e1c5203f654d9ff"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha256": "f2ee25d075548b78380be817209152047b919c4c15da8743d75d2e0c165cbea1"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha256": "253b2ebad322aa6ec18488dfbbf555bb93ad897940a342e4130e77ce778f9010"
+    },
+    {
+      "path": "ProjectSettings/EditorSettings.asset",
+      "sha256": "6f8761b516f06ff2f0373b6310571cf7951f63afb86c56bfd7be832e06a9987b"
+    },
+    {
+      "path": "Assets/NTSD/Prefabs/Common/EntityObject.prefab",
+      "sha256": "97a58f4819532dda96c008bfe7ca7204af39feb3ddc9d7dee93bcf9ea99c00b5"
+    },
+    {
+      "path": "Assets/NTSD/Prefabs/Common/Shadow.prefab",
+      "sha256": "92e29545e9f3720cfa375b174a24fd0b52845f3a31fda02e02c67350ae370e39"
+    },
+    {
+      "path": "Assets/NTSD/Map/BattleMapCatalog.asset",
+      "sha256": "45fd94d633d81cfb58477545078c974ff052766cb2f3570fe367aa48dcf688dd"
+    },
+    {
+      "path": "Assets/NTSD/Map/SunagakureMap.asset",
+      "sha256": "f7b5e4a44cac05480d1ca6f67abf623531264c1c96725d7fdd23da50c8e60c08"
+    },
+    {
+      "path": "Assets/NTSD/Sprite/OtherBg/Sunagakure.png",
+      "sha256": "112fb26709af7e77e11676665b7cb9445e2e2dbdb71a61037c5ddcdb6f754e42"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs",
+      "sha256": "e3e9324a032a62e5e173a46ea071e5e25b406a372597d26a0f5eb8c8ed39f9ce"
+    },
+    {
+      "path": "Library/ScriptAssemblies/Assembly-CSharp.dll",
+      "sha256": "a8874f8784d60efa30d627f61e4140a89ecc9466c6a80115024eae4e2c8cbb8b"
+    },
+    {
+      "path": "Library/ScriptAssemblies/Assembly-CSharp-Editor.dll",
+      "sha256": "86b1c83cc80f46e13038f5782e759ef70cc3f4be767c347797e0b670e1dabb66"
+    }
+  ],
+  "runtimeOwnerCreated": false,
+  "futureRunRootExists": false,
+  "contentPreparationRun": false,
+  "audioPreparationRun": false,
+  "parameterCollection": false,
+  "errors": []
+}

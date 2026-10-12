@@ -1,0 +1,35 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "37d6f1ca69cd440c9958aeb67fab1af6",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791732423494,
+      "finished_unix_ms": 1791732432107,
+      "last_update_unix_ms": 1791732432107,
+      "progress": {
+        "completed": 1,
+        "total": 10736,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791732431388,
+        "last_finished_test_full_name": "NTSD.Test.M12DiagnosticRepairTests.R01_ColdCloneFirstDifference",
+        "last_finished_unix_ms": 1791732431457,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.M12DiagnosticRepairTests.R01_ColdCloneFirstDifference",
+            "message": "  {\r\n  \"path\": \"$.BattleContentRuntimeRoot\",\r\n  \"originalType\": \"MISSING\",\r\n  \"cloneType\": \"MISSING\",\r\n  \"original\": null,\r\n  \"clone\": null\r\n}\r\n  Expected: null\r\n  But was:  < < <empty> >, < <empty> >, < <empty> >, < <empty> >, < <empty> > >\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

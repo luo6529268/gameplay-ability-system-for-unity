@@ -1,0 +1,102 @@
+{
+  "operationId": "OP-NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-PREFLIGHT01-20261011",
+  "time": "2026-10-11T14:36:03.394053+08:00",
+  "pid": 124616,
+  "executorThread": "01a1201b-7930-7c93-8c84-5bc7baada43f",
+  "authorization": "Same human-backed delegated PRE-FLIGHT-01 review feedback, documentation/source-proof only; no implementation/build/Player permission",
+  "plannedActions": "Record this exact11-path operation first; prepend review03 notice to seven governance pointers; append review03 clarification to Task/Change; correct one new review03 plan paragraph to distinguish existing harness stage1 stop from later terminal tee restore; preserve all existing artifacts and proposal. Every write checks current SHA equals this preimage. No code/settings mutation. CreateNew result/audit files.",
+  "command": "PowerShell heredoc piped to python -X utf8 -; Python hashlib guarded binary prepend/append and one exact plan paragraph replacement; no deletions, moves or Git writes",
+  "files": [
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CURRENT-AUTHORITY.md",
+      "beforeSha256": "cc6f52a9ee75c1067c332f20aebbc352cd08383086edb8fe289308a42ebe08e5",
+      "bytes": 429567,
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/review-03-backups/docs/ai/CURRENT-AUTHORITY.md",
+      "gitStatus": "M docs/ai/CURRENT-AUTHORITY.md"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "beforeSha256": "b7e8eac5aabc56616a0b13f5e74e5a27730979f54e9e466ad9d638df7cb55302",
+      "bytes": 1710940,
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/review-03-backups/docs/ai/STATE.md",
+      "gitStatus": "M docs/ai/STATE.md"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "beforeSha256": "d7c878a463ce4832c699a20873c670a85e9d50a375e61f8e70f73c752995192c",
+      "bytes": 778072,
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/review-03-backups/docs/ai/CHANGE-LEDGER.md",
+      "gitStatus": "M docs/ai/CHANGE-LEDGER.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "beforeSha256": "e41cede4295f041112f073418e131ab7c81c81b1da6ad3308cb033a4fa161595",
+      "bytes": 1649762,
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/review-03-backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "gitStatus": "M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-10-battle-audio-pcm-memory.md",
+      "beforeSha256": "5f42d609deca0f805e9252305cbdd8fd43a3321a0e4034b385af5e96baf374cb",
+      "bytes": 21672,
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/review-03-backups/Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+      "gitStatus": "M Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "beforeSha256": "5957616359279800a36022c0f47bebe26657336cbf8e2347c8f0492b0c9c0cfd",
+      "bytes": 270010,
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/review-03-backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "gitStatus": "M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "beforeSha256": "25e18afdf60afe67c0b8bdd23b6389183e95da440a51eddd58a70c100395d783",
+      "bytes": 376921,
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/review-03-backups/Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "gitStatus": "M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011.md",
+      "beforeSha256": "c737bb85552453d9cfab159d97ca49cb60b5e4abd1c3950e51d2d29bed70b8c7",
+      "bytes": 24587,
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/review-03-backups/docs/ai/TASKS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011.md",
+      "gitStatus": "?? docs/ai/TASKS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011.md"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001.md",
+      "beforeSha256": "035d0ae6c3ddc8b92aa16cf3a645863053edf8982bf83a41634b442b15a74f4c",
+      "bytes": 6990,
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/review-03-backups/docs/ai/CHANGE-RECORDS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001.md",
+      "gitStatus": "?? docs/ai/CHANGE-RECORDS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001.md"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/OP-NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-PREFLIGHT01-20261011/RECORD.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\OP-NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-PREFLIGHT01-20261011\\RECORD.md",
+      "beforeSha256": "0e5bf94f9728e98d8ef18fff2dd821c99628208d9ec9fc30152129de762d8712",
+      "bytes": 5266,
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/review-03-backups/docs/ai/FILE-OPERATIONS/OP-NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-PREFLIGHT01-20261011/RECORD.md",
+      "gitStatus": "?? docs/ai/FILE-OPERATIONS/OP-NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-PREFLIGHT01-20261011/RECORD.md"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/REVIEW-03-CASE-CAPACITY-CLARIFICATIONS.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011\\preflight-01\\REVIEW-03-CASE-CAPACITY-CLARIFICATIONS.md",
+      "beforeSha256": "e9419b5480dff32e60ce34a813ecaacf4853e4ead9bf58622fccb133bbc5f6ef",
+      "bytes": 12523,
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/review-03-backups/artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/REVIEW-03-CASE-CAPACITY-CLARIFICATIONS.md",
+      "gitStatus": "?? artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/REVIEW-03-CASE-CAPACITY-CLARIFICATIONS.md"
+    }
+  ],
+  "gitStatus": " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md\n M Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md\n M Assets/NTSD/Docs/battle-optimization-progress-tracker.md\n M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md\n M Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs\n M docs/ai/CHANGE-LEDGER.md\n M docs/ai/CURRENT-AUTHORITY.md\n M docs/ai/DECISIONS.md\n M docs/ai/FILE-OPERATIONS/INDEX.md\n M docs/ai/STATE.md\n",
+  "head": "8d55c6b68912560c7af755c424b41d3464a1921a",
+  "staged": ""
+}

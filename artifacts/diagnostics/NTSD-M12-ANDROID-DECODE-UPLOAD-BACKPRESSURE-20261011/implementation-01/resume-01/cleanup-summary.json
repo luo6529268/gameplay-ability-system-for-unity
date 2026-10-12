@@ -1,0 +1,42 @@
+[
+  {
+    "path": "owner-cleanup-6b98c384a298415b90f85428c8658dee.json",
+    "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q06_PublicConfiguredOwnerAndFallback",
+    "released": true,
+    "resourceRecords": 0,
+    "allDestroyed": true,
+    "restored": true
+  },
+  {
+    "path": "owner-cleanup-7ff7f5c0bc404beea2f5057c059a7dfa.json",
+    "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q06_PublicConfiguredOwnerAndFallback",
+    "released": true,
+    "resourceRecords": 118,
+    "allDestroyed": true,
+    "restored": true
+  },
+  {
+    "path": "owner-cleanup-9a8bf3ec69074418ba5ed2b36aa73997.json",
+    "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q06B_SixRealSheetsGateSharedAndOffPixels",
+    "released": true,
+    "resourceRecords": 66,
+    "allDestroyed": true,
+    "restored": true
+  },
+  {
+    "path": "owner-cleanup-ca1bd41c480642c6b9e7ef50eb85ef00.json",
+    "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q07_OnlyOnceSameInputAbba",
+    "released": true,
+    "resourceRecords": 136,
+    "allDestroyed": true,
+    "restored": true
+  },
+  {
+    "path": "owner-cleanup-e79ef92683f64eb5bc155b25965bd28b.json",
+    "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q05_ExistingSourceAndAtlasPixelOracle",
+    "released": true,
+    "resourceRecords": 61,
+    "allDestroyed": true,
+    "restored": true
+  }
+]

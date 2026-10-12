@@ -1,0 +1,78 @@
+{
+  "utc": "2026-10-11T15:19:40.076683+00:00",
+  "status": "OLD_OWNER_DISPOSITION_PENDING",
+  "sceneRestoration": "OBSERVED_MATCHES_PREPARE_EXTERNALLY_RESTORED",
+  "codeChanges": 0,
+  "newP1": 0,
+  "sourceCompile": 0,
+  "coldCloneComparison": 0,
+  "resourceRelease": "NOT_PROVED",
+  "question": "Human-controlled Editor restart retaining old Dispose UNKNOWN or preserve site; pending.",
+  "governance": [
+    {
+      "path": "docs\\ai\\CURRENT-AUTHORITY.md",
+      "sha256": "a61af5c104de7b5daaa137a922c48678859c85ecb60bd54d505cadd0111d6e8d",
+      "backupVerified": true
+    },
+    {
+      "path": "docs\\ai\\STATE.md",
+      "sha256": "ab67c976bc41c971dc6ab15e8b9e7e80c97f47737d6d15f5d9cff0f8a2012d2d",
+      "backupVerified": true
+    },
+    {
+      "path": "docs\\ai\\CHANGE-LEDGER.md",
+      "sha256": "5d36ef356a3ab3e348545be9111d64da148ad9df52a801dec3699f0a3f659053",
+      "backupVerified": true
+    },
+    {
+      "path": "Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "sha256": "5201d3fb102ce22d8e9da7a7bc91dd5001190a717a3d82ae749e2e00a538ac11",
+      "backupVerified": true
+    },
+    {
+      "path": "Assets\\NTSD\\Docs\\android-mobile-readiness\\m-12-decode-upload-byte-backpressure.md",
+      "sha256": "788457ec861a8acffe8b8762f97f845dd74edffd5e3d8f27ca33a208783bc442",
+      "backupVerified": true
+    },
+    {
+      "path": "Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "sha256": "ba1ca8ce61ba6b58b899dda54dc17f79c7c1eb24b06131a460150763d272e277",
+      "backupVerified": true
+    },
+    {
+      "path": "docs\\ai\\OPTIMIZATION-REVIEW-20261009\\DEPENDENCIES.md",
+      "sha256": "fc283e1fd3ac82ff65e2fe1b09eed34507e600eadcc5b3abf1cf9b7ac1b7aa82",
+      "backupVerified": true
+    },
+    {
+      "path": "docs\\ai\\TASKS\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011.md",
+      "sha256": "ff623f98681d6b72901242bd99a0a1cad435983963e40a76acd8a8ef7f6da2df",
+      "backupVerified": true
+    },
+    {
+      "path": "docs\\ai\\CHANGE-RECORDS\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001.md",
+      "sha256": "2543ade8ba95de63eb5373008dc85a0897bacc5982d9447105e0984d51fe8f74",
+      "backupVerified": true
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\REPORT.md",
+      "sha256": "301b974b5d85eca77e6a35ddf7d52bb8cd36d08b14b8216bd44850946b09e3b8",
+      "backupVerified": true
+    },
+    {
+      "path": "docs\\ai\\FILE-OPERATIONS\\OP-NTSD-M12-IMPLEMENTATION-20261011\\RECORD.md",
+      "sha256": "83728dcd8dd915f02fcbfed6c54ee55bba6b5d69cf8102651fada602cc9c8a34",
+      "backupVerified": true
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\REPORT.md",
+      "sha256": "52634d911f33ee3ec13e6defc821bf3f911f90bffebf07f99b29810ffbd67c9c",
+      "backupVerified": true
+    },
+    {
+      "path": "docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "sha256": "6261d7fb12690ca366bfd941e1297640d3181e80c33c96c45bf5c184182c913d",
+      "backupVerified": true
+    }
+  ]
+}

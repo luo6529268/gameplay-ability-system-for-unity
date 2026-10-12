@@ -1,0 +1,25 @@
+{
+  "utc": "2026-10-11T15:27:46.154663+00:00",
+  "rawDifferences": [
+    {
+      "path": "$.MonoBehaviour.BattleContentRuntimeRoot",
+      "original": "Assets/NTSD/Content/LoganRuntime",
+      "clone": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/play-01/64935977fe0c414d8d0b7bafcf2a6e8b/runtime"
+    },
+    {
+      "path": "$.MonoBehaviour.m_Name",
+      "original": "GameConfig",
+      "clone": "M12-Repair-Cold-Clone"
+    }
+  ],
+  "referencesEqual": true,
+  "referenceCount": 25,
+  "cause": "Exact MonoBehaviour serialization envelope; old code edits nonexistent top-level fields. No metadata exceptions required.",
+  "coldTest": "FAIL preserved; not rerun",
+  "cloneReleased": {
+    "cloneId": -2312,
+    "absent": true,
+    "singletonUnchanged": true,
+    "originalStillAsset": true
+  }
+}

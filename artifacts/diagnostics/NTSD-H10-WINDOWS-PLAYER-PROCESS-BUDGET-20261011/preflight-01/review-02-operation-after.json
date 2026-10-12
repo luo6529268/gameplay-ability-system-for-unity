@@ -1,0 +1,56 @@
+{
+  "time": "2026-10-11T14:07:16.308725+08:00",
+  "status": "PLANNED_PROPOSAL_ONLY",
+  "files": [
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "sha256": "cc6f52a9ee75c1067c332f20aebbc352cd08383086edb8fe289308a42ebe08e5",
+      "backupVerified": true
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "sha256": "b7e8eac5aabc56616a0b13f5e74e5a27730979f54e9e466ad9d638df7cb55302",
+      "backupVerified": true
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "sha256": "d7c878a463ce4832c699a20873c670a85e9d50a375e61f8e70f73c752995192c",
+      "backupVerified": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "sha256": "e41cede4295f041112f073418e131ab7c81c81b1da6ad3308cb033a4fa161595",
+      "backupVerified": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+      "sha256": "5f42d609deca0f805e9252305cbdd8fd43a3321a0e4034b385af5e96baf374cb",
+      "backupVerified": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "sha256": "5957616359279800a36022c0f47bebe26657336cbf8e2347c8f0492b0c9c0cfd",
+      "backupVerified": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "sha256": "25e18afdf60afe67c0b8bdd23b6389183e95da440a51eddd58a70c100395d783",
+      "backupVerified": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011.md",
+      "sha256": "c737bb85552453d9cfab159d97ca49cb60b5e4abd1c3950e51d2d29bed70b8c7",
+      "backupVerified": true
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001.md",
+      "sha256": "035d0ae6c3ddc8b92aa16cf3a645863053edf8982bf83a41634b442b15a74f4c",
+      "backupVerified": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/OP-NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-PREFLIGHT01-20261011/RECORD.md",
+      "sha256": "0e5bf94f9728e98d8ef18fff2dd821c99628208d9ec9fc30152129de762d8712",
+      "backupVerified": true
+    }
+  ]
+}

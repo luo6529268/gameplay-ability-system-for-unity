@@ -1,0 +1,11 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Retrieved 2 log entries.",
+    "data": [
+      "Assets\\NTSD\\Scripts\\Animation\\Manager\\CharacterAnimtorManager.cs(2983,20): error CS7036: There is no argument given that corresponds to the required formal parameter 'native' of 'CharacterAnimtorManager.ProcessAndCreateSpritesForCandidateAsync(int, SpriteFileInfo, ISet<int>, Dictionary<int, List<Sprite>>, HashSet<Sprite>, HashSet<Texture2D>, List<BattleAtlasSourcePixels>, Dictionary<string, Sprite>, Dictionary<Sprite, string>, Action<string>, SemaphoreSlim, SemaphoreSlim, BattleContentSource, string, Func<bool>, CharacterAnimtorManager.NativePrewarmOperation, CharacterAnimtorManager.NativeBodyDecodeRequest)'",
+      "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)"
+    ]
+  }
+}

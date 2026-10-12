@@ -1,0 +1,6 @@
+{
+  "reader": "inline Python after qualification",
+  "error": "UnicodeDecodeError: gbk codec cannot decode byte 0x80 in position 15119",
+  "file": "qualification.json",
+  "effect": "Read-only evidence summary stopped before XML backup; no Unity run or evidence mutation; explicitly UTF-8 reader follows"
+}

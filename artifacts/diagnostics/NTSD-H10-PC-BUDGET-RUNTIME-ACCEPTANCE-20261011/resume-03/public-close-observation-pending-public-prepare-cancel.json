@@ -1,0 +1,51 @@
+{
+  "label": "pending-public-prepare-cancel",
+  "genericBeforeClose": {
+    "SourceId": null,
+    "ClipId": null,
+    "GameObjectId": null,
+    "ParentId": null,
+    "TimeSamples": null,
+    "HostOwned": null,
+    "Enabled": null,
+    "ActiveInHierarchy": null,
+    "IsPlaying": null,
+    "Loop": null,
+    "Pitch": null,
+    "DspTime": 9781.7386666666662,
+    "Status": "UNKNOWN_SOURCE_UNAVAILABLE",
+    "Errors": []
+  },
+  "genericAfterClose": {
+    "SourceId": null,
+    "ClipId": null,
+    "GameObjectId": null,
+    "ParentId": null,
+    "TimeSamples": null,
+    "HostOwned": null,
+    "Enabled": null,
+    "ActiveInHierarchy": null,
+    "IsPlaying": null,
+    "Loop": null,
+    "Pitch": null,
+    "DspTime": 9781.7386666666662,
+    "Status": "UNKNOWN_SOURCE_UNAVAILABLE",
+    "Errors": []
+  },
+  "expectedGenericClipId": null,
+  "expectedClipSameReference": false,
+  "report": {
+    "Status": 0,
+    "CompletedStage": 10,
+    "FailureReason": "",
+    "DiscardedObjectPointTasks": 0,
+    "ReturnedRenderers": 0,
+    "ReturnedSpriteRenderers": 0,
+    "RemainingWorldObjects": 0,
+    "RemainingRuntimeSlots": 0,
+    "RemainingPoolBorrowers": 0,
+    "RuntimeStagesCompleted": true,
+    "IsComplete": false
+  },
+  "observation": "Immediately around public stage10 return, before close assertions; natural completion versus stop remains UNKNOWN if not playing"
+}

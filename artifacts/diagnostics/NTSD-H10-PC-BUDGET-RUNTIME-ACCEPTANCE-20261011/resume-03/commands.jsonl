@@ -1,0 +1,17 @@
+{"time": "2026-10-11T12:10:33.986797+08:00", "tool": "get_editor_state", "params": {}, "evidence": "editor-before.json"}
+{"time": "2026-10-11T12:10:34.003798+08:00", "tool": "manage_scene", "params": {"action": "get_loaded_scenes"}, "evidence": "initial-scenes.json"}
+{"time": "2026-10-11T12:13:24.833914+08:00", "tool": "refresh_unity", "params": {"mode": "if_dirty", "scope": "scripts", "compile": "request", "wait_for_ready": false}, "evidence": "compile-request.json"}
+{"time": "2026-10-11T12:13:46.579703+08:00", "tool": "get_editor_state", "params": {}, "evidence": "editor-after-compile.json"}
+{"time": "2026-10-11T12:13:46.589701+08:00", "tool": "read_console", "params": {"action": "get", "types": ["error"], "count": 10, "format": "detailed"}, "evidence": "compile-console.json"}
+{"time": "2026-10-11T12:14:42.889374+08:00", "tool": "get_editor_state", "params": {}, "evidence": "editor-compile-ready.json"}
+{"time": "2026-10-11T12:14:42.992436+08:00", "tool": "read_console", "params": {"action": "get", "types": ["error"], "count": 10, "format": "detailed"}, "evidence": "compile-console-ready.json"}
+{"time": "2026-10-11T12:14:43.067200+08:00", "tool": "manage_scene", "params": {"action": "get_loaded_scenes"}, "evidence": "scenes-before-qualification.json"}
+{"time": "2026-10-11T12:14:49.132524+08:00", "tool": "run_tests", "params": {"mode": "EditMode", "testNames": ["NTSD.Test.Editor.H10ResidentClosureDiagnostics.PcBudgetAllocationMeasurementQualification", "NTSD.Test.Editor.H10ResidentClosureDiagnostics.PcBudgetRuntimeQualification"]}, "evidence": "qualification-job.json"}
+{"time": "2026-10-11T12:15:08.146522+08:00", "tool": "get_test_job", "params": {"job_id": "7fc9ccdf217d4a1a88a1f5f2992177a1", "include_details": true, "include_failed_tests": true}, "evidence": "qualification-job-final.json"}
+{"time": "2026-10-11T12:15:19.213674+08:00", "tool": "get_editor_state", "params": {}, "evidence": "editor-before-play.json"}
+{"time": "2026-10-11T12:15:19.245694+08:00", "tool": "manage_scene", "params": {"action": "get_loaded_scenes"}, "evidence": "scenes-before-play.json"}
+{"time": "2026-10-11T12:15:19.473114+08:00", "tool": "run_tests", "params": {"mode": "EditMode", "testNames": ["NTSD.Test.Editor.H10ResidentClosureDiagnostics.PcBudgetRuntimeThreeSessionsPlay"]}, "evidence": "unique-play-job.json"}
+{"time": "2026-10-11T12:16:25.116124+08:00", "tool": "get_editor_state", "params": {}, "evidence": "editor-after-play.json"}
+{"time": "2026-10-11T12:16:25.166127+08:00", "tool": "manage_scene", "params": {"action": "get_loaded_scenes"}, "evidence": "scenes-after-play.json"}
+{"time": "2026-10-11T12:16:25.205641+08:00", "tool": "get_test_job", "params": {"job_id": "8643d09589eb42699199c1dbcfc2ed5b", "include_details": true, "include_failed_tests": true}, "evidence": "unique-play-job-final.json"}
+{"time": "2026-10-11T12:16:25.237156+08:00", "tool": "read_console", "params": {"action": "get", "types": ["error"], "count": 10, "format": "detailed"}, "evidence": "console-after-play.json"}

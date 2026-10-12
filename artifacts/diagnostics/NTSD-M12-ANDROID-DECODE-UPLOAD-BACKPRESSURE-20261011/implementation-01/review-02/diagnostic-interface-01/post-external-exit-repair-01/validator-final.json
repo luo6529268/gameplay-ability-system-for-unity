@@ -1,0 +1,13 @@
+{
+  "command": [
+    "C:\\Users\\Logan\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe",
+    "-NoProfile",
+    "-File",
+    "Tools/Validate-ChangeLedger.ps1",
+    "-RepositoryRoot",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity"
+  ],
+  "startedUtc": "2026-10-11T15:34:00.932229+00:00",
+  "finishedUtc": "2026-10-11T15:34:08.833716+00:00",
+  "exitCode": 0
+}

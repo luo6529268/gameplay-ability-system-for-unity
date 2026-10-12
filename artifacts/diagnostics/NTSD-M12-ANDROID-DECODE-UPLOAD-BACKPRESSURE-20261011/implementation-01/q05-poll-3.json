@@ -1,0 +1,35 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "1e76569705f94940b1cd8e1f817cb4a9",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791712330437,
+      "finished_unix_ms": 1791712342812,
+      "last_update_unix_ms": 1791712342812,
+      "progress": {
+        "completed": 1,
+        "total": 10733,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791712339935,
+        "last_finished_test_full_name": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q05_ExistingSourceAndAtlasPixelOracle",
+        "last_finished_unix_ms": 1791712340832,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q05_ExistingSourceAndAtlasPixelOracle",
+            "message": "System.IO.IOException : Could not create file \"I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-H08-NATIVE-SHEET-SHARING-20261010\\overlap-Source2D.json\". File already exists."
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

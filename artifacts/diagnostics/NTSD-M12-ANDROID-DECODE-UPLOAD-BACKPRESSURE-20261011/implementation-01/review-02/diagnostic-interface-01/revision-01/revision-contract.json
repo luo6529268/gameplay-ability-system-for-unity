@@ -1,0 +1,56 @@
+{
+  "schema": "ntsd.m12.revision-contract.v1",
+  "revision": "revision-01",
+  "project": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity",
+  "editorPid": 39108,
+  "runGuid": "64935977fe0c414d8d0b7bafcf2a6e8b",
+  "sourceSha256": "1bf39d4793a1212561a39a2a10d5b822e336c875d0583fd6ac8a648bf503e3b7",
+  "runtimeSha256": "a8874f8784d60efa30d627f61e4140a89ecc9466c6a80115024eae4e2c8cbb8b",
+  "coldMethodNormalizedLfSha256": "81c7c63b69148e025e5af83d5602e556213b17112e71ebe8f8132ddbd8ae6e8b",
+  "inputManifestSha256": "7f0f9fae4d31d2447ec7041c898dfd28cd7752397727db4b3b8ac55743f2cf15",
+  "protectedFiles": [
+    {
+      "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+      "sha256": "25c8e08f4d1be55ee55d0404aaf4e46d099afc6c2ba3d9040e1c5203f654d9ff"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha256": "f2ee25d075548b78380be817209152047b919c4c15da8743d75d2e0c165cbea1"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha256": "253b2ebad322aa6ec18488dfbbf555bb93ad897940a342e4130e77ce778f9010"
+    },
+    {
+      "path": "ProjectSettings/EditorSettings.asset",
+      "sha256": "6f8761b516f06ff2f0373b6310571cf7951f63afb86c56bfd7be832e06a9987b"
+    },
+    {
+      "path": "Assets/NTSD/Prefabs/Common/EntityObject.prefab",
+      "sha256": "97a58f4819532dda96c008bfe7ca7204af39feb3ddc9d7dee93bcf9ea99c00b5"
+    },
+    {
+      "path": "Assets/NTSD/Prefabs/Common/Shadow.prefab",
+      "sha256": "92e29545e9f3720cfa375b174a24fd0b52845f3a31fda02e02c67350ae370e39"
+    },
+    {
+      "path": "Assets/NTSD/Map/BattleMapCatalog.asset",
+      "sha256": "45fd94d633d81cfb58477545078c974ff052766cb2f3570fe367aa48dcf688dd"
+    },
+    {
+      "path": "Assets/NTSD/Map/SunagakureMap.asset",
+      "sha256": "f7b5e4a44cac05480d1ca6f67abf623531264c1c96725d7fdd23da50c8e60c08"
+    },
+    {
+      "path": "Assets/NTSD/Sprite/OtherBg/Sunagakure.png",
+      "sha256": "112fb26709af7e77e11676665b7cb9445e2e2dbdb71a61037c5ddcdb6f754e42"
+    }
+  ],
+  "references": {
+    "configGuid": "513170c32731baa449d4d0e9abf8c827",
+    "prefab": "Assets/NTSD/Prefabs/Common/EntityObject.prefab",
+    "shadow": "Assets/NTSD/Prefabs/Common/Shadow.prefab",
+    "originalRoot": "Assets/NTSD/Content/LoganRuntime"
+  },
+  "oldColdEvidenceReuse": "Unchanged route/method only at old source SHA; no second cold menu or new runtime qualification"
+}

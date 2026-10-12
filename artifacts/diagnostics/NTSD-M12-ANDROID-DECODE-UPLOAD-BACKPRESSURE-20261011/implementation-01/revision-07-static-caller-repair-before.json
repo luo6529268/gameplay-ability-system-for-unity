@@ -1,0 +1,11 @@
+{
+  "time": "2026-10-11T17:46:34.503005+08:00",
+  "command": "audited incremental patch; no rollback/delete",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "sha256": "1711bd2b8fa537dc7f70122895df2ea2a0f347d2027ec77bb89f4e21e03d4f12",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\backups\\revision-07-static-caller-repair-00.before.bin"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "rawCueId": "data\\016.wav",
+  "exactBuiltinMember": true,
+  "comparer": "StringComparer.Ordinal",
+  "genericPath": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\016.wav",
+  "genericFileExists": true,
+  "expectedCacheKey": "NTSD.AudioFile::data\\016.wav",
+  "actualCacheKeyObserved": false,
+  "scope": "Read-only static raw ID and file existence; no wrapper creation/load/alias registration"
+}

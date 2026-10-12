@@ -1,0 +1,269 @@
+{
+  "failure": "NUnit.Framework.AssertionException:   Expected: greater than or equal to 97\r\n  But was:  0\r\n\r\n  at NUnit.Framework.Assert.That[TActual] (TActual actual, NUnit.Framework.Constraints.IResolveConstraint expression, System.String message, System.Object[] args) [0x00044] in <10b6135e63434fdba4fc6c109928ab3b>:0 \r\n  at NUnit.Framework.Assert.That[TActual] (TActual actual, NUnit.Framework.Constraints.IResolveConstraint expression) [0x00001] in <10b6135e63434fdba4fc6c109928ab3b>:0 \r\n  at NTSD.Test.Editor.H10ResidentClosureDiagnostics+PcBudgetFixture.ExerciseHot (System.Int32 cycle) [0x00187] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\H10ResidentClosureDiagnostics.cs:3772 \r\n  at Cysharp.Threading.Tasks.UniTask+ExceptionResultSource.GetResult (System.Int16 token) [0x0001e] in .\\Library\\PackageCache\\com.cysharp.unitask@5cc97c7f00\\Runtime\\UniTask.Factory.cs:211 \r\n  at Cysharp.Threading.Tasks.UniTask+Awaiter.GetResult () [0x00015] in .\\Library\\PackageCache\\com.cysharp.unitask@5cc97c7f00\\Runtime\\UniTask.cs:312 \r\n  at NTSD.Test.Editor.H10ResidentClosureDiagnostics+PcBudgetFixture.RunThreeSessions () [0x0033f] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\H10ResidentClosureDiagnostics.cs:3891 \r\n  at Cysharp.Threading.Tasks.UniTaskCompletionSourceCore`1[TResult].GetResult (System.Int16 token) [0x00067] in .\\Library\\PackageCache\\com.cysharp.unitask@5cc97c7f00\\Runtime\\UniTaskCompletionSource.cs:244 \r\n  at Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1[TStateMachine].GetResult (System.Int16 token) [0x00002] in .\\Library\\PackageCache\\com.cysharp.unitask@5cc97c7f00\\Runtime\\CompilerServices\\StateMachineRunner.cs:218 \r\n  at Cysharp.Threading.Tasks.UniTask+Awaiter.GetResult () [0x00015] in .\\Library\\PackageCache\\com.cysharp.unitask@5cc97c7f00\\Runtime\\UniTask.cs:312 \r\n  at NTSD.Test.Editor.H10ResidentClosureDiagnostics+<>c.<PcBudgetRuntimeThreeSessionsPlay>b__71_0 () [0x00086] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\H10ResidentClosureDiagnostics.cs:3484 ",
+  "cleanupFailure": null,
+  "rows": [
+    {
+      "stage": "fixture-created",
+      "routes": [
+        {
+          "cue": "c/jira/w/e3.wav",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\c\\jira\\w\\e3.wav",
+          "key": "NTSD.AudioFile::c\\jira\\w\\e3.wav",
+          "exists": false
+        },
+        {
+          "cue": "c/kar/w/t.wav",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\c\\kar\\w\\t.wav",
+          "key": "NTSD.AudioFile::c\\kar\\w\\t.wav",
+          "exists": false
+        },
+        {
+          "cue": "c/dan/w/t.wav",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\c\\dan\\w\\t.wav",
+          "key": "NTSD.AudioFile::c\\dan\\w\\t.wav",
+          "exists": false
+        },
+        {
+          "cue": "data/001.wav",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\001.wav",
+          "key": "NTSD.AudioFile::data\\001.wav",
+          "exists": false
+        },
+        {
+          "cue": "c/kim/w/a1.wav",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\c\\kim\\w\\a1.wav",
+          "key": "NTSD.AudioFile::c\\kim\\w\\a1.wav",
+          "exists": false
+        },
+        {
+          "cue": "SFX_001",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_001",
+          "key": "NTSD.Audio::SFX_001",
+          "exists": false
+        },
+        {
+          "cue": "SFX_002",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_002",
+          "key": "NTSD.Audio::SFX_002",
+          "exists": false
+        },
+        {
+          "cue": "SFX_004",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_004",
+          "key": "NTSD.Audio::SFX_004",
+          "exists": false
+        },
+        {
+          "cue": "SFX_006",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_006",
+          "key": "NTSD.Audio::SFX_006",
+          "exists": false
+        },
+        {
+          "cue": "data\\016.wav",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\016.wav",
+          "key": "NTSD.AudioFile::data\\016.wav",
+          "exists": true
+        },
+        {
+          "cue": "SFX_016",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_016",
+          "key": "NTSD.Audio::SFX_016",
+          "exists": false
+        },
+        {
+          "cue": "SFX_010",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_010",
+          "key": "NTSD.Audio::SFX_010",
+          "exists": false
+        },
+        {
+          "cue": "SFX_011",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_011",
+          "key": "NTSD.Audio::SFX_011",
+          "exists": false
+        },
+        {
+          "cue": "SFX_017",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_017",
+          "key": "NTSD.Audio::SFX_017",
+          "exists": false
+        },
+        {
+          "cue": "SFX_020",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_020",
+          "key": "NTSD.Audio::SFX_020",
+          "exists": false
+        },
+        {
+          "cue": "SFX_021",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_021",
+          "key": "NTSD.Audio::SFX_021",
+          "exists": false
+        },
+        {
+          "cue": "SFX_025",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_025",
+          "key": "NTSD.Audio::SFX_025",
+          "exists": false
+        },
+        {
+          "cue": "SFX_032",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_032",
+          "key": "NTSD.Audio::SFX_032",
+          "exists": false
+        },
+        {
+          "cue": "SFX_033",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_033",
+          "key": "NTSD.Audio::SFX_033",
+          "exists": false
+        },
+        {
+          "cue": "SFX_039",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_039",
+          "key": "NTSD.Audio::SFX_039",
+          "exists": false
+        },
+        {
+          "cue": "SFX_065",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_065",
+          "key": "NTSD.Audio::SFX_065",
+          "exists": false
+        },
+        {
+          "cue": "SFX_066",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_066",
+          "key": "NTSD.Audio::SFX_066",
+          "exists": false
+        },
+        {
+          "cue": "SFX_068",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_068",
+          "key": "NTSD.Audio::SFX_068",
+          "exists": false
+        },
+        {
+          "cue": "SFX_085",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_085",
+          "key": "NTSD.Audio::SFX_085",
+          "exists": false
+        }
+      ],
+      "allowedKeys": [
+        "NTSD.AudioFile::data\\016.wav"
+      ],
+      "soundRoot": "NTSD/Sound",
+      "controller": "null; verified real empty AudioList fallback",
+      "noFullCatalog": true,
+      "builtinsAddedByPublicPrepare": true
+    },
+    {
+      "stage": "diagnostic-owner-before-await",
+      "capacity": 400,
+      "publishedCapacity": 51200,
+      "profile": "Authority400; audio requests only"
+    },
+    {
+      "stage": "prepared",
+      "cycle": 1,
+      "generation": 2,
+      "ownedIds": [
+        -1255888,
+        -1255874,
+        -1255878,
+        -1255882,
+        -1255886,
+        -1255892,
+        -1255896,
+        -1255900,
+        -1255904,
+        -1255910,
+        -1255914,
+        -1255918,
+        -1255922,
+        -1255926,
+        -1255930,
+        -1255934,
+        -1255938,
+        -1255942,
+        -1255946,
+        -1255950,
+        -1255954,
+        -1255958
+      ],
+      "ownedBytes": 8431640,
+      "nonmonoCountedOnce": true,
+      "cacheCount": 1,
+      "privateBytes": 0,
+      "processScope": "Unity Editor diagnostic sample; not game-process budget verdict"
+    },
+    {
+      "stage": "public-shutdown-return",
+      "label": "failure-cleanup",
+      "report": {
+        "Status": 0,
+        "CompletedStage": 10,
+        "FailureReason": "",
+        "DiscardedObjectPointTasks": 0,
+        "ReturnedRenderers": 0,
+        "ReturnedSpriteRenderers": 0,
+        "RemainingWorldObjects": 0,
+        "RemainingRuntimeSlots": 0,
+        "RemainingPoolBorrowers": 0,
+        "RuntimeStagesCompleted": true,
+        "IsComplete": false
+      },
+      "ids": [
+        -1255888,
+        -1255874,
+        -1255878,
+        -1255882,
+        -1255886,
+        -1255892,
+        -1255896,
+        -1255900,
+        -1255904,
+        -1255910,
+        -1255914,
+        -1255918,
+        -1255922,
+        -1255926,
+        -1255930,
+        -1255934,
+        -1255938,
+        -1255942,
+        -1255946,
+        -1255950,
+        -1255954,
+        -1255958
+      ],
+      "pendingAtStage5Return": 0,
+      "aliveAtReturn": 22,
+      "tailDrained": true
+    },
+    {
+      "stage": "drained-next-frame",
+      "label": "failure-cleanup",
+      "complete": {
+        "Status": 1,
+        "CompletedStage": 11,
+        "FailureReason": "",
+        "DiscardedObjectPointTasks": 0,
+        "ReturnedRenderers": 0,
+        "ReturnedSpriteRenderers": 0,
+        "RemainingWorldObjects": 0,
+        "RemainingRuntimeSlots": 0,
+        "RemainingPoolBorrowers": 0,
+        "RuntimeStagesCompleted": true,
+        "IsComplete": true
+      },
+      "ownedGone": true,
+      "mapBoundary": "Isolated empty diagnostic world; no scene map carrier. Not loaded Battle map teardown."
+    }
+  ],
+  "scope": "One isolated Play; diagnostic World and audio requests, not real1000 combat entities/Player/8GB certification",
+  "success": false,
+  "hearingVerified": false,
+  "fullEngineNativeAllocationClaimed": false
+}

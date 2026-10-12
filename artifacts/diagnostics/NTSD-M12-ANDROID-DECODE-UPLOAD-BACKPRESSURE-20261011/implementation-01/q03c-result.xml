@@ -1,0 +1,51 @@
+<test-suite type="TestSuite" id="137873" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="10733" result="Passed" start-time="2026-10-11 09:51:48Z" end-time="2026-10-11 09:51:50Z" duration="2.209169" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-suite type="Assembly" id="150275" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="10725" result="Passed" start-time="2026-10-11 09:51:48Z" end-time="2026-10-11 09:51:50Z" duration="1.987773" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="39108" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><test-suite type="TestSuite" id="150276" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="10725" result="Passed" start-time="2026-10-11 09:51:48Z" end-time="2026-10-11 09:51:50Z" duration="1.863291" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-suite type="TestSuite" id="150284" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="9922" result="Passed" start-time="2026-10-11 09:51:48Z" end-time="2026-10-11 09:51:50Z" duration="1.747846" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-suite type="TestFixture" id="139466" name="M12DecodeUploadBackpressureEditorTests" fullname="NTSD.Test.M12DecodeUploadBackpressureEditorTests" classname="NTSD.Test.M12DecodeUploadBackpressureEditorTests" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-10-11 09:51:48Z" end-time="2026-10-11 09:51:50Z" duration="1.703458" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-case id="139472" name="Q03C_FaultCannotFinishWhileAnotherWorkerIsBlocked" fullname="NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q03C_FaultCannotFinishWhileAnotherWorkerIsBlocked" methodname="Q03C_FaultCannotFinishWhileAnotherWorkerIsBlocked" classname="NTSD.Test.M12DecodeUploadBackpressureEditorTests" runstate="Runnable" seed="2133609443" result="Passed" start-time="2026-10-11 09:51:48Z" end-time="2026-10-11 09:51:50Z" duration="1.675027" asserts="0"><properties><property name="_JOINTYPE" value="UnityCombinatorial" /></properties><output><![CDATA[<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=Preserved, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\909dabc6689c4ad1b8f557070fc53982\vfs\c\body.png, 范围=[0-0], 尺寸=5x1, 行列=1x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=Preserved, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\909dabc6689c4ad1b8f557070fc53982\vfs\c\body.png, 范围=[0-0], 尺寸=5x1, 行列=1x1</color>
+<color=cyan>开始加载精灵，角色配置数量: 1</color>
+<color=cyan>共 1 个文件需要处理</color>
+[BMPLoader] 调色板偏移: 54, 最大颜色: 256, 实际颜色: 6
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=M12Six0, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/sheet0.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\implementation-01\fixtures\08f42c4eff93461ba2fb32b9aad0bcb8\six\vfs\c\sheet0.png, 范围=[0-0], 尺寸=256x256, 行列=1x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=M12Six1, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/sheet1.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\implementation-01\fixtures\08f42c4eff93461ba2fb32b9aad0bcb8\six\vfs\c\sheet1.png, 范围=[0-0], 尺寸=384x384, 行列=1x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=M12Six2, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/sheet2.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\implementation-01\fixtures\08f42c4eff93461ba2fb32b9aad0bcb8\six\vfs\c\sheet2.png, 范围=[0-0], 尺寸=512x512, 行列=1x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=M12Six3, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/sheet3.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\implementation-01\fixtures\08f42c4eff93461ba2fb32b9aad0bcb8\six\vfs\c\sheet3.png, 范围=[0-0], 尺寸=256x256, 行列=1x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=M12Six4, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/sheet4.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\implementation-01\fixtures\08f42c4eff93461ba2fb32b9aad0bcb8\six\vfs\c\sheet4.png, 范围=[0-0], 尺寸=384x384, 行列=1x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=M12Six5, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/sheet5.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\implementation-01\fixtures\08f42c4eff93461ba2fb32b9aad0bcb8\six\vfs\c\sheet5.png, 范围=[0-0], 尺寸=512x512, 行列=1x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=M12Six0, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/sheet0.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\implementation-01\fixtures\08f42c4eff93461ba2fb32b9aad0bcb8\six\vfs\c\sheet0.png, 范围=[0-0], 尺寸=256x256, 行列=1x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=M12Six1, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/sheet1.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\implementation-01\fixtures\08f42c4eff93461ba2fb32b9aad0bcb8\six\vfs\c\sheet1.png, 范围=[0-0], 尺寸=384x384, 行列=1x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=M12Six2, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/sheet2.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\implementation-01\fixtures\08f42c4eff93461ba2fb32b9aad0bcb8\six\vfs\c\sheet2.png, 范围=[0-0], 尺寸=512x512, 行列=1x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=M12Six3, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/sheet3.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\implementation-01\fixtures\08f42c4eff93461ba2fb32b9aad0bcb8\six\vfs\c\sheet3.png, 范围=[0-0], 尺寸=256x256, 行列=1x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=M12Six4, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/sheet4.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\implementation-01\fixtures\08f42c4eff93461ba2fb32b9aad0bcb8\six\vfs\c\sheet4.png, 范围=[0-0], 尺寸=384x384, 行列=1x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=M12Six5, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/sheet5.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\implementation-01\fixtures\08f42c4eff93461ba2fb32b9aad0bcb8\six\vfs\c\sheet5.png, 范围=[0-0], 尺寸=512x512, 行列=1x1</color>
+<color=cyan>开始加载精灵，角色配置数量: 6</color>
+<color=cyan>共 6 个文件需要处理</color>
+处理文件失败: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\implementation-01\fixtures\08f42c4eff93461ba2fb32b9aad0bcb8\six\vfs\c\sheet1.png
+M12 injected worker fault
+<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client connected 127.0.0.1:4865 (active clients: 1)
+]]></output></test-case></test-suite></test-suite></test-suite></test-suite></test-suite>

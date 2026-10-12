@@ -1,0 +1,11 @@
+# P2空World入口顺序缺口及最小候选
+
+本执行会话按主会话已供证的授权范围，精确复核CharacterSelectionController.cs101–116和455–476。StartBattle第470行同步MatchConfirmed(cfg)，随后474 SetMatchConfig(cfg)、475 LoadBattleAdditive。故原方案“真实UI生成cfg后在回调创建空players副本再调用App”的顺序不闭合：回调内设置副本还会被474原cfg覆盖；回调里启动另一Battle会造成重入。不得据此改原cfg.players、取消/替换事件委托、抛异常截断StartBattle、清理角色或新增生产hook。
+
+候选最小解法（待主审，不自授实施）：P1本来先于P2，在普通P1成功报告中冻结实际MatchConfig完整数据及VS mode的来源证据；P2复用该真实模板，进入相同Menu/prewarm/VS选择阶段取得同一构建中的gameMode资源引用，然后直接创建独立diagnostic MatchConfig，清空players、其它标量/列表保持模板实际值；走App.SetMatchConfig→LoadBattleAdditive，不点击Fight。此P2明确是Menu服务后的公开App诊断开局，完整真实Fight链由P1证明，不冒称P2也由Fight回调开局。template文件含源build/hash、完整字段、选择mode身份与root，避免凭默认值发明模式。
+
+唯一尚缺入口是如何无副作用取得当前selection实际gameMode引用。已知currentGameMode是字段且public仅SetGameMode无getter；拟只读反射该已声明字段一次（在冷Menu阶段，先核字段类型/引用/实际VS选择，禁止写字段），或者如果现有公开模式选择器本就暴露该引用，则优先复用该公开接口。需要主审选定/供证准确入口，不泛读整个UI。不需要另开Player/额外开关Scene，也不需要修改任何生产文件。P2每轮使用同一冻结模板的新副本；源模板与当前UI mode不匹配立即拒绝。
+
+这样普通P1建议seed682973786保持于模板的App初态；P2 harness request仍1314149188并在其原Configure中建立诊断World。两种seed时点都记录，不能称普通和千人同seed配置。若主审要求二者完全相同，则在候选表统一seed682973786后再冻结请求，不由probe隐式覆盖cfg。
+
+以上是有限方案提议，不是新行为合同或执行许可。当前方法体阅读不包含SyncPlayersFromSlots/slot输入/producer/Q06。

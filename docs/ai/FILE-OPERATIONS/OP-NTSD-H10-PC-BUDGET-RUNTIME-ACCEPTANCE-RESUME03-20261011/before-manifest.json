@@ -1,0 +1,104 @@
+{
+  "time": "2026-10-11T12:10:10.404588+08:00",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\H10ResidentClosureDiagnostics.cs",
+      "bytes": 257242,
+      "sha256": "a833e450dbeb17fa3b9a1455dba1a81d6c268a525f8ba3dcb2fc166fbd9efe5b",
+      "backup": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/backups/Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs",
+      "backupSha256": "a833e450dbeb17fa3b9a1455dba1a81d6c268a525f8ba3dcb2fc166fbd9efe5b",
+      "gitStatus": "M Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011.md",
+      "bytes": 8832,
+      "sha256": "037a2f690110eeefe09bd468a271c0240b8abab03f39a31006fcc761a461d6c3",
+      "backup": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/backups/docs/ai/TASKS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011.md",
+      "backupSha256": "037a2f690110eeefe09bd468a271c0240b8abab03f39a31006fcc761a461d6c3",
+      "gitStatus": "?? docs/ai/TASKS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011.md"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001.md",
+      "bytes": 13238,
+      "sha256": "23d817a0052ef22007a4e1c518e940c775ca7a7f9363eb2c8a8cce83d1bbe938",
+      "backup": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/backups/docs/ai/CHANGE-RECORDS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001.md",
+      "backupSha256": "23d817a0052ef22007a4e1c518e940c775ca7a7f9363eb2c8a8cce83d1bbe938",
+      "gitStatus": "?? docs/ai/CHANGE-RECORDS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001.md"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 774134,
+      "sha256": "119e899a4e17368aa58a1f21f6917c17d9e74c020250b4cfd120d7d7c7de66a9",
+      "backup": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/backups/docs/ai/CHANGE-LEDGER.md",
+      "backupSha256": "119e899a4e17368aa58a1f21f6917c17d9e74c020250b4cfd120d7d7c7de66a9",
+      "gitStatus": "M docs/ai/CHANGE-LEDGER.md"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1707002,
+      "sha256": "071a06b2cbc736d2108cc2c10dfd3628c8c3d87abe88a3edcca099838ce07db6",
+      "backup": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/backups/docs/ai/STATE.md",
+      "backupSha256": "071a06b2cbc736d2108cc2c10dfd3628c8c3d87abe88a3edcca099838ce07db6",
+      "gitStatus": "M docs/ai/STATE.md"
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CURRENT-AUTHORITY.md",
+      "bytes": 425629,
+      "sha256": "14fda347f441cd9955d41a5841a0fa8002b14ddcd96d3faadd95c3963ec39712",
+      "backup": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/backups/docs/ai/CURRENT-AUTHORITY.md",
+      "backupSha256": "14fda347f441cd9955d41a5841a0fa8002b14ddcd96d3faadd95c3963ec39712",
+      "gitStatus": "M docs/ai/CURRENT-AUTHORITY.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1645824,
+      "sha256": "a9499ef418adc0680e12a87eba5b5c3fae776f63aeab45465be2ff3e2f896c99",
+      "backup": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backupSha256": "a9499ef418adc0680e12a87eba5b5c3fae776f63aeab45465be2ff3e2f896c99",
+      "gitStatus": "M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-10-battle-audio-pcm-memory.md",
+      "bytes": 17734,
+      "sha256": "6df7f4a9fc8809e1667033a31552955d13c9c045cac71274939e5bd79a564bae",
+      "backup": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/backups/Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+      "backupSha256": "6df7f4a9fc8809e1667033a31552955d13c9c045cac71274939e5bd79a564bae",
+      "gitStatus": "M Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 266072,
+      "sha256": "17544d44ed3b4f2a09c36f04e50bccb99c1ac95d2ca8f4bcf86ceb21f0d6b15b",
+      "backup": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backupSha256": "17544d44ed3b4f2a09c36f04e50bccb99c1ac95d2ca8f4bcf86ceb21f0d6b15b",
+      "gitStatus": "M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "bytes": 372983,
+      "sha256": "4139e3aac318a5e885e86f8fdfc1d1a993ef083af294a3b34590531662d512e4",
+      "backup": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/backups/Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "backupSha256": "4139e3aac318a5e885e86f8fdfc1d1a993ef083af294a3b34590531662d512e4",
+      "gitStatus": "M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 160281,
+      "sha256": "e5f322272cb7e5cc4585473586a9042c5638f0f878a3b21f89fbf0ed52098183",
+      "backup": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/backups/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backupSha256": "e5f322272cb7e5cc4585473586a9042c5638f0f878a3b21f89fbf0ed52098183",
+      "gitStatus": "M docs/ai/FILE-OPERATIONS/INDEX.md"
+    }
+  ]
+}

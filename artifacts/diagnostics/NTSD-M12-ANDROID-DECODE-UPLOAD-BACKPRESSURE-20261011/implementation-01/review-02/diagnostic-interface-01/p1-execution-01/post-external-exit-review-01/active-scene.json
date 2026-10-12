@@ -1,0 +1,15 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Retrieved active scene information.",
+    "data": {
+      "name": "",
+      "path": "",
+      "buildIndex": -1,
+      "isDirty": false,
+      "isLoaded": true,
+      "rootCount": 0
+    }
+  }
+}

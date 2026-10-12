@@ -1,0 +1,3453 @@
+{
+  "stages": [
+    {
+      "boundary": "real-tick-subscopes",
+      "tick": 1,
+      "frame": 69,
+      "warm": true,
+      "stepped": true,
+      "actualSinkCalls": 1,
+      "requests": 1,
+      "cueCount": 5,
+      "expectedPlays": 1,
+      "sample": {
+        "Frame": 69,
+        "Tick": 1,
+        "Requests": 1,
+        "Measured": false,
+        "Allocation": {
+          "valid": false,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "Before": {
+          "Plays": 70,
+          "Evictions": 0,
+          "Rejections": 0,
+          "Loads": 44,
+          "Builds": 68,
+          "Failures": 0
+        },
+        "After": {
+          "Plays": 71,
+          "Evictions": 0,
+          "Rejections": 0,
+          "Loads": 44,
+          "Builds": 68,
+          "Failures": 0
+        }
+      },
+      "queue": {
+        "boundary": "World.QueueSound loop only",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": false,
+        "AfterAttempted": false,
+        "Before": {
+          "passed": false,
+          "knownLiveBytes": 0,
+          "positive": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "empty": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": false,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": false,
+          "knownLiveBytes": 0,
+          "positive": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "empty": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": false
+      },
+      "present": {
+        "boundary": "prepared NTSDSoundPlayer.PresentSounds only",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": false,
+        "AfterAttempted": false,
+        "Before": {
+          "passed": false,
+          "knownLiveBytes": 0,
+          "positive": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "empty": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": false,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": false,
+          "knownLiveBytes": 0,
+          "positive": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "empty": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": false
+      }
+    },
+    {
+      "boundary": "same-frame-publication-replay",
+      "tick": 1,
+      "frame": 69,
+      "warm": true,
+      "requests": 1,
+      "cueCount": 5,
+      "expectedPlays": 1,
+      "before": {
+        "Plays": 71,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "after": {
+        "Plays": 72,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "pipeline": {
+        "boundary": "publication + dispatch + prepared player; inner sampling disabled",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": false,
+        "AfterAttempted": false,
+        "Before": {
+          "passed": false,
+          "knownLiveBytes": 0,
+          "positive": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "empty": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": false,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": false,
+          "knownLiveBytes": 0,
+          "positive": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "empty": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": false
+      },
+      "innerSamplingDisabled": true
+    },
+    {
+      "boundary": "real-tick-subscopes",
+      "tick": 2,
+      "frame": 70,
+      "warm": true,
+      "stepped": true,
+      "actualSinkCalls": 1,
+      "requests": 1000,
+      "cueCount": 1,
+      "expectedPlays": 1,
+      "sample": {
+        "Frame": 70,
+        "Tick": 2,
+        "Requests": 1000,
+        "Measured": false,
+        "Allocation": {
+          "valid": false,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "Before": {
+          "Plays": 72,
+          "Evictions": 0,
+          "Rejections": 0,
+          "Loads": 44,
+          "Builds": 68,
+          "Failures": 0
+        },
+        "After": {
+          "Plays": 73,
+          "Evictions": 0,
+          "Rejections": 0,
+          "Loads": 44,
+          "Builds": 68,
+          "Failures": 0
+        }
+      },
+      "queue": {
+        "boundary": "World.QueueSound loop only",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": false,
+        "AfterAttempted": false,
+        "Before": {
+          "passed": false,
+          "knownLiveBytes": 0,
+          "positive": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "empty": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": false,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": false,
+          "knownLiveBytes": 0,
+          "positive": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "empty": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": false
+      },
+      "present": {
+        "boundary": "prepared NTSDSoundPlayer.PresentSounds only",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": false,
+        "AfterAttempted": false,
+        "Before": {
+          "passed": false,
+          "knownLiveBytes": 0,
+          "positive": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "empty": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": false,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": false,
+          "knownLiveBytes": 0,
+          "positive": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "empty": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": false
+      }
+    },
+    {
+      "boundary": "same-frame-publication-replay",
+      "tick": 2,
+      "frame": 70,
+      "warm": true,
+      "requests": 1000,
+      "cueCount": 1,
+      "expectedPlays": 1,
+      "before": {
+        "Plays": 73,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "after": {
+        "Plays": 74,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "pipeline": {
+        "boundary": "publication + dispatch + prepared player; inner sampling disabled",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": false,
+        "AfterAttempted": false,
+        "Before": {
+          "passed": false,
+          "knownLiveBytes": 0,
+          "positive": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "empty": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": false,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": false,
+          "knownLiveBytes": 0,
+          "positive": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "empty": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": false
+      },
+      "innerSamplingDisabled": true
+    },
+    {
+      "boundary": "real-tick-subscopes",
+      "tick": 3,
+      "frame": 71,
+      "warm": true,
+      "stepped": true,
+      "actualSinkCalls": 1,
+      "requests": 1000,
+      "cueCount": 5,
+      "expectedPlays": 5,
+      "sample": {
+        "Frame": 71,
+        "Tick": 3,
+        "Requests": 1000,
+        "Measured": false,
+        "Allocation": {
+          "valid": false,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "Before": {
+          "Plays": 74,
+          "Evictions": 0,
+          "Rejections": 0,
+          "Loads": 44,
+          "Builds": 68,
+          "Failures": 0
+        },
+        "After": {
+          "Plays": 79,
+          "Evictions": 0,
+          "Rejections": 0,
+          "Loads": 44,
+          "Builds": 68,
+          "Failures": 0
+        }
+      },
+      "queue": {
+        "boundary": "World.QueueSound loop only",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": false,
+        "AfterAttempted": false,
+        "Before": {
+          "passed": false,
+          "knownLiveBytes": 0,
+          "positive": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "empty": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": false,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": false,
+          "knownLiveBytes": 0,
+          "positive": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "empty": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": false
+      },
+      "present": {
+        "boundary": "prepared NTSDSoundPlayer.PresentSounds only",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": false,
+        "AfterAttempted": false,
+        "Before": {
+          "passed": false,
+          "knownLiveBytes": 0,
+          "positive": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "empty": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": false,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": false,
+          "knownLiveBytes": 0,
+          "positive": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "empty": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": false
+      }
+    },
+    {
+      "boundary": "same-frame-publication-replay",
+      "tick": 3,
+      "frame": 71,
+      "warm": true,
+      "requests": 1000,
+      "cueCount": 5,
+      "expectedPlays": 5,
+      "before": {
+        "Plays": 79,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "after": {
+        "Plays": 84,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "pipeline": {
+        "boundary": "publication + dispatch + prepared player; inner sampling disabled",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": false,
+        "AfterAttempted": false,
+        "Before": {
+          "passed": false,
+          "knownLiveBytes": 0,
+          "positive": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "empty": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": false,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": false,
+          "knownLiveBytes": 0,
+          "positive": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "empty": {
+            "valid": false,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": false
+      },
+      "innerSamplingDisabled": true
+    },
+    {
+      "boundary": "real-tick-subscopes",
+      "tick": 4,
+      "frame": 72,
+      "warm": false,
+      "stepped": true,
+      "actualSinkCalls": 1,
+      "requests": 1,
+      "cueCount": 5,
+      "expectedPlays": 1,
+      "sample": {
+        "Frame": 72,
+        "Tick": 4,
+        "Requests": 1,
+        "Measured": true,
+        "Allocation": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "Before": {
+          "Plays": 84,
+          "Evictions": 0,
+          "Rejections": 0,
+          "Loads": 44,
+          "Builds": 68,
+          "Failures": 0
+        },
+        "After": {
+          "Plays": 85,
+          "Evictions": 0,
+          "Rejections": 0,
+          "Loads": 44,
+          "Builds": 68,
+          "Failures": 0
+        }
+      },
+      "queue": {
+        "boundary": "World.QueueSound loop only",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": true,
+        "AfterAttempted": true,
+        "Before": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 200
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 300
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": true
+      },
+      "present": {
+        "boundary": "prepared NTSDSoundPlayer.PresentSounds only",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": true,
+        "AfterAttempted": true,
+        "Before": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 200
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 300
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": true
+      }
+    },
+    {
+      "boundary": "same-frame-publication-replay",
+      "tick": 4,
+      "frame": 72,
+      "warm": false,
+      "requests": 1,
+      "cueCount": 5,
+      "expectedPlays": 1,
+      "before": {
+        "Plays": 85,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "after": {
+        "Plays": 86,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "pipeline": {
+        "boundary": "publication + dispatch + prepared player; inner sampling disabled",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": true,
+        "AfterAttempted": true,
+        "Before": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 200
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 300
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": true
+      },
+      "innerSamplingDisabled": true
+    },
+    {
+      "boundary": "real-tick-subscopes",
+      "tick": 5,
+      "frame": 73,
+      "warm": false,
+      "stepped": true,
+      "actualSinkCalls": 1,
+      "requests": 1000,
+      "cueCount": 1,
+      "expectedPlays": 1,
+      "sample": {
+        "Frame": 73,
+        "Tick": 5,
+        "Requests": 1000,
+        "Measured": true,
+        "Allocation": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "Before": {
+          "Plays": 86,
+          "Evictions": 0,
+          "Rejections": 0,
+          "Loads": 44,
+          "Builds": 68,
+          "Failures": 0
+        },
+        "After": {
+          "Plays": 87,
+          "Evictions": 0,
+          "Rejections": 0,
+          "Loads": 44,
+          "Builds": 68,
+          "Failures": 0
+        }
+      },
+      "queue": {
+        "boundary": "World.QueueSound loop only",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": true,
+        "AfterAttempted": true,
+        "Before": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 300
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 500
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": true
+      },
+      "present": {
+        "boundary": "prepared NTSDSoundPlayer.PresentSounds only",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": true,
+        "AfterAttempted": true,
+        "Before": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 200
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 300
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": true
+      }
+    },
+    {
+      "boundary": "same-frame-publication-replay",
+      "tick": 5,
+      "frame": 73,
+      "warm": false,
+      "requests": 1000,
+      "cueCount": 1,
+      "expectedPlays": 1,
+      "before": {
+        "Plays": 87,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "after": {
+        "Plays": 88,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "pipeline": {
+        "boundary": "publication + dispatch + prepared player; inner sampling disabled",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": true,
+        "AfterAttempted": true,
+        "Before": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 200
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 100
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": true
+      },
+      "innerSamplingDisabled": true
+    },
+    {
+      "boundary": "real-tick-subscopes",
+      "tick": 6,
+      "frame": 74,
+      "warm": false,
+      "stepped": true,
+      "actualSinkCalls": 1,
+      "requests": 1000,
+      "cueCount": 5,
+      "expectedPlays": 5,
+      "sample": {
+        "Frame": 74,
+        "Tick": 6,
+        "Requests": 1000,
+        "Measured": true,
+        "Allocation": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "Before": {
+          "Plays": 88,
+          "Evictions": 0,
+          "Rejections": 0,
+          "Loads": 44,
+          "Builds": 68,
+          "Failures": 0
+        },
+        "After": {
+          "Plays": 93,
+          "Evictions": 0,
+          "Rejections": 0,
+          "Loads": 44,
+          "Builds": 68,
+          "Failures": 0
+        }
+      },
+      "queue": {
+        "boundary": "World.QueueSound loop only",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": true,
+        "AfterAttempted": true,
+        "Before": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 300
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 300
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": true
+      },
+      "present": {
+        "boundary": "prepared NTSDSoundPlayer.PresentSounds only",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": true,
+        "AfterAttempted": true,
+        "Before": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 100
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 300
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": true
+      }
+    },
+    {
+      "boundary": "same-frame-publication-replay",
+      "tick": 6,
+      "frame": 74,
+      "warm": false,
+      "requests": 1000,
+      "cueCount": 5,
+      "expectedPlays": 5,
+      "before": {
+        "Plays": 93,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "after": {
+        "Plays": 98,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "pipeline": {
+        "boundary": "publication + dispatch + prepared player; inner sampling disabled",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": true,
+        "AfterAttempted": true,
+        "Before": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 200
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 200
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": true
+      },
+      "innerSamplingDisabled": true
+    },
+    {
+      "boundary": "real-tick-subscopes",
+      "tick": 7,
+      "frame": 75,
+      "warm": false,
+      "stepped": true,
+      "actualSinkCalls": 1,
+      "requests": 1000,
+      "cueCount": 5,
+      "expectedPlays": 5,
+      "sample": {
+        "Frame": 75,
+        "Tick": 7,
+        "Requests": 1000,
+        "Measured": true,
+        "Allocation": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "Before": {
+          "Plays": 98,
+          "Evictions": 0,
+          "Rejections": 0,
+          "Loads": 44,
+          "Builds": 68,
+          "Failures": 0
+        },
+        "After": {
+          "Plays": 103,
+          "Evictions": 0,
+          "Rejections": 0,
+          "Loads": 44,
+          "Builds": 68,
+          "Failures": 0
+        }
+      },
+      "queue": {
+        "boundary": "World.QueueSound loop only",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": true,
+        "AfterAttempted": true,
+        "Before": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 200
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 500
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": true
+      },
+      "present": {
+        "boundary": "prepared NTSDSoundPlayer.PresentSounds only",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": true,
+        "AfterAttempted": true,
+        "Before": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 200
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 800
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": true
+      }
+    },
+    {
+      "boundary": "same-frame-publication-replay",
+      "tick": 7,
+      "frame": 75,
+      "warm": false,
+      "requests": 1000,
+      "cueCount": 5,
+      "expectedPlays": 5,
+      "before": {
+        "Plays": 103,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "after": {
+        "Plays": 108,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "pipeline": {
+        "boundary": "publication + dispatch + prepared player; inner sampling disabled",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": true,
+        "AfterAttempted": true,
+        "Before": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 500
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 400
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": true
+      },
+      "innerSamplingDisabled": true
+    },
+    {
+      "boundary": "real-tick-subscopes",
+      "tick": 8,
+      "frame": 76,
+      "warm": false,
+      "stepped": true,
+      "actualSinkCalls": 1,
+      "requests": 1000,
+      "cueCount": 5,
+      "expectedPlays": 5,
+      "sample": {
+        "Frame": 76,
+        "Tick": 8,
+        "Requests": 1000,
+        "Measured": true,
+        "Allocation": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "Before": {
+          "Plays": 108,
+          "Evictions": 0,
+          "Rejections": 0,
+          "Loads": 44,
+          "Builds": 68,
+          "Failures": 0
+        },
+        "After": {
+          "Plays": 113,
+          "Evictions": 0,
+          "Rejections": 0,
+          "Loads": 44,
+          "Builds": 68,
+          "Failures": 0
+        }
+      },
+      "queue": {
+        "boundary": "World.QueueSound loop only",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": true,
+        "AfterAttempted": true,
+        "Before": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 700
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 400
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": true
+      },
+      "present": {
+        "boundary": "prepared NTSDSoundPlayer.PresentSounds only",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": true,
+        "AfterAttempted": true,
+        "Before": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 200
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 300
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": true
+      }
+    },
+    {
+      "boundary": "same-frame-publication-replay",
+      "tick": 8,
+      "frame": 76,
+      "warm": false,
+      "requests": 1000,
+      "cueCount": 5,
+      "expectedPlays": 5,
+      "before": {
+        "Plays": 113,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "after": {
+        "Plays": 118,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "pipeline": {
+        "boundary": "publication + dispatch + prepared player; inner sampling disabled",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": true,
+        "AfterAttempted": true,
+        "Before": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 100
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 300
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": true
+      },
+      "innerSamplingDisabled": true
+    },
+    {
+      "boundary": "real-tick-subscopes",
+      "tick": 9,
+      "frame": 77,
+      "warm": false,
+      "stepped": true,
+      "actualSinkCalls": 1,
+      "requests": 1000,
+      "cueCount": 5,
+      "expectedPlays": 5,
+      "sample": {
+        "Frame": 77,
+        "Tick": 9,
+        "Requests": 1000,
+        "Measured": true,
+        "Allocation": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "Before": {
+          "Plays": 118,
+          "Evictions": 0,
+          "Rejections": 0,
+          "Loads": 44,
+          "Builds": 68,
+          "Failures": 0
+        },
+        "After": {
+          "Plays": 123,
+          "Evictions": 0,
+          "Rejections": 0,
+          "Loads": 44,
+          "Builds": 68,
+          "Failures": 0
+        }
+      },
+      "queue": {
+        "boundary": "World.QueueSound loop only",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": true,
+        "AfterAttempted": true,
+        "Before": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 500
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 500
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": true
+      },
+      "present": {
+        "boundary": "prepared NTSDSoundPlayer.PresentSounds only",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": true,
+        "AfterAttempted": true,
+        "Before": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 500
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 400
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": true
+      }
+    },
+    {
+      "boundary": "same-frame-publication-replay",
+      "tick": 9,
+      "frame": 77,
+      "warm": false,
+      "requests": 1000,
+      "cueCount": 5,
+      "expectedPlays": 5,
+      "before": {
+        "Plays": 123,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "after": {
+        "Plays": 128,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "pipeline": {
+        "boundary": "publication + dispatch + prepared player; inner sampling disabled",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": true,
+        "AfterAttempted": true,
+        "Before": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 600
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 600
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": true
+      },
+      "innerSamplingDisabled": true
+    },
+    {
+      "boundary": "real-tick-subscopes",
+      "tick": 10,
+      "frame": 78,
+      "warm": false,
+      "stepped": true,
+      "actualSinkCalls": 1,
+      "requests": 1000,
+      "cueCount": 5,
+      "expectedPlays": 5,
+      "sample": {
+        "Frame": 78,
+        "Tick": 10,
+        "Requests": 1000,
+        "Measured": true,
+        "Allocation": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "Before": {
+          "Plays": 128,
+          "Evictions": 0,
+          "Rejections": 0,
+          "Loads": 44,
+          "Builds": 68,
+          "Failures": 0
+        },
+        "After": {
+          "Plays": 133,
+          "Evictions": 0,
+          "Rejections": 0,
+          "Loads": 44,
+          "Builds": 68,
+          "Failures": 0
+        }
+      },
+      "queue": {
+        "boundary": "World.QueueSound loop only",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": true,
+        "AfterAttempted": true,
+        "Before": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 400
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 300
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": true
+      },
+      "present": {
+        "boundary": "prepared NTSDSoundPlayer.PresentSounds only",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": true,
+        "AfterAttempted": true,
+        "Before": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 300
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 400
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": true
+      }
+    },
+    {
+      "boundary": "same-frame-publication-replay",
+      "tick": 10,
+      "frame": 78,
+      "warm": false,
+      "requests": 1000,
+      "cueCount": 5,
+      "expectedPlays": 5,
+      "before": {
+        "Plays": 133,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "after": {
+        "Plays": 138,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "pipeline": {
+        "boundary": "publication + dispatch + prepared player; inner sampling disabled",
+        "OwnerThread": 1,
+        "currentThread": 1,
+        "Marker": "GC.Alloc",
+        "Category": "Internal",
+        "Unit": "TimeNanoseconds",
+        "Capacity": 256,
+        "BeforeAttempted": true,
+        "AfterAttempted": true,
+        "Before": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 200
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "Scope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "After": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 100
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "zeroEvents": true
+      },
+      "innerSamplingDisabled": true
+    }
+  ],
+  "lastQueue": {
+    "boundary": "World.QueueSound loop only",
+    "OwnerThread": 1,
+    "currentThread": 1,
+    "Marker": "GC.Alloc",
+    "Category": "Internal",
+    "Unit": "TimeNanoseconds",
+    "Capacity": 256,
+    "BeforeAttempted": true,
+    "AfterAttempted": true,
+    "Before": {
+      "passed": true,
+      "knownLiveBytes": 1048576,
+      "positive": {
+        "valid": true,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 1,
+        "allocationEvents": 1,
+        "rawValueTotal": 400
+      },
+      "empty": {
+        "valid": true,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      }
+    },
+    "Scope": {
+      "valid": true,
+      "calibratedBefore": true,
+      "saturated": false,
+      "wrapped": false,
+      "sampleCount": 0,
+      "allocationEvents": 0,
+      "rawValueTotal": 0
+    },
+    "After": {
+      "passed": true,
+      "knownLiveBytes": 1048576,
+      "positive": {
+        "valid": true,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 1,
+        "allocationEvents": 1,
+        "rawValueTotal": 300
+      },
+      "empty": {
+        "valid": true,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      }
+    },
+    "zeroEvents": true
+  },
+  "lastPresent": {
+    "boundary": "prepared NTSDSoundPlayer.PresentSounds only",
+    "OwnerThread": 1,
+    "currentThread": 1,
+    "Marker": "GC.Alloc",
+    "Category": "Internal",
+    "Unit": "TimeNanoseconds",
+    "Capacity": 256,
+    "BeforeAttempted": true,
+    "AfterAttempted": true,
+    "Before": {
+      "passed": true,
+      "knownLiveBytes": 1048576,
+      "positive": {
+        "valid": true,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 1,
+        "allocationEvents": 1,
+        "rawValueTotal": 300
+      },
+      "empty": {
+        "valid": true,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      }
+    },
+    "Scope": {
+      "valid": true,
+      "calibratedBefore": true,
+      "saturated": false,
+      "wrapped": false,
+      "sampleCount": 0,
+      "allocationEvents": 0,
+      "rawValueTotal": 0
+    },
+    "After": {
+      "passed": true,
+      "knownLiveBytes": 1048576,
+      "positive": {
+        "valid": true,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 1,
+        "allocationEvents": 1,
+        "rawValueTotal": 400
+      },
+      "empty": {
+        "valid": true,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      }
+    },
+    "zeroEvents": true
+  },
+  "lastPipeline": {
+    "boundary": "publication + dispatch + prepared player; inner sampling disabled",
+    "OwnerThread": 1,
+    "currentThread": 1,
+    "Marker": "GC.Alloc",
+    "Category": "Internal",
+    "Unit": "TimeNanoseconds",
+    "Capacity": 256,
+    "BeforeAttempted": true,
+    "AfterAttempted": true,
+    "Before": {
+      "passed": true,
+      "knownLiveBytes": 1048576,
+      "positive": {
+        "valid": true,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 1,
+        "allocationEvents": 1,
+        "rawValueTotal": 200
+      },
+      "empty": {
+        "valid": true,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      }
+    },
+    "Scope": {
+      "valid": true,
+      "calibratedBefore": true,
+      "saturated": false,
+      "wrapped": false,
+      "sampleCount": 0,
+      "allocationEvents": 0,
+      "rawValueTotal": 0
+    },
+    "After": {
+      "passed": true,
+      "knownLiveBytes": 1048576,
+      "positive": {
+        "valid": true,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 1,
+        "allocationEvents": 1,
+        "rawValueTotal": 100
+      },
+      "empty": {
+        "valid": true,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      }
+    },
+    "zeroEvents": true
+  },
+  "recordedSinkSamples": [
+    {
+      "Frame": 69,
+      "Tick": 1,
+      "Requests": 1,
+      "Measured": false,
+      "Allocation": {
+        "valid": false,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "Before": {
+        "Plays": 70,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "After": {
+        "Plays": 71,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      }
+    },
+    {
+      "Frame": 69,
+      "Tick": 1,
+      "Requests": 1,
+      "Measured": false,
+      "Allocation": {
+        "valid": false,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "Before": {
+        "Plays": 71,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "After": {
+        "Plays": 72,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      }
+    },
+    {
+      "Frame": 70,
+      "Tick": 2,
+      "Requests": 1000,
+      "Measured": false,
+      "Allocation": {
+        "valid": false,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "Before": {
+        "Plays": 72,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "After": {
+        "Plays": 73,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      }
+    },
+    {
+      "Frame": 70,
+      "Tick": 2,
+      "Requests": 1000,
+      "Measured": false,
+      "Allocation": {
+        "valid": false,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "Before": {
+        "Plays": 73,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "After": {
+        "Plays": 74,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      }
+    },
+    {
+      "Frame": 71,
+      "Tick": 3,
+      "Requests": 1000,
+      "Measured": false,
+      "Allocation": {
+        "valid": false,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "Before": {
+        "Plays": 74,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "After": {
+        "Plays": 79,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      }
+    },
+    {
+      "Frame": 71,
+      "Tick": 3,
+      "Requests": 1000,
+      "Measured": false,
+      "Allocation": {
+        "valid": false,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "Before": {
+        "Plays": 79,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "After": {
+        "Plays": 84,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      }
+    },
+    {
+      "Frame": 72,
+      "Tick": 4,
+      "Requests": 1,
+      "Measured": true,
+      "Allocation": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "Before": {
+        "Plays": 84,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "After": {
+        "Plays": 85,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      }
+    },
+    {
+      "Frame": 72,
+      "Tick": 4,
+      "Requests": 1,
+      "Measured": false,
+      "Allocation": {
+        "valid": false,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "Before": {
+        "Plays": 85,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "After": {
+        "Plays": 86,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      }
+    },
+    {
+      "Frame": 73,
+      "Tick": 5,
+      "Requests": 1000,
+      "Measured": true,
+      "Allocation": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "Before": {
+        "Plays": 86,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "After": {
+        "Plays": 87,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      }
+    },
+    {
+      "Frame": 73,
+      "Tick": 5,
+      "Requests": 1000,
+      "Measured": false,
+      "Allocation": {
+        "valid": false,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "Before": {
+        "Plays": 87,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "After": {
+        "Plays": 88,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      }
+    },
+    {
+      "Frame": 74,
+      "Tick": 6,
+      "Requests": 1000,
+      "Measured": true,
+      "Allocation": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "Before": {
+        "Plays": 88,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "After": {
+        "Plays": 93,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      }
+    },
+    {
+      "Frame": 74,
+      "Tick": 6,
+      "Requests": 1000,
+      "Measured": false,
+      "Allocation": {
+        "valid": false,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "Before": {
+        "Plays": 93,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "After": {
+        "Plays": 98,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      }
+    },
+    {
+      "Frame": 75,
+      "Tick": 7,
+      "Requests": 1000,
+      "Measured": true,
+      "Allocation": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "Before": {
+        "Plays": 98,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "After": {
+        "Plays": 103,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      }
+    },
+    {
+      "Frame": 75,
+      "Tick": 7,
+      "Requests": 1000,
+      "Measured": false,
+      "Allocation": {
+        "valid": false,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "Before": {
+        "Plays": 103,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "After": {
+        "Plays": 108,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      }
+    },
+    {
+      "Frame": 76,
+      "Tick": 8,
+      "Requests": 1000,
+      "Measured": true,
+      "Allocation": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "Before": {
+        "Plays": 108,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "After": {
+        "Plays": 113,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      }
+    },
+    {
+      "Frame": 76,
+      "Tick": 8,
+      "Requests": 1000,
+      "Measured": false,
+      "Allocation": {
+        "valid": false,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "Before": {
+        "Plays": 113,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "After": {
+        "Plays": 118,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      }
+    },
+    {
+      "Frame": 77,
+      "Tick": 9,
+      "Requests": 1000,
+      "Measured": true,
+      "Allocation": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "Before": {
+        "Plays": 118,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "After": {
+        "Plays": 123,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      }
+    },
+    {
+      "Frame": 77,
+      "Tick": 9,
+      "Requests": 1000,
+      "Measured": false,
+      "Allocation": {
+        "valid": false,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "Before": {
+        "Plays": 123,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "After": {
+        "Plays": 128,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      }
+    },
+    {
+      "Frame": 78,
+      "Tick": 10,
+      "Requests": 1000,
+      "Measured": true,
+      "Allocation": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "Before": {
+        "Plays": 128,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "After": {
+        "Plays": 133,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      }
+    },
+    {
+      "Frame": 78,
+      "Tick": 10,
+      "Requests": 1000,
+      "Measured": false,
+      "Allocation": {
+        "valid": false,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "Before": {
+        "Plays": 133,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      },
+      "After": {
+        "Plays": 138,
+        "Evictions": 0,
+        "Rejections": 0,
+        "Loads": 44,
+        "Builds": 68,
+        "Failures": 0
+      }
+    }
+  ],
+  "scope": "Three exclusive current-thread scopes; no whole Driver/engine GC, no 1000-entity claim",
+  "saturation": "65-identity saturation is unchanged prior evidence, not newly claimed"
+}

@@ -1,0 +1,96 @@
+{
+  "results": [
+    {
+      "key": "f1",
+      "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.R02_AdmissionStopPrecedesFailureReturn",
+      "result": "Passed",
+      "xml": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\focused-01\\f1-result.xml"
+    },
+    {
+      "key": "f2",
+      "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.R02_RealWorkerFailureCancelsOrdinaryWaiter",
+      "result": "Passed",
+      "xml": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\focused-01\\f2-result.xml"
+    },
+    {
+      "key": "f3",
+      "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q03C_FaultCannotFinishWhileAnotherWorkerIsBlocked",
+      "result": "Passed",
+      "xml": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\focused-01\\f3-result.xml"
+    },
+    {
+      "key": "f4",
+      "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q03D_AppAsyncCloseSharesPendingOwner",
+      "result": "Passed",
+      "xml": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\focused-01\\f4-result.xml"
+    }
+  ],
+  "ownerCleanup": [
+    {
+      "path": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\focused-01\\owner-cleanup-29b04edd89a34f4da77afb17ba324b74.json",
+      "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.R02_AdmissionStopPrecedesFailureReturn",
+      "released": true,
+      "resourceRecords": 0,
+      "destroyed": true,
+      "restored": true
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\focused-01\\owner-cleanup-470f361d3e074a888066311343d5e1f7.json",
+      "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q03C_FaultCannotFinishWhileAnotherWorkerIsBlocked",
+      "released": true,
+      "resourceRecords": 24,
+      "destroyed": true,
+      "restored": true
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\focused-01\\owner-cleanup-6e4552248d4b47babe4a2d716fbe1010.json",
+      "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.R02_RealWorkerFailureCancelsOrdinaryWaiter",
+      "released": true,
+      "resourceRecords": 0,
+      "destroyed": true,
+      "restored": true
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\focused-01\\owner-cleanup-a3c348fdd47f41e18b6b27db578f086e.json",
+      "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q03D_AppAsyncCloseSharesPendingOwner",
+      "released": true,
+      "resourceRecords": 0,
+      "destroyed": true,
+      "restored": true
+    }
+  ],
+  "workerCleanup": [
+    {
+      "Reserved": 0,
+      "Active": 0,
+      "Waiting": 0,
+      "PendingPixels": 0,
+      "actualDecode": 1,
+      "thirdDecode": 0
+    },
+    {
+      "Reserved": 0,
+      "Active": 0,
+      "Waiting": 0,
+      "PendingPixels": 0,
+      "actualDecode": 1,
+      "thirdDecode": 0
+    },
+    {
+      "Reserved": 0,
+      "Active": 0,
+      "Waiting": 0,
+      "PendingPixels": 0,
+      "actualDecode": 1,
+      "thirdDecode": 0
+    },
+    {
+      "Reserved": 0,
+      "Active": 0,
+      "Waiting": 0,
+      "PendingPixels": 0,
+      "actualDecode": 1,
+      "thirdDecode": 0
+    }
+  ]
+}

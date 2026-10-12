@@ -1,0 +1,20 @@
+{
+  "utc": "2026-10-11T13:06:13.847488+00:00",
+  "protectedCount": 93,
+  "protectedDrift": [],
+  "oldRawCount": 6,
+  "oldRawDrift": [],
+  "backupCount": 56,
+  "previousBackupCount": 27,
+  "revisionBackupCount": 29,
+  "backupDrift": [],
+  "codeFingerprintChanges": [
+    "Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs",
+    "Library/ScriptAssemblies/Assembly-CSharp-Editor.dll"
+  ],
+  "oldColdReceiptUnchanged": true,
+  "frozenInputCount": 24,
+  "frozenInputsDrift": [],
+  "futurePlayRootExists": false,
+  "currentIdentitiesMatchC2": true
+}

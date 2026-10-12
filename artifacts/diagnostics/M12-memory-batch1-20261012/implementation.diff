@@ -1,0 +1,542 @@
+--- before/Assets/NTSD/Scripts/Animation/Runtime/BMPLoader.cs
++++ Assets/NTSD/Scripts/Animation/Runtime/BMPLoader.cs
+@@ -16,6 +16,9 @@
+             public int Height;
+             public Color[] Pixels;
+             public bool IsPng { get; internal set; }
++            internal Color32[] PngPixels;
++            internal bool HasPixels => PngPixels != null || Pixels != null;
++            internal long PixelStorageBytes => PngPixels != null ? 4L * PngPixels.Length : 16L * (Pixels?.Length ?? 0);
+         }
+ 
+         /// <summary>
+@@ -119,7 +122,18 @@
+         private static VerifiedImageLayout ReadLayout(string path, string hash, long length, byte[] header, int count)
+         {
+             bool png = count >= 8 && PngPixelDecoder.HasSignature(header);
+-            if (!png) return new VerifiedImageLayout(path, hash, length, 0, 0, false);
++            if (!png)
++            {
++                if (count >= 30 && header[0] == 'B' && header[1] == 'M')
++                {
++                    int bmpWidth = System.BitConverter.ToInt32(header, 18);
++                    long bmpHeight = System.Math.Abs((long)System.BitConverter.ToInt32(header, 22));
++                    if (bmpWidth <= 0 || bmpHeight <= 0 || bmpHeight > int.MaxValue)
++                        throw new InvalidDataException("BMP dimensions are invalid.");
++                    return new VerifiedImageLayout(path, hash, length, bmpWidth, (int)bmpHeight, false);
++                }
++                return new VerifiedImageLayout(path, hash, length, 0, 0, false);
++            }
+             if (count < 33 || header[8] != 0 || header[9] != 0 || header[10] != 0 || header[11] != 13 ||
+                 header[12] != 73 || header[13] != 72 || header[14] != 68 || header[15] != 82)
+                 throw new InvalidDataException("PNG has no complete leading IHDR.");
+@@ -133,6 +147,31 @@
+ 
+         internal static BmpData LoadVerifiedImageData(string filePath, VerifiedImageLayout layout)
+         {
++            return DecodeImageData(ReadVerifiedBytes(filePath, layout), filePath);
++        }
++
++        internal static BmpData LoadVerifiedNativeImageData(string filePath, string expectedSha256)
++        {
++            return LoadVerifiedNativeImageData(filePath, ReadVerifiedImageLayout(filePath, expectedSha256));
++        }
++
++        internal static BmpData LoadVerifiedNativeImageData(string filePath, VerifiedImageLayout layout)
++        {
++            byte[] bytes = ReadVerifiedBytes(filePath, layout);
++            if (!layout.IsPng) return DecodeImageData(bytes, filePath);
++            if (!PngPixelDecoder.TryDecode(bytes, out int width, out int height, out byte[] rgba, out string error))
++                throw new InvalidDataException("PNG decode failed: " + error);
++            var pixels = new Color32[checked(width * height)];
++            for (int i = 0; i < pixels.Length; i++)
++            {
++                int offset = i * 4;
++                pixels[i] = new Color32(rgba[offset], rgba[offset + 1], rgba[offset + 2], rgba[offset + 3]);
++            }
++            return new BmpData { Width = width, Height = height, PngPixels = pixels, IsPng = true };
++        }
++
++        private static byte[] ReadVerifiedBytes(string filePath, VerifiedImageLayout layout)
++        {
+             if (!string.Equals(Path.GetFullPath(filePath), layout.FilePath, System.StringComparison.Ordinal))
+                 throw new InvalidDataException("Qualified image path changed.");
+             byte[] bytes;
+@@ -159,7 +198,7 @@
+                 bytes, System.Math.Min(bytes.Length, 33));
+             if (current.IsPng != layout.IsPng || current.Width != layout.Width || current.Height != layout.Height)
+                 throw new InvalidDataException("Qualified image dimensions changed before decoding.");
+-            return DecodeImageData(bytes, filePath);
++            return bytes;
+         }
+ 
+         private static BmpData LoadDataCore(string filePath, string expectedSha256)
+--- before/Assets/NTSD/Scripts/Animation/Runtime/BattleAtlasResources.cs
++++ Assets/NTSD/Scripts/Animation/Runtime/BattleAtlasResources.cs
+@@ -193,19 +193,18 @@
+             BattleAtlasArrayDecision decision = policy.EvaluateArray(plan.PageCount);
+             if (TraceAllocations)
+                 Debug.Log($"[Q08 AtlasTrace] planPages={plan.PageCount}, array={decision.UseTextureArray}, reason={decision.Reason}, managedBytes={GC.GetTotalMemory(false)}, phase=select");
+-            Color32[][] pages = null;
++            Color32[] pagePixels;
++            try
++            {
++                pagePixels = new Color32[checked(plan.PageSize * plan.PageSize)];
++            }
++            catch (Exception exception)
++            {
++                diagnostic = $"Atlas CPU page allocation failed: {exception.Message}";
++                return false;
++            }
+             if (decision.UseTextureArray)
+             {
+-                try
+-                {
+-                    pages = AssemblePages(plan, indexed);
+-                }
+-                catch (Exception exception)
+-                {
+-                    diagnostic = $"Atlas CPU assembly failed: {exception.Message}";
+-                    return false;
+-                }
+-
+                 Texture2DArray array = null;
+                 try
+                 {
+@@ -223,8 +222,11 @@
+                         filterMode = FilterMode.Point,
+                         wrapMode = TextureWrapMode.Clamp,
+                     };
+-                    for (int page = 0; page < pages.Length; page++)
+-                        array.SetPixels32(pages[page], page, 0);
++                    for (int page = 0; page < plan.PageCount; page++)
++                    {
++                        AssemblePageInto(plan, indexed, page, pagePixels);
++                        array.SetPixels32(pagePixels, page, 0);
++                    }
+                     array.Apply(false, true);
+                     if (TraceAllocations)
+                         Debug.Log("[Q08 AtlasTrace] array allocation complete");
+@@ -257,9 +259,7 @@
+                 {
+                     if (TraceAllocations)
+                         Debug.Log($"[Q08 AtlasTrace] ordered page begin={page}/{plan.PageCount}, managedBytes={GC.GetTotalMemory(false)}");
+-                    Color32[] pagePixels = pages != null
+-                        ? pages[page]
+-                        : AssemblePage(plan, indexed, page);
++                    AssemblePageInto(plan, indexed, page, pagePixels);
+                     var texture = new Texture2D(
+                         BattleAtlasLayoutPlanner.PageSize,
+                         BattleAtlasLayoutPlanner.PageSize,
+@@ -633,6 +633,20 @@
+             int pageIndex)
+         {
+             var page = new Color32[checked(plan.PageSize * plan.PageSize)];
++            AssemblePageInto(plan, indexedSources, pageIndex, page);
++            return page;
++        }
++
++        internal static void AssemblePageInto(
++            BattleAtlasPlan plan,
++            IReadOnlyDictionary<string, BattleAtlasSourcePixels> indexedSources,
++            int pageIndex,
++            Color32[] page)
++        {
++            if (pageIndex < 0 || pageIndex >= plan.PageCount || page == null ||
++                page.Length != checked(plan.PageSize * plan.PageSize))
++                throw new ArgumentOutOfRangeException(nameof(pageIndex));
++            Array.Clear(page, 0, page.Length);
+             for (int index = 0; index < plan.Placements.Count; index++)
+             {
+                 BattleAtlasPlacement placement = plan.Placements[index];
+@@ -648,7 +662,6 @@
+                     placement.ContentRect,
+                     plan.Padding);
+             }
+-            return page;
+         }
+ 
+         internal static bool TryValidateSourceSet(
+--- before/Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs
++++ Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs
+@@ -231,6 +231,7 @@
+             internal bool Committed;
+             internal bool ReuseNativeBodySheets;
+             internal NativeDecodeAdmission Admission;
++            internal BattleImageMemoryBudget MemoryBudget;
+             internal NativeDecodeAdmission Metrics;
+             internal NativeDecodeAdmission Accounting => Admission ?? Metrics;
+             internal Action<string> DecodeStarted;
+@@ -596,17 +597,18 @@
+             BMPLoader.BmpData pixels = null;
+             try
+             {
+-                pixels = await UniTask.RunOnThreadPool(() => BMPLoader.LoadVerifiedImageData(path, hash));
++                pixels = await UniTask.RunOnThreadPool(() => BMPLoader.LoadVerifiedNativeImageData(path, hash));
+             await UniTask.SwitchToMainThread();
+             if (!CanCompleteSpritePrewarmInvocation(operation.Invocation)) throw new OperationCanceledException();
+-            if (pixels == null || pixels.Pixels == null)
++            if (pixels == null || !pixels.HasPixels)
+                 throw new InvalidDataException("Native UI image could not be decoded: " + path);
+             var texture = new Texture2D(pixels.Width, pixels.Height, TextureFormat.RGBA32, false);
+             operation.Textures.Add(texture);
+             operation.Resources.Add(texture);
+             texture.filterMode = FilterMode.Point;
+             texture.wrapMode = TextureWrapMode.Clamp;
+-            texture.SetPixels(pixels.Pixels);
++            if (pixels.PngPixels != null) texture.SetPixels32(pixels.PngPixels);
++            else texture.SetPixels(pixels.Pixels);
+             texture.Apply();
+             Sprite sprite = Sprite.Create(texture, new Rect(0, 0, pixels.Width, pixels.Height), new Vector2(0.5f, 0.5f), 100f);
+             operation.Sprites.Add(sprite);
+@@ -2008,6 +2010,16 @@
+             }
+ 
+             Debug.Log($"<color=cyan>共 {allFileInfos.Count} 个文件需要处理</color>");
++
++            if (native != null)
++            {
++                long oldPublicationBytes = EstimateOwnedImageBytes();
++                BattleRenderingDeviceCapabilities capabilities = BattleRenderingDeviceCapabilities.FromSystem();
++                native.MemoryBudget = await RunNativeImageBudgetPreflightAsync(native, allFileInfos,
++                    stagedConfigs, oldPublicationBytes, capabilities.AtlasMemoryBudgetBytes, capabilities.MaxTextureSize);
++                if (!CanCompleteSpritePrewarmInvocation(invocation)) return false;
++                Debug.Log("[Image batch budget] " + native.MemoryBudget.Describe());
++            }
+ 
+             int totalCreated = 0;
+             int failedSheets = 0;
+@@ -2246,7 +2258,8 @@
+                         out HashSet<UnityEngine.Object> atlasResources,
+                         out atlasDiagnostic,
+                         out atlasPolicyDecision,
+-                        out atlasDiagnosticInputs))
++                        out atlasDiagnosticInputs,
++                        native == null ? (Action<long>)null : bytes => native.MemoryBudget.Validate(bytes)))
+                 {
+                     throw new InvalidOperationException($"Battle atlas publication failed: {atlasDiagnostic}");
+                 }
+@@ -2412,17 +2425,17 @@
+             int invocation, LoganVisualContentCandidate.NativeSparkInput input)
+         {
+             BMPLoader.BmpData decoded = await UniTask.RunOnThreadPool(() =>
+-                BMPLoader.LoadVerifiedImageData(input.Image.Path, input.Image.Sha256));
++                BMPLoader.LoadVerifiedNativeImageData(input.Image.Path, input.Image.Sha256));
+             if (!CanCompleteSpritePrewarmInvocation(invocation))
+                 return null;
+-            if (decoded?.Pixels == null || !decoded.IsPng ||
++            if (decoded == null || !decoded.HasPixels || !decoded.IsPng ||
+                 decoded.Width != 500 || decoded.Height != 320 ||
+                 input.Width != 99 || input.Height != 79)
+                 throw new InvalidDataException(
+                     "Native SPARK PNG or system.dat geometry differs from the formal 20-cell surface.");
+ 
+             Color32[] pixels = await UniTask.RunOnThreadPool(() =>
+-                ApplyNativeSparkBlackKey(ConvertToColor32(decoded.Pixels)));
++                ApplyNativeSparkBlackKey(decoded.PngPixels ?? ConvertToColor32(decoded.Pixels)));
+             if (!CanCompleteSpritePrewarmInvocation(invocation))
+                 return null;
+ 
+@@ -2515,14 +2528,14 @@
+                 }
+ 
+                 BMPLoader.BmpData decoded = await UniTask.RunOnThreadPool(() =>
+-                    BMPLoader.LoadVerifiedImageData(image.Path, image.Sha256));
++                    BMPLoader.LoadVerifiedNativeImageData(image.Path, image.Sha256));
+                 if (!CanCompleteSpritePrewarmInvocation(invocation))
+                     throw new OperationCanceledException("Native kill icon publication was cancelled.");
+-                if (decoded?.Pixels == null || !decoded.IsPng ||
++                if (decoded == null || !decoded.HasPixels || !decoded.IsPng ||
+                     decoded.Width <= 0 || decoded.Height <= 0)
+                     throw new InvalidDataException("Native kill icon is not a valid PNG: " + image.Path);
+ 
+-                Color32[] pixels = ConvertToColor32(decoded.Pixels);
++                Color32[] pixels = decoded.PngPixels ?? ConvertToColor32(decoded.Pixels);
+                 await UniTask.SwitchToMainThread();
+                 if (!CanCompleteSpritePrewarmInvocation(invocation))
+                     throw new OperationCanceledException("Native kill icon publication was cancelled.");
+@@ -2571,15 +2584,15 @@
+                     throw new OperationCanceledException("Native WORDS publication was cancelled.");
+                 LoganVisualContentCandidate.ImageInput image = input.Images[sheetIndex];
+                 BMPLoader.BmpData decoded = await UniTask.RunOnThreadPool(() =>
+-                    BMPLoader.LoadVerifiedImageData(image.Path, image.Sha256));
++                    BMPLoader.LoadVerifiedNativeImageData(image.Path, image.Sha256));
+                 if (!CanCompleteSpritePrewarmInvocation(invocation))
+                     throw new OperationCanceledException("Native WORDS publication was cancelled.");
+-                if (decoded?.Pixels == null || !decoded.IsPng ||
++                if (decoded == null || !decoded.HasPixels || !decoded.IsPng ||
+                     decoded.Width != BattleCommonVisualCatalog.WordTextureWidth ||
+                     decoded.Height != BattleCommonVisualCatalog.WordTextureHeight)
+                     throw new InvalidDataException("Native WORDS sheet has an invalid PNG geometry: " + image.Path);
+ 
+-                Color32[] pixels = ConvertToColor32(decoded.Pixels);
++                Color32[] pixels = decoded.PngPixels ?? ConvertToColor32(decoded.Pixels);
+                 await UniTask.SwitchToMainThread();
+                 if (!CanCompleteSpritePrewarmInvocation(invocation))
+                     throw new OperationCanceledException("Native WORDS publication was cancelled.");
+@@ -2891,6 +2904,8 @@
+ 
+         internal static Color32[] PrepareBattleSheetPixels(BMPLoader.BmpData data, BattleContentSource source)
+         {
++            if (data.PngPixels != null && source != null && source.IsLoganRuntime && data.IsPng)
++                return data.PngPixels;
+             var pixels = new Color32[data.Pixels.Length];
+             for (int i = 0; i < pixels.Length; i++)
+                 pixels[i] = data.Pixels[i];
+@@ -3027,6 +3042,143 @@
+             public void Dispose() { Reservation?.Dispose(); Reservation = null; }
+         }
+ 
++        private long EstimateOwnedImageBytes()
++        {
++            var resources = new HashSet<UnityEngine.Object>(publishedOwnedResources);
++            resources.UnionWith(legacyOwnedUiResources);
++            foreach (SpritePublicationOwnership retired in retiredSpritePublications.Values)
++            {
++                resources.UnionWith(retired.Resources);
++                foreach (Sprite sprite in retired.Sprites)
++                    if (sprite != null) resources.Add(sprite.texture);
++            }
++            foreach (Sprite sprite in publishedOwnedSprites.Concat(legacyOwnedUiSprites))
++                if (sprite != null) resources.Add(sprite.texture);
++            foreach (List<Sprite> sprites in MergedSprites.Values)
++                foreach (Sprite sprite in sprites)
++                    if (sprite != null) resources.Add(sprite.texture);
++            long bytes = 0;
++            foreach (UnityEngine.Object resource in resources)
++            {
++                if (resource == null) continue;
++                int width, height, depth, mipCount;
++                bool readable;
++                if (resource is Texture2D texture)
++                {
++                    width = texture.width; height = texture.height; depth = 1;
++                    mipCount = texture.mipmapCount; readable = texture.isReadable;
++                }
++                else if (resource is Texture2DArray array)
++                {
++                    width = array.width; height = array.height; depth = array.depth;
++                    mipCount = array.mipmapCount; readable = array.isReadable;
++                }
++                else continue;
++                for (int mip = 0; mip < mipCount; mip++)
++                {
++                    bytes = checked(bytes + BattleImageMemoryBudget.PixelBytes(width, height) * depth * (readable ? 2 : 1));
++                    width = Math.Max(1, width / 2); height = Math.Max(1, height / 2);
++                }
++            }
++            return bytes;
++        }
++
++        private async UniTask<BattleImageMemoryBudget> RunNativeImageBudgetPreflightAsync(
++            NativePrewarmOperation operation,
++            List<(int characterId, SpriteFileInfo fileInfo, HashSet<int> ownedEffectivePics)> declarations,
++            Dictionary<int, LF2CharacterDataWrapper> configs, long oldBytes, long atlasLimit, int maxTextureSize)
++        {
++            BeginNativePrewarmWork();
++            try
++            {
++                return await UniTask.RunOnThreadPool(() => BuildNativeImageMemoryBudget(operation, declarations,
++                    configs, oldBytes, atlasLimit, maxTextureSize));
++            }
++            finally
++            {
++                await UniTask.SwitchToMainThread();
++                EndNativePrewarmWork();
++            }
++        }
++
++        private static BattleImageMemoryBudget BuildNativeImageMemoryBudget(
++            NativePrewarmOperation operation,
++            List<(int characterId, SpriteFileInfo fileInfo, HashSet<int> ownedEffectivePics)> declarations,
++            Dictionary<int, LF2CharacterDataWrapper> configs, long oldBytes, long atlasLimit, int maxTextureSize)
++        {
++            var budget = new BattleImageMemoryBudget(oldBytes);
++            var layouts = new Dictionary<string, BMPLoader.VerifiedImageLayout>(StringComparer.OrdinalIgnoreCase);
++            var physicalBodies = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
++            var atlasPaths = new HashSet<string>(StringComparer.Ordinal);
++            long extraClampPages = 0;
++            BMPLoader.VerifiedImageLayout Qualify(string path, string hash)
++            {
++                string key = Path.GetFullPath(path) + "|" + hash;
++                if (!layouts.TryGetValue(key, out BMPLoader.VerifiedImageLayout layout))
++                {
++                    layout = BMPLoader.ReadVerifiedImageLayout(path, hash);
++                    if (layout.Width > maxTextureSize || layout.Height > maxTextureSize)
++                        throw new InvalidDataException("Image exceeds current texture dimension limit: " + path);
++                    BattleImageMemoryBudget.PixelBytes(layout.Width, layout.Height);
++                    layouts.Add(key, layout);
++                }
++                return layout;
++            }
++            void Add(string path, string hash, bool retained, bool readable, bool atlas)
++            {
++                BMPLoader.VerifiedImageLayout layout = Qualify(path, hash);
++                budget.AddImage(layout, retained, readable);
++                if (atlas && BattleAtlasLayoutPlanner.IsPageEligible(layout.Width, layout.Height))
++                    atlasPaths.Add(BattleAtlasLayoutPlanner.NormalizePath(path));
++            }
++            foreach (var declaration in declarations)
++            {
++                SpriteFileInfo info = declaration.fileInfo;
++                if (operation.Candidate.IsMissingBodySheet(info.filePath)) continue;
++                string hash = operation.Candidate.GetImageSha256(info.filePath);
++                BMPLoader.VerifiedImageLayout layout = Qualify(info.filePath, hash);
++                if (!operation.ReuseNativeBodySheets || physicalBodies.Add(Path.GetFullPath(info.filePath) + "|" + hash))
++                    Add(info.filePath, hash, true, false, true);
++                if (!layout.IsPng) continue;
++                ResolveEffectiveGrid(info, layout.Width, layout.Height, out int row, out int col);
++                foreach (int pic in declaration.ownedEffectivePics)
++                {
++                    long index = (long)pic - info.startFrame;
++                    if (index < 0 || index > (long)info.endFrame - info.startFrame || index >= (long)row * col) continue;
++                    long x = checked(index % col * ((long)info.width + 1));
++                    long y = checked(layout.Height - (index / col + 1) * ((long)info.height + 1) + 1);
++                    if (x >= 0 && y >= 0 && x + info.width <= layout.Width && y + info.height <= layout.Height) continue;
++                    budget.AddClampedCell(info.width, info.height);
++                    if (BattleAtlasLayoutPlanner.IsPageEligible(info.width, info.height)) extraClampPages++;
++                }
++            }
++            var candidate = operation.Candidate;
++            if (candidate.SparkInput != null)
++                Add(candidate.SparkInput.Image.Path, candidate.SparkInput.Image.Sha256, true, false, true);
++            if (candidate.WordsInput != null)
++                foreach (var image in candidate.WordsInput.Images) Add(image.Path, image.Sha256, true, false, true);
++            if (candidate.KillIconInput != null)
++            {
++                var icons = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
++                foreach (var image in candidate.KillIconInput.Images)
++                    if (image != null && icons.Add(image.Path + "|" + image.Sha256))
++                        Add(image.Path, image.Sha256, false, false, false);
++            }
++            foreach (var config in configs.Values)
++            {
++                if (!string.IsNullOrEmpty(config.characterData.head))
++                    Add(config.characterData.head, candidate.GetImageSha256(config.characterData.head), false, true, false);
++                if (!string.IsNullOrEmpty(config.characterData.small))
++                    Add(config.characterData.small, candidate.GetImageSha256(config.characterData.small), false, true, false);
++            }
++            // Before pixel hashes exist, each eligible source/clamp may consume one full page.
++            // The actual atlas is checked against both this reservation and the batch limits.
++            long atlasBytes = checked((atlasPaths.Count + extraClampPages) * BattleImageMemoryBudget.PageBytes);
++            if (atlasLimit >= 0) atlasBytes = Math.Min(atlasBytes, atlasLimit);
++            budget.ReserveAtlas(atlasBytes);
++            return budget;
++        }
++
+         private async UniTask<NativeBodyDecodeRequest> AcquireNativeDecodeAsync(
+             NativePrewarmOperation operation, string path, string hash, long cellPixels)
+         {
+@@ -3070,20 +3222,23 @@
+                 bmpData = await UniTask.RunOnThreadPool(() =>
+                 {
+                     native.DecodeStarted?.Invoke(filePath);
+-                    return request == null ? BMPLoader.LoadVerifiedImageData(filePath, group.ExpectedSha256)
+-                        : BMPLoader.LoadVerifiedImageData(filePath, request.Layout);
++                    return request == null ? BMPLoader.LoadVerifiedNativeImageData(filePath, group.ExpectedSha256)
++                        : BMPLoader.LoadVerifiedNativeImageData(filePath, request.Layout);
+                 });
+                 await UniTask.SwitchToMainThread();
+                 if (!canMaterialize()) return (0, 0);
+-                if (bmpData == null || bmpData.Pixels == null) return (0, affectedDeclarations);
+-                pendingBytes = 16L * bmpData.Pixels.Length;
++                if (bmpData == null || !bmpData.HasPixels) return (0, affectedDeclarations);
++                pendingBytes = bmpData.PixelStorageBytes;
+                 accounting.AddPendingPixels(pendingBytes);
+                 int textureWidth = bmpData.Width, textureHeight = bmpData.Height;
+                 pixels = await UniTask.RunOnThreadPool(() => PrepareBattleSheetPixels(bmpData, source));
+                 await UniTask.SwitchToMainThread();
+                 if (!canMaterialize()) return (0, 0);
+-                accounting.AddPendingPixels(4L * pixels.Length);
+-                pendingBytes += 4L * pixels.Length;
++                if (!ReferenceEquals(pixels, bmpData.PngPixels))
++                {
++                    accounting.AddPendingPixels(4L * pixels.Length);
++                    pendingBytes += 4L * pixels.Length;
++                }
+                 plans = new BodySheetSpritePlan[group.Members.Count];
+                 for (int i = 0; i < group.Members.Count; i++)
+                 {
+@@ -3100,9 +3255,9 @@
+                     }
+                 }
+                 if (failed > 0 || !canMaterialize()) return (0, failed);
+-                if (request != null)
+-                {
+-                    long floatBytes = 16L * bmpData.Pixels.Length;
++                if (request != null || bmpData.PngPixels != null)
++                {
++                    long floatBytes = 16L * (bmpData.Pixels?.Length ?? 0);
+                     bmpData = null;
+                     pendingBytes -= floatBytes;
+                     accounting.RemovePendingPixels(floatBytes);
+@@ -3364,8 +3519,10 @@
+                 bmpData = await UniTask.RunOnThreadPool(() =>
+                 {
+                     if (native != null) native.DecodeStarted?.Invoke(filePath);
+-                    return request != null ? BMPLoader.LoadVerifiedImageData(filePath, request.Layout)
+-                        : expectedSha256 == null ? BMPLoader.LoadBmpData(filePath)
++                    if (native != null)
++                        return request != null ? BMPLoader.LoadVerifiedNativeImageData(filePath, request.Layout)
++                            : BMPLoader.LoadVerifiedNativeImageData(filePath, expectedSha256);
++                    return expectedSha256 == null ? BMPLoader.LoadBmpData(filePath)
+                         : BMPLoader.LoadVerifiedImageData(filePath, expectedSha256);
+                 });
+                 if (canMaterialize != null)
+@@ -3373,7 +3530,7 @@
+                     await UniTask.SwitchToMainThread();
+                     if (!canMaterialize()) return -1;
+                 }
+-                if (bmpData == null || bmpData.Pixels == null)
++                if (bmpData == null || !bmpData.HasPixels)
+                 {
+                     return -1;
+                 }
+@@ -3381,19 +3538,22 @@
+                 int textureWidth = bmpData.Width;
+                 int textureHeight = bmpData.Height;
+ 
+-                pendingBytes = 16L * bmpData.Pixels.Length;
++                pendingBytes = bmpData.PixelStorageBytes;
+                 accounting?.AddPendingPixels(pendingBytes);
+                 processedSheet = await UniTask.RunOnThreadPool(() => PrepareBattleSheetPixels(bmpData, source));
+                 await UniTask.SwitchToMainThread();
+-                accounting?.AddPendingPixels(4L * processedSheet.Length);
+-                pendingBytes += 4L * processedSheet.Length;
++                if (!ReferenceEquals(processedSheet, bmpData.PngPixels))
++                {
++                    accounting?.AddPendingPixels(4L * processedSheet.Length);
++                    pendingBytes += 4L * processedSheet.Length;
++                }
+                 plan = PrepareBodySheetSpritePlan(
+                     fileInfo, ownedEffectivePics, bmpData, processedSheet, source);
+                 if (plan == null) return -1;
+ 
+-                if (request != null)
+-                {
+-                    long floatBytes = 16L * bmpData.Pixels.Length;
++                if (request != null || bmpData.PngPixels != null)
++                {
++                    long floatBytes = 16L * (bmpData.Pixels?.Length ?? 0);
+                     bmpData = null;
+                     pendingBytes -= floatBytes;
+                     accounting.RemovePendingPixels(floatBytes);
+@@ -3734,7 +3894,8 @@
+             out HashSet<UnityEngine.Object> ownedResources,
+             out string diagnostic,
+             out BattleAtlasPolicyDecision policyDecision,
+-            out BattleAtlasDiagnosticInputs diagnosticInputs)
++            out BattleAtlasDiagnosticInputs diagnosticInputs,
++            Action<long> beforeAtlasAllocation = null)
+         {
+             boundCatalog = sourceCatalog ?? BattleSpriteCatalog.Empty;
+             boundCommonCatalog = sourceCommonCatalog ?? BattleCommonVisualCatalog.Empty;
+@@ -3808,6 +3969,8 @@
+                     budgetReason,
+                     capabilities.ToAtlasCapabilityPolicy());
+             }
++            beforeAtlasAllocation?.Invoke(planResult.Plan.PageCount == 0 ||
++                policyDecision.EffectiveMode == BattleAtlasPolicyMode.SourceTexture2D ? 0 : plannedAtlasBytes);
+             if (planResult.Plan.PageCount == 0 ||
+                 policyDecision.EffectiveMode == BattleAtlasPolicyMode.SourceTexture2D)
+             {

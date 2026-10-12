@@ -1,0 +1,12 @@
+{
+  "time": "2026-10-11T12:12:54.942493+08:00",
+  "beforeSha256": "a833e450dbeb17fa3b9a1455dba1a81d6c268a525f8ba3dcb2fc166fbd9efe5b",
+  "afterSha256": "d36cd18e6bffc68090891dea9874ea8c5d2ff56ae13d826dcef792e2edfd8b4e",
+  "oldPrefixBytes": 195422,
+  "oldPrefixSame": true,
+  "recordersQualificationSinkEmitterSame": true,
+  "exerciseHotSame": true,
+  "onlyAllowedReplacements": true,
+  "playNotRun": true,
+  "newState": "cold fixture-owned snapshots sized once to existing pool/host; no production state"
+}

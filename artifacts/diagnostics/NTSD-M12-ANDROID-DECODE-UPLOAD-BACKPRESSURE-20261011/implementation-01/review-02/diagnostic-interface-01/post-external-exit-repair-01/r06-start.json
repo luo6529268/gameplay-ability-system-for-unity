@@ -1,0 +1,28 @@
+{
+  "utc": "2026-10-11T15:42:08.055957+00:00",
+  "request": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "testNames": [
+        "NTSD.Test.M12DiagnosticRepairTests.R06_UnknownErrorStaysFailedWhileDurableSafeReleaseCompletes"
+      ],
+      "includeDetails": true,
+      "includeFailedTests": true
+    }
+  },
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "3fa22a3e025540bb8e598a4420e7c4cc",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": true
+      }
+    }
+  }
+}

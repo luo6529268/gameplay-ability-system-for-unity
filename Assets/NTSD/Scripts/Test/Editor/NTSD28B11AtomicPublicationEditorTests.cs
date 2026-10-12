@@ -31,6 +31,12 @@ namespace NTSD.Test
 
 
         private const string ResumeOutput = "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-ADMISSION-20261010";
+        internal string EvidenceDirectory { get; set; } = ResumeOutput;
+        internal string DrawEvidenceDirectory { get; set; }
+        internal CharacterAnimtorManager M12Manager => manager;
+        internal GameObject M12NewObject(string name) => NewObject(name);
+        internal LoganVisualContentCandidate M12Candidate(string name, bool heads = false) => Candidate(name, heads);
+        internal UniTask<bool> M12Load(LoganVisualContentCandidate candidate, Action<string> progress = null) => Load(candidate, progress);
         private readonly List<OwnedResourceObservation> observedResources = new List<OwnedResourceObservation>(256);
         private readonly HashSet<int> preexistingResourceIds = new HashSet<int>();
         private string observedGeneration;
@@ -59,10 +65,10 @@ namespace NTSD.Test
                 BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).GetValue(target);
         }
 
-        private static void SaveResumeEvidence(string name, object value)
+        private void SaveResumeEvidence(string name, object value)
         {
-            Directory.CreateDirectory(ResumeOutput);
-            using (var stream = new FileStream(Path.Combine(ResumeOutput, name), FileMode.CreateNew, FileAccess.Write))
+            Directory.CreateDirectory(EvidenceDirectory);
+            using (var stream = new FileStream(Path.Combine(EvidenceDirectory, name), FileMode.CreateNew, FileAccess.Write))
             using (var writer = new StreamWriter(stream))
                 writer.Write(Newtonsoft.Json.JsonConvert.SerializeObject(value, Newtonsoft.Json.Formatting.Indented));
         }
@@ -723,7 +729,7 @@ namespace NTSD.Test
                     Assert.That(await Load(sourceCandidate), Is.True);
                     AssertSharedDefinitionPublication(sourceCandidate);
 
-                    NTSD.Test.Editor.H08ResidentVisualMemoryDiagnostics.VerifySharedPublicationDraw(manager.SpriteCatalog, "Source2D");
+                    NTSD.Test.Editor.H08ResidentVisualMemoryDiagnostics.VerifySharedPublicationDraw(manager.SpriteCatalog, "Source2D", DrawEvidenceDirectory);
                     BattleSpriteEntry sourceFirst = PublishedEntry(56, 0);
                     BattleSpriteEntry sourceSecond = PublishedEntry(57, 0);
                     BattleSpriteEntry sourceClamped = PublishedEntry(57, 2);
@@ -775,7 +781,7 @@ namespace NTSD.Test
                     Assert.That(await Load(atlasCandidate), Is.True);
                     AssertSharedDefinitionPublication(atlasCandidate);
 
-                    NTSD.Test.Editor.H08ResidentVisualMemoryDiagnostics.VerifySharedPublicationDraw(manager.SpriteCatalog, "OrderedPages");
+                    NTSD.Test.Editor.H08ResidentVisualMemoryDiagnostics.VerifySharedPublicationDraw(manager.SpriteCatalog, "OrderedPages", DrawEvidenceDirectory);
                     BattleSpriteEntry atlasFirst = PublishedEntry(56, 0);
                     BattleSpriteEntry atlasSecond = PublishedEntry(57, 0);
                     BattleSpriteEntry atlasSecondFrame = PublishedEntry(57, 1);

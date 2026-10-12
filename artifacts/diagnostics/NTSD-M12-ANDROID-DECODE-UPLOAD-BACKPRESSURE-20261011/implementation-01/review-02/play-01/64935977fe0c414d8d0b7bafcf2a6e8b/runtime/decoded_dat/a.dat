@@ -1,0 +1,9 @@
+<bmp_begin>
+name: DefaultAdmission_A
+head: c/head.png
+small: c/small.png
+file(20-19): c/body.png w: 2 h: 2 row: 2 col: 1
+<bmp_end>
+<frame> 0 standing
+pic: 0 state: 0 wait: 1 next: 0
+<frame_end>

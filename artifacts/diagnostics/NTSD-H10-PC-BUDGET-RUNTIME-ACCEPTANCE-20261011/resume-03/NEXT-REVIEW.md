@@ -1,0 +1,7 @@
+# H10 resume-03 下一步独立审阅
+
+已执行本轮唯一新版组，源冻结；限定状态RUNTIME_AUDIO_GATES_VERIFIED。优先核：六次真实启动身份，generic轮2/3旧selector停播而新启动在播；63个前后校准有效0事件scope；三轮公开stage10/空地图11/drain/下一帧；真实pending取消/late与自然UnityDestroy；generic精确清理/当前Menu序列化恢复。旧失败原件不改。
+
+本轮没有新生产优化，也没有需要扩大生产追踪的播放首差。成功仅覆盖隔离Editor诊断World和音频请求。1000请求不是1000实体；Listener非零波形不是人工听感或逐cue音质；音频对象预算账本不是游戏进程预算。
+
+主讨论会话独立审阅后继续同H10剩余必要门。已有PLAYER-PRECONDITIONS-REVIEW.md只读路线可复用；当前没有授权build/Player/sidecar/Settings/IL2CPP或新执行组。整游戏进程Private稳态2GiB/过渡采样峰3GiB、目标PC、实际Battle地图/producer完整覆盖仍缺证，H10父项OPEN。无需重跑已证明且未受影响的全catalog/旧GC/其它优化点；不得用同版长窗或改负载求PASS。H07/Android不因此通过。

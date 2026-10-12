@@ -1,0 +1,38 @@
+{
+  "operation": "OP-NTSD-M12-IMPLEMENTATION-20261011",
+  "authorized": "Direct human approved only H08 SaveCandidate and VerifySharedPublicationDraw output argument plus existing M12 fixture forwarding; continue from failed pixel gate",
+  "time": "2026-10-11T17:58:43.348570+08:00",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/H08ResidentVisualMemoryDiagnostics.cs",
+      "sha256": "32647ef6e46eb4b8b6d1ff9ecdadc0eb28e2f723fa50ab3b5d9c22de81846ef5",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\resume-01\\backups\\00.before.bin"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11AtomicPublicationEditorTests.cs",
+      "sha256": "e95a5cabd446ca0e0d0390516cb46cd45c1e730fe2562f8e1999d8d2a6815fd3",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\resume-01\\backups\\01.before.bin"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs",
+      "sha256": "054493a2d462987659d2fb5a0475ed6c5b9d006c3bb52ce9b820713ddb716e45",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\resume-01\\backups\\02.before.bin"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001.md",
+      "sha256": "6477d34546dd0961f33a074a86147ad2dde60e45db3af6bef18252b263bc2b14",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\resume-01\\backups\\03.before.bin"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011.md",
+      "sha256": "aac6db7a3aa42a8eeac3a853fbf677792399af552201682659992f5b6990bc6c",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\resume-01\\backups\\04.before.bin"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/OP-NTSD-M12-IMPLEMENTATION-20261011/RECORD.md",
+      "sha256": "27edea2129db9e03c5bcbde279b28c7da2e8e782c94af0183925c895424c4e98",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\resume-01\\backups\\05.before.bin"
+    }
+  ],
+  "command": "apply_patch exact optional output parameter; no oracle/default route/CreateNew changes"
+}

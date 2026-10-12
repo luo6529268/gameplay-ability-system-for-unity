@@ -1,3 +1,29 @@
+- [OP-NTSD-M12-IMPLEMENTATION-20261011](OP-NTSD-M12-IMPLEMENTATION-20261011/RECORD.md) — PARTIAL; originalMenu already externally restored/verified clean8, oldowner unreleased/interface gap proven. Exact disposition requested before source import; no source/compile/cold clone/P1 or Scene mutation in repair-01 yet.13 current governance backups recorded; old failures retained.
+
+- [OP-NTSD-M12-SHUTDOWN-SEAM-REVIEW-20261011](OP-NTSD-M12-SHUTDOWN-SEAM-REVIEW-20261011/RECORD.md) — PLANNED；M12实际关闭链核验与准确扩域提案，10份真实前件，源码/Unity0。
+
+- [OP-NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-PREFLIGHT01-20261011](OP-NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-PREFLIGHT01-20261011/RECORD.md) — VERIFIED（仅文档操作）；M12 Task/Change仍PLANNED，完整方案与三项审阅决定已交回，生产/Unity为0。
+
+- [OP-NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-PREFLIGHT01-20261011](OP-NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-PREFLIGHT01-20261011/RECORD.md) — PLANNED，M12手机优先有限预检；10份真实治理前件，生产和Unity未操作。
+
+- [OP-NTSD-ANDROID-FIRST-OPTIMIZATION-BASELINE-20261011](OP-NTSD-ANDROID-FIRST-OPTIMIZATION-BASELINE-20261011/RECORD.md) - VERIFIED: Android-first policy; original document bytes retained; nine backups and 17 named protections verified.
+
+- [OP-NTSD-ANDROID-FIRST-OPTIMIZATION-BASELINE-20261011](OP-NTSD-ANDROID-FIRST-OPTIMIZATION-BASELINE-20261011/RECORD.md) - PLANNED: Android-first optimization policy, documentation only.
+
+- [OP-NTSD-H10-USER-SCOPE-CLOSEOUT-20261011](OP-NTSD-H10-USER-SCOPE-CLOSEOUT-20261011/RECORD.md) — H10用户范围结项文档操作；Player未实施路线取消，真实前件/实际结果见记录，无源码或运行操作。
+
+> **2026-10-11 H10 resume-02：SCOPED_HOT_0EVENTS_PASS / SECOND_CYCLE_GENERIC_PLAY_OBSERVATION_FAILED。** Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 BLOCKED。首次编译及新资格2/2PASS，raw-key/两轮cold wrapper与generic同引用通过；两轮各7tick×3范围共42有效校准scope0事件，无热load/build/reject增量，非整Driver/千人实体。第一轮实际播放/非零输出及公开关闭重入完成；唯一Play整体0/1FAIL于第二轮genericVoice在播断言，首个同clip voice选择器有观察风险，实际原因未证明，未改生产/追加组。两次关闭/owned后帧归零/精确generic清理及当前Menu组件/config恢复通过。4094保护/9指纹/196旧artifact保持。三轮/pending/natural/Player/进程门未完成，H10父项OPEN；预算与对象门复用不变。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/REPORT.md，下一仅同H10精确播放观察独立审阅。无新Goal/队列/其他点，以下是旧时点。
+
+> **2026-10-11 H10 resume-02 IN_PROGRESS。** 同Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001，经独立审阅仅修PcBudget真实raw-key、无解码成员资格、cold wrapper guard及关闭证据字段；三个已通过recorder算法不改。先编译/本版资格2项，全过后仅一次新版Play，首差停止。原两失败/生产/预算及对象门复用保持，H10父项OPEN。计划 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/PLAN.md；Operation OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME02-20261011；无Player/Settings/其他点/Goal。下方保留旧时点。
+
+> **2026-10-11 H10 resume-01：MEASUREMENT_QUALIFIED_FIXTURE_CUE_ID_MISMATCH。** Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 BLOCKED（本轮夹具）。首次编译PASS，无解码资格2/2PASS：三个独立GC.Alloc recorder前后正控有效/empty0，Unit原样TimeNanoseconds；不是生产热0GC。唯一新Play0/1 Error，冷generic查询data/016与实际注册data\016 raw key不一致，wrapper null，未进热循环；归属执行者夹具错误，生产未改，不追加组。22owned失败清理公开stage10/空地图stage11及下一帧释放通过，generic016精确清理；当前Menu clean8/组件快照/config/MM settings相同。4094保护/旧105artifact无漂移，旧其他方法体保持。预算已批准与218.313758MiB对象门复用保持；三轮/播放/取消/Player/进程门未过，H10父项OPEN。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/REPORT.md；下一仅同H10精确raw-key/guard修正独立审阅，不自动运行，无新Goal/队列/Player。下方保留此前时点。
+
+> **2026-10-11 H10 resume-01 IN_PROGRESS。** 独立审阅后恢复Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001。仅PcBudget诊断计量/负控/保护修正，先无解码资格，全部通过后仅一次新版本三轮Play组；首差停止。旧分配校准FAIL原件保留，生产/Scene/资源/Settings冻结，预算已批准/对象门复用保持，H10父项OPEN，无Player/其他点/Goal。计划 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/PLAN.md；Operation OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME01-20261011。下方为此前时点。
+
+- OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 | PARTIAL | source/docs applied; unique Play calibration FAIL, cleanup complete; old evidence retained | [Record](OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/RECORD.md)
+
+- OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 | PLANNED | exact ten preimages backed up; approved PC targets and sole H10 Editor diagnostic | [Record](OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/RECORD.md)
+
 > **2026-10-11 H10全目录音频账本完成：FULL_CATALOG_AUDIO_ENVELOPE_MEASURED。** Task NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 / Change NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 VERIFIED（仅Editor诊断）。真实330定义/1000cue，两轮public准备关闭唯一组1/1 PASS；每轮978formal+72generic去重228,918,567B（218.313758MiB），formal逐局归零、同72generic跨轮复用，最终仅精确释放新增72key/clip，原4clips及Menu clean8保持。首次资格FAIL及事件保留，修正资格/恢复检查/无音频所有权负控各1/1；测量后仅诊断guard哈希变化，生产冻结。71283保护无漂移。报告 artifacts/diagnostics/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011/REPORT.md。音频数字预算UNDECIDED、producer完整闭包未准入，H10父项OPEN；下一仅同H10预算/覆盖合同审阅，不自动其他点/Goal/队列。以下为此前时点。
 
 > 2026-10-11 NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 IN_PROGRESS / NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 PLANNED. H10 continues: complete real catalog/generic inventory, protected2resource fixture first, then one bounded2session audio-only envelope if safe. Production frozen; parent budget/coverage remain OPEN. No other point or Goal.
@@ -800,3 +826,32 @@ NTSD-H10-BOUNDED-PCM-CONVERSION-20261010 VERIFIED (file operation; task cost-spi
 - NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-20261010 | COMPLETED_SCOPED | [Record](NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-20261010/RECORD.md)
 
 - NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 | COMPLETED_MEASURED | [Record](NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011/RECORD.md)
+
+- [OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME03-20261011](OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME03-20261011/RECORD.md) — PLANNED；仅PcBudget冷观察，11真实dirty备份，原失败证据冻结。
+
+- OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME03-20261011 — runtime checks VERIFIED；精确冷观察/一次新组通过，原件保护与validator收尾见Record追加；H10父项OPEN。
+
+- [OP-NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-PREFLIGHT01-20261011](OP-NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-PREFLIGHT01-20261011/RECORD.md) — PLANNED；预检文档/新Task/Change与原dirty10备份，尚无代码/Settings/build/运行。
+
+- 同Operation PRE-FLIGHT-01 addendum-01：15份当前真实前件，补具名供证/有限CASE候选/部署及空World顺序缺口；仍PLANNED，未执行源/Settings/build/Player。见Operation RECORD与addendum-01-before-manifest。
+
+
+### M12 repair-01 source work authorized after human restart
+
+Same Task/Change/Operation; old OWNER_LOST/Dispose UNKNOWN retained. Plan artifacts\diagnostics\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\implementation-01\review-02\diagnostic-interface-01\post-external-exit-repair-01\IMPLEMENTATION-PLAN.md. Exact independent diagnostic region only; cold firstdiff then evidence-driven minimum fix/narrow EditMode checks, no P1. M12 OPEN/defaultOFF/H08ON. Current repair IN_PROGRESS; prior statements above are history.
+
+
+> **2026-10-11 M12 repair-01：CLONE_CAUSE_FIXED / COMPILE_PASS / R03_ASSERTION_FAILED，后续已停。** 用户手动重启后原Editor确认idle/nonPlay、Menu clean8、旧owner不存在；旧P1外部中断/Dispose UNKNOWN保留。一次冷R01首差FAIL留存：实际JSON有MonoBehaviour包装层，旧代码在错误顶层改name/root；原始差异仅这两项，25引用相同。仅既有M12独立诊断区修正准确路径及已批早期自有释放/外部观察，原40652字节、ReadStaticPlan、8菜单不变。两次依赖性窄编译通过；修复后R02 1/1PASS；R03在Dispose后Set应抛ObjectDisposedException的断言失败，未改断言/重跑，R04–R07未执行。R03自有clone消失/原singleton保持/Dispose回执与失败并存，非旧run释放证明。原十回执/93保护/旧6证据不变；24复制目标仍匹配，重启后发现6个原Temp源缺失（未清理/未恢复，责任未归因）；旧run新增external-interruption原件ownedResourcesReleased=false。完整报告见 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/REPORT.md 文末repair-01。Task/Change/Operation沿用，Change BLOCKED、M12父OPEN/ACTIVE、字节DEFAULT_OFF/H08ON；无P1重跑/H07/Android通过，其他hold保持。下方为历史时点。
+
+
+> **2026-10-11 M12 repair-01最新：R03_TEST_OUTPUT_ERROR / BLOCKED。** 精确R03断言修订仅改release/decoded.Wait(0)与独立输出标签，原Set断言FAIL保留；安全窄编译通过。修订R03仅运行一次，新的DirectoryNotFoundException落在fixture-finally证据写入：目录实际存在，first-failure路径258字符成功，warmup263/owned269/finally260字符无成功回执，符合Windows/Mono长路径限制现象但未另做复验。已停，R04–R07未运行，未缩短路径再试/改生产/P1。当前Editor idle/nonPlay、Menu clean8、无hotowner，Console返回0；最终清理回执缺失，不能称本修订R03或全窄门通过。clone包装层原因已修、R02 1/1PASS复用；旧P1外部中断/Dispose UNKNOWN不变。源SHAb7eb9768308ed507b5db8d6e53f5650fc6967600eb951b2df96c24fa8cce849e；同Task/Change/Operation，M12父OPEN/ACTIVE、字节DEFAULT_OFF/H08ON。准确新失败见repair-01/r03-correction-path-failure.json与r03-correction-01-results.xml。下方为此前阶段。
+
+M12 correction-02 exact R03 evidence-label fix IN_PROGRESS; same Task/Change/Operation, no P1, see repair-01/correction02-before-manifest.json. Prior failure/WAIT wording is historical.
+
+
+> **2026-10-11 M12 repair-01／correction-02：诊断最小修复及冷态有限验证完成，FOCUSED_TEST_PASS。** 最终仅将R03输出标签改为u3（所有冷态路径最长242–249字符且先验无碰撞）；一次原Editor窄编译通过，R03–R07各一次共5/5PASS，R02原1/1PASS按未改方法及比较helper复用，六项冷态门通过。5夹具均有cloneAbsent/singleton保持最终回执；原Menu clean8、Editor idle/nonPlay、无hotowner、Console本次0。原R01首差、R03 Set断言FAIL、长路径R03 ERROR及旧P1全部原件保留；不把新夹具释放覆盖旧run外部中断/Dispose UNKNOWN。源码仅既有M12独立诊断区，原40652字节/ReadStaticPlan/8菜单不变，生产未改；最终源d408f359324adedea3304ffc0b3c4b378f548872a27220cf133fb04336098bfa。93保护/旧6/旧run10及外部回执不变，24复制目标匹配；18源WAV匹配、6Temp源缺失原因UNKNOWN且未补建。完整报告见diagnostic-interface-01/REPORT.md文末correction-02。M12父OPEN/ACTIVE、字节DEFAULT_OFF/H08ON；下一仅同M12真实生命周期缺口审阅，P1不得自动重跑，其他hold不恢复。下方失败/等待状态保留为历史。
+
+
+- OP-NTSD-M12-IMAGE-MEMORY-BATCH1-20261012 | IN_PROGRESS | first PNG/atlas/batch-memory implementation | [Record](OP-NTSD-M12-IMAGE-MEMORY-BATCH1-20261012/RECORD.md)
+
+> 2026-10-12 FINAL BATCH1: NTSD-M12-IMAGE-MEMORY-BATCH1-001 FOCUSED_TEST_PASS. Original Editor narrow compilation/domain reload succeeded after retained ordinary import/namespace corrections; final isolated fixture 12/12 Passed, 0 failed/skipped (job 18cd851285b64abca719b67b09f4760e). Native prewarm and match rebind use compact PNG; one managed page reused; whole-batch predecode plus actual-atlas guards installed. Original Menu loaded/active/clean8, nonPlay/idle/nontest; final Console 0 error/warning. Protected 2353 paths unchanged; 1869 old artifacts metadata unchanged, no content re-read in final audit; original 135746-byte diagnostic/Q/F/P1 prefix identical. Parent M12 OPEN, native byte gate DEFAULT_OFF/H08 ON, automation stays paused. No Play/P1/ABBA/build/device/Profiler/prebuild paging or original PNG/DAT changes. This completes the requested source/compile/focused batch, not runtime/device acceptance. Evidence: artifacts/diagnostics/M12-memory-batch1-20261012/REPORT.md. ChangeLedger validation result will be appended after execution.

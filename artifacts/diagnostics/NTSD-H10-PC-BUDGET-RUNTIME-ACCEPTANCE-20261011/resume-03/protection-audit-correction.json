@@ -1,0 +1,74 @@
+{
+  "time": "2026-10-11T12:22:27.806054+08:00",
+  "status": "PROTECTION_PASS_COMPARISON_FORMAT_CORRECTED",
+  "originalAudit": "protection-audit.json",
+  "originalFailure": "Final audit assertion failed because before files were written LF and after files used Windows CRLF; raw bytes differed, Git content did not",
+  "comparisons": {
+    "head": {
+      "beforeBytes": 41,
+      "afterBytes": 42,
+      "beforeCRLF": 0,
+      "afterCRLF": 1,
+      "semanticLinesSame": true,
+      "before": [
+        "8d55c6b68912560c7af755c424b41d3464a1921a"
+      ],
+      "after": [
+        "8d55c6b68912560c7af755c424b41d3464a1921a"
+      ]
+    },
+    "tracked": {
+      "beforeBytes": 429,
+      "afterBytes": 439,
+      "beforeCRLF": 0,
+      "afterCRLF": 10,
+      "semanticLinesSame": true,
+      "before": [
+        "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+        "Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+        "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+        "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+        "Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs",
+        "docs/ai/CHANGE-LEDGER.md",
+        "docs/ai/CURRENT-AUTHORITY.md",
+        "docs/ai/DECISIONS.md",
+        "docs/ai/FILE-OPERATIONS/INDEX.md",
+        "docs/ai/STATE.md"
+      ],
+      "after": [
+        "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+        "Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+        "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+        "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+        "Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs",
+        "docs/ai/CHANGE-LEDGER.md",
+        "docs/ai/CURRENT-AUTHORITY.md",
+        "docs/ai/DECISIONS.md",
+        "docs/ai/FILE-OPERATIONS/INDEX.md",
+        "docs/ai/STATE.md"
+      ]
+    },
+    "staged": {
+      "beforeBytes": 0,
+      "afterBytes": 0,
+      "beforeCRLF": 0,
+      "afterCRLF": 0,
+      "semanticLinesSame": true,
+      "before": [],
+      "after": []
+    }
+  },
+  "protectedCount": 4094,
+  "protectedDrift": [],
+  "priorArtifactsCount": 293,
+  "priorArtifactsDrift": [],
+  "sourceAssemblyRecorderCount": 9,
+  "sourceAssemblyRecorderDrift": [],
+  "allElevenBackupsValid": true,
+  "newStatusEntries": [
+    "?? docs/ai/FILE-OPERATIONS/OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME03-20261011/"
+  ],
+  "sourceFrozenSincePlay": true,
+  "oldNonPcBudgetPrefixSame": true,
+  "oldPrefixBytes": 195422
+}

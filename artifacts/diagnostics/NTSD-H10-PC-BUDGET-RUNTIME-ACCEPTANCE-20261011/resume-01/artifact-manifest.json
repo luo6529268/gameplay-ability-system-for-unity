@@ -1,0 +1,451 @@
+{
+  "time": "2026-10-11T11:27:07.493579+08:00",
+  "selfExcluded": true,
+  "files": [
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/after-play-console.json",
+      "bytes": 773,
+      "sha256": "602601876a17f4b66d9004fd35f39753c7319a3570b21a48d8d8f5514bcad223"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/after-play-editor.json",
+      "bytes": 1425,
+      "sha256": "a00bbc9f370831faa0e94f16779c7e25b295cfdd4a2c3c91b9236be8dd94e18e"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/after-play-scenes.json",
+      "bytes": 238,
+      "sha256": "3b8da510a5510f4d58dc8f9a63fb1a1b2f94af8abda7b1f2ef34ee8317889c0a"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/backups/Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+      "bytes": 14307,
+      "sha256": "062c8888089f18733a50c747f5632a0586fb1a602a79de0463deb0925ddeb73c"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "bytes": 262510,
+      "sha256": "8df4e3404795e207c987f12bbd3c639b9b2d170324b6b7354757cce821ca7854"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1642307,
+      "sha256": "4116d6ebc05e197696c8399a9658eb3c8fa3eca1e39506145e0ab175bedc0561"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/backups/Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "bytes": 369466,
+      "sha256": "66ec3373277b63dddd73ccc7fc9e6de93f76283095cd82e5656864c6ea3cf383"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/backups/Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs",
+      "bytes": 239408,
+      "sha256": "5c9c349dd1a1e0a066a0a42a6e0dd67f95504b6c75923451deb07eb0f6d7d96d"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/backups/docs/ai/CHANGE-LEDGER.md",
+      "bytes": 770617,
+      "sha256": "6e9a459d66ec56f40c0a85487fe38caeaa1b56ac74dbc884bcd706a587a3974a"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/backups/docs/ai/CHANGE-RECORDS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001.md",
+      "bytes": 4752,
+      "sha256": "676aa240e1e0ccb7d6a07f3b090ecac9614cfe1c0766657eaf26340a31bf00e5"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/backups/docs/ai/CURRENT-AUTHORITY.md",
+      "bytes": 422112,
+      "sha256": "e73b0c03b6d4af60cda2d86ad2758fdc2e05573f65242871bf25eababb5f40ce"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/backups/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "bytes": 156764,
+      "sha256": "f6d9543fd28cbb26a978f823ebc789c5b1d3a179cd75430c3253a57d2fa4ff1f"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/backups/docs/ai/STATE.md",
+      "bytes": 1703485,
+      "sha256": "fb9191e5f0d3af84ea8cf967f3a121a3b2db8fff651765c71c67ebf6b07b1b06"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/backups/docs/ai/TASKS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011.md",
+      "bytes": 5315,
+      "sha256": "82940c1113fd64b42b76255b3a5b6ca29dc521bb27601c7e570ea53b43b0ac94"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/before-compile-editor.json",
+      "bytes": 1425,
+      "sha256": "9b0fcc4ab8d1972aa1bd30041edf40cc8c2682c9249197edc0b0c5d424f65561"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/before-compile-scenes.json",
+      "bytes": 238,
+      "sha256": "3b8da510a5510f4d58dc8f9a63fb1a1b2f94af8abda7b1f2ef34ee8317889c0a"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/catalog-input-correspondence-resolved.json",
+      "bytes": 960807,
+      "sha256": "d88823a90f50d4ea5e6430f9232909dbb495a73cb1e0da7835e5e5e318625ca5"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/change-ledger.log",
+      "bytes": 817206,
+      "sha256": "a3840966af9a36ded4869bf867c976b64b415e38e89f5c92cc21f512a13ca97e"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/commands.jsonl",
+      "bytes": 3759,
+      "sha256": "1ccd976c4f0b290521e4acc37a82807ae9986371b08be96b740e9709e720a5db"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/compile-console-01.json",
+      "bytes": 319,
+      "sha256": "d1ea30865eae0f3f4dd7c048968d8b667a9cfa29da4f69dae324ce28b2a1d655"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/compile-request-01.json",
+      "bytes": 268,
+      "sha256": "4629b7f0afc42694fbc4ccd02467562ddd4b0722aff2636c3164115772f77b17"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/compile-state-01.json",
+      "bytes": 1395,
+      "sha256": "8f43c297ed20bd9f3e9c082e84b3fa288f193f9fec15639a8d03f20202a16fdd"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/diff-check-final.log",
+      "bytes": 1349,
+      "sha256": "6b66f66041baf939ded923e603411331e51f6405e1fc7ee94bc7f3387bfc7778"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/final-audit.json",
+      "bytes": 3241,
+      "sha256": "1e30d63a565a66931075897bb9c397a327ad436875035327db0cd002895d6e98"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/final-status-prefix.md",
+      "bytes": 1117,
+      "sha256": "0a0a4204fd8ad3c6a4236f8305228b873e80ef2f77e7ddab801ccb0a6f00da06"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/fixture-cleanup.json",
+      "bytes": 9438,
+      "sha256": "931d6b0c649e0456d7b50bc0d2ac8e3178659d7b1a968dcec8a321fdb7cb5925"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/framework-input.json",
+      "bytes": 414,
+      "sha256": "02159d40e8e6bc3c5208ba359bdcfa2b0878036c2efb005f8a4b1ddced3521af"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/head-after.txt",
+      "bytes": 41,
+      "sha256": "f5b3134f482da64a6c51452366735cf5f038e48ea1c32fc0b539df55e9d2b0ca"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/head-before.txt",
+      "bytes": 41,
+      "sha256": "f5b3134f482da64a6c51452366735cf5f038e48ea1c32fc0b539df55e9d2b0ca"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/head-final.txt",
+      "bytes": 41,
+      "sha256": "f5b3134f482da64a6c51452366735cf5f038e48ea1c32fc0b539df55e9d2b0ca"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/hot-scope-status.json",
+      "bytes": 225,
+      "sha256": "c9d8b3471e305a5584e7a195f4eadaeb414e8583a38d4fa1856d0de2b556cd85"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/initial-editor.json",
+      "bytes": 1425,
+      "sha256": "f94ad2bb3ddaa415841d8d638d5de8f59ae066dff0346c48f02df006b21f123f"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/initial-scenes.json",
+      "bytes": 238,
+      "sha256": "3b8da510a5510f4d58dc8f9a63fb1a1b2f94af8abda7b1f2ef34ee8317889c0a"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/intermediate/20261011T112434231305/Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+      "bytes": 14957,
+      "sha256": "d610993aaa87a8ed7b6c2548bb50ba80ce98a79180394709e74c71b387a9ed25"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/intermediate/20261011T112434231305/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "bytes": 263160,
+      "sha256": "5beb53ac1b591e53e1d116ef9a1d619d3321548c8177641884e5aa78939971b5"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/intermediate/20261011T112434231305/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1642957,
+      "sha256": "6cb443fa07b9fec90856a61714c6e4d2e70ce1272599c239185ac416f1f65613"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/intermediate/20261011T112434231305/Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "bytes": 370116,
+      "sha256": "6806126598b0773a241a4df156be026eb8dcd047a7681794545ce4c8fa871b17"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/intermediate/20261011T112434231305/docs/ai/CHANGE-LEDGER.md",
+      "bytes": 771267,
+      "sha256": "46e72613c67a0944ae0d69af56be9190472e19e8548a6326c090585bd3a3d8e4"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/intermediate/20261011T112434231305/docs/ai/CHANGE-RECORDS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001.md",
+      "bytes": 6806,
+      "sha256": "f3756ddb01727dbc66a46f7b61688c239b1db61c633dbaab89a1cae640db6de9"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/intermediate/20261011T112434231305/docs/ai/CURRENT-AUTHORITY.md",
+      "bytes": 422762,
+      "sha256": "f5492919e37bb01e2850a2f0620744a5528988715ad3ea9cc050392ac7098bb4"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/intermediate/20261011T112434231305/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "bytes": 157414,
+      "sha256": "988c0aa525e349c28ba19d1ed972a2287228fcf2ac369b9f46d1e36b0ab5edc3"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/intermediate/20261011T112434231305/docs/ai/FILE-OPERATIONS/OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME01-20261011/RECORD.md",
+      "bytes": 1820,
+      "sha256": "66907241492e80ab53b4d1372d9e94467f562af9c8aead960d2ed13ec2501434"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/intermediate/20261011T112434231305/docs/ai/STATE.md",
+      "bytes": 1704135,
+      "sha256": "da525180cf2fab5e9e185990eef038df15f1a7fe764fd9b5ee5d9472b1a49b67"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/intermediate/20261011T112434231305/docs/ai/TASKS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011.md",
+      "bytes": 5965,
+      "sha256": "f04b1564a32960d65907d56f6486848efc9126bae0a188dbcba55cd0a003aac0"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/intermediate/20261011T112545190280/artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/NEXT-REVIEW.md",
+      "bytes": 3092,
+      "sha256": "8bd5ea171de1a5dacb8c7859f8a92554bd590332ddd5719890bf75b558736f9c"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/intermediate/20261011T112545190280/artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/REPORT.md",
+      "bytes": 8618,
+      "sha256": "834504800d43737396eb4726d18210d12dfb7501676fa6772fbd506aa105aa6d"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/intermediate/20261011T112545190280/docs/ai/CHANGE-RECORDS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001.md",
+      "bytes": 8782,
+      "sha256": "a16ab055e36a20bc18e77bb2332c748b0ec736527a3eb028bed1d4c07764d6c6"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/local-link-check.json",
+      "bytes": 1871,
+      "sha256": "5f374e4151ec283fc79b71b480abbdbacf913ffe13c38535ecf48cce151aa78e"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/measurement-qualification.json",
+      "bytes": 12767,
+      "sha256": "80e03da145c9f4b9325901c543e3f77e5a1f7d5807f1e4838f2fc08ac9a54d93"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/mm-protection.json",
+      "bytes": 6029,
+      "sha256": "fef4fe2c805c129ad0e63860211885fdd6720f20ff3bafef2e11e19e40d7e2dc"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/NEXT-REVIEW.md",
+      "bytes": 3092,
+      "sha256": "470141265d4bc6a3db6b46ce37515f86dc9cc8730bd5e7d6480a38cdd637a718"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/offline-evidence-read-error.json",
+      "bytes": 310,
+      "sha256": "ae9eca322ece45e1eb86b6006c1fd428ee0d254ba2f4d4e994dcaa498dfb65db"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/operation-events.jsonl",
+      "bytes": 6089,
+      "sha256": "aa4edb403ec27f35c93e3d98524e12629b28de8dba00dd5b89a176ca545cad08"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/PLAN.md",
+      "bytes": 2976,
+      "sha256": "8f24f71e980bf72ea1d526f08a77b3769978c28238acbc8e76612ded0bae46b4"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/play-result.json",
+      "bytes": 9453,
+      "sha256": "1c35c52b2067e2e6d192c22ad4cbab98f4eae86fae39deb074fb39c9d1f8693e"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/predeclared-generic-routes.json",
+      "bytes": 5242,
+      "sha256": "164f420efacadf8a4fbef986fcb11f3f74a29f3abe17e837ded57e204698b588"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/protected-before-compile.json",
+      "bytes": 680522,
+      "sha256": "aa76928f14e6b1992adb10b124e7e5f581e5721d9d4fb97493e96eef95764875"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/protection-audit.json",
+      "bytes": 2806,
+      "sha256": "cd2205687251c78b564ea4522dea53382bc2b09fb9b4acc886d28e2649443380"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/qualification-ready.json",
+      "bytes": 1395,
+      "sha256": "67760d4a977a6da245fc6244e15a0b016070ebbb5d416420dd310314d731a81f"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/qualification-result.json",
+      "bytes": 1284,
+      "sha256": "6f2efc5dd3b5a1d3ffd4d897ea42a29a72bebecf2a2a70bd3c105aa9046d362f"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/qualification-run.json",
+      "bytes": 219,
+      "sha256": "a16390582a081c9101bda3af4fd2df5d04e6f967647db6617a1b1723a88874ba"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/qualification-scenes.json",
+      "bytes": 238,
+      "sha256": "3b8da510a5510f4d58dc8f9a63fb1a1b2f94af8abda7b1f2ef34ee8317889c0a"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/qualification-tests.xml",
+      "bytes": 3177,
+      "sha256": "9ad359637e0dde85d407bbc026be9540dc5747e590180c7604be5a2ed7682bef"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/qualification.json",
+      "bytes": 738989,
+      "sha256": "7f71e844eff8fb9eaad67a0f7a96ffeec63e3b8819214656b11f7ec3fbcaba1e"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/registration.json",
+      "bytes": 806,
+      "sha256": "d1bf72dc062d2207eca74a42c512dfd0b0f733a00b75d50f26fc2ba51a38bc76"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/REPORT.md",
+      "bytes": 9142,
+      "sha256": "7b3af7b50bf78f8379a211313b495155a38a8d123086c41c835010d2250cd25a"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/RESULT.json",
+      "bytes": 3748,
+      "sha256": "91fdeb492e1d575a57bf6a98b5231a348b7579d49819252ea0b0e3a679f2bbb9"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/resume-only-source.diff",
+      "bytes": 39837,
+      "sha256": "d4bfbdeeaa1393161c95da6edb177ae583f85e3b2bcead5ecaf6a79d212b51d7"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/scene-restored.json",
+      "bytes": 1474630,
+      "sha256": "b571a50193ea6b6a72ed2b4b507e2621e279458ec1f5128fe9389bf68c7c753a"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/shared-temp-before-qualification.xml",
+      "bytes": 6535,
+      "sha256": "b52cd9ddd0abecd620d2f2928795688d7cd76774ff33e25ee2e244dc656282e2"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/source-assembly-before-play.json",
+      "bytes": 1152,
+      "sha256": "964116d0abbe02d0ed88bc38c65d6f741b5f1ddfee8dfa0c13a2b1c6d1a4783b"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/source-assembly-before.json",
+      "bytes": 1152,
+      "sha256": "9459e071b84bf5e1ea5a66dc9de5699382b634683936d00c61f35a99e987bf90"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/source-version-01.cs",
+      "bytes": 253744,
+      "sha256": "b3a289d85afbae428808df647261ecf68ccdb751779a74243988e16c4300a5c5"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/staged-after.patch",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/staged-before.patch",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/staged-final.patch",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/static-review.json",
+      "bytes": 451,
+      "sha256": "38f2184d1c3bcf7903953912e1f7d7dd14417ac7e80d274d5df32b5eaa783df7"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/status-after-play.txt",
+      "bytes": 2113,
+      "sha256": "f8ca2adc5712ca598119ec493ee0830bc41e757333c0daefe7760dc81e69c65f"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/status-before.txt",
+      "bytes": 2026,
+      "sha256": "f3cdf0ffa2a34fc5c03e77c03ed65f3502c67b0ebc24a3422297387219bc5cb8"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/status-final.txt",
+      "bytes": 2113,
+      "sha256": "f8ca2adc5712ca598119ec493ee0830bc41e757333c0daefe7760dc81e69c65f"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/tracked-after.patch",
+      "bytes": 100311,
+      "sha256": "a4c37d6f6149747cf528072151c9d7db4b80b03c01571673baa62e2dc5dd5637"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/tracked-before.patch",
+      "bytes": 80548,
+      "sha256": "147fd1bbbf8ae68ba93734536696dc8f16ced1484a40ecd4f71fc8ac4cfcaca9"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/unique-play-job-final.json",
+      "bytes": 583,
+      "sha256": "d8f99fe6cf1c039cbac526215332c57d0583e7e6724e37b03139d5a64191d486"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/unique-play-ready.json",
+      "bytes": 1467,
+      "sha256": "35316201c02eb95d335631644a12635017f57369f40a6089c32e7a4e97dc9822"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/unique-play-run.json",
+      "bytes": 219,
+      "sha256": "7217e48c7653f17605db0d5ec439d3364286c6ff6feb97c3fdceb5315eec9174"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/unique-play-scenes.json",
+      "bytes": 238,
+      "sha256": "3b8da510a5510f4d58dc8f9a63fb1a1b2f94af8abda7b1f2ef34ee8317889c0a"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/unique-play-started.json",
+      "bytes": 207,
+      "sha256": "957eb373d640c00cdcef8f264d8e2e82db8453eb37a6d6a271cc8aca6e3c3abf"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/unique-play-tests.xml",
+      "bytes": 6305,
+      "sha256": "b5616f60656028613a286ba89f1746d5acce3f9fb64e215a1239e9b383195c9e"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/validator-result.json",
+      "bytes": 699,
+      "sha256": "055478a763395fbb78d335ac7265b4503f0c528d1645404d284fe14d1681cd63"
+    }
+  ]
+}

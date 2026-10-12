@@ -1,0 +1,18 @@
+{
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/H08ResidentVisualMemoryDiagnostics.cs",
+      "sha256": "1054fcde0e00599359ef9a89846a6e25832699d93b41584805e0ab7b05b52dc7"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11AtomicPublicationEditorTests.cs",
+      "sha256": "1b6adc22ac9b95a665a656cc7208293113bba281a3259bdd3b011243a9a9bdc1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs",
+      "sha256": "56ac00b0b837a702899fa9cefe737d544562a891a84c8b37f785445d91559350"
+    }
+  ],
+  "changes": "Optional per-call evidence directory; default and CreateNew unchanged; M12 run GUID subfolder; no assertions or production changes",
+  "time": "2026-10-11T18:02:49.112948+08:00"
+}

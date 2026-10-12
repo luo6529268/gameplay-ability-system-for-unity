@@ -1,0 +1,8 @@
+{
+  "inspectionCorrection": "Initial read-only JSON inspection treated audioHeaders as a list and raised KeyError 0; actual shape audioHeaders.rows was then read. No project mutation or test involved.",
+  "compileRequests": 1,
+  "compilerFailures": 0,
+  "menuCalls": 0,
+  "inputCopies": 0,
+  "playRuns": 0
+}

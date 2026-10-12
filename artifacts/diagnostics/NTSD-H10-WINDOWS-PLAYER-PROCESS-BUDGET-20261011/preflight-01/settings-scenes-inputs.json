@@ -1,0 +1,37 @@
+[
+  {
+    "path": "ProjectSettings/ProjectSettings.asset",
+    "sha256": "25475e98ddf5ae903c1ce4685353715f843d004485d088e0bed33bea98792338",
+    "bytes": 24229
+  },
+  {
+    "path": "ProjectSettings/EditorBuildSettings.asset",
+    "sha256": "8d621a077642b5154ba305861ca57dfb549ff4fde5bc58f3e284536a5982f01e",
+    "bytes": 458
+  },
+  {
+    "path": "ProjectSettings/BurstAotSettings_StandaloneWindows.json",
+    "sha256": "72601656f7f4b74e53d13c65a01cf8a26a450257d75a3f145a0d5d6ebf5d1296",
+    "bytes": 444
+  },
+  {
+    "path": "ProjectSettings/CommonBurstAotSettings.json",
+    "sha256": "0831b2bc3ddc23d7d49336fa2e2675ac2badbcc194acd29f6382641d2701e814",
+    "bytes": 80
+  },
+  {
+    "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+    "sha256": "25c8e08f4d1be55ee55d0404aaf4e46d099afc6c2ba3d9040e1c5203f654d9ff",
+    "bytes": 3329
+  },
+  {
+    "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "sha256": "f2ee25d075548b78380be817209152047b919c4c15da8743d75d2e0c165cbea1",
+    "bytes": 652229
+  },
+  {
+    "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+    "sha256": "253b2ebad322aa6ec18488dfbbf555bb93ad897940a342e4130e77ce778f9010",
+    "bytes": 109282
+  }
+]

@@ -1,0 +1,86 @@
+{
+  "operationId": "OP-NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-PREFLIGHT01-20261011",
+  "start": "2026-10-11T14:48:39.477782+08:00",
+  "end": "2026-10-11T14:51:07.059077+08:00",
+  "pid": 111552,
+  "exitCode": 0,
+  "status": "VERIFIED_DOCUMENT_APPEND_ONLY",
+  "command": "PowerShell heredoc | python -X utf8 -; exact SHA guard then binary prepend/append; no deletes/moves/Git writes; CreateNew output evidence",
+  "actualFiles": [
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "beforeSha256": "43263c93bbf3ba8a0c78e5f0e826672a3a5e2c201833d7c3b0f370073c3a08c6",
+      "afterSha256": "4fd9f7c7e3b4ddf151fa8e19bf69c0cfe79a4b889583247bf6d475baf20ab335",
+      "bytes": 431433
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "beforeSha256": "ba8dd27f965187d391baf86cee3d2a1a13301e340513bc8a1ea175ac68b4d12a",
+      "afterSha256": "9402d4b53363c955988e7454835ca33efcdfa289a57623e546770e3252b58d6f",
+      "bytes": 1712806
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "beforeSha256": "82cba6cc776f31fe7cf1f1afe9962f1f2bd5e1d3b81258b3cc0cd136cf1c32d2",
+      "afterSha256": "df875a4eb1ee0df27b8d89c6ca0c2c0d848d3480ea0ad1a6ed81a447b6e73873",
+      "bytes": 779938
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "beforeSha256": "a29178c84ce9299af32a14de46d85d46e0c5af5745fd374c11be6f51a56b8131",
+      "afterSha256": "000d6a1174fbde277bb9895e533426b27ebb0e723aea6c6a168e134ad82baa4a",
+      "bytes": 1651628
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+      "beforeSha256": "0b9ffb9f92318e3dc86d8f4cbe6ddb1cafa22c07d90517acab8cf48fb800dc1b",
+      "afterSha256": "2d654447d9816e58488b2c0038a41b9b464add10f42810d91dc51d529d49a99a",
+      "bytes": 23538
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "beforeSha256": "bcdaede06bb5733ecd901f1913f982cde07e9096510ba6a2c419eda4ecd8be10",
+      "afterSha256": "3ad9b7570b54e670471ff06929d08725f657289c310d588c76334c04fcad9efc",
+      "bytes": 271876
+    },
+    {
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "beforeSha256": "5e3c4fcd1f16a7f8eb94651f29bf94d88659974ebcabf160ee88faff1f29d294",
+      "afterSha256": "88f06a402e724dc0a1c96d470bf31ef5a7ddef157c8e367633ad64878652e945",
+      "bytes": 378787
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011.md",
+      "beforeSha256": "b66130b5d5e87fab34547a77a03859550f54ff75d9bedec4cc260cb3f5442fbb",
+      "afterSha256": "9c43316eb5f12b91e843031e69ff34014679c0548c5f42562265da625b3c3bf9",
+      "bytes": 28915
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001.md",
+      "beforeSha256": "8093e41d7c4b0634e993105457fa559e6831c3f90f9e8c8d530584f0e1556533",
+      "afterSha256": "5ef0af875616ca207fcae6b2333722c0752242f4de3ed34cac96a14e45bb7844",
+      "bytes": 11318
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PLAN.md",
+      "beforeSha256": "f33a4db0e12c8b311b0459ff0843f49633fff97b536b29128de8f2215b3eb0a3",
+      "afterSha256": "0d51210ebeebcdd64495b3ccc4875f2ae902530b83edce4ffd4f9c4f80699fff",
+      "bytes": 34888
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PRE-FLIGHT-01.md",
+      "beforeSha256": "7fc8b45605e4d5855f23db77639fe2c6d0d7aa528427d457d9cb591b239535f8",
+      "afterSha256": "3683b2c8d87660176df9225ed9e06a688b8def25c81f3e2bd526f6109f291952",
+      "bytes": 18041
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/OP-NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-PREFLIGHT01-20261011/RECORD.md",
+      "beforeSha256": "173ed6d3f56fb3a031e5cd776ed46603466c4b4497eaf99cb09ff03b82eba5e0",
+      "afterSha256": "5be5803ce21df6555ca962b113781cb3fb3b631045cd25ec0ed9df6cf08c73e4",
+      "bytes": 7044
+    }
+  ],
+  "codeSettingsResourceUnityBuildPlayerChanges": 0,
+  "rawResults": "resolved-input-deployment-comparison.json / kill-icon-input-data-check.json",
+  "verification": "convergence-protection.json / validator-convergence.json"
+}

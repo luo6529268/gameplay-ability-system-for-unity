@@ -1,0 +1,132 @@
+[
+  {
+    "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+    "bytes": 3329,
+    "sha256": "25c8e08f4d1be55ee55d0404aaf4e46d099afc6c2ba3d9040e1c5203f654d9ff"
+  },
+  {
+    "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset.meta",
+    "bytes": 197,
+    "sha256": "fc5af11037cd0f5f52469ba07d449d735c791816b85b74a1a69e300ec45e89b5"
+  },
+  {
+    "path": "Assets/NTSD/Prefabs/Common/EntityObject.prefab",
+    "bytes": 6695,
+    "sha256": "97a58f4819532dda96c008bfe7ca7204af39feb3ddc9d7dee93bcf9ea99c00b5"
+  },
+  {
+    "path": "Assets/NTSD/Prefabs/Common/EntityObject.prefab.meta",
+    "bytes": 161,
+    "sha256": "11e3dce024f75d5091a10e872fb223c3a5682f6513bd2c7bc3557d254957c014"
+  },
+  {
+    "path": "Assets/NTSD/Prefabs/Common/Shadow.prefab",
+    "bytes": 2096,
+    "sha256": "92e29545e9f3720cfa375b174a24fd0b52845f3a31fda02e02c67350ae370e39"
+  },
+  {
+    "path": "Assets/NTSD/Prefabs/Common/Shadow.prefab.meta",
+    "bytes": 161,
+    "sha256": "53ca9184ca113c2c986121ebe96237e6dbc1b1b05e6b27fa7315a9cdc6e69f27"
+  },
+  {
+    "path": "Assets/NTSD/Map/BattleMapCatalog.asset",
+    "bytes": 530,
+    "sha256": "45fd94d633d81cfb58477545078c974ff052766cb2f3570fe367aa48dcf688dd"
+  },
+  {
+    "path": "Assets/NTSD/Map/BattleMapCatalog.asset.meta",
+    "bytes": 189,
+    "sha256": "fa62a04a74042272f048faff576ad516800ff8a19bab2068d1e1e3c161b0e964"
+  },
+  {
+    "path": "Assets/NTSD/Map/SunagakureMap.asset",
+    "bytes": 778,
+    "sha256": "f7b5e4a44cac05480d1ca6f67abf623531264c1c96725d7fdd23da50c8e60c08"
+  },
+  {
+    "path": "Assets/NTSD/Map/SunagakureMap.asset.meta",
+    "bytes": 189,
+    "sha256": "07c86ff0e8b180daa12f7a75b2c0dfc24df25d6e7d32333524736879367b9fe1"
+  },
+  {
+    "path": "Assets/NTSD/Sprite/OtherBg/Sunagakure.png",
+    "bytes": 3084974,
+    "sha256": "112fb26709af7e77e11676665b7cb9445e2e2dbdb71a61037c5ddcdb6f754e42"
+  },
+  {
+    "path": "Assets/NTSD/Sprite/OtherBg/Sunagakure.png.meta",
+    "bytes": 4082,
+    "sha256": "30b3f2f0edd64145874dc33bbe253c9fac889125e2a563d0b79b5b21e7de119e"
+  },
+  {
+    "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "bytes": 652229,
+    "sha256": "f2ee25d075548b78380be817209152047b919c4c15da8743d75d2e0c165cbea1"
+  },
+  {
+    "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+    "bytes": 109282,
+    "sha256": "253b2ebad322aa6ec18488dfbbf555bb93ad897940a342e4130e77ce778f9010"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Runtime/BattleRuntimeProfile.cs",
+    "bytes": 10213,
+    "sha256": "b0753c55e10ab3566a3b22f098ab37b44ae4f02f8c4cb89ec99a7d0666da3ebc"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationBackendMode.cs",
+    "bytes": 2732,
+    "sha256": "2f605661219d02730e1a4b2bd0dc8f95d095e80b28065757e1afa3fe58fe95e3"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2ObjectPool.cs",
+    "bytes": 27549,
+    "sha256": "3b6bf9c565d22231b202a312708af25f0d95bf8a63bd4f8bc11909abc5c606b6"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/App/NTSDSoundPlayer.cs",
+    "bytes": 52447,
+    "sha256": "2d540933e1661b7b679f9be7bd500da825d9c9706b97628c22bc8345145184ee"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/App/NTSDSoundPlayer.cs.meta",
+    "bytes": 254,
+    "sha256": "6706a53876f4cae60510831f30f4d75b470c8ec429dcf20ec59d0a687720978c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/App/AppManager.cs",
+    "bytes": 28002,
+    "sha256": "2a35f3706d5680e192bb1dec822e6f821dea1230c146383502d089b94857bb40"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs",
+    "bytes": 40652,
+    "sha256": "a574743ce5690eb5fe7a126b50747177276398cd9fe562d337e2d9b8de2d0bfc"
+  },
+  {
+    "path": "Packages/manifest.json",
+    "bytes": 2789,
+    "sha256": "21d93b83f18d354050ea0965165806001563de7ac2e974841279aff63edb2705"
+  },
+  {
+    "path": "I:/GitHub/Unity_GAS/unity-mcp/MCPForUnity/Editor/Tools/ExecuteCode.cs",
+    "bytes": 30310,
+    "sha256": "413433708bb74df5feed3d5ab74e3956ac86a71c85053fab49e0eefd5dff32ba"
+  },
+  {
+    "path": "I:/GitHub/Unity_GAS/unity-mcp/MCPForUnity/Editor/Tools/ExecuteMenuItem.cs",
+    "bytes": 2235,
+    "sha256": "debca0393bd4c397f1d781510c8d74a3b1e321133cc6c05796efc26e8dc9de93"
+  },
+  {
+    "path": "I:/GitHub/Unity_GAS/unity-mcp/MCPForUnity/Editor/Tools/CommandRegistry.cs",
+    "bytes": 15865,
+    "sha256": "77565925a8cb7129095e0ee3a86c43a05fa373de30427a86db47392d9505eb6b"
+  },
+  {
+    "path": "I:/GitHub/Unity_GAS/unity-mcp/MCPForUnity/Editor/Services/Transport/TransportCommandDispatcher.cs",
+    "bytes": 17814,
+    "sha256": "7439184e0ad0b446e3c8b9666a9322938de5209c6b02918abf1fcbb5c3a39587"
+  }
+]

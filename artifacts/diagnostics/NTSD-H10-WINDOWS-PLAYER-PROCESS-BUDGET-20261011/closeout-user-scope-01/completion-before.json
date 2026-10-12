@@ -1,0 +1,19 @@
+{
+  "time": "2026-10-11T15:56:58.536997+08:00",
+  "operationId": "OP-NTSD-H10-USER-SCOPE-CLOSEOUT-20261011",
+  "planned": "Append actual validation to newly created report; change this new Operation status to VERIFIED and append actual completion; exact SHA guards and genuine own-file backups",
+  "files": [
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/closeout-user-scope-01/REPORT.md",
+      "sha256": "95767c928806220ac6a45f4515ecc6e7a507dc4982e431c7e2a7f050f44cf8ef",
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/closeout-user-scope-01/report-before-completion.md",
+      "bytes": 3033
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/OP-NTSD-H10-USER-SCOPE-CLOSEOUT-20261011/RECORD.md",
+      "sha256": "b294e720f60a5166e8d759248815a785ce4cbc769dacc2bea83d6794238cbcf1",
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/closeout-user-scope-01/operation-before-completion.md",
+      "bytes": 1775
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "State": "FAILED_CLEAN_SAFE",
+  "FirstFailure": "System.InvalidOperationException: Clone changed fields other than runtime root.\r\n  at NTSD.Test.M12RealSceneCloseDiagnostics.Require (System.Boolean condition, System.String message) [0x00009] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\M12DecodeUploadBackpressureEditorTests.cs:1074 \r\n  at NTSD.Test.M12RealSceneCloseDiagnostics+RunOwner.RunAsync () [0x00249] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\M12DecodeUploadBackpressureEditorTests.cs:1267 ",
+  "errors": 1,
+  "acceptedError": 0,
+  "logIoFailure": 0,
+  "phase": "failed_cleanup_only",
+  "persistedLogs": 1,
+  "logWriters": 0,
+  "lateLogs": 0,
+  "logPersistenceComplete": true,
+  "ownedResourcesReleased": false,
+  "observationBoundary": "Before expected domain reload; post-Exit Console still requires external review."
+}

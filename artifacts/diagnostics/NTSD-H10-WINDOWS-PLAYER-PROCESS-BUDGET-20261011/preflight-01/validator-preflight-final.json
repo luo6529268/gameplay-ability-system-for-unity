@@ -1,0 +1,22 @@
+{
+  "start": "2026-10-11T15:05:32.923423+08:00",
+  "end": "2026-10-11T15:05:53.257415+08:00",
+  "command": [
+    "pwsh",
+    "-NoProfile",
+    "-File",
+    "Tools/Validate-ChangeLedger.ps1",
+    "-RepositoryRoot",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity"
+  ],
+  "exitCode": 0,
+  "passed": true,
+  "records": 1423,
+  "warnings": 4534,
+  "ownWarnings": [
+    "  WARNING: Record NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001 declares Assets/NTSD/Scripts/Test/Editor/H10WindowsPlayerBudgetBuild.cs, which is not in the current code diff.",
+    "  WARNING: Record NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001 declares Assets/NTSD/Scripts/Test/H10WindowsPlayerBudgetProbe.cs, which is not in the current code diff.",
+    "  WARNING: Record NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001 declares Tools/Diagnostics/H10WindowsPrivateBytesSampler.ps1, which is not in the current code diff."
+  ],
+  "rawLog": "change-ledger-preflight-final.log"
+}

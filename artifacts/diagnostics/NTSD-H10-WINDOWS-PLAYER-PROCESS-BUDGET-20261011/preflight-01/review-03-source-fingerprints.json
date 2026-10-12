@@ -1,0 +1,53 @@
+{
+  "time": "2026-10-11T14:32:05.637850+08:00",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha256": "f2ee25d075548b78380be817209152047b919c4c15da8743d75d2e0c165cbea1",
+      "bytes": 652229
+    },
+    {
+      "path": "Assets/NTSD/Scripts/UI/CharacterSelectionController.cs",
+      "sha256": "9f70c6cacd3c84bb1dcbab3b1053d656c5de811315e8f0848effe5a39b58fe52",
+      "bytes": 20035
+    },
+    {
+      "path": "Assets/NTSD/Scripts/UI/CharacterSelectionController.cs.meta",
+      "sha256": "bfb369b47d55acc0a0bfd0e2c572ac2e7191e41ef4c098c98797dfc3017fb277",
+      "bytes": 254
+    },
+    {
+      "path": "Assets/NTSD/Scripts/UI/SelectRoleItem.cs",
+      "sha256": "1ef76855e15d6f3bfba2853f8291ffcab35115751c37a6bbf459348249e63cd1",
+      "bytes": 22540
+    },
+    {
+      "path": "Assets/NTSD/Scripts/UI/SelectGameModeController.cs",
+      "sha256": "3448c69886c03951eb1cba964bb19da88f79180d68c81ed10a0451986712724a",
+      "bytes": 2213
+    },
+    {
+      "path": "Assets/NTSD/Scripts/UI/MenuUIController.cs",
+      "sha256": "754f6212d0183b543252ae936ab7d406537936f433a7466147d04cf64b17a09c",
+      "bytes": 1802
+    },
+    {
+      "path": "Assets/NTSD/Scripts/App/GameModeConfig.cs",
+      "sha256": "5d877a91579c10088ad7004f541eccd210b65061f0c6b151c9234dc48efd3db6",
+      "bytes": 191
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LoganVisualContentCandidate.cs",
+      "sha256": "35ac697cb8b5a43bc9ae76413f59dd3498218b6c188a06a02e00e99b01d99f9f",
+      "bytes": 22446
+    }
+  ],
+  "menuBinding": {
+    "sceneLines": "3411-3440",
+    "scriptGuid": "b9e532a34253ab24b8de2ae799b933d3",
+    "serializedGameModeId": 0,
+    "serializedBattleGameModeId": 1,
+    "status": "Static source only; actual cold runtime values still required"
+  },
+  "readBoundary": "Candidate declarations/selected rg call sites only; no new full method reads. Main-supplied exact reads referenced separately."
+}

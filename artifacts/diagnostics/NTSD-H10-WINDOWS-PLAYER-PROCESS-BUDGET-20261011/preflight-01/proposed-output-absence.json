@@ -1,0 +1,27 @@
+{
+  "time": "2026-10-11T12:57:56.276138+08:00",
+  "newPaths": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/H10WindowsPlayerBudgetBuild.cs",
+      "exists": false
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/H10WindowsPlayerBudgetBuild.cs.meta",
+      "exists": false
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/H10WindowsPlayerBudgetProbe.cs",
+      "exists": false
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/H10WindowsPlayerBudgetProbe.cs.meta",
+      "exists": false
+    },
+    {
+      "path": "Tools/Diagnostics/H10WindowsPrivateBytesSampler.ps1",
+      "exists": false
+    }
+  ],
+  "buildOutput": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/build-01",
+  "buildOutputExists": false
+}

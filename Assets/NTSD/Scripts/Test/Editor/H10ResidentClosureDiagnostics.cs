@@ -3344,6 +3344,1061 @@ namespace NTSD.Test.Editor
             }
         }
 
+        // Alignment contract: NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001.
+        private const string PcBudgetOutput = "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03";
+        private const string PcBudgetRestoreKey = "NTSD.H10.PcBudget.SceneRestore.20261011.Resume03";
+        private const string PcBudgetGenericCue = @"data\016.wav";
+        private static readonly string[] PcBudgetCueIds =
+        {
+            "c/jira/w/e3.wav", "c/kar/w/t.wav", "c/dan/w/t.wav", "data/001.wav", "c/kim/w/a1.wav"
+        };
+
+        private static void PcBudgetSave(string name, object value)
+        {
+            Directory.CreateDirectory(PcBudgetOutput);
+            using var writer = new StreamWriter(new FileStream(Path.Combine(PcBudgetOutput, name + ".json"),
+                FileMode.CreateNew, FileAccess.Write));
+            writer.Write(JsonConvert.SerializeObject(value, Formatting.Indented));
+        }
+
+        private static FieldInfo PcBudgetStatic(Type type, string name)
+        {
+            var field = type.GetField(name, BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.That(field, Is.Not.Null, type.FullName + "." + name);
+            return field;
+        }
+
+        private static string PcBudgetObjectIdentity(UnityEngine.Object value)
+        {
+            if (value == null) return "null";
+            if (UnityEditor.AssetDatabase.TryGetGUIDAndLocalFileIdentifier(value, out string guid, out long localId)
+                && !string.IsNullOrEmpty(guid)) return guid + ":" + localId;
+            var transform = value is GameObject gameObject ? gameObject.transform : (value as Component)?.transform;
+            if (transform == null) return value.GetType().FullName + ":" + value.name;
+            string path = "";
+            for (var part = transform; part != null; part = part.parent)
+                path = "/" + part.GetSiblingIndex() + ":" + part.name + path;
+            return transform.gameObject.scene.path + path + ":" + value.GetType().FullName;
+        }
+
+        private static string PcBudgetMenuState()
+        {
+            var components = Resources.FindObjectsOfTypeAll<Component>()
+                .Where(x => x != null && x.gameObject.scene.path == "Assets/NTSD/Scene/NTSD_Menu.unity")
+                .OrderBy(PcBudgetObjectIdentity, StringComparer.Ordinal).ToArray();
+            var rows = new List<object>(components.Length);
+            foreach (var component in components)
+            {
+                string json = UnityEditor.EditorJsonUtility.ToJson(component);
+                string stable = System.Text.RegularExpressions.Regex.Replace(json, "\"instanceID\":\\s*(-?[0-9]+)", match =>
+                    "\"objectIdentity\":" + JsonConvert.SerializeObject(PcBudgetObjectIdentity(
+                        UnityEditor.EditorUtility.InstanceIDToObject(int.Parse(match.Groups[1].Value)))));
+                rows.Add(new { identity = PcBudgetObjectIdentity(component), active = component.gameObject.activeSelf,
+                    enabled = component is Behaviour behaviour ? (bool?)behaviour.enabled : null, serialized = stable });
+            }
+            return JsonConvert.SerializeObject(rows);
+        }
+
+        private static UnityEditor.SceneManagement.SceneSetup[] PcBudgetPreflight()
+        {
+            Assert.That(Application.isPlaying, Is.False);
+            Assert.That(UnityEditor.EditorApplication.isCompiling || UnityEditor.EditorApplication.isUpdating, Is.False);
+            Assert.That(UnityEditor.SessionState.GetString(PcBudgetRestoreKey, ""), Is.Empty);
+            var initial = Newtonsoft.Json.Linq.JObject.Parse(File.ReadAllText(Path.Combine(PcBudgetOutput, "initial-scenes.json")));
+            var original = (Newtonsoft.Json.Linq.JArray)initial["result"]["data"]["scenes"];
+            Assert.That(original.Count, Is.EqualTo(1));
+            Assert.That((string)original[0]["path"], Is.EqualTo("Assets/NTSD/Scene/NTSD_Menu.unity"));
+            Assert.That((bool)original[0]["isDirty"], Is.False);
+            var menu = UnityEngine.SceneManagement.SceneManager.GetSceneByPath((string)original[0]["path"]);
+            Assert.That(menu.IsValid() && menu.isLoaded && !menu.isDirty && menu.rootCount == 8, Is.True);
+            // The installed EditModeLauncher creates exactly one active empty additive scene before a test.
+            Assert.That(UnityEngine.SceneManagement.SceneManager.sceneCount, Is.EqualTo(2));
+            var frameworkScene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(1);
+            Assert.That(frameworkScene != menu && frameworkScene == UnityEngine.SceneManagement.SceneManager.GetActiveScene(), Is.True);
+            Assert.That(frameworkScene.path, Is.Empty);
+            Assert.That(frameworkScene.rootCount, Is.Zero);
+            Assert.That(frameworkScene.isDirty, Is.False);
+            Assert.That(EnvelopeSha("Library/PackageCache/com.unity.test-framework@1.1.33/UnityEditor.TestRunner/TestLaunchers/EditModeLauncher.cs"),
+                Is.EqualTo((string)Newtonsoft.Json.Linq.JObject.Parse(File.ReadAllText(
+                    Path.Combine(PcBudgetOutput, "framework-input.json")))["sha256"]));
+            var loader = NTSD_ResourceLoader.Instance;
+            Assert.That(loader.GetPendingRequestCount(), Is.Zero);
+            Assert.That(loader.GetQueuedTaskCount(), Is.Zero);
+            var cache = (IDictionary)typeof(NTSD_ResourceLoader).GetField("cache", Private).GetValue(loader);
+            Assert.That(cache.Count, Is.Zero, "Existing cache cannot be discarded by domain reload");
+            foreach (var player in Resources.FindObjectsOfTypeAll<NTSDSoundPlayer>())
+            {
+                Assert.That(player.BattleAudioPreparationInProgressForDiagnostics, Is.False);
+                Assert.That(player.PendingFormalAudioLoadsForDiagnostics, Is.Zero);
+                Assert.That(player.OwnedFormalAudioSourcesForDiagnostics, Is.Zero);
+                Assert.That(ReadPrivateField<List<AudioClip>>(player, "ownedBattlePlaybackClips").Count, Is.Zero);
+                Assert.That(ReadPrivateField<IDictionary>(player, "preparedCues").Count, Is.Zero);
+            }
+            foreach (var voice in Resources.FindObjectsOfTypeAll<AudioSource>())
+                if (voice.gameObject.scene.IsValid()) Assert.That(voice.isPlaying, Is.False, voice.name);
+            var setups = UnityEditor.SceneManagement.EditorSceneManager.GetSceneManagerSetup();
+            return setups.Where(x => x.path == menu.path).Select(x => new UnityEditor.SceneManagement.SceneSetup
+            {
+                path = x.path, isLoaded = x.isLoaded, isActive = (bool)original[0]["isActive"]
+            }).ToArray();
+        }
+
+        [Test]
+        public void PcBudgetRuntimeQualification()
+        {
+            var setup = PcBudgetPreflight();
+            var correspondence = Newtonsoft.Json.Linq.JObject.Parse(File.ReadAllText(
+                Path.Combine(PcBudgetOutput, "catalog-input-correspondence-resolved.json")));
+            Assert.That((string)correspondence["status"], Is.EqualTo("INPUT_FINGERPRINTS_MATCH"));
+            var controllerProof = Newtonsoft.Json.Linq.JObject.Parse(File.ReadAllText(Path.Combine(
+                EnvelopeOutput, "controller-evidence.json")));
+            foreach (var pair in ((Newtonsoft.Json.Linq.JObject)controllerProof["files"]).Properties())
+                Assert.That(EnvelopeSha(pair.Name), Is.EqualTo((string)pair.Value));
+            Assert.That((int)controllerProof["configuredAudioItems"], Is.Zero);
+            Assert.That(Resources.FindObjectsOfTypeAll<AudioController>().Any(x => x.gameObject.scene.IsValid()), Is.False,
+                "This fixture supports the recorded empty Battle AudioList fallback only");
+            foreach (string name in new[] { "PublishPendingSoundsAfterChecksum", "DispatchPublishedSounds", "PreparePresentationHotPathCapacity" })
+                Assert.That(typeof(NTSD.Simulation.SimulationTickDriver).GetMethod(name, Private), Is.Not.Null);
+            foreach (string cue in PcBudgetCueIds)
+                Assert.That(File.Exists(Path.Combine(Application.dataPath, "NTSD/Content/LoganRuntime/vfs", cue)), Is.True, cue);
+            string genericPath = Path.Combine(Application.dataPath, "NTSD/Sound", PcBudgetGenericCue);
+            var builtins = (string[])typeof(NTSDSoundPlayer).GetField("BuiltInBattleSoundIds",
+                BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+            bool exactBuiltinMember = builtins.Contains(PcBudgetGenericCue, StringComparer.Ordinal);
+            bool genericFileExists = File.Exists(genericPath);
+            PcBudgetSave("raw-key-qualification", new { rawCueId = PcBudgetGenericCue, exactBuiltinMember,
+                comparer = "StringComparer.Ordinal", genericPath, genericFileExists,
+                expectedCacheKey = "NTSD.AudioFile::" + PcBudgetGenericCue,
+                actualCacheKeyObserved = false, scope = "Read-only static raw ID and file existence; no wrapper creation/load/alias registration" });
+            Assert.That(exactBuiltinMember, Is.True, "Use the exact public-prepare builtin ID, not a path alias");
+            Assert.That(genericFileExists, Is.True, genericPath);
+            PcBudgetSave("qualification", new
+            {
+                setup, cacheEmpty = true, loaderIdle = true, noActiveAudio = true, genericPath,
+                menuState = PcBudgetMenuState(),
+                nativeClips = Resources.FindObjectsOfTypeAll<AudioClip>().Select(x => new
+                    { id = x.GetInstanceID(), identity = PcBudgetObjectIdentity(x), x.name, x.samples, x.channels, x.frequency }).ToArray(),
+                originalManagers = Resources.FindObjectsOfTypeAll<MoreMountains.Tools.MMSoundManager>()
+                    .Where(x => x.gameObject.scene.IsValid()).Select(x => new { id = x.GetInstanceID(), json = UnityEditor.EditorJsonUtility.ToJson(x) }).ToArray(),
+                controller = "Recorded Menu null / Battle empty AudioList fallback, not controller lifecycle equivalence",
+                editorSettings = new { UnityEditor.EditorSettings.enterPlayModeOptionsEnabled, UnityEditor.EditorSettings.enterPlayModeOptions },
+                scope = "No audio decode or scene switch; precise original-state and seam prerequisite qualification"
+            });
+        }
+
+        [UnityTearDown]
+        public IEnumerator RestorePcBudgetRuntimeScene()
+        {
+            string saved = UnityEditor.SessionState.GetString(PcBudgetRestoreKey, "");
+            if (string.IsNullOrEmpty(saved)) yield break;
+            if (Application.isPlaying) yield return new ExitPlayMode();
+            var setup = JsonConvert.DeserializeObject<H10SceneSetup>(saved);
+            UnityEditor.SceneManagement.EditorSceneManager.RestoreSceneManagerSetup(setup.Scenes);
+            UnityEditor.SessionState.EraseString(PcBudgetRestoreKey);
+            var after = UnityEditor.SceneManagement.EditorSceneManager.GetSceneManagerSetup();
+            Assert.That(after.Length, Is.EqualTo(setup.Scenes.Length));
+            for (int i = 0; i < after.Length; i++)
+            {
+                Assert.That(after[i].path, Is.EqualTo(setup.Scenes[i].path));
+                Assert.That(after[i].isActive, Is.EqualTo(setup.Scenes[i].isActive));
+                Assert.That(UnityEngine.SceneManagement.SceneManager.GetSceneAt(i).isDirty, Is.False);
+            }
+            Assert.That(UnityEngine.SceneManagement.SceneManager.GetSceneAt(0).rootCount, Is.EqualTo(8));
+            string beforeState = UnityEditor.SessionState.GetString(PcBudgetRestoreKey + ".Components", "");
+            string afterState = PcBudgetMenuState();
+            UnityEditor.SessionState.EraseString(PcBudgetRestoreKey + ".Components");
+            PcBudgetSave("scene-restored", new { setup = after, menuClean8 = true, sceneAssetsSaved = false,
+                beforeState, afterState, componentStateEqual = beforeState == afterState,
+                identityScope = "Scene path/hierarchy/type and serialized asset GUID/localID; not cross-domain instance IDs" });
+            Assert.That(afterState, Is.EqualTo(beforeState), "Current Menu component state must survive this fixture");
+        }
+
+        [UnityTest]
+        public IEnumerator PcBudgetRuntimeThreeSessionsPlay()
+        {
+            var setup = PcBudgetPreflight();
+            Assert.That(File.Exists(Path.Combine(PcBudgetOutput, "qualification.json")), Is.True);
+            Assert.That((bool)Newtonsoft.Json.Linq.JObject.Parse(File.ReadAllText(
+                Path.Combine(PcBudgetOutput, "measurement-qualification.json")))["passed"], Is.True);
+            PcBudgetSave("unique-play-started", new { utc = DateTime.UtcNow, setup });
+            string saved = JsonConvert.SerializeObject(new H10SceneSetup { Scenes = setup });
+            UnityEditor.SessionState.SetString(PcBudgetRestoreKey, saved);
+            UnityEditor.SessionState.SetString(PcBudgetRestoreKey + ".Components", PcBudgetMenuState());
+            UnityEditor.SceneManagement.EditorSceneManager.NewScene(
+                UnityEditor.SceneManagement.NewSceneSetup.EmptyScene, UnityEditor.SceneManagement.NewSceneMode.Single);
+            yield return new EnterPlayMode();
+            yield return UniTask.ToCoroutine(async () =>
+            {
+                PcBudgetFixture fixture = null;
+                string failure = null;
+                string cleanupFailure = null;
+                try
+                {
+                    fixture = new PcBudgetFixture();
+                    fixture.Initialize();
+                    await fixture.RunThreeSessions();
+                    await fixture.RunPendingBoundaries();
+                }
+                catch (Exception ex)
+                {
+                    failure = ex.ToString();
+                    throw;
+                }
+                finally
+                {
+                    if (fixture != null)
+                    {
+                        try { await fixture.Finish(); }
+                        catch (Exception ex) { cleanupFailure = ex.ToString(); }
+                    }
+                    PcBudgetSave("play-result", new
+                    {
+                        failure, cleanupFailure, rows = fixture?.Rows,
+                        scope = "One isolated Play; diagnostic World and audio requests, not real1000 combat entities/Player/8GB certification",
+                        success = failure == null && cleanupFailure == null,
+                        hearingVerified = false, fullEngineNativeAllocationClaimed = false
+                    });
+                    if (failure == null && cleanupFailure != null) Assert.Fail(cleanupFailure);
+                }
+            });
+            yield return new ExitPlayMode();
+        }
+
+        private struct PcBudgetCounters
+        {
+            public long Plays, Evictions, Rejections, Loads, Builds, Failures;
+            public static PcBudgetCounters Read(NTSDSoundPlayer player) => new PcBudgetCounters
+            {
+                Plays = player.PooledOneShotPlayCountForDiagnostics,
+                Evictions = player.OneShotVoiceLimitDropCountForDiagnostics,
+                Rejections = player.RejectedUnpreparedCueCountForDiagnostics,
+                Loads = player.FormalAudioLoadCountForDiagnostics,
+                Builds = player.PreparedCueBuildCountForDiagnostics,
+                Failures = player.FailedPreparedCueLoadCountForDiagnostics
+            };
+        }
+
+        private static T? PcBudgetReadCold<T>(Func<T> read, List<string> errors, string field) where T : struct
+        {
+            try { return read(); }
+            catch (Exception ex) { errors.Add(field + ": " + ex.GetType().Name + ": " + ex.Message); return null; }
+        }
+
+        private sealed class PcBudgetVoiceObservation
+        {
+            [JsonIgnore] public AudioSource Source;
+            [JsonIgnore] public AudioClip Clip;
+            public int? SourceId, ClipId, GameObjectId, ParentId, TimeSamples;
+            public bool? HostOwned, Enabled, ActiveInHierarchy, IsPlaying, Loop;
+            public float? Pitch;
+            public double? DspTime;
+            public string Status;
+            public string[] Errors;
+        }
+
+        private static PcBudgetVoiceObservation PcBudgetObserveVoice(AudioSource source, GameObject host)
+        {
+            var errors = new List<string>();
+            var row = new PcBudgetVoiceObservation { Source = source, Status = "UNKNOWN_SOURCE_UNAVAILABLE" };
+            row.DspTime = PcBudgetReadCold(() => AudioSettings.dspTime, errors, "dspTime");
+            if (source != null)
+            {
+                row.SourceId = PcBudgetReadCold(() => source.GetInstanceID(), errors, "sourceId");
+                try { row.Clip = source.clip; }
+                catch (Exception ex) { errors.Add("clip: " + ex.GetType().Name + ": " + ex.Message); }
+                row.ClipId = row.Clip != null ? PcBudgetReadCold(() => row.Clip.GetInstanceID(), errors, "clipId") : null;
+                row.GameObjectId = PcBudgetReadCold(() => source.gameObject.GetInstanceID(), errors, "gameObjectId");
+                row.ParentId = PcBudgetReadCold(() => source.transform.parent != null
+                    ? source.transform.parent.GetInstanceID() : 0, errors, "parentId");
+                row.HostOwned = PcBudgetReadCold(() => host != null && (source.gameObject == host
+                    || source.transform.IsChildOf(host.transform)), errors, "hostOwned");
+                row.Enabled = PcBudgetReadCold(() => source.enabled, errors, "enabled");
+                row.ActiveInHierarchy = PcBudgetReadCold(() => source.gameObject.activeInHierarchy, errors, "activeInHierarchy");
+                row.IsPlaying = PcBudgetReadCold(() => source.isPlaying, errors, "isPlaying");
+                row.Loop = PcBudgetReadCold(() => source.loop, errors, "loop");
+                row.Pitch = PcBudgetReadCold(() => source.pitch, errors, "pitch");
+                row.TimeSamples = PcBudgetReadCold(() => source.timeSamples, errors, "timeSamples");
+                row.Status = errors.Count == 0 ? "OBSERVED" : "UNKNOWN_FIELDS";
+            }
+            row.Errors = errors.ToArray();
+            return row;
+        }
+
+        private sealed class PcBudgetColdVoices
+        {
+            // Array references are used only for identity; all before values are copied.
+            [JsonIgnore] public AudioSource[] PoolArray, PoolSources;
+            [JsonIgnore] public long[] SequenceArray;
+            public long[] StartSequences;
+            public int?[] PoolSourceIds;
+            public PcBudgetVoiceObservation[] Voices;
+            public int HostId;
+            public long? OneShotPlays, LoopPlays, Evictions, Rejections, Loads, Builds, Failures;
+            public string[] Errors;
+        }
+
+        private static PcBudgetColdVoices PcBudgetCaptureVoices(NTSDSoundPlayer player, GameObject host)
+        {
+            var errors = new List<string>();
+            var snapshot = new PcBudgetColdVoices { HostId = host.GetInstanceID() };
+            try
+            {
+                snapshot.PoolArray = ReadPrivateField<AudioSource[]>(player, "oneShotVoices");
+                snapshot.SequenceArray = ReadPrivateField<long[]>(player, "oneShotVoiceStartSequences");
+                snapshot.PoolSources = snapshot.PoolArray == null ? null : (AudioSource[])snapshot.PoolArray.Clone();
+                snapshot.StartSequences = snapshot.SequenceArray == null ? null : (long[])snapshot.SequenceArray.Clone();
+                snapshot.PoolSourceIds = snapshot.PoolSources?.Select(x => x != null ? (int?)x.GetInstanceID() : null).ToArray();
+            }
+            catch (Exception ex) { errors.Add("poolMapping: " + ex.GetType().Name + ": " + ex.Message); }
+            try { snapshot.Voices = host.GetComponentsInChildren<AudioSource>(true).Select(x => PcBudgetObserveVoice(x, host)).ToArray(); }
+            catch (Exception ex) { errors.Add("hostVoices: " + ex.GetType().Name + ": " + ex.Message); }
+            snapshot.OneShotPlays = PcBudgetReadCold(() => player.PooledOneShotPlayCountForDiagnostics, errors, "oneShotPlays");
+            snapshot.LoopPlays = PcBudgetReadCold(() => player.LoopFallbackPlayCountForDiagnostics, errors, "loopPlays");
+            snapshot.Evictions = PcBudgetReadCold(() => player.OneShotVoiceLimitDropCountForDiagnostics, errors, "evictions");
+            snapshot.Rejections = PcBudgetReadCold(() => player.RejectedUnpreparedCueCountForDiagnostics, errors, "rejections");
+            snapshot.Loads = PcBudgetReadCold(() => player.FormalAudioLoadCountForDiagnostics, errors, "loads");
+            snapshot.Builds = PcBudgetReadCold(() => player.PreparedCueBuildCountForDiagnostics, errors, "builds");
+            snapshot.Failures = PcBudgetReadCold(() => player.FailedPreparedCueLoadCountForDiagnostics, errors, "failures");
+            snapshot.Errors = errors.ToArray();
+            return snapshot;
+        }
+
+        private static AudioSource PcBudgetObservePlayback(NTSDSoundPlayer player, GameObject host,
+            AudioClip expected, Action play, string label)
+        {
+            var before = PcBudgetCaptureVoices(player, host);
+            string playError = null;
+            try { play(); }
+            catch (Exception ex) { playError = ex.ToString(); }
+            var after = PcBudgetCaptureVoices(player, host);
+            bool sameMapping = before.PoolArray != null && before.SequenceArray != null
+                && ReferenceEquals(before.PoolArray, after.PoolArray) && ReferenceEquals(before.SequenceArray, after.SequenceArray)
+                && before.PoolSources != null && after.PoolSources != null
+                && before.StartSequences != null && after.StartSequences != null
+                && before.PoolSources.Length == after.PoolSources.Length
+                && before.StartSequences.Length == before.PoolSources.Length
+                && after.StartSequences.Length == after.PoolSources.Length
+                && before.PoolSources.Where((x, i) => !ReferenceEquals(x, after.PoolSources[i])).Any() == false;
+            int[] advanced = sameMapping ? Enumerable.Range(0, before.StartSequences.Length)
+                .Where(i => after.StartSequences[i] > before.StartSequences[i]).ToArray() : Array.Empty<int>();
+            int[] retreated = sameMapping ? Enumerable.Range(0, before.StartSequences.Length)
+                .Where(i => after.StartSequences[i] < before.StartSequences[i]).ToArray() : Array.Empty<int>();
+            AudioSource started = advanced.Length == 1 ? after.PoolSources[advanced[0]] : null;
+            var actual = after.Voices?.FirstOrDefault(x => ReferenceEquals(x.Source, started));
+            var legacy = PcBudgetObserveVoice(FindVoiceWithClip(host, expected), host);
+            var matching = after.Voices?.Where(x => ReferenceEquals(x.Clip, expected)).ToArray();
+            long? playDelta = after.OneShotPlays + after.LoopPlays - before.OneShotPlays - before.LoopPlays;
+            PcBudgetSave("play-observation-" + label, new { label, expectedClipId = expected != null ? (int?)expected.GetInstanceID() : null,
+                before, after, playError, sameMapping, advanced, retreated, playDelta,
+                actualStartedVoice = actual, legacySelection = legacy, matchingVoices = matching,
+                playingMatches = matching?.Where(x => x.IsPlaying == true).Select(x => x.SourceId).ToArray(),
+                clipSameReference = actual != null && ReferenceEquals(actual.Clip, expected),
+                observation = "Copied cold values around exactly one synchronous production call; no replay or stop" });
+            Assert.That(playError, Is.Null, label);
+            Assert.That(before.Errors, Is.Empty, label + " before fields");
+            Assert.That(after.Errors, Is.Empty, label + " after fields");
+            Assert.That(before.Voices, Is.Not.Null, label);
+            Assert.That(after.Voices, Is.Not.Null, label);
+            Assert.That(before.Voices.All(x => x.Status == "OBSERVED"), Is.True, label + " before voices");
+            Assert.That(after.Voices.All(x => x.Status == "OBSERVED"), Is.True, label + " after voices");
+            Assert.That(playDelta, Is.EqualTo(1), label + " exactly one actual play");
+            Assert.That(after.Loads - before.Loads, Is.EqualTo(0), label + " no load");
+            Assert.That(after.Builds - before.Builds, Is.EqualTo(0), label + " no build");
+            Assert.That(after.Failures - before.Failures, Is.EqualTo(0), label + " no failure");
+            Assert.That(after.Rejections - before.Rejections, Is.EqualTo(0), label + " no rejection");
+            Assert.That(sameMapping, Is.True, label + " pool identity/index mapping");
+            Assert.That(retreated, Is.Empty, label + " monotonic sequence");
+            Assert.That(advanced.Length, Is.EqualTo(1), label + " exactly one newly started voice");
+            Assert.That(started, Is.Not.Null, label + " started source");
+            Assert.That(actual, Is.Not.Null, label + " started source belongs to captured host");
+            Assert.That(actual.Clip, Is.SameAs(expected), label + " exact clip reference");
+            Assert.That(actual.HostOwned, Is.True, label + " host ownership");
+            Assert.That(actual.Enabled, Is.True, label + " enabled");
+            Assert.That(actual.ActiveInHierarchy, Is.True, label + " active");
+            Assert.That(actual.IsPlaying, Is.True, label + " actual startup playing observation");
+            return started;
+        }
+
+        private sealed class PcBudgetAllocationBoundary : IDisposable
+        {
+            public readonly BattleScopedGcAllocationRecorder Recorder = new BattleScopedGcAllocationRecorder();
+            public readonly string Boundary;
+            public readonly int OwnerThread = System.Threading.Thread.CurrentThread.ManagedThreadId;
+            public BattleScopedGcAllocationRecorder.CalibrationResult Before, After;
+            public BattleScopedGcAllocationRecorder.ScopeResult Scope;
+            public bool BeforeAttempted, AfterAttempted;
+            public PcBudgetAllocationBoundary(string boundary) { Boundary = boundary; }
+            public void CalibrateBefore() { Scope = default; After = default; AfterAttempted = false; BeforeAttempted = true; Before = Recorder.Calibrate(); }
+            public void CalibrateAfter() { AfterAttempted = true; After = Recorder.Calibrate(); }
+            public void Begin()
+            {
+                if (!Recorder.Begin()) throw new InvalidOperationException("Allocation recorder is unavailable");
+            }
+            public void End() { Scope = Recorder.End(); }
+            public object Evidence() => new { boundary = Boundary, OwnerThread, currentThread = System.Threading.Thread.CurrentThread.ManagedThreadId,
+                Recorder.Marker, Recorder.Category, Recorder.Unit, Recorder.Capacity, BeforeAttempted, AfterAttempted, Before, Scope, After,
+                zeroEvents = BattleScopedGcAllocationRecorder.HasZeroEvents(Scope, Before, After) };
+            public void RequireZero() => Assert.That(BattleScopedGcAllocationRecorder.HasZeroEvents(Scope, Before, After), Is.True, Boundary);
+            public void Dispose() { Recorder.Dispose(); }
+        }
+
+        [Test]
+        public void PcBudgetAllocationMeasurementQualification()
+        {
+            PcBudgetPreflight();
+            var rows = new List<object>(3);
+            var owners = new PcBudgetAllocationBoundary[3];
+            bool passed = false;
+            try
+            {
+                for (int i = 0; i < owners.Length; i++) owners[i] = new PcBudgetAllocationBoundary("qualified-boundary-" + i);
+                for (int i = 0; i < owners.Length; i++)
+                {
+                    var owner = owners[i];
+                    var inactive = owner.Recorder.End();
+                    bool began = false;
+                    try { owner.Begin(); began = true; }
+                    finally { owner.End(); }
+                    var uncalibrated = owner.Scope;
+                    owner.CalibrateBefore();
+                    try { owner.Begin(); }
+                    finally { owner.End(); }
+                    owner.CalibrateAfter();
+                    rows.Add(new { i, began, inactive, uncalibrated, calibrated = owner.Evidence(),
+                        independentInstance = owners.Where(x => ReferenceEquals(x.Recorder, owner.Recorder)).Count() == 1 });
+                    Assert.That(began, Is.True);
+                    Assert.That(inactive.valid, Is.False);
+                    Assert.That(uncalibrated.calibratedBefore, Is.False);
+                    Assert.That(BattleScopedGcAllocationRecorder.HasZeroEvents(inactive, owner.Before, owner.After), Is.False);
+                    Assert.That(BattleScopedGcAllocationRecorder.HasZeroEvents(uncalibrated, owner.Before, owner.After), Is.False);
+                    owner.RequireZero();
+                }
+                passed = true;
+            }
+            finally
+            {
+                try { PcBudgetSave("measurement-qualification", new { passed, rows,
+                    partial = owners.Where(x => x != null).Select(x => x.Evidence()).ToArray(),
+                    schedule = "Three independent instances; production sink scope disabled during outer pipeline sampling; no nested Reset",
+                    reusedCapacityNegativeControl = "Existing recorder saturation evidence, not rerun" }); }
+                finally { foreach (var owner in owners) owner?.Dispose(); }
+            }
+        }
+
+        private struct PcBudgetHotRow
+        {
+            public int Frame, Tick, Requests;
+            public bool Measured;
+            public BattleScopedGcAllocationRecorder.ScopeResult Allocation;
+            public PcBudgetCounters Before, After;
+        }
+
+        private sealed class PcBudgetSink : NTSD.Simulation.ISimulationSoundPresentationSink
+        {
+            private readonly NTSDSoundPlayer player;
+            private readonly PcBudgetAllocationBoundary allocation;
+            public readonly PcBudgetHotRow[] Samples = new PcBudgetHotRow[128];
+            public int Count;
+            public bool Measure;
+            public PcBudgetSink(NTSDSoundPlayer value, PcBudgetAllocationBoundary boundary) { player = value; allocation = boundary; }
+            public void PresentSounds(IReadOnlyList<NTSD.Simulation.PendingSoundEvent> sounds)
+            {
+                int index = Count++;
+                var before = PcBudgetCounters.Read(player);
+                try
+                {
+                    if (Measure) allocation.Begin();
+                    player.PresentSounds(sounds);
+                }
+                finally
+                {
+                    if (Measure) allocation.End();
+                    Samples[index] = new PcBudgetHotRow
+                    {
+                        Frame = Time.frameCount, Tick = sounds.Count > 0 ? sounds[0].Tick : -1,
+                        Requests = sounds.Count, Measured = Measure, Allocation = Measure ? allocation.Scope : default,
+                        Before = before, After = PcBudgetCounters.Read(player)
+                    };
+                }
+            }
+        }
+
+        private sealed class PcBudgetEmitter : NTSD.Animation.LF2Objects.LF2Entity
+        {
+            private readonly NTSD.Simulation.SimulationWorld world;
+            private readonly PcBudgetAllocationBoundary allocation;
+            public int Count = 1, CueCount = 1;
+            public bool Measure;
+            public override NTSD.Animation.LF2Objects.LF2ObjectType ObjectTypeEnum => NTSD.Animation.LF2Objects.LF2ObjectType.Other;
+            public PcBudgetEmitter(NTSD.Simulation.SimulationWorld value, PcBudgetAllocationBoundary boundary)
+            {
+                world = value;
+                allocation = boundary;
+                Name = "H10PcBudgetDiagnosticSoundEmitter";
+                FrameDelay = 4;
+                Health = new NTSD.Animation.LF2Objects.LF2Health();
+                Health.BindRuntime(Runtime);
+                ItrRest = new LF2ItrRestTracker();
+                PS.BindRuntime(Runtime);
+                Trans = new FrameTransistor(this);
+            }
+            public override void SimTransit(int tickIndex)
+            {
+                try
+                {
+                    if (Measure) allocation.Begin();
+                    for (int i = 0; i < Count; i++) world.QueueSound(PcBudgetCueIds[i % CueCount], 500);
+                }
+                finally { if (Measure) allocation.End(); }
+            }
+            public override void SimTU(int tickIndex) { }
+            public override void Reset() { }
+            public override void Init(NTSD.Animation.LF2Tasks.LF2TaskBase task, NTSD.Animation.LF2Objects.LF2ObjectRenderer renderer) { }
+        }
+
+        private sealed class PcBudgetFixture
+        {
+            public readonly List<object> Rows = new List<object>(96);
+            private readonly List<GameObject> hosts = new List<GameObject>(12);
+            private readonly List<UniTask> operations = new List<UniTask>(8);
+            private readonly Dictionary<string, object> addedCache = new Dictionary<string, object>(StringComparer.Ordinal);
+            private readonly HashSet<string> allowedKeys = new HashSet<string>(StringComparer.Ordinal);
+            private readonly IDictionary cache;
+            private readonly Dictionary<string, object> beforeCache;
+            private readonly HashSet<int> initialClipIds;
+            private readonly FieldInfo configField, managerField, mmField, driverField;
+            private readonly object oldConfig, oldManager, oldMm, oldDriver;
+            private readonly UnityEngine.Random.State randomBefore;
+            private GameObject audioHost;
+            private CharacterAnimtorManager manager;
+            private AudioListener listener;
+            private NTSDSoundPlayer player;
+            private readonly float[] outputSamples = new float[512];
+            private readonly List<AudioClip> allTrackedOwned = new List<AudioClip>(160);
+            private NTSD.Simulation.SimulationTickDriver driver;
+            private GameObject driverHost;
+            private int lastGeneration;
+            private int firstGenericId;
+            private AudioClip firstGenericClip;
+            private string configStateBefore, mmSettingsStateBefore;
+            private bool finished;
+
+            public PcBudgetFixture()
+            {
+                Assert.That(Application.isPlaying, Is.True);
+                Assert.That(AppManager.Instance == null && NTSD.Simulation.SimulationTickDriver.Instance == null, Is.True);
+                Assert.That(Resources.FindObjectsOfTypeAll<AudioController>().Any(x => x.gameObject.scene.IsValid()), Is.False);
+                Assert.That(Resources.FindObjectsOfTypeAll<AudioSource>().Any(x => x.gameObject.scene.IsValid()), Is.False);
+                Assert.That(Resources.FindObjectsOfTypeAll<MoreMountains.Tools.MMSoundManager>().Any(x => x.gameObject.scene.IsValid()), Is.False);
+                configField = PcBudgetStatic(typeof(GameConfig), "_instance");
+                managerField = PcBudgetStatic(typeof(MoreMountains.Tools.MMSingleton<CharacterAnimtorManager>), "_instance");
+                mmField = PcBudgetStatic(typeof(MoreMountains.Tools.MMPersistentSingleton<MoreMountains.Tools.MMSoundManager>), "_instance");
+                driverField = PcBudgetStatic(typeof(NTSD.Simulation.SimulationTickDriver).BaseType, "<Instance>k__BackingField");
+                oldConfig = configField.GetValue(null); oldManager = managerField.GetValue(null);
+                oldMm = mmField.GetValue(null); oldDriver = driverField.GetValue(null);
+                Assert.That(oldManager == null && oldMm == null && oldDriver == null, Is.True);
+                randomBefore = UnityEngine.Random.state;
+                cache = (IDictionary)typeof(NTSD_ResourceLoader).GetField("cache", Private).GetValue(NTSD_ResourceLoader.Instance);
+                beforeCache = SnapshotCache(cache);
+                Assert.That(beforeCache.Count, Is.Zero);
+                Assert.That(NTSD_ResourceLoader.Instance.GetPendingRequestCount(), Is.Zero);
+                Assert.That(NTSD_ResourceLoader.Instance.GetQueuedTaskCount(), Is.Zero);
+                initialClipIds = Resources.FindObjectsOfTypeAll<AudioClip>().Select(x => x.GetInstanceID()).ToHashSet();
+            }
+
+            public void Initialize()
+            {
+                var config = UnityEditor.AssetDatabase.LoadAssetAtPath<GameConfig>("Assets/NTSD/Config/GameConfig/GameConfig.asset");
+                configStateBefore = UnityEditor.EditorJsonUtility.ToJson(config);
+                configField.SetValue(null, config);
+                var mmHost = OwnHost("H10PcBudgetOwnedMM", false);
+                var mm = mmHost.AddComponent<MoreMountains.Tools.MMSoundManager>();
+                mm.enabled = false; // Own manager supplies its mixer reference; do not load or mutate shared settings on Start.
+                mm.settingsSo = UnityEditor.AssetDatabase.LoadAssetAtPath<MoreMountains.Tools.MMSoundManagerSettingsSO>(
+                    "Assets/NTSD/MoreMountains/MMTools/Core/MMAudio/MMSoundManager/Settings/MMSoundManagerSettings.asset");
+                mmSettingsStateBefore = UnityEditor.EditorJsonUtility.ToJson(mm.settingsSo);
+                mmHost.SetActive(true);
+                Assert.That(ReferenceEquals(MoreMountains.Tools.MMSoundManager.Current, mm), Is.True);
+                var managerHost = OwnHost("H10PcBudgetMetadata", false);
+                manager = managerHost.AddComponent<CharacterAnimtorManager>();
+                var frame = new LF2FrameData();
+                typeof(LF2FrameData).GetMethod("SealFrameSounds", Private).Invoke(frame, new object[] { PcBudgetCueIds });
+                typeof(CharacterAnimtorManager).GetField("TotalCharacterFrameConfig", Private).SetValue(manager,
+                    new Dictionary<int, LF2CharacterDataWrapper>
+                    {
+                        [2710] = new LF2CharacterDataWrapper(2710, new LF2CharacterData { frames = new List<LF2FrameData> { frame } })
+                    });
+                audioHost = OwnHost("H10PcBudgetAudio", false);
+                listener = audioHost.AddComponent<AudioListener>();
+                player = audioHost.AddComponent<NTSDSoundPlayer>();
+                audioHost.SetActive(true);
+                Assert.That(listener.enabled && listener.gameObject.activeInHierarchy, Is.True);
+                Assert.That(ReadPrivateField<string>(player, "soundRootFolder"), Is.EqualTo("NTSD/Sound"));
+                var all = new HashSet<string>(PcBudgetCueIds, StringComparer.Ordinal);
+                foreach (string cue in (string[])typeof(NTSDSoundPlayer).GetField("BuiltInBattleSoundIds",
+                    BindingFlags.Static | BindingFlags.NonPublic).GetValue(null)) all.Add(cue);
+                var routes = new List<object>();
+                foreach (string cue in all)
+                {
+                    object generic = Cue(player, cue, false);
+                    string path = ReadPrivateCue<string>(generic, "SourcePath");
+                    string key = ReadPrivateCue<string>(generic, "CacheKey");
+                    bool exists = ReadPrivateCue<bool>(generic, "IsSingleFile") ? File.Exists(path) : Directory.Exists(path);
+                    if (exists) allowedKeys.Add(key);
+                    routes.Add(new { cue, path, key, exists });
+                }
+                Rows.Add(new { stage = "fixture-created", routes, allowedKeys = allowedKeys.ToArray(),
+                    soundRoot = ReadPrivateField<string>(player, "soundRootFolder"), controller = "null; verified real empty AudioList fallback",
+                    noFullCatalog = true, builtinsAddedByPublicPrepare = true });
+                PcBudgetSave("predeclared-generic-routes", Rows[Rows.Count - 1]);
+            }
+
+            private GameObject OwnHost(string name, bool active)
+            {
+                var host = new GameObject(name);
+                hosts.Add(host); // Ownership is recorded at construction, before any component/getter runs.
+                host.SetActive(active);
+                return host;
+            }
+
+            private static object Cue(NTSDSoundPlayer value, string id, bool battle) =>
+                RequireProductionMethod("GetOrPrepareCue", 2).Invoke(value, new object[] { id, battle });
+            private static T ReadPrivateCue<T>(object cue, string name) => (T)RequireCueField(cue.GetType(), name).GetValue(cue);
+            private static AudioClip[] Owned(NTSDSoundPlayer value) => ReadPrivateField<List<AudioClip>>(value, "ownedFormalAudioSources")
+                .Concat(ReadPrivateField<List<AudioClip>>(value, "ownedBattlePlaybackClips")).Where(x => x != null).Distinct().ToArray();
+
+            private async UniTask Await(UniTask operation)
+            {
+                UniTask tracked = operation.Preserve();
+                operations.Add(tracked);
+                double deadline = UnityEditor.EditorApplication.timeSinceStartup + 120;
+                while (tracked.Status == UniTaskStatus.Pending)
+                {
+                    if (UnityEditor.EditorApplication.timeSinceStartup > deadline)
+                        throw new TimeoutException("H10 PC fixture async tail is still pending; no new session allowed");
+                    await UniTask.NextFrame();
+                }
+                await tracked;
+            }
+
+            private void ObserveCache()
+            {
+                foreach (DictionaryEntry entry in cache)
+                {
+                    string key = (string)entry.Key;
+                    if (beforeCache.TryGetValue(key, out object old)) { Assert.That(entry.Value, Is.SameAs(old)); continue; }
+                    Assert.That(allowedKeys.Contains(key), Is.True, key);
+                    if (addedCache.TryGetValue(key, out object previous)) Assert.That(entry.Value, Is.SameAs(previous), key);
+                    else addedCache.Add(key, entry.Value);
+                }
+            }
+
+            private void CreateDriver(NTSDSoundPlayer owner)
+            {
+                Assert.That(driver == null && driverField.GetValue(null) == null, Is.True);
+                driverHost = OwnHost("H10PcBudgetDriver", false);
+                driver = driverHost.AddComponent<NTSD.Simulation.SimulationTickDriver>();
+                driver.enabled = false;
+                driverHost.SetActive(true);
+                Assert.That(driver.TryConfigureEmptyDiagnosticWorld(new NTSD.Simulation.BattleRuntimeWorldSettings(
+                    NTSD.Simulation.BattleRuntimeProfile.Authority400,
+                    NTSD.Simulation.BattleRuntimeProfilePolicy.AuthorityRuntimeSlotCapacity,
+                    NTSD.Simulation.BattleRuntimeProfilePolicy.AuthorityRuntimeSlotCapacity), out string reason), Is.True, reason);
+                driver.ApplySettings(new NTSD.Simulation.LockstepSimulationSettings
+                {
+                    driveMode = NTSD.Simulation.SimulationDriveMode.Manual, requireInputFrameReady = false,
+                    enableFrameChecksum = true, captureFullFrameSnapshotForDiagnostics = false
+                });
+                driver.SetSoundPresentationSinkForDiagnostics(owner);
+                Assert.That(ReadPrivateField<NTSDSoundPlayer>(driver, "_battleSoundPlayer"), Is.SameAs(owner),
+                    "The real diagnostic seam must capture owner before the first await");
+                int capacity = driver.World.RuntimeSlotCapacity;
+                driver.World.BattleBuffersForServices.Prepare(capacity, 0);
+                typeof(NTSD.Simulation.SimulationTickDriver).GetMethod("PreparePresentationHotPathCapacity", Private)
+                    .Invoke(driver, new object[] { capacity });
+                Assert.That(driver.World.PendingSounds.Capacity, Is.GreaterThanOrEqualTo(1000));
+                Assert.That(ReadPrivateField<int>(driver, "_publishedSoundEventLimit"), Is.GreaterThanOrEqualTo(1000));
+                Rows.Add(new { stage = "diagnostic-owner-before-await", capacity,
+                    publishedCapacity = ReadPrivateField<int>(driver, "_publishedSoundEventLimit"), profile = "Authority400; audio requests only" });
+            }
+
+            private static void AssertNoHotWork(PcBudgetCounters before, PcBudgetCounters after)
+            {
+                Assert.That(after.Loads, Is.EqualTo(before.Loads));
+                Assert.That(after.Builds, Is.EqualTo(before.Builds));
+                Assert.That(after.Failures, Is.EqualTo(before.Failures));
+                Assert.That(after.Rejections, Is.EqualTo(before.Rejections));
+            }
+
+            private async UniTask ExerciseHot(int cycle)
+            {
+                PcBudgetAllocationBoundary queue = null, present = null, pipeline = null;
+                PcBudgetSink sink = null;
+                PcBudgetEmitter emitter = null;
+                var stages = new List<object>(24);
+                try
+                {
+                    queue = new PcBudgetAllocationBoundary("World.QueueSound loop only");
+                    present = new PcBudgetAllocationBoundary("prepared NTSDSoundPlayer.PresentSounds only");
+                    pipeline = new PcBudgetAllocationBoundary("publication + dispatch + prepared player; inner sampling disabled");
+                    sink = new PcBudgetSink(player, present);
+                    driver.SetSoundPresentationSinkForDiagnostics(sink);
+                    emitter = new PcBudgetEmitter(driver.World, queue);
+                    driver.World.Register(emitter);
+                    driver.SetPaused(false);
+                    driver.SetPaused(true);
+                    var publish = (Action)Delegate.CreateDelegate(typeof(Action), driver,
+                        typeof(NTSD.Simulation.SimulationTickDriver).GetMethod("PublishPendingSoundsAfterChecksum", Private));
+                    var dispatch = (Action)Delegate.CreateDelegate(typeof(Action), driver,
+                        typeof(NTSD.Simulation.SimulationTickDriver).GetMethod("DispatchPublishedSounds", Private));
+                    for (int tick = 1; tick <= 10; tick++)
+                    {
+                        bool warm = tick <= 3;
+                        emitter.Count = tick == 1 || tick == 4 ? 1 : 1000;
+                        emitter.CueCount = tick == 2 || tick == 5 ? 1 : PcBudgetCueIds.Length;
+                        emitter.Measure = sink.Measure = !warm;
+                        if (!warm)
+                        {
+                            queue.CalibrateBefore();
+                            Assert.That(queue.Before.passed, Is.True, queue.Boundary);
+                            present.CalibrateBefore();
+                            Assert.That(present.Before.passed, Is.True, present.Boundary);
+                        }
+                        int beforeSamples = sink.Count;
+                        bool stepped = driver.StepOneTick(NTSD.Simulation.FrameInputSet.Empty(tick),
+                            ignorePaused: true, buildPresentation: false);
+                        if (!warm) { queue.CalibrateAfter(); present.CalibrateAfter(); }
+                        var sample = sink.Samples[beforeSamples];
+                        int expectedPlays = Math.Min(emitter.Count, emitter.CueCount);
+                        stages.Add(new { boundary = "real-tick-subscopes", tick, frame = Time.frameCount, warm,
+                            stepped, actualSinkCalls = sink.Count - beforeSamples, requests = emitter.Count,
+                            cueCount = emitter.CueCount, expectedPlays, sample,
+                            queue = queue.Evidence(), present = present.Evidence() });
+                        Assert.That(stepped, Is.True);
+                        Assert.That(sink.Count, Is.EqualTo(beforeSamples + 1));
+                        if (!warm)
+                        {
+                            queue.RequireZero(); present.RequireZero();
+                            Assert.That(sample.Requests, Is.EqualTo(emitter.Count));
+                            Assert.That(sample.After.Plays - sample.Before.Plays, Is.EqualTo(expectedPlays));
+                            AssertNoHotWork(sample.Before, sample.After);
+                        }
+                        // No inner recorder runs while the outer publication/dispatch scope is active.
+                        sink.Measure = false;
+                        if (!warm)
+                        {
+                            pipeline.CalibrateBefore();
+                            Assert.That(pipeline.Before.passed, Is.True, pipeline.Boundary);
+                        }
+                        var before = PcBudgetCounters.Read(player);
+                        try
+                        {
+                            if (!warm) pipeline.Begin();
+                            publish();
+                            dispatch();
+                        }
+                        finally { if (!warm) pipeline.End(); }
+                        var after = PcBudgetCounters.Read(player);
+                        if (!warm) pipeline.CalibrateAfter();
+                        stages.Add(new { boundary = "same-frame-publication-replay", tick, frame = Time.frameCount,
+                            warm, requests = emitter.Count, cueCount = emitter.CueCount, expectedPlays,
+                            before, after, pipeline = pipeline.Evidence(), innerSamplingDisabled = !sink.Measure });
+                        if (!warm)
+                        {
+                            pipeline.RequireZero();
+                            Assert.That(after.Plays - before.Plays, Is.EqualTo(expectedPlays));
+                            AssertNoHotWork(before, after);
+                        }
+                        Assert.That(driver.RejectedPublishedSoundEventCountForDiagnostics, Is.Zero);
+                        Assert.That(driver.World.RejectedSoundEventCountForDiagnostics, Is.Zero);
+                        await UniTask.NextFrame();
+                    }
+                    Assert.That(player.OneShotVoiceCountForDiagnostics, Is.EqualTo(64));
+                }
+                finally
+                {
+                    if (sink != null) sink.Measure = false;
+                    if (emitter != null) emitter.Measure = false;
+                    try
+                    {
+                        foreach (var boundary in new[] { queue, present, pipeline })
+                            if (boundary != null && boundary.BeforeAttempted && !boundary.AfterAttempted) boundary.CalibrateAfter();
+                    }
+                    finally
+                    {
+                        try { PcBudgetSave("hot-cycle-" + cycle, new { stages,
+                            lastQueue = queue?.Evidence(), lastPresent = present?.Evidence(), lastPipeline = pipeline?.Evidence(),
+                            recordedSinkSamples = sink?.Samples.Take(sink.Count).ToArray(),
+                            scope = "Three exclusive current-thread scopes; no whole Driver/engine GC, no 1000-entity claim",
+                            saturation = "65-identity saturation is unchanged prior evidence, not newly claimed" }); }
+                        finally { try { queue?.Dispose(); } finally { try { present?.Dispose(); } finally { pipeline?.Dispose(); } } }
+                    }
+                }
+                Rows.Add(new { stage = "hot-complete", cycle, measuredTicks = 7, actualFrames = 10,
+                    sameFrameBatchReplay = true, expectedVoiceCapacity = 64 });
+            }
+
+            private async UniTask CloseDriver(NTSDSoundPlayer owner, string label,
+                AudioSource preserveGenericVoice = null, AudioClip preserveGenericClip = null)
+            {
+                AudioClip[] owned = Owned(owner);
+                int[] ids = owned.Select(x => x.GetInstanceID()).ToArray();
+                allTrackedOwned.AddRange(owned);
+                var world = driver.World;
+                var genericBeforeClose = PcBudgetObserveVoice(preserveGenericVoice, audioHost);
+                var report = driver.ShutdownBattleRuntime();
+                var genericAfterClose = PcBudgetObserveVoice(preserveGenericVoice, audioHost);
+                PcBudgetSave("public-close-observation-" + label, new { label, genericBeforeClose, genericAfterClose,
+                    expectedGenericClipId = preserveGenericClip != null ? (int?)preserveGenericClip.GetInstanceID() : null,
+                    expectedClipSameReference = preserveGenericVoice != null && ReferenceEquals(genericAfterClose.Clip, preserveGenericClip),
+                    report, observation = "Immediately around public stage10 return, before close assertions; natural completion versus stop remains UNKNOWN if not playing" });
+                int pendingAtPublicShutdownReturn = owner.PendingFormalAudioLoadsForDiagnostics;
+                int aliveAtReturn = owned.Count(x => x != null);
+                Rows.Add(new { stage = "public-shutdown-return", label, report, ids,
+                    pendingAtPublicShutdownReturn, aliveAtReturn, tailDrained = owner.BattleAudioTailDrainedForDiagnostics,
+                    observationPoint = "Entire public ShutdownBattleRuntime returned (stage10); not a separate stage5 sample" });
+                Assert.That(report.RuntimeStagesCompleted, Is.True, report.FailureReason);
+                Assert.That(report.CompletedStage, Is.EqualTo(NTSD.Simulation.BattleRuntimeShutdownStage.ObjectPoolQuiesced));
+                Assert.That(driver.World, Is.Null);
+                Assert.That(report.RemainingWorldObjects + report.RemainingRuntimeSlots + report.RemainingPoolBorrowers, Is.Zero);
+                Assert.That(owner.OwnedFormalAudioSourcesForDiagnostics, Is.Zero);
+                Assert.That(Owned(owner), Is.Empty);
+                Assert.That(owner.BattleSoundShutdownCompletedForDiagnostics, Is.True);
+                if (preserveGenericVoice != null)
+                    Assert.That(preserveGenericClip != null && preserveGenericVoice.clip == preserveGenericClip
+                        && preserveGenericVoice.isPlaying, Is.True, "Stage5 must not stop the borrowed generic voice");
+                // This diagnostic world never creates a map carrier; check the actual map owner before reporting stage11.
+                Assert.That(ReadPrivateField<object>(driver, "_battleObjectPool"), Is.Null);
+                Assert.That(Resources.FindObjectsOfTypeAll<NTSD.Test.BattleTestBootstrap>()
+                    .Any(x => x.gameObject.scene.IsValid()), Is.False);
+                Assert.That(Resources.FindObjectsOfTypeAll<NTSD.App.BattleBootstrap>()
+                    .Any(x => x.gameObject.scene.IsValid()), Is.False, "No real Battle map owner in this diagnostic world");
+                var complete = driver.CompleteBattleRuntimeShutdownAfterMapCleanup(true);
+                Assert.That(complete.IsComplete, Is.True, complete.FailureReason);
+                Assert.That(complete.CompletedStage, Is.EqualTo(NTSD.Simulation.BattleRuntimeShutdownStage.RuntimeMapCleared));
+                await WaitForConditionAsync(() => owner.BattleAudioTailDrainedForDiagnostics, 600, label + " drain");
+                await UniTask.NextFrame();
+                Assert.That(owned.All(x => x == null), Is.True, label + " deferred owned destruction");
+                Assert.That(Resources.FindObjectsOfTypeAll<AudioSource>().Any(v => v.clip != null && ids.Contains(v.clip.GetInstanceID())), Is.False);
+                Rows.Add(new { stage = "drained-next-frame", label, complete, ownedGone = true,
+                    mapBoundary = "Isolated empty diagnostic world; no scene map carrier. Not loaded Battle map teardown." });
+                UnityEngine.Object.Destroy(driverHost);
+                await UniTask.NextFrame();
+                Assert.That(driver == null && driverHost == null, Is.True);
+                Assert.That(driverField.GetValue(null) == null, Is.True);
+                driver = null; driverHost = null;
+            }
+
+            public async UniTask RunThreeSessions()
+            {
+                for (int cycle = 1; cycle <= 3; cycle++)
+                {
+                    Assert.That(allTrackedOwned.All(x => x == null), Is.True, "Old generation must retire before new load");
+                    CreateDriver(player);
+                    await Await(player.PrepareBattleCuesAsync(manager));
+                    ObserveCache();
+                    Assert.That(player.BattleCatalogSealedForDiagnostics, Is.True);
+                    Assert.That(player.PendingFormalAudioLoadsForDiagnostics, Is.Zero);
+                    Assert.That(player.FailedPreparedCueLoadCountForDiagnostics, Is.Zero);
+                    object first = Cue(player, PcBudgetCueIds[0], true);
+                    Assert.That(first, Is.Not.Null, "First formal wrapper must exist after public prepare");
+                    int generation = ReadPrivateCue<int>(first, "CatalogGeneration");
+                    Assert.That(generation, Is.GreaterThan(lastGeneration)); lastGeneration = generation;
+                    object nonmono = Cue(player, "c/kim/w/a1.wav", true);
+                    Assert.That(nonmono, Is.Not.Null, "Nonmono formal wrapper must exist after public prepare");
+                    var source = ReadPrivateCue<AudioClip>(nonmono, "OwnedSource");
+                    Assert.That(source, Is.Not.Null);
+                    Assert.That(source.channels, Is.Not.EqualTo(1));
+                    var nonmonoOutputs = ReadPrivateCue<AudioClip[]>(nonmono, "BattlePlaybackClips");
+                    Assert.That(nonmonoOutputs, Is.Not.Null.And.Not.Empty);
+                    Assert.That(nonmonoOutputs[0], Is.SameAs(source));
+                    var owned = Owned(player);
+                    var preparedGeneric = ReadPrivateField<IDictionary>(player, "preparedCues");
+                    bool rawKeyPresent = preparedGeneric.Contains(PcBudgetGenericCue);
+                    object registeredGeneric = rawKeyPresent ? preparedGeneric[PcBudgetGenericCue] : null;
+                    PcBudgetSave("cold-wrapper-cycle-" + cycle, new { cycle, rawCueId = PcBudgetGenericCue,
+                        rawKeyPresent, wrapperNotNull = registeredGeneric != null,
+                        catalogSealed = player.BattleCatalogSealedForDiagnostics });
+                    Assert.That(rawKeyPresent, Is.True, "Sealed catalog must contain the exact generic raw ID");
+                    Assert.That(registeredGeneric, Is.Not.Null, "Registered generic wrapper must be nonnull before field reads");
+                    object generic = Cue(player, PcBudgetGenericCue, false);
+                    Assert.That(generic, Is.Not.Null);
+                    Assert.That(generic, Is.SameAs(registeredGeneric));
+                    var genericClips = ReadPrivateCue<AudioClip[]>(generic, "Clips");
+                    string genericPath = ReadPrivateCue<string>(generic, "SourcePath");
+                    string genericKey = ReadPrivateCue<string>(generic, "CacheKey");
+                    bool publicWrapperFound = player.TryGetPreparedSingleFileWrapperForDiagnostics(PcBudgetGenericCue, out var publicClips);
+                    bool preciseCacheReference = addedCache.TryGetValue(genericKey, out object added)
+                        && cache.Contains(genericKey) && ReferenceEquals(cache[genericKey], added);
+                    PcBudgetSave("cold-identity-cycle-" + cycle, new { cycle, rawCueId = PcBudgetGenericCue,
+                        genericPath, genericKey, wrapperSameReference = ReferenceEquals(generic, registeredGeneric),
+                        publicWrapperFound, publicClipsSameArray = ReferenceEquals(publicClips, genericClips),
+                        clipIds = genericClips?.Select(x => x != null ? x.GetInstanceID() : 0).ToArray(),
+                        previousGenericId = firstGenericId, preciseCacheReference });
+                    Assert.That(genericClips, Is.Not.Null.And.Not.Empty, "Public prepare must prepare real generic016");
+                    Assert.That(publicWrapperFound, Is.True);
+                    Assert.That(publicClips, Is.SameAs(genericClips));
+                    Assert.That(preciseCacheReference, Is.True);
+                    AudioClip genericClip = genericClips[0];
+                    Assert.That(genericClip, Is.Not.Null);
+                    int genericId = genericClip.GetInstanceID();
+                    if (firstGenericId == 0) { firstGenericId = genericId; firstGenericClip = genericClip; }
+                    Assert.That(genericId, Is.EqualTo(firstGenericId));
+                    Assert.That(genericClip, Is.SameAs(firstGenericClip));
+                    Rows.Add(new { stage = "prepared", cycle, generation, ownedIds = owned.Select(x => x.GetInstanceID()).ToArray(),
+                        sourceIds = ReadPrivateField<List<AudioClip>>(player, "ownedFormalAudioSources").Select(x => x.GetInstanceID()).ToArray(),
+                        outputIds = ReadPrivateField<List<AudioClip>>(player, "ownedBattlePlaybackClips").Select(x => x.GetInstanceID()).ToArray(),
+                        ownedBytes = owned.Sum(x => Profiler.GetRuntimeMemorySizeLong(x)),
+                        nonmonoCountedOnce = true, cacheCount = cache.Count, genericId, genericKey,
+                        genericSourcePath = ReadPrivateCue<string>(generic, "SourcePath"),
+                        processScope = "Prior Unity Process.PrivateMemorySize64 zero unavailable; process budget not measured here" });
+                    await ExerciseHot(cycle);
+                    Assert.That(Owned(player), Is.EquivalentTo(owned), "Hot requests must preserve prepared native identities");
+                    object playbackCue = Cue(player, PcBudgetCueIds[0], true);
+                    Assert.That(playbackCue, Is.Not.Null, "Prepared formal wrapper must remain available after hot requests");
+                    AudioClip playback = ReadPrivateCue<AudioClip[]>(playbackCue, "BattlePlaybackClips")[0];
+                    var voice = PcBudgetObservePlayback(player, audioHost, playback,
+                        () => player.PresentSound(new NTSD.Simulation.PendingSoundEvent(PcBudgetCueIds[0], 500, 20)),
+                        "formal-cycle-" + cycle);
+                    float outputMax = 0f;
+                    for (int i = 0; i < 8; i++)
+                    {
+                        await UniTask.NextFrame();
+                        AudioListener.GetOutputData(outputSamples, 0);
+                        for (int n = 0; n < outputSamples.Length; n++) outputMax = Mathf.Max(outputMax, Mathf.Abs(outputSamples[n]));
+                    }
+                    PcBudgetSave("waveform-cycle-" + cycle, new { cycle, listenerEnabled = listener.enabled,
+                        outputMax, outputSamples = outputSamples.Length * 8, hearingVerified = false,
+                        waveformStatus = outputMax > 0f ? "NONZERO_OUTPUT_OBSERVED" : "UNKNOWN_OUTPUT_NOT_OBSERVED" });
+                    var genericVoice = PcBudgetObservePlayback(player, audioHost, genericClip,
+                        () => player.PlaySfx(PcBudgetGenericCue), "generic-cycle-" + cycle);
+                    Rows.Add(new { stage = "play-evidence", cycle, voiceEnabled = voice.enabled,
+                        voicePlayingObserved = true, listenerEnabled = listener.enabled, outputMax, outputSamples = outputSamples.Length * 8,
+                        hearingVerified = false, genericId, genericVoiceEnabled = genericVoice.enabled,
+                        waveformStatus = outputMax > 0f ? "NONZERO_OUTPUT_OBSERVED" : "UNKNOWN_OUTPUT_NOT_OBSERVED" });
+                    await CloseDriver(player, "cycle-" + cycle, genericVoice, genericClip);
+                    Assert.That(genericClip, Is.Not.Null);
+                    ObserveCache();
+                    PcBudgetSave("cycle-" + cycle, new { cycle, generation, genericId, ownedGone = true, rows = Rows.ToArray() });
+                }
+            }
+
+            public async UniTask RunPendingBoundaries()
+            {
+                CreateDriver(player);
+                long staleBefore = player.StaleFormalAudioReleaseCountForDiagnostics;
+                UniTask pending = player.PrepareBattleCuesAsync(manager).Preserve();
+                operations.Add(pending);
+                await WaitForConditionAsync(() => player.PendingFormalAudioLoadsForDiagnostics > 0, 600, "real public prepare pending load");
+                Rows.Add(new { stage = "before-pending-cancel", pendingLoads = player.PendingFormalAudioLoadsForDiagnostics,
+                    ownedIds = Owned(player).Select(x => x.GetInstanceID()).ToArray() });
+                await CloseDriver(player, "pending-public-prepare-cancel");
+                await pending;
+                Assert.That(player.StaleFormalAudioReleaseCountForDiagnostics, Is.GreaterThan(staleBefore));
+                Assert.That(Resources.FindObjectsOfTypeAll<AudioClip>().Any(x => x.GetInstanceID() == player.LastStaleFormalAudioInstanceIdForDiagnostics), Is.False);
+                ObserveCache();
+                Rows.Add(new { stage = "pending-cancel", staleBefore, staleAfter = player.StaleFormalAudioReleaseCountForDiagnostics,
+                    staleId = player.LastStaleFormalAudioInstanceIdForDiagnostics, drained = player.BattleAudioTailDrainedForDiagnostics });
+                var naturalHost = OwnHost("H10PcBudgetNaturalDestroy", false);
+                var natural = naturalHost.AddComponent<NTSDSoundPlayer>();
+                naturalHost.SetActive(true);
+                UniTask naturalPending = natural.PrepareBattleCuesAsync(manager).Preserve();
+                operations.Add(naturalPending);
+                await WaitForConditionAsync(() => natural.PendingFormalAudioLoadsForDiagnostics > 0, 600, "natural destroy pending load");
+                int hostId = naturalHost.GetInstanceID();
+                var naturalOwned = Owned(natural);
+                allTrackedOwned.AddRange(naturalOwned);
+                int[] naturalOwnedIds = naturalOwned.Select(x => x.GetInstanceID()).ToArray();
+                Rows.Add(new { stage = "before-natural-destroy", hostId, naturalOwnedIds,
+                    pendingLoads = natural.PendingFormalAudioLoadsForDiagnostics });
+                UnityEngine.Object.Destroy(naturalHost);
+                await UniTask.NextFrame();
+                await Await(naturalPending);
+                await UniTask.NextFrame();
+                Assert.That(naturalHost == null && natural == null, Is.True);
+                Assert.That(naturalOwned.All(x => x == null), Is.True);
+                Assert.That(natural.BattleAudioTailDrainedForDiagnostics, Is.True);
+                Assert.That(natural.PendingFormalAudioLoadsForDiagnostics, Is.Zero);
+                Assert.That(Resources.FindObjectsOfTypeAll<AudioClip>().Any(x => x.GetInstanceID() == natural.LastStaleFormalAudioInstanceIdForDiagnostics), Is.False);
+                ObserveCache();
+                Rows.Add(new { stage = "natural-destroy-await", hostId, naturalOwnedIds, ownedGone = true,
+                    destroyedByUnityCallback = true, pendingOperationCompleted = true,
+                    tailDrained = natural.BattleAudioTailDrainedForDiagnostics,
+                    staleId = natural.LastStaleFormalAudioInstanceIdForDiagnostics,
+                    staleCount = natural.StaleFormalAudioReleaseCountForDiagnostics });
+            }
+
+            public async UniTask Finish()
+            {
+                if (finished) return;
+                if (driver != null)
+                {
+                    await CloseDriver(player, "failure-cleanup");
+                }
+                if (player != null)
+                {
+                    RequireProductionMethod("BeginBattleSoundShutdown", 0).Invoke(player, null);
+                    RequireProductionMethod("CompleteBattleSoundShutdown", 0).Invoke(player, null);
+                }
+                foreach (UniTask operation in operations)
+                {
+                    double deadline = UnityEditor.EditorApplication.timeSinceStartup + 120;
+                    while (operation.Status == UniTaskStatus.Pending)
+                    {
+                        if (UnityEditor.EditorApplication.timeSinceStartup > deadline) throw new TimeoutException("Pending owner retained");
+                        await UniTask.NextFrame();
+                    }
+                }
+                ObserveCache();
+                foreach (GameObject host in hosts) if (host != null) UnityEngine.Object.Destroy(host);
+                await UniTask.NextFrame();
+                Assert.That(hosts.All(x => x == null), Is.True);
+                Assert.That(Resources.FindObjectsOfTypeAll<NTSDSoundPlayer>().Any(x => x.gameObject.scene.IsValid()), Is.False);
+                var candidates = addedCache.Values.SelectMany(EnvelopeFixture.CacheClips).Where(x => x != null).Distinct().ToArray();
+                foreach (AudioClip clip in candidates)
+                {
+                    Assert.That(initialClipIds.Contains(clip.GetInstanceID()), Is.False, "Pre-existing native clip cannot be released");
+                    Assert.That(Resources.FindObjectsOfTypeAll<AudioSource>().Any(x => x.clip == clip), Is.False);
+                    Assert.That(Resources.FindObjectsOfTypeAll<AudioController>().SelectMany(x => x.AudioList ?? Array.Empty<AudioItem>())
+                        .Where(x => x != null).SelectMany(x => x.clip ?? Array.Empty<AudioClip>()).Any(x => x == clip), Is.False);
+                    foreach (DictionaryEntry entry in cache)
+                        if (!addedCache.ContainsKey((string)entry.Key)) Assert.That(EnvelopeFixture.CacheClips(entry.Value).Any(x => x == clip), Is.False);
+                }
+                foreach (var entry in addedCache)
+                {
+                    Assert.That(cache.Contains(entry.Key) && ReferenceEquals(cache[entry.Key], entry.Value), Is.True, entry.Key);
+                    NTSD_ResourceLoader.Instance.RemoveCache(entry.Key);
+                }
+                int[] ids = candidates.Select(x => x.GetInstanceID()).ToArray();
+                foreach (AudioClip clip in candidates) UnityEngine.Object.Destroy(clip);
+                await UniTask.NextFrame();
+                Assert.That(candidates.All(x => x == null), Is.True);
+                Assert.That(CacheMatches(cache, beforeCache), Is.True);
+                Assert.That(allTrackedOwned.All(x => x == null), Is.True);
+                var remainingClips = Resources.FindObjectsOfTypeAll<AudioClip>();
+                int[] remainingIds = remainingClips.Select(x => x.GetInstanceID()).OrderBy(x => x).ToArray();
+                Assert.That(remainingClips.Select(x => x.GetInstanceID()), Is.EquivalentTo(initialClipIds),
+                    "The fixture must leave no new native AudioClip and preserve all pre-existing ones");
+                Assert.That(NTSD_ResourceLoader.Instance.GetPendingRequestCount(), Is.Zero);
+                Assert.That(NTSD_ResourceLoader.Instance.GetQueuedTaskCount(), Is.Zero);
+                string configStateAfter = UnityEditor.EditorJsonUtility.ToJson(UnityEditor.AssetDatabase.LoadAssetAtPath<GameConfig>(
+                    "Assets/NTSD/Config/GameConfig/GameConfig.asset"));
+                string mmSettingsStateAfter = UnityEditor.EditorJsonUtility.ToJson(UnityEditor.AssetDatabase.LoadAssetAtPath<MoreMountains.Tools.MMSoundManagerSettingsSO>(
+                    "Assets/NTSD/MoreMountains/MMTools/Core/MMAudio/MMSoundManager/Settings/MMSoundManagerSettings.asset"));
+                configField.SetValue(null, oldConfig); managerField.SetValue(null, oldManager);
+                mmField.SetValue(null, oldMm); driverField.SetValue(null, oldDriver);
+                UnityEngine.Random.state = randomBefore;
+                finished = true;
+                PcBudgetSave("fixture-cleanup", new { exactRemovedKeys = addedCache.Keys.ToArray(), ids, cacheRestored = true,
+                    allOwnedHostsGone = true, allTrackedOwnedGone = true, loaderIdle = true, singletonBindingsRestored = true,
+                    initialClipIds = initialClipIds.OrderBy(x => x).ToArray(), remainingIds,
+                    configStateBefore, configStateAfter, mmSettingsStateBefore, mmSettingsStateAfter,
+                    configStateEqual = configStateBefore == configStateAfter, mmSettingsStateEqual = mmSettingsStateBefore == mmSettingsStateAfter });
+                if (configStateBefore != null) Assert.That(configStateAfter, Is.EqualTo(configStateBefore));
+                if (mmSettingsStateBefore != null) Assert.That(mmSettingsStateAfter, Is.EqualTo(mmSettingsStateBefore));
+            }
+        }
+
     }
 }
 #endif

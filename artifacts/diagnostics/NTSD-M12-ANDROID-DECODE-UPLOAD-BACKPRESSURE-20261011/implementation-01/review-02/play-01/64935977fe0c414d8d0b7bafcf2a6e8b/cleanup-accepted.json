@@ -1,0 +1,7 @@
+{
+  "runGuid": "64935977fe0c414d8d0b7bafcf2a6e8b",
+  "transaction": 1,
+  "State": "HOLD",
+  "FirstFailure": "System.InvalidOperationException: Clone changed fields other than runtime root.\r\n  at NTSD.Test.M12RealSceneCloseDiagnostics.Require (System.Boolean condition, System.String message) [0x00009] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\M12DecodeUploadBackpressureEditorTests.cs:1074 \r\n  at NTSD.Test.M12RealSceneCloseDiagnostics+RunOwner.RunAsync () [0x00249] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\M12DecodeUploadBackpressureEditorTests.cs:1267 ",
+  "utc": "2026-10-11T13:39:49.3037774Z"
+}

@@ -1,3 +1,51 @@
+> **2026-10-11 M12 repair-01／correction-02：诊断最小修复及冷态有限验证完成，FOCUSED_TEST_PASS。** 最终仅将R03输出标签改为u3（所有冷态路径最长242–249字符且先验无碰撞）；一次原Editor窄编译通过，R03–R07各一次共5/5PASS，R02原1/1PASS按未改方法及比较helper复用，六项冷态门通过。5夹具均有cloneAbsent/singleton保持最终回执；原Menu clean8、Editor idle/nonPlay、无hotowner、Console本次0。原R01首差、R03 Set断言FAIL、长路径R03 ERROR及旧P1全部原件保留；不把新夹具释放覆盖旧run外部中断/Dispose UNKNOWN。源码仅既有M12独立诊断区，原40652字节/ReadStaticPlan/8菜单不变，生产未改；最终源d408f359324adedea3304ffc0b3c4b378f548872a27220cf133fb04336098bfa。93保护/旧6/旧run10及外部回执不变，24复制目标匹配；18源WAV匹配、6Temp源缺失原因UNKNOWN且未补建。完整报告见diagnostic-interface-01/REPORT.md文末correction-02。M12父OPEN/ACTIVE、字节DEFAULT_OFF/H08ON；下一仅同M12真实生命周期缺口审阅，P1不得自动重跑，其他hold不恢复。下方失败/等待状态保留为历史。
+
+> **2026-10-11 M12 repair-01最新：R03_TEST_OUTPUT_ERROR / BLOCKED。** 精确R03断言修订仅改release/decoded.Wait(0)与独立输出标签，原Set断言FAIL保留；安全窄编译通过。修订R03仅运行一次，新的DirectoryNotFoundException落在fixture-finally证据写入：目录实际存在，first-failure路径258字符成功，warmup263/owned269/finally260字符无成功回执，符合Windows/Mono长路径限制现象但未另做复验。已停，R04–R07未运行，未缩短路径再试/改生产/P1。当前Editor idle/nonPlay、Menu clean8、无hotowner，Console返回0；最终清理回执缺失，不能称本修订R03或全窄门通过。clone包装层原因已修、R02 1/1PASS复用；旧P1外部中断/Dispose UNKNOWN不变。源SHAb7eb9768308ed507b5db8d6e53f5650fc6967600eb951b2df96c24fa8cce849e；同Task/Change/Operation，M12父OPEN/ACTIVE、字节DEFAULT_OFF/H08ON。准确新失败见repair-01/r03-correction-path-failure.json与r03-correction-01-results.xml。下方为此前阶段。
+
+> **2026-10-11 M12 repair-01：CLONE_CAUSE_FIXED / COMPILE_PASS / R03_ASSERTION_FAILED，后续已停。** 用户手动重启后原Editor确认idle/nonPlay、Menu clean8、旧owner不存在；旧P1外部中断/Dispose UNKNOWN保留。一次冷R01首差FAIL留存：实际JSON有MonoBehaviour包装层，旧代码在错误顶层改name/root；原始差异仅这两项，25引用相同。仅既有M12独立诊断区修正准确路径及已批早期自有释放/外部观察，原40652字节、ReadStaticPlan、8菜单不变。两次依赖性窄编译通过；修复后R02 1/1PASS；R03在Dispose后Set应抛ObjectDisposedException的断言失败，未改断言/重跑，R04–R07未执行。R03自有clone消失/原singleton保持/Dispose回执与失败并存，非旧run释放证明。原十回执/93保护/旧6证据不变；24复制目标仍匹配，重启后发现6个原Temp源缺失（未清理/未恢复，责任未归因）；旧run新增external-interruption原件ownedResourcesReleased=false。完整报告见 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/REPORT.md 文末repair-01。Task/Change/Operation沿用，Change BLOCKED、M12父OPEN/ACTIVE、字节DEFAULT_OFF/H08ON；无P1重跑/H07/Android通过，其他hold保持。下方为历史时点。
+
+> **2026-10-11 M12 repair-01：原Scene已外部恢复并核验，旧owner处置待明确，源码修复尚未开始。** 当前原Editor稳定nonPlay/idle；唯一NTSD_Menu loaded/active/clean/root8与Prepare相同，文件字节保持，本任务没有重复加载。旧owner仍存活、cloneReleased/handlesDisposed=false，原首差和Warmup异常保留。已核现有编译类型和全部相关支持接口：unity_reflect仅元数据、无活owner方法调用，M12 Cleanup/Exit要求Play；没有无需导入的合法EditMode精确释放路径。动态代码/再进Play/先reload丢owner仍禁用。已请求具体处置决定：用户手动重启Editor并保留旧run外部中断/Dispose UNKNOWN，随后才续已批准的最小修复；未获答前0源码/compile/test/P1。源码/两DLL/保护93/旧6/24输入/十run原件均匹配。证据 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/post-external-exit-repair-01/interface-gap-proof.json；同Task/Change/Operation，M12父OPEN/ACTIVE、Change BLOCKED、DEFAULT_OFF/H08ON。下方为此前时点。
+
+> **2026-10-11 M12 外部退出后只读核对：EXTERNAL_INTERRUPTION / NOT_RESTORED，最小修复仅提案。** 用户决定手动退出；本轮实际观察稳定nonPlay/idle、非编译/更新/测试，原诊断owner仍存活，playing=false、cloneReleased=false、handlesDisposed=false。当前仍单一空Scene clean/root0，原Menu clean8未恢复。原runRoot十个回执不变，无external-interruption/安全Exit/reload/result新原件；本轮仅另存外部观察，不补造。Console两次0条，实际Read Status从精确Editor.log取得，旧首差/退出Exception保留；native clone当前身份、句柄Dispose完成及退出边界日志完整性未证明。源码/两DLL/具名保护93/旧6/24输入均匹配；0源码/compile/test/Scene变更/P1重跑。单一诊断文件的clone首差、分阶段自有释放、严格失败与安全释放分离、外部退出观察及独立Scene恢复提案见 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/REPORT.md 文末post-external-exit-review-01。Task/Change/Operation沿用；M12父OPEN/ACTIVE、Change BLOCKED、字节DEFAULT_OFF/H08ON，其他hold不恢复。以下保留此前事实。
+
+> **2026-10-11 M12 唯一P1：FIRST_DIFFERENCE / EXIT_GUARD_HOLD（未恢复Scene）。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。Prepare实际回执与24项232571B复制校验通过；同runGuid一次Enter/一次Run在menu_load的“Clone changed fields other than runtime root.”守卫停止，尚未加载真实Menu/Battle或开始两个周期。一次Cleanup获接受，实际状态FAILED_CLEAN_SAFE；Exit If Safe因“Warmup identity was never observed.”拒绝。最后存活owner仍playing=true，native/Loading/close pending=false，errors1/persisted1/writers0/late0；clone未释放、句柄未dispose，空Scene clean0，未退出/未恢复。FAILED_CLEAN_SAFE不等于安全退出完成。无改代码/编译/重跑/第二I/新ABBA。M12父OPEN/ACTIVE、字节门DEFAULT_OFF、H08ON；下一只交回首差及早期失败安全收尾缺口审阅，不恢复其他hold/Goal。完整结果见 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/REPORT.md 文末P1；以下为此前时点。
+
+> **2026-10-11 M12 P1一次有限执行 IN_PROGRESS。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011；revision-01 R/C2经有限独立接受，现只派固定runGuid的Prepare→一次Play双周期→守卫允许的清理/退出/恢复。准确24输入232571B、复制目标/原SHA/Scene和失败HOLD门已先登记于diagnostic-interface-01/p1-execution-01。无源码/编译/第二I/旧测试/ABBA/设备或其他点；首差即停，不换根重试。当前尚无P1结果，M12父OPEN/ACTIVE、默认OFF、H08ON。以下为此前时点。
+
+> **2026-10-11 M12 revision-01：R/C2完成，P未派发/未运行。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。仅修独立诊断区的修订身份、自有clone/句柄收尾、完整取消condition与日志落盘、单次cleanup；24文件232571B未来输入已冻结、复制0。原40652字节、ReadStaticPlan方法与八菜单均保持。原Editor一次C2窄编译/new DLL/reload通过、Menu clean8，Console1条MCP连接退出Exception保留；所有菜单调用0，不做第二次I。旧C/I仅复用旧SHA下未改方法/路由，不称新源码运行PASS。源码1bf39d4793a1212561a39a2a10d5b822e336c875d0583fd6ac8a648bf503e3b7。下一同M12独立审阅此修订、严格取消归属/实际释放/音频/退出观察门，再派原定单Play两周期；M12父OPEN/ACTIVE、字节门默认OFF、H08ON，其他hold保持。完整本轮见implementation-01/review-02/diagnostic-interface-01/REPORT.md文末revision-01。以下保留历史。
+
+> **2026-10-11 M12 revision-01 IN_PROGRESS。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。独立审阅已有限接受旧S/G/C/I；本轮仅修既有独立诊断区的Prepare身份门、自有clone/句柄收尾、完整取消日志与持久化、at-most-once cleanup，冻结24文件232571B未来输入。原40652字节、ReadStaticPlan方法及八菜单保持；没有复制、菜单或Play。下一仅C2窄编译和G，不重复I。字节门OFF、H08ON、M12父OPEN，其他hold不恢复。见diagnostic-interface-01/revision-01/PLAN.md；以下为此前时点。
+
+> **2026-10-11 M12 diagnostic-interface-01：COMPILE_PASS / COLD_INTERFACE_PASS，P未运行。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。仅既有M12测试文件追加独立诊断和8菜单，原40652字节完全保留。原Editor一次窄编译完成；唯一一次Read Static Plan实际回执确认PID39108、Authority400/400、CentralOnly、源码/DLL匹配，Menu clean8；无hot owner、无内容/音频准备、无Play目录/运行。Console返回2条MCP连接退出Exception记录原样保留，不称Console零异常。下一仍同M12独立审阅实现及C/I证据、明确音频和退出观察资格后再派原单Play两周期；其他菜单未派发。原C1/F1–F4、旧ABBA按各自SHA/覆盖复用。M12父OPEN/字节门默认OFF、H08ON；其他hold保持。完整报告：artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/REPORT.md。此前execute_code与进程参数观察不再作为方案/资格依据；以下保留历史。
+
+> **2026-10-11 M12 diagnostic-interface-01 IN_PROGRESS。** 同 Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。仅在既有 M12 测试文件追加独立诊断类型及八个显式菜单，原40652字节保持；范围为代码、原Editor窄编译及一次 Read Static Plan 冷态资格。Prepare/Enter/Run/关闭/恢复均未派发，不运行Play。此前 execute_code 路线撤销，禁止替代动态求值；此前进程参数读取观察撤回，不作为配置权威、不再收集或复述参数。实际配置只认本次 Resolve 结果回执。原 C1/F1–F4 与旧ABBA按各自SHA和覆盖复用；M12父OPEN、字节门默认OFF、H08ON，其他hold保持。见 implementation-01/review-02/diagnostic-interface-01/IMPLEMENTATION-PLAN.md。以下保留此前时点。
+
+> **2026-10-11 M12 P0-static-03：原容量/资源及独立Editor诊断方案已收敛，P1仍未写／未运行。** 同Task/Change/Operation。当前原Editor无NTSD覆盖，静态解析Authority400/400、CentralOnly；clone仅改六文件根。拟在同已声明测试文件新增独立Editor-only类型，通过现有execute_code显式分段调用；不继承旧fixture、不用UTR枚举/LogAssert/NoUnexpectedReceived，不自动退出Play。只在无活跃事务的预期reload边界接回冷记录，hot owner丢失不重建/重跑。完整资源/接口/两周期/日志/安全退出表见implementation-01/REPORT.md文末。仅余Spark材质捕获653–662与formal声音路径609–639两个准确来源读证；接口本轮未向Editor调用。0脚本/Unity/编译/测试/Play/新ABBA，原门复用；M12 OPEN/默认OFF、H08 ON，其他hold保持。
+
+> **2026-10-11 M12 P0-static-02：Driver创建与六文件输入已核，完整双周期表仍为提案。** 同Task/Change/Operation；ShowLoading只切面板，文本队列空不要求currentText清零，Warmup纹理/Sprite没有已证归还。clone仅改BattleContentRuntimeRoot，严格日志、await/timeout、对象观察和恢复见implementation-01/REPORT.md文末。下一只读pool/空players闭包、UTR精确日志及Enter/ExitPlay三组局部；P1未实施/尚不具执行资格。本轮0脚本/Unity/编译/测试/Play/新ABBA，C1/F1–F4复用、旧ABBA留旧SHA。M12 OPEN/默认OFF、H08 ON，其他hold保持。
+
+> **2026-10-11 M12 P0-static-01：四类获准只读事实已复核，P1尚未实施。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。Singleton/clone首次赋值、EnterPlay两键、Loading完整任务和两个Scene指定绑定已核；native drain不能替代Loading/Core/Start/池/UI收尾。完整一次Play双周期提案集中于implementation-01/REPORT.md文末：首周期加载/准备期取消，次周期完整准备后关闭，分别join并在首个Battle回调先撤订。下一准确局部读证仅Driver两段、Loading合法caller及getter/Warmup/Update；未读新正文、未写驱动。本轮0源码/Unity/编译/测试/ABBA，复用本版C1/F1–F4。字节门默认OFF、M12父OPEN、H08 ON；其他hold保持。以下为此前时点。
+
+> **2026-10-11 M12 review-02/focused-01：最小修复已实现，FOCUSED_TEST_PASS。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。manager失败/取消主线程Stop先于Dispose；App普通pending自动接现有异步关闭、真实completed才更新菜单；Driver只回原LF；两个新增focused＋原Q03C/Q03D，原Editor一次编译及4/4通过。F2固定4分支第三decode0、waiter取消/另一owner保留后全归零。未写Play驱动、无P0/P1/新ABBA；旧成本只属旧SHA。真实Scene下一路线改为合法Menu在途→Scene加载准备期关闭，精确4类静态读证请求集中于implementation-01/REPORT.md文末。字节门OFF/M12 OPEN，H08 ON，其他hold不恢复。以下保留此前时点。
+
+> **2026-10-11 M12 review-02：REVIEW_GAPS_CONFIRMED / NEXT_FIX_PROPOSED，尚未实施新修复。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。只读确认失败worker先归还额度、外层后Stop的普通waiter窗口，以及UnloadBattle主菜单pending未恢复/提前MenuMain两点；Driver另有整文件换行差异。原12PASS与唯一ABBA冻结于原SHA；PendingPixels不覆盖decoder内部或登记前瞬间，不称GC/整进程峰值。准确最小四文件提案、4项focused及待授权单一双周期真实Scene表集中在 implementation-01/REPORT.md 文末review-02。本轮0源码变更、0Unity/测试；M12 OPEN/字节门OFF，原关闭保护已接线，H08 ON。其他hold/Goal不恢复。以下保留此前证据时点。
+
+> **2026-10-11 M12有限候选验证完成：FOCUSED_TEST_PASS / DEFAULT_OFF。** Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。原Editor编译通过，11项正确性/生命周期门通过（8复用、3续跑），首次且唯一ABBA1/1：worker像素payload峰值18.125→5MiB（-72.41%），retained3.625MiB不变，耗时比1.0496（非加速）。旧Q05 CreateNew冲突ERROR保留；获批仅修H08辅助证据路径后续跑。四生产/四测试文件，字节门OFF、H08共享ON；关闭保护已接线。真实Scene卸载/重入、30秒超时、强制退出、完整内容/进程/Android未验，M12父项OPEN。下一仅同M12原件审阅及准确缺失门，不恢复其他hold/Goal。报告 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/REPORT.md。以下保留此前时点。
+
+> **2026-10-11 M12实施 IN_PROGRESS。** 用户已明确批准Driver/App两个生产文件的限定关闭扩域。Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001：先阶段1取消、阶段2实际native drain、阶段5清理与pending恢复；再原128MiB/固定E字节准入及有限验证。原十一阶段/规则保持，强制Editor退出另报边界，不改其桥接脚本。Operation OP-NTSD-M12-IMPLEMENTATION-20261011；17真实前件已备份，候选默认OFF，其他hold/旧Goal不恢复。当前尚未编译/验证，不声明PASS。
+
+> **2026-10-11 M12继续授权／实际关闭链已核清：AWAITING_EXACT_SHUTDOWN_SCOPE_DECISION。** 用户已批准原M12实施与有限验证，但要求扩大关闭域前先报告。阶段1取消非drain，阶段2只管dedicated worker，阶段5/Stopped未检查图片任务；原同步App也不会await/resume。为保留真实drain后才关闭的门，现提出仅新增Driver关闭/重建guard与App正常异步关闭接线两个生产文件，关闭合同仅补原阶段映射；尚未修改这些文件或任何生产/测试脚本。Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001仍PLANNED；[准确证据和范围](../../../../artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/shutdown-review-01/REPORT.md)。本轮Unity/编译/测试0，M12 OPEN，其他hold保持。下方preflight-only授权说明为此前阶段，不覆盖本次附条件继续授权。
+
+> **2026-10-11 M12 手机优先有限预检：PLANNED / PRE_FLIGHT_READY_FOR_REVIEW。** Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011；Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。准确方案已形成：native PNG共享/显式OFF两路解码前按字节准入，128MiB普通权重＋超大单张独占上界439799644B为待审建议，非手机内存预算。703header/长度静态核验；真实clamp哈希临时字节另计，候选>128MiB为9项。M12不能单独解决大源/全量atlas驻留。主审需核准确Driver stage1/2/5与图片任务drain区别；本轮未读Driver/Q06方法体、未改脚本、未操作Unity/编译/测试/测量。10份真实治理前件已备份；[唯一完整方案](../../../../artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/PLAN.md)。M12保持OPEN，下一为同Task独立审阅后准确派实施，不默认暂停或关闭；H10 CLOSED／Player ABANDONED及其余hold不恢复。以下保留历史时点。
+
+## 2026-10-11 当前方向：手机优先的 M-12 评审
+
+用户已明确先适配 Android 手机、降低资源消耗，再扩展 PC 表现规格。下一步先形成手机整局预算分配与加载代价建议，再冻结本项在途字节上限；不能沿用开发机核数/余量或 PC 的2/3GiB门。
+
+分别核算解码中、待上传、图集仍持有的像素，包含 Color[] 和 Color32[]；异步字节额度、最大单资源、取消/失败归还及图集等待死锁要在准确方案中闭合。队列有界不等于全量驻留峰值有界。具体手机档位和数值未定，本轮没有代码、测试、测量或平台构建；既有原文保留，H10仍结项。
+
+[Android-first decision](../../../../docs/ai/DECISIONS/NTSD-ANDROID-FIRST-OPTIMIZATION-BASELINE-20261011.md)
+
 ## 2026-10-10 当前阶段更正：M-12
 
 | 当前阶段 | 当前次序 | 原风险等级 |
@@ -18,7 +66,7 @@
 | 字段 | 本轮整理 |
 |---|---|
 | 类别 / 建议优先级 | 内存 / 中 |
-| 当前状态 | 方案待容量预算；本轮仅文档，未实施/复测 |
+| 当前状态 | 编译及4/4 focused复用；原Editor静态容量400/CentralOnly和资源已列，拟改同文件独立Editor诊断显式调用，避开旧fixture/UTR强退；仅余两个材质/音频路径来源seam，P1未写/未运行/默认OFF/父项OPEN |
 | 依赖的最小范围 | H-01/H-08所有权接口与容量；不要求视觉整个父项先通过 |
 | 下一步与具体方向 | 区分待上传和仍被atlas持有的像素；保留UniTask，取消归还reservation |
 | 完成边界 | 队列/峰值有界、无死锁/旧session回写，不能把队列缩小当全驻留解决 |
@@ -70,3 +118,12 @@
 
 本项只影响加载成本，不改变逻辑结果、资源闭包、segment或fail-closed。
 2026-10-06登记；本轮无实现/测量。回滚到原加载链不等于低端内存通过。
+
+
+### M12 repair-01 source work authorized after human restart
+
+Same Task/Change/Operation; old OWNER_LOST/Dispose UNKNOWN retained. Plan artifacts\diagnostics\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\implementation-01\review-02\diagnostic-interface-01\post-external-exit-repair-01\IMPLEMENTATION-PLAN.md. Exact independent diagnostic region only; cold firstdiff then evidence-driven minimum fix/narrow EditMode checks, no P1. M12 OPEN/defaultOFF/H08ON. Current repair IN_PROGRESS; prior statements above are history.
+
+M12 R03 exact cold-test API correction IN_PROGRESS within same repair; original FAIL retained, no P1. See repair-01/r03-correction-before-manifest.json and detailed report.
+
+M12 correction-02 exact R03 evidence-label fix IN_PROGRESS; same Task/Change/Operation, no P1, see repair-01/correction02-before-manifest.json. Prior failure/WAIT wording is historical.

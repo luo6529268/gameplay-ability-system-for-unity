@@ -1,0 +1,20 @@
+{
+  "time": "2026-10-11T12:25:36.582189+08:00",
+  "supersedes": "final-audit.json/Operation after-manifest hashes for the three prose addendum files only; all original fingerprints retained",
+  "hashes": {
+    "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/REPORT.md": "5106b60adcf35626625bf0d080a2e89a2175f355b127da2b850fce8d8734d265",
+    "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/RESULT.json": "a75455e578eb5c4fc558d3789c06c8220d987765df6190df81d99aa5909dd0d1",
+    "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/NEXT-REVIEW.md": "1a0f123096dbfa813259b27a84a5d1ebd8354b7656acfe8acab86442fd89d881",
+    "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/hot-scope-audit.json": "063f4cbcf459817286618dbe83a4e6481ae8707f2bbc17346ec36726160d4bf1",
+    "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/playback-observation-audit.json": "19293911bae2c48ca2d215e3343fb6a2de7722576f1cf9d9b697c8c6a085a513",
+    "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/lifecycle-audit.json": "f87d1b2aee3d5895b13bf98d6eced62f1b86fc0001248eebe3c74230f241553c",
+    "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/protection-audit-correction.json": "3fae20f841ff98ec905e57b2636b9f3f005259602d8d3ea9821ae04df4a8c0a1",
+    "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/validator-result.json": "fc8b554472bbfcb3e6f772867a319b7411412aa7740cd1351e581fa38c92225a",
+    "docs/ai/CHANGE-RECORDS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001.md": "b9ceeed5fa87aaa3ba1957b785b75a9d3ed2af8fee7011d26317ace565f1016b",
+    "docs/ai/FILE-OPERATIONS/OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME03-20261011/RECORD.md": "4a88063ef68e4b7579ef84158ad1ec871dec4a7aeac38f32159d4974661837f8"
+  },
+  "sourceUnchangedAfterPlay": true,
+  "historyRetrievalLimitation": "history-retrieval-scope-correction.json",
+  "runtimeStatus": "RUNTIME_AUDIO_GATES_VERIFIED",
+  "parentH10": "OPEN"
+}

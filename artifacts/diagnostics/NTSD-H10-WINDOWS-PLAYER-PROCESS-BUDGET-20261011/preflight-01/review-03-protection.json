@@ -1,0 +1,23 @@
+{
+  "time": "2026-10-11T14:40:15.305149+08:00",
+  "reusedFullProtectedAudit": "protection-audit-final.json: 4094 unchanged at that earlier time; not rerun here",
+  "checkedImmutableSourceSettingsAssemblyCount": 19,
+  "immutableDrift": [],
+  "oldH10Count": 406,
+  "oldH10Drift": [],
+  "review03SourceCount": 8,
+  "review03SourceDrift": [],
+  "backupCount": 11,
+  "backupErrors": [],
+  "proposalSha256": "c0c76b0651252213137247dbe68c77a20e0a3a27b02730a83ba2cf0206ecef2c",
+  "proposalMatchesAccepted": true,
+  "oldManifestSha256": "53fd2e7bdddf4b4a7fdfad66e7f82ae58313381962de78d4a3d0a249cca15b6e",
+  "oldManifestSame": true,
+  "unexpectedCode": [],
+  "buildStillAbsent": true,
+  "trackedCount": 10,
+  "trackedPathsSame": true,
+  "headSame": true,
+  "staged": "",
+  "unityActionsThisReview": 0
+}

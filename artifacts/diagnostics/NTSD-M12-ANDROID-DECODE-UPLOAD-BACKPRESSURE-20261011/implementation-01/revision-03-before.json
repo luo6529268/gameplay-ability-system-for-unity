@@ -1,0 +1,11 @@
+{
+  "time": "2026-10-11T17:28:37.188685+08:00",
+  "command": "audited incremental patch; no rollback/delete",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "sha256": "9c0b0710f0d5a04552f8b793fa0a240fd87e4318500485e0869d116f9d746452",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\backups\\revision-03-00.before.bin"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "job_id": "a9781eca0d544bc1b9c00a8a155c4f16",
+  "status": "succeeded",
+  "mode": "EditMode",
+  "started_unix_ms": 1791715319813,
+  "finished_unix_ms": 1791715327342,
+  "last_update_unix_ms": 1791715327342,
+  "progress": {
+    "completed": 1,
+    "total": 10735,
+    "current_test_full_name": null,
+    "current_test_started_unix_ms": 1791715326120,
+    "last_finished_test_full_name": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.R02_RealWorkerFailureCancelsOrdinaryWaiter",
+    "last_finished_unix_ms": 1791715326739,
+    "stuck_suspected": false,
+    "editor_is_focused": false,
+    "blocked_reason": null,
+    "failures_so_far": [],
+    "failures_capped": false
+  },
+  "error": null,
+  "result": {
+    "mode": "EditMode",
+    "summary": {
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "durationSeconds": 1.0671844,
+      "resultState": "Passed"
+    },
+    "results": [
+      {
+        "name": "R02_RealWorkerFailureCancelsOrdinaryWaiter",
+        "fullName": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.R02_RealWorkerFailureCancelsOrdinaryWaiter",
+        "state": "Passed",
+        "durationSeconds": 0.618124,
+        "message": null,
+        "stackTrace": null,
+        "output": "处理文件失败: I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\focused-01\\fixtures\\0e9eab4bea9b40bfbf794bd9cd94c0d9\\r02-worker.png\nM12 R02 injected worker fault\r\n<color=red>处理文件失败: I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\focused-01\\fixtures\\0e9eab4bea9b40bfbf794bd9cd94c0d9\\r02-worker.png\nM12 R02 injected worker fault</color>\r\n"
+      }
+    ]
+  }
+}

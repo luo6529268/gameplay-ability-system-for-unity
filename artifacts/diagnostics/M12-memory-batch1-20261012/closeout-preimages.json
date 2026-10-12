@@ -1,0 +1,62 @@
+[
+  {
+    "path": "docs/ai/CHANGE-RECORDS/NTSD-M12-IMAGE-MEMORY-BATCH1-001.md",
+    "bytes": 2926,
+    "sha256": "241a6c50657dd1cc142174b9741feb64a565f6050dfeb9894ff1654a81f8b115",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/closeout-before/docs/ai/CHANGE-RECORDS/NTSD-M12-IMAGE-MEMORY-BATCH1-001.md"
+  },
+  {
+    "path": "docs/ai/FILE-OPERATIONS/OP-NTSD-M12-IMAGE-MEMORY-BATCH1-20261012/RECORD.md",
+    "bytes": 2856,
+    "sha256": "3d0045f91b29fc701547087228743c54baccd63e57122fb3d1b9871aeee0bfcd",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/closeout-before/docs/ai/FILE-OPERATIONS/OP-NTSD-M12-IMAGE-MEMORY-BATCH1-20261012/RECORD.md"
+  },
+  {
+    "path": "docs/ai/TASKS/NTSD-M12-IMAGE-MEMORY-BATCH1-20261012.md",
+    "bytes": 411,
+    "sha256": "12b9d2b207c53a91c66acacfae87e19ed0e2228d46293d66291d9471cb94cdf8",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/closeout-before/docs/ai/TASKS/NTSD-M12-IMAGE-MEMORY-BATCH1-20261012.md"
+  },
+  {
+    "path": "docs/ai/CHANGE-LEDGER.md",
+    "bytes": 804379,
+    "sha256": "31bc891dac39bb5929a3946fbbcdca2e95db7a7498276469884729bac7666a39",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/closeout-before/docs/ai/CHANGE-LEDGER.md"
+  },
+  {
+    "path": "docs/ai/STATE.md",
+    "bytes": 1737200,
+    "sha256": "e5365640cc3963d91c6fda4e12ef6b5b5aac263e1e67101b9d394ca8e158b82f",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/closeout-before/docs/ai/STATE.md"
+  },
+  {
+    "path": "docs/ai/CURRENT-AUTHORITY.md",
+    "bytes": 455707,
+    "sha256": "cf57adeae01325ff19b06e5dccf908080f30c31e1749f230e1cb33ceee73148e",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/closeout-before/docs/ai/CURRENT-AUTHORITY.md"
+  },
+  {
+    "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "bytes": 1676045,
+    "sha256": "0b80519d25690b9859fb0321688bb60608c3e8aa8aa55438fd6b410ef184f92c",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/closeout-before/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+  },
+  {
+    "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+    "bytes": 383025,
+    "sha256": "32c24262572cf2c4e7fbfc7e2b4f9d8ee65db3394519b0e274070c8cebc12114",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/closeout-before/Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md"
+  },
+  {
+    "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "bytes": 167398,
+    "sha256": "77041fc7ac97f628c83b165f0b1ae37c23db780a9f520a38abc079120fbe089a",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/closeout-before/docs/ai/FILE-OPERATIONS/INDEX.md"
+  },
+  {
+    "path": "artifacts/diagnostics/M12-memory-batch1-20261012/REPORT.md",
+    "bytes": 101,
+    "sha256": "14da8c1d7a340775155b8c3f1cda36ffd8aaeca890147a661368e6e8e4afb25e",
+    "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/closeout-before/artifacts/diagnostics/M12-memory-batch1-20261012/REPORT.md"
+  }
+]

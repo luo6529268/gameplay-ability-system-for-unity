@@ -1,0 +1,17 @@
+{
+  "revision-contract.json": {
+    "expected": "56e85ee9c01a44fb67dc35a7cdaef0fa31d64c07a580853b32ad114d6d7b09a2",
+    "actual": "56e85ee9c01a44fb67dc35a7cdaef0fa31d64c07a580853b32ad114d6d7b09a2",
+    "match": true
+  },
+  "compile-identity.json": {
+    "expected": "22f6c9b7c3c101924fed3ea5b9230304ea765063b57cba352aa359cc63afa9b5",
+    "actual": "22f6c9b7c3c101924fed3ea5b9230304ea765063b57cba352aa359cc63afa9b5",
+    "match": true
+  },
+  "frozen-input-manifest.json": {
+    "expected": "7f0f9fae4d31d2447ec7041c898dfd28cd7752397727db4b3b8ac55743f2cf15",
+    "actual": "7f0f9fae4d31d2447ec7041c898dfd28cd7752397727db4b3b8ac55743f2cf15",
+    "match": true
+  }
+}

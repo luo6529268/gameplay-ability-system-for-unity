@@ -1,0 +1,51 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "22c366a6c24540ee807d0eddf4e17d8a",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791712274844,
+      "finished_unix_ms": 1791712283300,
+      "last_update_unix_ms": 1791712283300,
+      "progress": {
+        "completed": 1,
+        "total": 10733,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791712281607,
+        "last_finished_test_full_name": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q02B_OverCeilingRejectsBeforeDecodePreservingPublication",
+        "last_finished_unix_ms": 1791712282545,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 1.4880832,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "Q02B_OverCeilingRejectsBeforeDecodePreservingPublication",
+            "fullName": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q02B_OverCeilingRejectsBeforeDecodePreservingPublication",
+            "state": "Passed",
+            "durationSeconds": 0.9368689,
+            "message": null,
+            "stackTrace": null,
+            "output": "<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>\r\n<color=cyan>[BMP 解析] 角色=Prior, 找到 1 个精灵文件定义</color>\r\n<color=cyan>[BMP 文件] c/body.png -> I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587\\vfs\\c\\body.png, 范围=[0-0], 尺寸=5x1, 行列=1x1</color>\r\n<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>\r\n<color=cyan>[BMP 解析] 角色=Prior, 找到 1 个精灵文件定义</color>\r\n<color=cyan>[BMP 文件] c/body.png -> I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587\\vfs\\c\\body.png, 范围=[0-0], 尺寸=5x1, 行列=1x1</color>\r\n<color=cyan>开始加载精灵，角色配置数量: 1</color>\r\n<color=cyan>共 1 个文件需要处理</color>\r\n[BMPLoader] 调色板偏移: 54, 最大颜色: 256, 实际颜色: 6\r\n<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>\r\n<color=cyan>[BMP 解析] 角色=OverCeiling, 找到 1 个精灵文件定义</color>\r\n<color=cyan>[BMP 文件] c/body.png -> I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\eb42fc2e024c4c758a4f47033eb2fb1f\\vfs\\c\\body.png, 范围=[0-0], 尺寸=5x1, 行列=1x1</color>\r\n<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>\r\n<color=cyan>[BMP 解析] 角色=OverCeiling, 找到 1 个精灵文件定义</color>\r\n<color=cyan>[BMP 文件] c/body.png -> I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\eb42fc2e024c4c758a4f47033eb2fb1f\\vfs\\c\\body.png, 范围=[0-0], 尺寸=5x1, 行列=1x1</color>\r\n<color=cyan>开始加载精灵，角色配置数量: 1</color>\r\n<color=cyan>共 1 个文件需要处理</color>\r\n"
+          }
+        ]
+      }
+    }
+  }
+}

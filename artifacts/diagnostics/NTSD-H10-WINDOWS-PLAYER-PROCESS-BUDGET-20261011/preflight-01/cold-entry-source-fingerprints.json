@@ -1,0 +1,55 @@
+{
+  "time": "2026-10-11T14:56:36.851522+08:00",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/BattleContentSource.cs",
+      "sha256": "d3de7cd93c965e7ddab03d3098f55284eb727d48fd4d39ad50c0a7535d8e04d5",
+      "bytes": 5107
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LoganObjectCatalog.cs",
+      "sha256": "396653874921d97c45052433e376a732d15fec94fddfcc628b658a71f082e6e2",
+      "bytes": 11046
+    },
+    {
+      "path": "Assets/NTSD/Scripts/App/ProjectBattleModeConfig.cs",
+      "sha256": "2d8622bf7e4702bfddca1312f43a10551a4a4075f96eda29f7c3ca625cd94878",
+      "bytes": 9713
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LoganModeComboInput.cs",
+      "sha256": "d7f45da0fc34fdfec3d11d8738899c0be44676e77bea9b4732fb9acc7221daa6",
+      "bytes": 18074
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "sha256": "6990b2534ca6c832ab50c5fd692e3275ca335b2e2c77c1502bcc85eaa394ea34",
+      "bytes": 213082
+    },
+    {
+      "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+      "sha256": "25c8e08f4d1be55ee55d0404aaf4e46d099afc6c2ba3d9040e1c5203f654d9ff",
+      "bytes": 3329
+    },
+    {
+      "path": "Assets/NTSD/Resources/ProjectBattleModeConfig.asset",
+      "sha256": "b57cfef32cc3ece37ac98a4a1ef04feb2fee4eb3cc08466a4bfd32c1edd85b82",
+      "bytes": 1308
+    }
+  ],
+  "scope": "SHA/read-only declarations plus main-supplied named root binding; no Candidate/parser/Unity invocation",
+  "mainSuppliedRootContract": {
+    "RuntimeRoot": "Path.GetFullPath(root)",
+    "DatRoot": "RuntimeRoot/decoded_dat",
+    "ImageRoot": "RuntimeRoot/vfs",
+    "configuredRoot": "Assets/NTSD/Content/LoganRuntime",
+    "rejects": "absolute/colon paths and ImageRoot escape",
+    "pathContainmentComparison": "OrdinalIgnoreCase on Windows, not cue identity comparer"
+  },
+  "directColdEntry": "LoganVisualContentCandidate.Capture(BattleContentSource, ProjectBattleModeConfig.Snapshot)",
+  "directMetadataDependencies": [
+    "LoganObjectCatalog.Read(source, snapshot)",
+    "CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(catalog)"
+  ],
+  "qualificationStillNotExecuted": true
+}

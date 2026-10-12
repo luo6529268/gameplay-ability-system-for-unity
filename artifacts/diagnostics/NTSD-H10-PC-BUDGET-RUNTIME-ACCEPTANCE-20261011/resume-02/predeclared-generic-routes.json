@@ -1,0 +1,156 @@
+{
+  "stage": "fixture-created",
+  "routes": [
+    {
+      "cue": "c/jira/w/e3.wav",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\c\\jira\\w\\e3.wav",
+      "key": "NTSD.AudioFile::c\\jira\\w\\e3.wav",
+      "exists": false
+    },
+    {
+      "cue": "c/kar/w/t.wav",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\c\\kar\\w\\t.wav",
+      "key": "NTSD.AudioFile::c\\kar\\w\\t.wav",
+      "exists": false
+    },
+    {
+      "cue": "c/dan/w/t.wav",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\c\\dan\\w\\t.wav",
+      "key": "NTSD.AudioFile::c\\dan\\w\\t.wav",
+      "exists": false
+    },
+    {
+      "cue": "data/001.wav",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\001.wav",
+      "key": "NTSD.AudioFile::data\\001.wav",
+      "exists": false
+    },
+    {
+      "cue": "c/kim/w/a1.wav",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\c\\kim\\w\\a1.wav",
+      "key": "NTSD.AudioFile::c\\kim\\w\\a1.wav",
+      "exists": false
+    },
+    {
+      "cue": "SFX_001",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_001",
+      "key": "NTSD.Audio::SFX_001",
+      "exists": false
+    },
+    {
+      "cue": "SFX_002",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_002",
+      "key": "NTSD.Audio::SFX_002",
+      "exists": false
+    },
+    {
+      "cue": "SFX_004",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_004",
+      "key": "NTSD.Audio::SFX_004",
+      "exists": false
+    },
+    {
+      "cue": "SFX_006",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_006",
+      "key": "NTSD.Audio::SFX_006",
+      "exists": false
+    },
+    {
+      "cue": "data\\016.wav",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\016.wav",
+      "key": "NTSD.AudioFile::data\\016.wav",
+      "exists": true
+    },
+    {
+      "cue": "SFX_016",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_016",
+      "key": "NTSD.Audio::SFX_016",
+      "exists": false
+    },
+    {
+      "cue": "SFX_010",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_010",
+      "key": "NTSD.Audio::SFX_010",
+      "exists": false
+    },
+    {
+      "cue": "SFX_011",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_011",
+      "key": "NTSD.Audio::SFX_011",
+      "exists": false
+    },
+    {
+      "cue": "SFX_017",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_017",
+      "key": "NTSD.Audio::SFX_017",
+      "exists": false
+    },
+    {
+      "cue": "SFX_020",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_020",
+      "key": "NTSD.Audio::SFX_020",
+      "exists": false
+    },
+    {
+      "cue": "SFX_021",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_021",
+      "key": "NTSD.Audio::SFX_021",
+      "exists": false
+    },
+    {
+      "cue": "SFX_025",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_025",
+      "key": "NTSD.Audio::SFX_025",
+      "exists": false
+    },
+    {
+      "cue": "SFX_032",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_032",
+      "key": "NTSD.Audio::SFX_032",
+      "exists": false
+    },
+    {
+      "cue": "SFX_033",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_033",
+      "key": "NTSD.Audio::SFX_033",
+      "exists": false
+    },
+    {
+      "cue": "SFX_039",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_039",
+      "key": "NTSD.Audio::SFX_039",
+      "exists": false
+    },
+    {
+      "cue": "SFX_065",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_065",
+      "key": "NTSD.Audio::SFX_065",
+      "exists": false
+    },
+    {
+      "cue": "SFX_066",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_066",
+      "key": "NTSD.Audio::SFX_066",
+      "exists": false
+    },
+    {
+      "cue": "SFX_068",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_068",
+      "key": "NTSD.Audio::SFX_068",
+      "exists": false
+    },
+    {
+      "cue": "SFX_085",
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_085",
+      "key": "NTSD.Audio::SFX_085",
+      "exists": false
+    }
+  ],
+  "allowedKeys": [
+    "NTSD.AudioFile::data\\016.wav"
+  ],
+  "soundRoot": "NTSD/Sound",
+  "controller": "null; verified real empty AudioList fallback",
+  "noFullCatalog": true,
+  "builtinsAddedByPublicPrepare": true
+}

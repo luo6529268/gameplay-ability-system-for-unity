@@ -1,0 +1,28 @@
+{
+  "scope": "STATIC_ONLY_NOT_RUNTIME_QUALIFIED",
+  "editorProcessIdObserved": 39108,
+  "namedNtsdOverridesObserved": [],
+  "gameConfig": {
+    "runtimeRoot": "Assets/NTSD/Content/LoganRuntime",
+    "profileName": "",
+    "desktopCapacity": 512,
+    "backend": "CentralOnly",
+    "ai": "DataOrientedCanonical",
+    "poolInitial": 10,
+    "poolMax": 200,
+    "spriteInitial": 16
+  },
+  "staticExpectedProfile": "Authority400",
+  "staticExpectedCapacity": 400,
+  "staticExpectedBackend": "CentralOnly",
+  "liveResolveExecuted": false,
+  "formalAudioRoot": "UNKNOWN_PENDING_NARROW_PATH_SEAM",
+  "sparkMaterial": "UNKNOWN_PENDING_CAPTURE_SEAM",
+  "soundComponentMenuSerializedCount": 0,
+  "soundRootFieldDefault": "NTSD/Sound",
+  "cloneFieldsToChange": [
+    "BattleContentRuntimeRoot"
+  ],
+  "interface": "existing execute_code -> independent static Editor-only diagnostic, not implemented or invoked",
+  "actualToolCalls": 0
+}

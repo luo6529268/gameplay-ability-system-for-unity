@@ -1,0 +1,11 @@
+{
+  "command": [
+    "git",
+    "status",
+    "--short",
+    "--branch"
+  ],
+  "exitCode": 0,
+  "stdoutBytes": 4216,
+  "stderrBytes": 0
+}

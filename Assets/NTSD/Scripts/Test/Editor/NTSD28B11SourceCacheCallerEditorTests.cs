@@ -30,6 +30,13 @@ namespace NTSD.Test
         private readonly Dictionary<FieldInfo, object> previousOwners = new Dictionary<FieldInfo, object>();
         private Dictionary<string, object> previousCache;
         private CharacterAnimtorManager Manager => (CharacterAnimtorManager)Field("manager");
+        private bool m12Admission;
+        internal void ConfigureM12(string evidenceDirectory, bool enabled)
+        {
+            fixture.EvidenceDirectory = evidenceDirectory;
+            m12Admission = enabled;
+            Manager.ConfigureNativeDecodeAdmission(enabled);
+        }
         private object Field(string name) => fixture.GetType().GetField(name, PrivateInstance).GetValue(fixture);
 
         private void Bind<T>(T value) where T : Component
@@ -123,9 +130,9 @@ namespace NTSD.Test
         private void SetFixtureField(string name, object value) =>
             fixture.GetType().GetField(name, PrivateInstance).SetValue(fixture, value);
 
-        private static void SaveAdmission(string name, object value) =>
+        private void SaveAdmission(string name, object value) =>
             typeof(NTSD28B11AtomicPublicationEditorTests).GetMethod("SaveResumeEvidence",
-                BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, new[] { name, value });
+                BindingFlags.Instance | BindingFlags.NonPublic).Invoke(fixture, new[] { name, value });
 
         private sealed class PublicationSnapshot
         {
@@ -262,6 +269,7 @@ namespace NTSD.Test
             replacement.gameObject.SetActive(true);
             replacement.gameObject.SetActive(false);
             SetFixtureField("manager", replacement);
+            if (m12Admission) replacement.ConfigureNativeDecodeAdmission(true);
             Bind(replacement);
         }
 

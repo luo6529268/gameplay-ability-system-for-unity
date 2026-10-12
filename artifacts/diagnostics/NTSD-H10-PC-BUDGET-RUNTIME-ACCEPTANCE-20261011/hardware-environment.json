@@ -1,0 +1,31 @@
+{
+  "capturedAt": "2026-10-11T10:42:09.9101016+08:00",
+  "cpu": {
+    "Name": "13th Gen Intel(R) Core(TM) i5-13600KF",
+    "NumberOfCores": 14,
+    "NumberOfLogicalProcessors": 20,
+    "MaxClockSpeed": 3500
+  },
+  "os": {
+    "Caption": "Microsoft Windows 10 专业版",
+    "OSArchitecture": "64 位",
+    "TotalVisibleMemorySize": 66917812,
+    "FreePhysicalMemory": 22721692
+  },
+  "gpu": [
+    {
+      "Name": "NVIDIA GeForce RTX 4070",
+      "AdapterRAM": 4293918720,
+      "DriverVersion": "32.0.15.9649"
+    },
+    {
+      "Name": "GameViewer Virtual Display Adapter",
+      "AdapterRAM": null,
+      "DriverVersion": "15.6.5.199"
+    }
+  ],
+  "powerScheme": "电源方案 GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (高性能)",
+  "sustainedPerformance": "NOT_MEASURED",
+  "cpuPowerWatts": "NOT_MEASURED",
+  "certification": "Developer machine inventory only; not8GB certification"
+}

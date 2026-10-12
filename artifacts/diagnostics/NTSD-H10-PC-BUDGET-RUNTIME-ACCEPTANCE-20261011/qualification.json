@@ -1,0 +1,25 @@
+{
+  "setup": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "isLoaded": true,
+      "isActive": true,
+      "isSubScene": false
+    }
+  ],
+  "cacheEmpty": true,
+  "loaderIdle": true,
+  "noActiveAudio": true,
+  "originalManagers": [
+    {
+      "id": 224646,
+      "json": "{\"MonoBehaviour\":{\"m_Enabled\":true,\"m_EditorHideFlags\":0,\"m_Name\":\"\",\"m_EditorClassIdentifier\":\"\",\"AutomaticallyUnparentOnAwake\":true,\"settingsSo\":{\"fileID\":11400000,\"guid\":\"07ea3ff88e1ecb84d91f58aa804badc6\",\"type\":2},\"AudioSourcePoolSize\":10,\"PoolCanExpand\":true}}"
+    }
+  ],
+  "controller": "Recorded Menu null / Battle empty AudioList fallback, not controller lifecycle equivalence",
+  "editorSettings": {
+    "enterPlayModeOptionsEnabled": false,
+    "enterPlayModeOptions": 3
+  },
+  "scope": "No audio decode or scene switch; precise original-state and seam prerequisite qualification"
+}

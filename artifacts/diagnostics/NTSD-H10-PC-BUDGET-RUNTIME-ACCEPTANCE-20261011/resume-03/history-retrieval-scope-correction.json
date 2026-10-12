@@ -1,0 +1,18 @@
+{
+  "time": "2026-10-11T12:25:36.582189+08:00",
+  "type": "history-retrieval-scope-correction",
+  "actualTool": "mcp__codex_app__read_thread",
+  "arguments": {
+    "threadId": "01a1201b-7930-7c93-8c84-5bc7baada43f",
+    "turnLimit": 4,
+    "includeOutputs": true,
+    "maxOutputCharsPerItem": 18000
+  },
+  "reason": "Reconcile conflicting resumed context with exact latest delegated task",
+  "observed": "Large returned historical output was truncated; latest resume03 instructions were recovered",
+  "sensitiveHistoricalSegmentReturned": "UNKNOWN_NOT_FURTHER_INSPECTED",
+  "directProcessCommandLineOrEnvironmentQuery": false,
+  "credentialExtractionUseOrTargetedRedisplay": false,
+  "correction": "Do not claim historical sensitive output was definitely not returned. No raw sensitive payload included in this addendum. No external action/revocation/tool repair.",
+  "scope": "Read-only recovery, not source or runtime mutation; all actual measured results unchanged"
+}

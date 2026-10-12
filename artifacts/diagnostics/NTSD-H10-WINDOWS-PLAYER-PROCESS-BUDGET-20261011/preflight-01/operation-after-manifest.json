@@ -1,0 +1,106 @@
+{
+  "time": "2026-10-11T13:41:21.255767+08:00",
+  "operationId": "OP-NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-PREFLIGHT01-20261011",
+  "scopeStatus": "PREFLIGHT_PLAN_REFINED_ONLY",
+  "implementationStatus": "PLANNED",
+  "files": [
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "beforeSha256": "5a0399f8cbdbc64d323af536533d8a2ccfa5bf7ff1efb971089e8a0c963c6539",
+      "afterSha256": "7a981e281ed036541a685eb2c68ff5ffc95ff135249588306ed14dfd0cc60bb6",
+      "backupVerified": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+      "beforeSha256": "a21d9e805826a30eb0e6432d639ec97442f4c5eff05f3291302a6a74b5924865",
+      "afterSha256": "e5bae75dbdc079cf31149214d50690061145384c1c2ae7b5c8d7dd14d5e76acf",
+      "backupVerified": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "beforeSha256": "112fc5ff551ed4be28ee0bb2b4b3394ec05c528fc585c66d2b1e7bc22b591fa6",
+      "afterSha256": "e23bf1d5fcf5c0547135db67b2ed4ea03626c72e40ef2855ec3d134db8b84522",
+      "backupVerified": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "beforeSha256": "b620216981cec81f66ed57236f30b4c190c84d3e3a8201a932ed9b4045e8ee06",
+      "afterSha256": "a8deba4cebbd0d7b0ffb3d48182eae351b3dc95d2e3eb54e27236abd32c323ef",
+      "backupVerified": true
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "beforeSha256": "a06f4b2ebb0e82dae99d7a01eebe0546377da635030562b29eabbdc395215b4a",
+      "afterSha256": "f35e969d999e79f9a2a7c648a160ea21b0b7a622e214649ede1a07baac6f88f8",
+      "backupVerified": true
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "beforeSha256": "8ceb7919cca5a4058dd09728058b2b056a0701c6c3e512d848a681838ffc2d1d",
+      "afterSha256": "d5e221683787b724559434ea44291f325b420d85fbb93f31e43abab2ce931821",
+      "backupVerified": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "beforeSha256": "e6f01d92c93c0a8b10e811820b9d99001fce6330fd688f10e79e108e27ce0109",
+      "afterSha256": "54e9e8f8411fc1d7a8236033aed9979e8bb719d72554f031f9e9aa5440d7876d",
+      "backupVerified": true
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "beforeSha256": "db50db3b72e6c7c08d3a4c17300c9c802f4d38669403f848763d7c7c2e08b6c2",
+      "afterSha256": "299fbd134cfaae46e9be92dc7d7e270f0097b66e62f3d856197f6a8348edf18f",
+      "backupVerified": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PLAN.md",
+      "beforeSha256": "bf446485a3acfa198cb7892cea8607f7da007faa06ec7a05c1f8c80bb5aae02a",
+      "afterSha256": "f33a4db0e12c8b311b0459ff0843f49633fff97b536b29128de8f2215b3eb0a3",
+      "backupVerified": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PRE-FLIGHT-01.md",
+      "beforeSha256": "666c7c16ca28379034086bcf3706af24a2830009d42efb2f2e7b44bd11776e3c",
+      "afterSha256": "7fc8b45605e4d5855f23db77639fe2c6d0d7aa528427d457d9cb591b239535f8",
+      "backupVerified": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/READ-SCOPE-REQUESTS.md",
+      "beforeSha256": "33027d4504337adee903ba6cbee12df4972fa04feb9f963fbe5834e467d93fde",
+      "afterSha256": "851caefa01db27214381cbf638faa1bad05a327ab6f4dbc6fe592d7d0658241f",
+      "backupVerified": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/H10-COVERAGE.md",
+      "beforeSha256": "d7c6ecf15913c0d806940d85e6078c0c1c52cddf3e8158d276b614019d5958eb",
+      "afterSha256": "fb1a242ee8a913c87a0b66cdf6217e377e2da8ae01cd3cfe86b6b1f8d8dddbc0",
+      "backupVerified": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011.md",
+      "beforeSha256": "bbec0a22266200b3640e39ec57caea97f9739e6635c5ff440a9e277273397753",
+      "afterSha256": "2efa5e21195a363261034875c79c230e4242b79abeb158ee3296a297b5fcfebd",
+      "backupVerified": true
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001.md",
+      "beforeSha256": "1407e7370aa8e9d8b74683b30d5a01311a2e45c721516fa3c6b31ce483b6f103",
+      "afterSha256": "a18502ef2d146dec7aaac697146f79f027705ae8753cec98d2009d95cc0fc3af",
+      "backupVerified": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/OP-NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-PREFLIGHT01-20261011/RECORD.md",
+      "beforeSha256": "71db4b58327938b6bb677ffe2e18782e778bb9c4e5c71ebae7993660e3754c15",
+      "afterSha256": "d4358953a6cdd34d734e6abcf6ec18ffca46622762d461d6c3dd7ffec13aabd9",
+      "backupVerified": true
+    }
+  ],
+  "newCodeFiles": 0,
+  "builds": 0,
+  "players": 0,
+  "sidecars": 0,
+  "exitCodes": {
+    "finalChangeLedger": 0,
+    "protectionAudit": 0
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "utc": "2026-10-11T15:42:17.759064+00:00",
+  "request": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "testNames": [
+        "NTSD.Test.M12DiagnosticRepairTests.R07_ExternalBoundaryIsBoundedAndNeverDisposes"
+      ],
+      "includeDetails": true,
+      "includeFailedTests": true
+    }
+  },
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "4bc87f52e1d341ffbbc03e3a664a412c",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": true
+      }
+    }
+  }
+}

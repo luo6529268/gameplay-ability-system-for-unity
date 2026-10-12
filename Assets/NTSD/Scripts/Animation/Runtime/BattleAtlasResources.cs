@@ -193,19 +193,18 @@ namespace NTSD.Animation
             BattleAtlasArrayDecision decision = policy.EvaluateArray(plan.PageCount);
             if (TraceAllocations)
                 Debug.Log($"[Q08 AtlasTrace] planPages={plan.PageCount}, array={decision.UseTextureArray}, reason={decision.Reason}, managedBytes={GC.GetTotalMemory(false)}, phase=select");
-            Color32[][] pages = null;
+            Color32[] pagePixels;
+            try
+            {
+                pagePixels = new Color32[checked(plan.PageSize * plan.PageSize)];
+            }
+            catch (Exception exception)
+            {
+                diagnostic = $"Atlas CPU page allocation failed: {exception.Message}";
+                return false;
+            }
             if (decision.UseTextureArray)
             {
-                try
-                {
-                    pages = AssemblePages(plan, indexed);
-                }
-                catch (Exception exception)
-                {
-                    diagnostic = $"Atlas CPU assembly failed: {exception.Message}";
-                    return false;
-                }
-
                 Texture2DArray array = null;
                 try
                 {
@@ -223,8 +222,11 @@ namespace NTSD.Animation
                         filterMode = FilterMode.Point,
                         wrapMode = TextureWrapMode.Clamp,
                     };
-                    for (int page = 0; page < pages.Length; page++)
-                        array.SetPixels32(pages[page], page, 0);
+                    for (int page = 0; page < plan.PageCount; page++)
+                    {
+                        AssemblePageInto(plan, indexed, page, pagePixels);
+                        array.SetPixels32(pagePixels, page, 0);
+                    }
                     array.Apply(false, true);
                     if (TraceAllocations)
                         Debug.Log("[Q08 AtlasTrace] array allocation complete");
@@ -257,9 +259,7 @@ namespace NTSD.Animation
                 {
                     if (TraceAllocations)
                         Debug.Log($"[Q08 AtlasTrace] ordered page begin={page}/{plan.PageCount}, managedBytes={GC.GetTotalMemory(false)}");
-                    Color32[] pagePixels = pages != null
-                        ? pages[page]
-                        : AssemblePage(plan, indexed, page);
+                    AssemblePageInto(plan, indexed, page, pagePixels);
                     var texture = new Texture2D(
                         BattleAtlasLayoutPlanner.PageSize,
                         BattleAtlasLayoutPlanner.PageSize,
@@ -633,6 +633,20 @@ namespace NTSD.Animation
             int pageIndex)
         {
             var page = new Color32[checked(plan.PageSize * plan.PageSize)];
+            AssemblePageInto(plan, indexedSources, pageIndex, page);
+            return page;
+        }
+
+        internal static void AssemblePageInto(
+            BattleAtlasPlan plan,
+            IReadOnlyDictionary<string, BattleAtlasSourcePixels> indexedSources,
+            int pageIndex,
+            Color32[] page)
+        {
+            if (pageIndex < 0 || pageIndex >= plan.PageCount || page == null ||
+                page.Length != checked(plan.PageSize * plan.PageSize))
+                throw new ArgumentOutOfRangeException(nameof(pageIndex));
+            Array.Clear(page, 0, page.Length);
             for (int index = 0; index < plan.Placements.Count; index++)
             {
                 BattleAtlasPlacement placement = plan.Placements[index];
@@ -648,7 +662,6 @@ namespace NTSD.Animation
                     placement.ContentRect,
                     plan.Padding);
             }
-            return page;
         }
 
         internal static bool TryValidateSourceSet(

@@ -1,0 +1,79 @@
+{
+  "operationId": "OP-NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-PREFLIGHT01-20261011",
+  "time": "2026-10-11T13:53:51.625522+08:00",
+  "authorization": "Delegated PRE-FLIGHT-01 review feedback: only concrete compatibility proposal and scope refinement; fourth processor path NOT authorized for code edit",
+  "plannedActions": "Prepend current scoped proposal pointer to seven existing governance files; append to Task/Change/Operation. No code or runtime mutation. CreateNew new evidence only.",
+  "files": [
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "beforeSha256": "d5e221683787b724559434ea44291f325b420d85fbb93f31e43abab2ce931821",
+      "bytes": 428780,
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/review-02-preimages/docs/ai/CURRENT-AUTHORITY.md",
+      "backupSha256": "d5e221683787b724559434ea44291f325b420d85fbb93f31e43abab2ce931821"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "beforeSha256": "299fbd134cfaae46e9be92dc7d7e270f0097b66e62f3d856197f6a8348edf18f",
+      "bytes": 1710153,
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/review-02-preimages/docs/ai/STATE.md",
+      "backupSha256": "299fbd134cfaae46e9be92dc7d7e270f0097b66e62f3d856197f6a8348edf18f"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "beforeSha256": "f35e969d999e79f9a2a7c648a160ea21b0b7a622e214649ede1a07baac6f88f8",
+      "bytes": 777285,
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/review-02-preimages/docs/ai/CHANGE-LEDGER.md",
+      "backupSha256": "f35e969d999e79f9a2a7c648a160ea21b0b7a622e214649ede1a07baac6f88f8"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "beforeSha256": "7a981e281ed036541a685eb2c68ff5ffc95ff135249588306ed14dfd0cc60bb6",
+      "bytes": 1648975,
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/review-02-preimages/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backupSha256": "7a981e281ed036541a685eb2c68ff5ffc95ff135249588306ed14dfd0cc60bb6"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+      "beforeSha256": "e5bae75dbdc079cf31149214d50690061145384c1c2ae7b5c8d7dd14d5e76acf",
+      "bytes": 20885,
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/review-02-preimages/Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+      "backupSha256": "e5bae75dbdc079cf31149214d50690061145384c1c2ae7b5c8d7dd14d5e76acf"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "beforeSha256": "e23bf1d5fcf5c0547135db67b2ed4ea03626c72e40ef2855ec3d134db8b84522",
+      "bytes": 269223,
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/review-02-preimages/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backupSha256": "e23bf1d5fcf5c0547135db67b2ed4ea03626c72e40ef2855ec3d134db8b84522"
+    },
+    {
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "beforeSha256": "a8deba4cebbd0d7b0ffb3d48182eae351b3dc95d2e3eb54e27236abd32c323ef",
+      "bytes": 376134,
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/review-02-preimages/Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "backupSha256": "a8deba4cebbd0d7b0ffb3d48182eae351b3dc95d2e3eb54e27236abd32c323ef"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011.md",
+      "beforeSha256": "2efa5e21195a363261034875c79c230e4242b79abeb158ee3296a297b5fcfebd",
+      "bytes": 22913,
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/review-02-preimages/docs/ai/TASKS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011.md",
+      "backupSha256": "2efa5e21195a363261034875c79c230e4242b79abeb158ee3296a297b5fcfebd"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001.md",
+      "beforeSha256": "a18502ef2d146dec7aaac697146f79f027705ae8753cec98d2009d95cc0fc3af",
+      "bytes": 5316,
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/review-02-preimages/docs/ai/CHANGE-RECORDS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001.md",
+      "backupSha256": "a18502ef2d146dec7aaac697146f79f027705ae8753cec98d2009d95cc0fc3af"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/OP-NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-PREFLIGHT01-20261011/RECORD.md",
+      "beforeSha256": "d4358953a6cdd34d734e6abcf6ec18ffca46622762d461d6c3dd7ffec13aabd9",
+      "bytes": 3622,
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/review-02-preimages/docs/ai/FILE-OPERATIONS/OP-NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-PREFLIGHT01-20261011/RECORD.md",
+      "backupSha256": "d4358953a6cdd34d734e6abcf6ec18ffca46622762d461d6c3dd7ffec13aabd9"
+    }
+  ],
+  "gitStatus": " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md\n M Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md\n M Assets/NTSD/Docs/battle-optimization-progress-tracker.md\n M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md\n M Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs\n M docs/ai/CHANGE-LEDGER.md\n M docs/ai/CURRENT-AUTHORITY.md\n M docs/ai/DECISIONS.md\n M docs/ai/FILE-OPERATIONS/INDEX.md\n M docs/ai/STATE.md\n?? artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010/windows/capture/\n?? artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/windows/capture/\n?? artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/\n?? artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/\n?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH39-CPU-GC-CAPTURE-20261007/windows-01/cpu-gc-samples-recovered.json\n?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH39-CPU-GC-CAPTURE-20261007/windows-01/cpu-gc.raw\n?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH42-CAMERA-GC-CALLSTACK-20261007/camera-01/cpu-gc.raw\n?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH42-CAMERA-GC-CALLSTACK-20261007/camera-02/cpu-gc.raw\n?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007/camera-01/cpu-gc.raw\n?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007/camera-01/profiler-history-before.raw\n?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/cpu-gc-samples.json\n?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/cpu-gc.raw\n?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl\n?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl\n?? docs/ai/CHANGE-RECORDS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001.md\n?? docs/ai/CHANGE-RECORDS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001.md\n?? docs/ai/DECISIONS/\n?? docs/ai/FILE-OPERATIONS/OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/\n?? docs/ai/FILE-OPERATIONS/OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME01-20261011/\n?? docs/ai/FILE-OPERATIONS/OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME02-20261011/\n?? docs/ai/FILE-OPERATIONS/OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME03-20261011/\n?? docs/ai/FILE-OPERATIONS/OP-NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-PREFLIGHT01-20261011/\n?? docs/ai/TASKS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011.md\n?? docs/ai/TASKS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011.md\n"
+}

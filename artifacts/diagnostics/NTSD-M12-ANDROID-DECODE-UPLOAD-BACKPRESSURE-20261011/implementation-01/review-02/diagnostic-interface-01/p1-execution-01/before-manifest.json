@@ -1,0 +1,404 @@
+{
+  "utc": "2026-10-11T13:30:04.722829+00:00",
+  "task": "NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011",
+  "change": "NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001",
+  "operation": "OP-NTSD-M12-IMPLEMENTATION-20261011",
+  "identities": {
+    "Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs": "1bf39d4793a1212561a39a2a10d5b822e336c875d0583fd6ac8a648bf503e3b7",
+    "Library/ScriptAssemblies/Assembly-CSharp.dll": "a8874f8784d60efa30d627f61e4140a89ecc9466c6a80115024eae4e2c8cbb8b",
+    "Library/ScriptAssemblies/Assembly-CSharp-Editor.dll": "220980f9a5aeed57d992425629e5c7fef17e73e6391b953e4cc07e46c2034431",
+    "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\revision-01\\revision-contract.json": "56e85ee9c01a44fb67dc35a7cdaef0fa31d64c07a580853b32ad114d6d7b09a2",
+    "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\revision-01\\compile-identity.json": "22f6c9b7c3c101924fed3ea5b9230304ea765063b57cba352aa359cc63afa9b5",
+    "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\revision-01\\frozen-input-manifest.json": "7f0f9fae4d31d2447ec7041c898dfd28cd7752397727db4b3b8ac55743f2cf15"
+  },
+  "originalProtectedFiles": [
+    {
+      "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+      "sha256": "25c8e08f4d1be55ee55d0404aaf4e46d099afc6c2ba3d9040e1c5203f654d9ff"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha256": "f2ee25d075548b78380be817209152047b919c4c15da8743d75d2e0c165cbea1"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha256": "253b2ebad322aa6ec18488dfbbf555bb93ad897940a342e4130e77ce778f9010"
+    },
+    {
+      "path": "ProjectSettings/EditorSettings.asset",
+      "sha256": "6f8761b516f06ff2f0373b6310571cf7951f63afb86c56bfd7be832e06a9987b"
+    },
+    {
+      "path": "Assets/NTSD/Prefabs/Common/EntityObject.prefab",
+      "sha256": "97a58f4819532dda96c008bfe7ca7204af39feb3ddc9d7dee93bcf9ea99c00b5"
+    },
+    {
+      "path": "Assets/NTSD/Prefabs/Common/Shadow.prefab",
+      "sha256": "92e29545e9f3720cfa375b174a24fd0b52845f3a31fda02e02c67350ae370e39"
+    },
+    {
+      "path": "Assets/NTSD/Map/BattleMapCatalog.asset",
+      "sha256": "45fd94d633d81cfb58477545078c974ff052766cb2f3570fe367aa48dcf688dd"
+    },
+    {
+      "path": "Assets/NTSD/Map/SunagakureMap.asset",
+      "sha256": "f7b5e4a44cac05480d1ca6f67abf623531264c1c96725d7fdd23da50c8e60c08"
+    },
+    {
+      "path": "Assets/NTSD/Sprite/OtherBg/Sunagakure.png",
+      "sha256": "112fb26709af7e77e11676665b7cb9445e2e2dbdb71a61037c5ddcdb6f754e42"
+    }
+  ],
+  "originalScene": {
+    "name": "NTSD_Menu",
+    "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "buildIndex": 0,
+    "isDirty": false,
+    "isLoaded": true,
+    "rootCount": 8
+  },
+  "originalEditorState": "before-editor.json",
+  "consoleBaseline": "before-console.json",
+  "inputCount": 24,
+  "inputBytes": 232571,
+  "inputOperations": [
+    {
+      "source": "Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\catalog.csv",
+      "relative": "catalog.csv",
+      "bytes": 125,
+      "sha256": "ff6f4223553a3cec1a7803c08688eebb3ab90f99bc5dbd201ec1003a95386da5",
+      "kind": "original_fixture",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\catalog.csv",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\catalog.csv",
+      "destinationExisted": false,
+      "overwrite": false
+    },
+    {
+      "source": "Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\decoded_dat\\a.dat",
+      "relative": "decoded_dat/a.dat",
+      "bytes": 194,
+      "sha256": "91c663472bf62e7fc16f06021bdba72f7097066b47da6059ec6e4409e97b426e",
+      "kind": "original_fixture",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\decoded_dat\\a.dat",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\decoded_dat\\a.dat",
+      "destinationExisted": false,
+      "overwrite": false
+    },
+    {
+      "source": "Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\decoded_dat\\b.dat",
+      "relative": "decoded_dat/b.dat",
+      "bytes": 194,
+      "sha256": "c6b5c794eb591f5664e327e349eaf5281ed2c967796339c5e1c34a3c59a15eb3",
+      "kind": "original_fixture",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\decoded_dat\\b.dat",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\decoded_dat\\b.dat",
+      "destinationExisted": false,
+      "overwrite": false
+    },
+    {
+      "source": "Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\vfs\\c\\body.png",
+      "relative": "vfs/c/body.png",
+      "bytes": 92,
+      "sha256": "e9e561f528581cdf8c97af14563ea814ad53023967790b0e8a2fd42243f217fe",
+      "kind": "original_fixture",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\vfs\\c\\body.png",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\vfs\\c\\body.png",
+      "destinationExisted": false,
+      "overwrite": false
+    },
+    {
+      "source": "Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\vfs\\c\\head.png",
+      "relative": "vfs/c/head.png",
+      "bytes": 92,
+      "sha256": "e9e561f528581cdf8c97af14563ea814ad53023967790b0e8a2fd42243f217fe",
+      "kind": "original_fixture",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\vfs\\c\\head.png",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\vfs\\c\\head.png",
+      "destinationExisted": false,
+      "overwrite": false
+    },
+    {
+      "source": "Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\vfs\\c\\small.png",
+      "relative": "vfs/c/small.png",
+      "bytes": 92,
+      "sha256": "e9e561f528581cdf8c97af14563ea814ad53023967790b0e8a2fd42243f217fe",
+      "kind": "original_fixture",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\bdafd1d58176477081e477cb8abf28d0\\vfs\\c\\small.png",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\vfs\\c\\small.png",
+      "destinationExisted": false,
+      "overwrite": false
+    },
+    {
+      "source": "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\001.wav",
+      "relative": "vfs/data/001.wav",
+      "bytes": 11828,
+      "sha256": "bfa77d98caf3ae5307116d6d8451dd554700209c40f6bb50d0949dcd47523584",
+      "kind": "formal_wav",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\001.wav",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\vfs\\data\\001.wav",
+      "destinationExisted": false,
+      "overwrite": false
+    },
+    {
+      "source": "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\002.wav",
+      "relative": "vfs/data/002.wav",
+      "bytes": 9302,
+      "sha256": "7c2c6620b63128565f6b733512dbaf2fbcc185df9136a37c7e47461ffd72f78d",
+      "kind": "formal_wav",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\002.wav",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\vfs\\data\\002.wav",
+      "destinationExisted": false,
+      "overwrite": false
+    },
+    {
+      "source": "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\004.wav",
+      "relative": "vfs/data/004.wav",
+      "bytes": 11228,
+      "sha256": "4b501f67bec53f364530e041012faa40334e7f4f0f82088b6b7caa472c2207ac",
+      "kind": "formal_wav",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\004.wav",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\vfs\\data\\004.wav",
+      "destinationExisted": false,
+      "overwrite": false
+    },
+    {
+      "source": "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\006.wav",
+      "relative": "vfs/data/006.wav",
+      "bytes": 15654,
+      "sha256": "3ade81bab01f8eb99f9ed4c68d4c63245a6413757b801edfe04e59f7be3e80ea",
+      "kind": "formal_wav",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\006.wav",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\vfs\\data\\006.wav",
+      "destinationExisted": false,
+      "overwrite": false
+    },
+    {
+      "source": "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\016.wav",
+      "relative": "vfs/data/016.wav",
+      "bytes": 8284,
+      "sha256": "40f7b9ac8483ba57dfed5c1e0322653fc387918d429b7711e3dd4b11178a9810",
+      "kind": "formal_wav",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\016.wav",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\vfs\\data\\016.wav",
+      "destinationExisted": false,
+      "overwrite": false
+    },
+    {
+      "source": "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\010.wav",
+      "relative": "vfs/data/010.wav",
+      "bytes": 11576,
+      "sha256": "e5e31a220b7b607e189093cf01e1fefa4fb00ec00e8b55cb6ec9715c0fa199d6",
+      "kind": "formal_wav",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\010.wav",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\vfs\\data\\010.wav",
+      "destinationExisted": false,
+      "overwrite": false
+    },
+    {
+      "source": "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\011.wav",
+      "relative": "vfs/data/011.wav",
+      "bytes": 3884,
+      "sha256": "788bf352868b82eeead8da8b95d289bcc8a9dcdf1f8c2b368579cf61b1ce7f9a",
+      "kind": "formal_wav",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\011.wav",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\vfs\\data\\011.wav",
+      "destinationExisted": false,
+      "overwrite": false
+    },
+    {
+      "source": "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\017.wav",
+      "relative": "vfs/data/017.wav",
+      "bytes": 15232,
+      "sha256": "43030d58b00f98999af6635c9966294fb9b5b6889d03fd1dca8f46bfedf3b5a6",
+      "kind": "formal_wav",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\017.wav",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\vfs\\data\\017.wav",
+      "destinationExisted": false,
+      "overwrite": false
+    },
+    {
+      "source": "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\020.wav",
+      "relative": "vfs/data/020.wav",
+      "bytes": 16458,
+      "sha256": "4872410c3601f31931ccd2eb5335093acc132ac73c0bae7fb15aeb118a482e73",
+      "kind": "formal_wav",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\020.wav",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\vfs\\data\\020.wav",
+      "destinationExisted": false,
+      "overwrite": false
+    },
+    {
+      "source": "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\021.wav",
+      "relative": "vfs/data/021.wav",
+      "bytes": 34354,
+      "sha256": "ae2ed083b8a94665266ac32522e8a1648b9918cab12062d838f1cdacc605637e",
+      "kind": "formal_wav",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\021.wav",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\vfs\\data\\021.wav",
+      "destinationExisted": false,
+      "overwrite": false
+    },
+    {
+      "source": "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\025.wav",
+      "relative": "vfs/data/025.wav",
+      "bytes": 8606,
+      "sha256": "8668a7e6a2912e5f5c093c9814ee06343aff88333f39d894dc954c8ddcfbc1d1",
+      "kind": "formal_wav",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\025.wav",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\vfs\\data\\025.wav",
+      "destinationExisted": false,
+      "overwrite": false
+    },
+    {
+      "source": "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\032.wav",
+      "relative": "vfs/data/032.wav",
+      "bytes": 12148,
+      "sha256": "90bb8290a65a8aa38e2effc077939431df0ece4e1c304eb6905ad47002def286",
+      "kind": "formal_wav",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\032.wav",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\vfs\\data\\032.wav",
+      "destinationExisted": false,
+      "overwrite": false
+    },
+    {
+      "source": "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\033.wav",
+      "relative": "vfs/data/033.wav",
+      "bytes": 10898,
+      "sha256": "ffaa8f70f73ba7ecf5c122246327275e707f3c47d05ed413fda9a37479e29b06",
+      "kind": "formal_wav",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\033.wav",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\vfs\\data\\033.wav",
+      "destinationExisted": false,
+      "overwrite": false
+    },
+    {
+      "source": "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\039.wav",
+      "relative": "vfs/data/039.wav",
+      "bytes": 2774,
+      "sha256": "8b3c2c8356655ad3708e578a9033a8f9db25243fb97c91a97ee2f0dbf350b889",
+      "kind": "formal_wav",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\039.wav",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\vfs\\data\\039.wav",
+      "destinationExisted": false,
+      "overwrite": false
+    },
+    {
+      "source": "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\065.wav",
+      "relative": "vfs/data/065.wav",
+      "bytes": 11828,
+      "sha256": "14771b1ce75ecda3b215997b4d4492cd33e2d92ae07eca4d15a7418ea239ed8d",
+      "kind": "formal_wav",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\065.wav",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\vfs\\data\\065.wav",
+      "destinationExisted": false,
+      "overwrite": false
+    },
+    {
+      "source": "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\066.wav",
+      "relative": "vfs/data/066.wav",
+      "bytes": 11662,
+      "sha256": "10452009e1ad4bc6a1d4659ae0171704779c009c08c4d96c6a1767e96121e259",
+      "kind": "formal_wav",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\066.wav",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\vfs\\data\\066.wav",
+      "destinationExisted": false,
+      "overwrite": false
+    },
+    {
+      "source": "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\068.wav",
+      "relative": "vfs/data/068.wav",
+      "bytes": 26776,
+      "sha256": "d88c46d5a2304d12997579dcf38e9b0eab18eb409c5627096a52cb9c06db27f2",
+      "kind": "formal_wav",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\068.wav",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\vfs\\data\\068.wav",
+      "destinationExisted": false,
+      "overwrite": false
+    },
+    {
+      "source": "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\085.wav",
+      "relative": "vfs/data/085.wav",
+      "bytes": 9290,
+      "sha256": "917c14ddfe70f09946887e14eb05d592b612d81fd31a289077ee4f517a8a62ee",
+      "kind": "formal_wav",
+      "absoluteSource": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\085.wav",
+      "absoluteDestination": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\play-01\\64935977fe0c414d8d0b7bafcf2a6e8b\\runtime\\vfs\\data\\085.wav",
+      "destinationExisted": false,
+      "overwrite": false
+    }
+  ],
+  "backups": [
+    {
+      "path": "docs\\ai\\CURRENT-AUTHORITY.md",
+      "sha256": "14cfbccc41d3e62b0204854cc507065b4ef8fa407b07dba51d45a18bd28f85e5",
+      "bytes": 446743,
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\p1-execution-01\\backups\\00.before.bin"
+    },
+    {
+      "path": "docs\\ai\\STATE.md",
+      "sha256": "5726c64ed708c821d62c8c6b09457f6f162136825f91565f0e59d1d1abff9448",
+      "bytes": 1728116,
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\p1-execution-01\\backups\\01.before.bin"
+    },
+    {
+      "path": "docs\\ai\\CHANGE-LEDGER.md",
+      "sha256": "a66adffcf00af3957a422dd89a8e0f5315c8c5a74dfaa18a7294cc2a685d6ac8",
+      "bytes": 795228,
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\p1-execution-01\\backups\\02.before.bin"
+    },
+    {
+      "path": "Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "sha256": "99ab029caee19501173dace9ab4ea88b90d98305c8401fcb3004c8d42bb4feb3",
+      "bytes": 1666961,
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\p1-execution-01\\backups\\03.before.bin"
+    },
+    {
+      "path": "Assets\\NTSD\\Docs\\android-mobile-readiness\\m-12-decode-upload-byte-backpressure.md",
+      "sha256": "1ef0b688a52c7437f53d323c997b971999c419fca7e598b72bfca3ed41ad6769",
+      "bytes": 16959,
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\p1-execution-01\\backups\\04.before.bin"
+    },
+    {
+      "path": "Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "sha256": "b80d023ed008b0ea306e2645da9d0315aa1a07d77ae168216bdfc59ecd6f74bd",
+      "bytes": 287594,
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\p1-execution-01\\backups\\05.before.bin"
+    },
+    {
+      "path": "docs\\ai\\OPTIMIZATION-REVIEW-20261009\\DEPENDENCIES.md",
+      "sha256": "104f8b2f623bafeaca749d636bd8bb36af45351d4c82f908865de05b4f5343bd",
+      "bytes": 41968,
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\p1-execution-01\\backups\\06.before.bin"
+    },
+    {
+      "path": "docs\\ai\\TASKS\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011.md",
+      "sha256": "68c68206c0bb70b991812a3881a9cd763cd6395e30cb2440b67670000f8c7b56",
+      "bytes": 30409,
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\p1-execution-01\\backups\\07.before.bin"
+    },
+    {
+      "path": "docs\\ai\\CHANGE-RECORDS\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001.md",
+      "sha256": "fd8beb5482b0f62da3c88eaa8c69ce1f9ee5ae319ebd9dad55c058ae3b73767e",
+      "bytes": 46698,
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\p1-execution-01\\backups\\08.before.bin"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\REPORT.md",
+      "sha256": "d76dca9bbc9d977469e515fc625ab93e40746a97a6d0cc41e0033b02738296b6",
+      "bytes": 110884,
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\p1-execution-01\\backups\\09.before.bin"
+    },
+    {
+      "path": "docs\\ai\\FILE-OPERATIONS\\OP-NTSD-M12-IMPLEMENTATION-20261011\\RECORD.md",
+      "sha256": "d234a5a510592efba3afdd87c236595d1593cfd36a69b802834beccac3b9a364",
+      "bytes": 31785,
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\p1-execution-01\\backups\\10.before.bin"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\REPORT.md",
+      "sha256": "3776ec14b624253eb3d867d64a29ba42288aef80817aba18aa4277c4b82b6973",
+      "bytes": 17186,
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\p1-execution-01\\backups\\11.before.bin"
+    }
+  ]
+}

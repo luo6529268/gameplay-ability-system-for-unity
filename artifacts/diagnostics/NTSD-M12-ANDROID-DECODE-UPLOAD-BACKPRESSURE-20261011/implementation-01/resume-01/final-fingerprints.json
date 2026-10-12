@@ -1,0 +1,63 @@
+{
+  "time": "2026-10-11T18:10:06.951053+08:00",
+  "protectedCount": 93,
+  "drift": [],
+  "codeAndAssemblies": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "sha256": "fc5cc10c6dde66bb380e9e3d1f770d8ad9fcfc53f029d49831eadd37449c3d3f",
+      "bytes": 230289
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Runtime/BMPLoader.cs",
+      "sha256": "7c305c02f52a50acd109a1c3aea045e70dab5985b2345eba8dde6a7e8e86ab60",
+      "bytes": 30413
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+      "sha256": "412a332a7d553c0e1b5b319f2b9683405586fc10b670373db60f7efc17db4241",
+      "bytes": 129635
+    },
+    {
+      "path": "Assets/NTSD/Scripts/App/AppManager.cs",
+      "sha256": "965288ab21bd3ad839b643b1a909aa5324d3ca6b7a13803e77684d44c5493f81",
+      "bytes": 24683
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/H08ResidentVisualMemoryDiagnostics.cs",
+      "sha256": "1054fcde0e00599359ef9a89846a6e25832699d93b41584805e0ab7b05b52dc7",
+      "bytes": 45034
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs",
+      "sha256": "56ac00b0b837a702899fa9cefe737d544562a891a84c8b37f785445d91559350",
+      "bytes": 30936
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11AtomicPublicationEditorTests.cs",
+      "sha256": "1b6adc22ac9b95a665a656cc7208293113bba281a3259bdd3b011243a9a9bdc1",
+      "bytes": 64728
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11SourceCacheCallerEditorTests.cs",
+      "sha256": "e003a7d76955d6b7855077d1e2fd3476e9f19e4b6d30d169a692fcc3db5e171c",
+      "bytes": 40630
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs.meta",
+      "sha256": "5dc841a7d989a6ed8a6f7743b749d65bd60b19522fd321a2ab5b894b8be1169f",
+      "bytes": 254
+    },
+    {
+      "path": "Library/ScriptAssemblies/Assembly-CSharp.dll",
+      "sha256": "9255bf3da5973d1062ae425d0ba4157c0afa135a463e024c70e4b7b15f70278f",
+      "bytes": 4326912
+    },
+    {
+      "path": "Library/ScriptAssemblies/Assembly-CSharp-Editor.dll",
+      "sha256": "5e4faa0b8bcfd3c0f7465b44d2480336d18678c854655b59118c5bc4fd651d86",
+      "bytes": 7838720
+    }
+  ],
+  "oldOverlapSha": "40e1951441196b2584c8f3a79f4c28f7398c3663439266deb171ff7c4c14c7e8"
+}

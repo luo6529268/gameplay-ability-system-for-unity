@@ -1,0 +1,29 @@
+{
+  "utc": "2026-10-11T15:15:37.551931+00:00",
+  "source": "Exact runGuid Editor.log line5671312",
+  "lastMatchingLine": "5671312:{\"runGuid\":\"64935977fe0c414d8d0b7bafcf2a6e8b\",\"state\":\"FAILED_CLEAN_SAFE\",\"phase\":\"failed_cleanup_only\",\"firstFailure\":\"System.InvalidOperationException: Clone changed fields other than runtime root.\\r\\n  at NTSD.Test.M12RealSceneCloseDiagnostics.Require (System.Boolean condition, System.String message) [0x00009] in I:\\\\GitHub\\\\Unity_GAS\\\\gameplay-ability-system-for-unity\\\\Assets\\\\NTSD\\\\Scripts\\\\Test\\\\Editor\\\\M12DecodeUploadBackpressureEditorTests.cs:1074 \\r\\n  at NTSD.Test.M12RealSceneCloseDiagnostics+RunOwner.RunAsync () [0x00249] in I:\\\\GitHub\\\\Unity_GAS\\\\gameplay-ability-system-for-unity\\\\Assets\\\\NTSD\\\\Scripts\\\\Test\\\\Editor\\\\M12DecodeUploadBackpressureEditorTests.cs:1267 \",\"playing\":false,\"nativePending\":false,\"loadingPending\":false,\"closePending\":false,\"errors\":1,\"acceptedError\":0,\"textureId\":0,\"spriteId\":0,\"cleanupAccepted\":true,\"handlesDisposed\":false,\"cloneReleased\":false,\"cloneId\":-1273784,\"cloneType\":\"NTSD.App.GameConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null\",\"logWriters\":0,\"persistedLogs\":1,\"lateLogs\":0,\"attributionExamined\":false,\"attributionMatched\":false}",
+  "state": {
+    "runGuid": "64935977fe0c414d8d0b7bafcf2a6e8b",
+    "state": "FAILED_CLEAN_SAFE",
+    "phase": "failed_cleanup_only",
+    "firstFailure": "System.InvalidOperationException: Clone changed fields other than runtime root.\r\n  at NTSD.Test.M12RealSceneCloseDiagnostics.Require (System.Boolean condition, System.String message) [0x00009] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\M12DecodeUploadBackpressureEditorTests.cs:1074 \r\n  at NTSD.Test.M12RealSceneCloseDiagnostics+RunOwner.RunAsync () [0x00249] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\M12DecodeUploadBackpressureEditorTests.cs:1267 ",
+    "playing": false,
+    "nativePending": false,
+    "loadingPending": false,
+    "closePending": false,
+    "errors": 1,
+    "acceptedError": 0,
+    "textureId": 0,
+    "spriteId": 0,
+    "cleanupAccepted": true,
+    "handlesDisposed": false,
+    "cloneReleased": false,
+    "cloneId": -1273784,
+    "cloneType": "NTSD.App.GameConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+    "logWriters": 0,
+    "persistedLogs": 1,
+    "lateLogs": 0,
+    "attributionExamined": false,
+    "attributionMatched": false
+  }
+}

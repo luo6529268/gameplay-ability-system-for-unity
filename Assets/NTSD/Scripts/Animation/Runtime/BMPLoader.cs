@@ -16,6 +16,9 @@ namespace NTSD.Animation
             public int Height;
             public Color[] Pixels;
             public bool IsPng { get; internal set; }
+            internal Color32[] PngPixels;
+            internal bool HasPixels => PngPixels != null || Pixels != null;
+            internal long PixelStorageBytes => PngPixels != null ? 4L * PngPixels.Length : 16L * (Pixels?.Length ?? 0);
         }
 
         /// <summary>
@@ -68,6 +71,136 @@ namespace NTSD.Animation
             return LoadDataCore(filePath, expectedSha256);
         }
 
+        internal readonly struct VerifiedImageLayout
+        {
+            internal readonly string FilePath, ExpectedSha256;
+            internal readonly long FileBytes;
+            internal readonly int Width, Height;
+            internal readonly bool IsPng;
+
+            internal VerifiedImageLayout(string path, string hash, long bytes, int width, int height, bool png)
+            {
+                FilePath = path; ExpectedSha256 = hash; FileBytes = bytes;
+                Width = width; Height = height; IsPng = png;
+            }
+        }
+
+        internal static VerifiedImageLayout ReadVerifiedImageLayout(string filePath, string expectedSha256)
+        {
+            if (string.IsNullOrEmpty(expectedSha256) || expectedSha256.Length != 64)
+                throw new System.ArgumentException("An expected SHA-256 image identity is required.");
+            string fullPath = Path.GetFullPath(filePath);
+            using (var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (var hash = SHA256.Create())
+            {
+                long length = stream.Length;
+                if (length <= 0 || length > int.MaxValue)
+                    throw new InvalidDataException("Image length is outside the supported range.");
+                var header = new byte[33];
+                int headerCount = 0;
+                var buffer = new byte[65536];
+                long readBytes = 0;
+                int count;
+                while ((count = stream.Read(buffer, 0, buffer.Length)) != 0)
+                {
+                    int copy = System.Math.Min(header.Length - headerCount, count);
+                    if (copy > 0) System.Buffer.BlockCopy(buffer, 0, header, headerCount, copy);
+                    headerCount += copy;
+                    readBytes = checked(readBytes + count);
+                    if (readBytes > length) throw new InvalidDataException("Image grew during qualification.");
+                    hash.TransformBlock(buffer, 0, count, buffer, 0);
+                }
+                hash.TransformFinalBlock(System.Array.Empty<byte>(), 0, 0);
+                if (readBytes != length || stream.Length != length ||
+                    !string.Equals(System.BitConverter.ToString(hash.Hash).Replace("-", string.Empty),
+                        expectedSha256, System.StringComparison.OrdinalIgnoreCase))
+                    throw new InvalidDataException("Image changed during qualification: " + filePath);
+                return ReadLayout(fullPath, expectedSha256, length, header, headerCount);
+            }
+        }
+
+        private static VerifiedImageLayout ReadLayout(string path, string hash, long length, byte[] header, int count)
+        {
+            bool png = count >= 8 && PngPixelDecoder.HasSignature(header);
+            if (!png)
+            {
+                if (count >= 30 && header[0] == 'B' && header[1] == 'M')
+                {
+                    int bmpWidth = System.BitConverter.ToInt32(header, 18);
+                    long bmpHeight = System.Math.Abs((long)System.BitConverter.ToInt32(header, 22));
+                    if (bmpWidth <= 0 || bmpHeight <= 0 || bmpHeight > int.MaxValue)
+                        throw new InvalidDataException("BMP dimensions are invalid.");
+                    return new VerifiedImageLayout(path, hash, length, bmpWidth, (int)bmpHeight, false);
+                }
+                return new VerifiedImageLayout(path, hash, length, 0, 0, false);
+            }
+            if (count < 33 || header[8] != 0 || header[9] != 0 || header[10] != 0 || header[11] != 13 ||
+                header[12] != 73 || header[13] != 72 || header[14] != 68 || header[15] != 82)
+                throw new InvalidDataException("PNG has no complete leading IHDR.");
+            long width = ((long)header[16] << 24) | ((long)header[17] << 16) | ((long)header[18] << 8) | header[19];
+            long height = ((long)header[20] << 24) | ((long)header[21] << 16) | ((long)header[22] << 8) | header[23];
+            if (width <= 0 || height <= 0 || width > int.MaxValue || height > int.MaxValue ||
+                checked(width * height) > 32L * 1024 * 1024)
+                throw new InvalidDataException("PNG dimensions exceed the existing decoder limit.");
+            return new VerifiedImageLayout(path, hash, length, (int)width, (int)height, true);
+        }
+
+        internal static BmpData LoadVerifiedImageData(string filePath, VerifiedImageLayout layout)
+        {
+            return DecodeImageData(ReadVerifiedBytes(filePath, layout), filePath);
+        }
+
+        internal static BmpData LoadVerifiedNativeImageData(string filePath, string expectedSha256)
+        {
+            return LoadVerifiedNativeImageData(filePath, ReadVerifiedImageLayout(filePath, expectedSha256));
+        }
+
+        internal static BmpData LoadVerifiedNativeImageData(string filePath, VerifiedImageLayout layout)
+        {
+            byte[] bytes = ReadVerifiedBytes(filePath, layout);
+            if (!layout.IsPng) return DecodeImageData(bytes, filePath);
+            if (!PngPixelDecoder.TryDecode(bytes, out int width, out int height, out byte[] rgba, out string error))
+                throw new InvalidDataException("PNG decode failed: " + error);
+            var pixels = new Color32[checked(width * height)];
+            for (int i = 0; i < pixels.Length; i++)
+            {
+                int offset = i * 4;
+                pixels[i] = new Color32(rgba[offset], rgba[offset + 1], rgba[offset + 2], rgba[offset + 3]);
+            }
+            return new BmpData { Width = width, Height = height, PngPixels = pixels, IsPng = true };
+        }
+
+        private static byte[] ReadVerifiedBytes(string filePath, VerifiedImageLayout layout)
+        {
+            if (!string.Equals(Path.GetFullPath(filePath), layout.FilePath, System.StringComparison.Ordinal))
+                throw new InvalidDataException("Qualified image path changed.");
+            byte[] bytes;
+            using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                if (layout.FileBytes <= 0 || layout.FileBytes > int.MaxValue || stream.Length != layout.FileBytes)
+                    throw new InvalidDataException("Qualified image length changed before allocation.");
+                bytes = new byte[(int)layout.FileBytes];
+                int offset = 0;
+                while (offset < bytes.Length)
+                {
+                    int count = stream.Read(bytes, offset, bytes.Length - offset);
+                    if (count == 0) throw new InvalidDataException("Qualified image was truncated.");
+                    offset += count;
+                }
+                if (stream.ReadByte() != -1 || stream.Length != layout.FileBytes)
+                    throw new InvalidDataException("Qualified image grew before decoding.");
+            }
+            using (var hash = SHA256.Create())
+                if (!string.Equals(System.BitConverter.ToString(hash.ComputeHash(bytes)).Replace("-", string.Empty),
+                    layout.ExpectedSha256, System.StringComparison.OrdinalIgnoreCase))
+                    throw new InvalidDataException("Qualified image bytes changed before decoding.");
+            VerifiedImageLayout current = ReadLayout(layout.FilePath, layout.ExpectedSha256, bytes.Length,
+                bytes, System.Math.Min(bytes.Length, 33));
+            if (current.IsPng != layout.IsPng || current.Width != layout.Width || current.Height != layout.Height)
+                throw new InvalidDataException("Qualified image dimensions changed before decoding.");
+            return bytes;
+        }
+
         private static BmpData LoadDataCore(string filePath, string expectedSha256)
         {
             if (!File.Exists(filePath))
@@ -90,6 +223,11 @@ namespace NTSD.Animation
                 }
             }
 
+            return DecodeImageData(fileData, filePath);
+        }
+
+        private static BmpData DecodeImageData(byte[] fileData, string filePath)
+        {
             // TryLoadWithUnityData 依赖 Texture2D（主线程 API），后台线程直接走手动解析
             if (System.Threading.Thread.CurrentThread.ManagedThreadId != 1)
             {

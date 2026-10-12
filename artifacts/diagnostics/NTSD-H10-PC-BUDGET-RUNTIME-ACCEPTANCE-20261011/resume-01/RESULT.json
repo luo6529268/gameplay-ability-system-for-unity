@@ -1,0 +1,77 @@
+{
+  "time": "2026-10-11T11:23:20.802418+08:00",
+  "task": "NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011",
+  "resume": "01",
+  "status": "MEASUREMENT_QUALIFIED_FIXTURE_CUE_ID_MISMATCH",
+  "changeStatus": "BLOCKED",
+  "parentH10": "OPEN",
+  "runtimeAudioGatesVerified": false,
+  "productionChanged": false,
+  "oldNonPcBudgetMethodsChanged": false,
+  "sourceFrozenAtMeasuredVersion": true,
+  "compile": {
+    "attempts": 1,
+    "passed": true
+  },
+  "qualification": {
+    "passed": 2,
+    "failed": 0,
+    "recorderUnit": "TimeNanoseconds",
+    "rawValueInterpretedAsBytes": false,
+    "threeIndependentInstances": true,
+    "ownerThread": 1,
+    "capacityEach": 256,
+    "positiveControlsBeforeAfterEach": 1,
+    "emptyControlsEvents": 0,
+    "invalidAndUncalibratedRejected": true
+  },
+  "play": {
+    "passed": 0,
+    "failed": 1,
+    "resultLabel": "Error",
+    "durationSeconds": 15.118494,
+    "firstDifference": "Null generic wrapper after first public prepare; fixture raw cue data/016.wav differs from registered data\\016.wav",
+    "failureRaw": "System.NullReferenceException: Object reference not set to an instance of an object\r\n  at NTSD.Test.Editor.H10ResidentClosureDiagnostics+PcBudgetFixture.ReadPrivateCue[T] (System.Object cue, System.String name) [0x00000] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\H10ResidentClosureDiagnostics.cs:3816 \r\n  at NTSD.Test.Editor.H10ResidentClosureDiagnostics+PcBudgetFixture.RunThreeSessions () [0x002a0] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\H10ResidentClosureDiagnostics.cs:4056 \r\n  at Cysharp.Threading.Tasks.UniTaskCompletionSourceCore`1[TResult].GetResult (System.Int16 token) [0x00067] in .\\Library\\PackageCache\\com.cysharp.unitask@5cc97c7f00\\Runtime\\UniTaskCompletionSource.cs:244 \r\n  at Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1[TStateMachine].GetResult (System.Int16 token) [0x00002] in .\\Library\\PackageCache\\com.cysharp.unitask@5cc97c7f00\\Runtime\\CompilerServices\\StateMachineRunner.cs:218 \r\n  at Cysharp.Threading.Tasks.UniTask+Awaiter.GetResult () [0x00015] in .\\Library\\PackageCache\\com.cysharp.unitask@5cc97c7f00\\Runtime\\UniTask.cs:312 \r\n  at NTSD.Test.Editor.H10ResidentClosureDiagnostics+<>c.<PcBudgetRuntimeThreeSessionsPlay>b__74_0 () [0x00086] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\H10ResidentClosureDiagnostics.cs:3530 ",
+    "wrapperNonNullGuardOmitted": true,
+    "completeCycles": 0,
+    "validHotSamples": 0,
+    "formalPrepareReturned": true,
+    "playbackReached": false,
+    "pendingCancelReached": false,
+    "naturalDestroyGateReached": false,
+    "rerun": false
+  },
+  "cleanup": {
+    "failure": null,
+    "ownedObservedAtPublicShutdown": 22,
+    "returnStage": 10,
+    "returnNativeStillAlive": 22,
+    "emptyMapCompleteStage": 11,
+    "nextFrameOwnedGone": true,
+    "exactRemovedKeys": [
+      "NTSD.AudioFile::data\\016.wav"
+    ],
+    "genericIds": [
+      -1258522
+    ],
+    "fixtureNativeClipBaseline": [],
+    "fixtureNativeClipsAfter": [],
+    "configStateEqual": true,
+    "mmSettingsStateEqual": true,
+    "menuClean8": true,
+    "menuComponentStateEqual": true,
+    "doesNotCertifyRealBattleMap": true
+  },
+  "objectBudget": {
+    "reusedBytes": 228918567,
+    "limitBytes": 335544320,
+    "status": "PASS_BY_UNCHANGED_INPUT_REUSE",
+    "inputRows": 1682
+  },
+  "processBudgetMeasured": false,
+  "playerExecuted": false,
+  "androidOrH07Certified": false,
+  "newQ06BodyRead": false,
+  "goalQueueOrSubagentsStarted": false,
+  "nextReview": "NEXT-REVIEW.md"
+}

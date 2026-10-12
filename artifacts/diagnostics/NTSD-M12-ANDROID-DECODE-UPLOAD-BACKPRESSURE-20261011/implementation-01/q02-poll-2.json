@@ -1,0 +1,51 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "1cfcf77040d5403aa281a5d757078c67",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791712267819,
+      "finished_unix_ms": 1791712274578,
+      "last_update_unix_ms": 1791712274578,
+      "progress": {
+        "completed": 1,
+        "total": 10733,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791712273777,
+        "last_finished_test_full_name": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q02_ReservationFifoOversizeCancellationAndMoreThanSixLeases",
+        "last_finished_unix_ms": 1791712273811,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.4941522,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "Q02_ReservationFifoOversizeCancellationAndMoreThanSixLeases",
+            "fullName": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q02_ReservationFifoOversizeCancellationAndMoreThanSixLeases",
+            "state": "Passed",
+            "durationSeconds": 0.0342137,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

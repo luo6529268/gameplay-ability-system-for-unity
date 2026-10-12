@@ -49,6 +49,13 @@ namespace NTSD.App
         private NTSDSoundPlayer soundPlayer;
         private SparkRenderer sparkRenderer;
         private InputModule inputModule;
+        private bool battleUnloadPending;
+        private bool battleShutdownPending;
+        private int shutdownRequestVersion;
+        private UniTask<AsyncOperation> battleUnloadTask;
+        private UniTask<bool> battleShutdownTask;
+        private Scene battleUnloadScene;
+        private bool battleUnloadReturnToCharacterSelection;
 
         [Header("Runtime")]
         [SerializeField] private AppFlowState state = AppFlowState.MenuMain;
@@ -91,6 +98,7 @@ namespace NTSD.App
 
         protected override void OnSingletonDestroyed()
         {
+            shutdownRequestVersion++;
             TryShutdownBattleRuntimeBeforeSceneDestroy(out _);
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
@@ -403,11 +411,18 @@ namespace NTSD.App
 
         public AsyncOperation UnloadBattle()
         {
+            if (battleUnloadPending) return null;
+            if (CharacterAnimtorManager.TryGetInstance()?.HasPendingNativePrewarmWork == true)
+            {
+                UnloadBattleAfterDrainAsync(false).Forget();
+                return null;
+            }
             return UnloadBattleInternal(false);
         }
 
         public bool TryReturnToCharacterSelectionFromBattleResult()
         {
+            if (battleUnloadPending) return IsPendingBattleUnloadFor(true);
             if (state != AppFlowState.BattleRunning &&
                 state != AppFlowState.BattlePaused)
                 return false;
@@ -418,13 +433,23 @@ namespace NTSD.App
                 !battleScene.IsValid() || !battleScene.isLoaded)
                 return false;
 
+            if (CharacterAnimtorManager.TryGetInstance()?.HasPendingNativePrewarmWork == true)
+            {
+                // True means the close request was accepted; menu state changes only after unload completes.
+                UnloadBattleAfterDrainAsync(true).Forget();
+                return true;
+            }
             return UnloadBattleInternal(true) != null;
         }
 
         private AsyncOperation UnloadBattleInternal(bool returnToCharacterSelection)
         {
-            state = AppFlowState.BattleStopping;
+            if (battleUnloadPending) return null;
             var scene = SceneManager.GetSceneByName(battleSceneName);
+            if (!scene.IsValid() || !scene.isLoaded) return null;
+            int version = shutdownRequestVersion;
+            SimulationTickDriver driver = SimulationTickDriver.Instance;
+            state = AppFlowState.BattleStopping;
             if (!TryShutdownBattleRuntimeBeforeSceneDestroy(
                     out BattleRuntimeShutdownReport shutdownReport))
             {
@@ -435,11 +460,35 @@ namespace NTSD.App
                 return null;
             }
 
-            NTSD.TimeWheel.TimeWheel.DestroySharedInstance();
+            if (this == null || version != shutdownRequestVersion ||
+                !ReferenceEquals(driver, SimulationTickDriver.Instance) ||
+                SceneManager.GetSceneByName(battleSceneName) != scene) return null;
+            return FinishBattleSceneUnload(scene, returnToCharacterSelection);
+        }
 
-            if (!returnToCharacterSelection)
-                state = AppFlowState.MenuMain;
-            var op = SceneManager.UnloadSceneAsync(battleSceneName);
+        private AsyncOperation FinishBattleSceneUnload(Scene scene, bool returnToCharacterSelection)
+        {
+            NTSD.TimeWheel.TimeWheel.DestroySharedInstance();
+            int version = shutdownRequestVersion;
+            SimulationTickDriver driver = SimulationTickDriver.Instance;
+            battleUnloadPending = true;
+            battleUnloadScene = scene;
+            battleUnloadReturnToCharacterSelection = returnToCharacterSelection;
+            AsyncOperation op;
+            try { op = SceneManager.UnloadSceneAsync(scene); }
+            catch
+            {
+                battleUnloadPending = false;
+                battleUnloadScene = default;
+                throw;
+            }
+            if (op == null)
+            {
+                battleUnloadPending = false;
+                battleUnloadScene = default;
+                return null;
+            }
+            battleUnloadTask = UniTask.FromResult(op);
 
             if (menuUi == null)
             {
@@ -450,24 +499,115 @@ namespace NTSD.App
             {
                 op.completed += _ =>
                 {
-                    menuUi?.EnableMenuUiCamera(true);
-                    if (returnToCharacterSelection)
+                    if (this == null || version != shutdownRequestVersion || battleUnloadScene != scene)
+                        return;
+                    Scene currentScene = SceneManager.GetSceneByName(battleSceneName);
+                    SimulationTickDriver currentDriver = SimulationTickDriver.Instance;
+                    if ((currentScene.IsValid() && currentScene != scene) ||
+                        (currentDriver != null && !ReferenceEquals(currentDriver, driver)) ||
+                        (driver != null && driver.LifecycleState != BattleRuntimeLifecycleState.Stopped))
+                        return;
+                    try
                     {
-                        CharacterSelectionController selection =
-                            FindObjectOfType<CharacterSelectionController>(true);
-                        selection?.ResetAll();
-                        menuUi?.ShowSelectCharacter();
-                        state = AppFlowState.MenuSelectCharacter;
+                        menuUi?.EnableMenuUiCamera(true);
+                        if (returnToCharacterSelection)
+                        {
+                            CharacterSelectionController selection =
+                                FindObjectOfType<CharacterSelectionController>(true);
+                            selection?.ResetAll();
+                            menuUi?.ShowSelectCharacter();
+                            state = AppFlowState.MenuSelectCharacter;
+                        }
+                        else
+                        {
+                            menuUi?.ShowMainMenu();
+                            state = AppFlowState.MenuMain;
+                        }
+                        EnsureSingleEventSystem();
                     }
-                    else
+                    finally
                     {
-                        menuUi?.ShowMainMenu();
+                        battleUnloadPending = false;
+                        battleUnloadScene = default;
                     }
-                    EnsureSingleEventSystem();
                 };
             }
 
             return op;
+        }
+
+        public UniTask<AsyncOperation> UnloadBattleAfterDrainAsync(bool returnToCharacterSelection = false)
+        {
+            if (battleUnloadPending) return IsPendingBattleUnloadFor(returnToCharacterSelection)
+                ? battleUnloadTask : UniTask.FromResult<AsyncOperation>(null);
+            Scene scene = SceneManager.GetSceneByName(battleSceneName);
+            if (!scene.IsValid() || !scene.isLoaded) return UniTask.FromResult<AsyncOperation>(null);
+            battleUnloadScene = scene;
+            battleUnloadReturnToCharacterSelection = returnToCharacterSelection;
+            battleUnloadPending = true;
+            battleUnloadTask = UnloadBattleAfterDrainCoreAsync(returnToCharacterSelection).Preserve();
+            return battleUnloadTask;
+        }
+
+        private bool IsPendingBattleUnloadFor(bool returnToCharacterSelection)
+        {
+            return battleUnloadPending && battleUnloadReturnToCharacterSelection == returnToCharacterSelection &&
+                battleUnloadScene == SceneManager.GetSceneByName(battleSceneName);
+        }
+
+        private async UniTask<AsyncOperation> UnloadBattleAfterDrainCoreAsync(bool returnToCharacterSelection)
+        {
+            Scene scene = battleUnloadScene;
+            int version = shutdownRequestVersion;
+            AsyncOperation unload = null;
+            state = AppFlowState.BattleStopping;
+            try
+            {
+                if (!await TryShutdownBattleRuntimeBeforeSceneDestroyAsync() || this == null ||
+                    version != shutdownRequestVersion || !scene.IsValid() || !scene.isLoaded ||
+                    SceneManager.GetSceneByName(battleSceneName) != scene) return null;
+                unload = FinishBattleSceneUnload(scene, returnToCharacterSelection);
+                return unload;
+            }
+            finally
+            {
+                if (unload == null && version == shutdownRequestVersion && battleUnloadScene == scene)
+                {
+                    battleUnloadPending = false;
+                    battleUnloadScene = default;
+                }
+            }
+        }
+
+        public UniTask<bool> TryShutdownBattleRuntimeBeforeSceneDestroyAsync()
+        {
+            if (battleShutdownPending) return battleShutdownTask;
+            Scene scene = SceneManager.GetSceneByName(battleSceneName);
+            BattleBootstrap bootstrap = scene.IsValid() && scene.isLoaded ? FindBattleBootstrap(scene) : null;
+            SimulationTickDriver driver = SimulationTickDriver.Instance;
+            battleShutdownPending = true;
+            battleShutdownTask = ShutdownBattleRuntimeBeforeSceneDestroyCoreAsync(
+                scene, driver, bootstrap, shutdownRequestVersion).Preserve();
+            return battleShutdownTask;
+        }
+
+        private async UniTask<bool> ShutdownBattleRuntimeBeforeSceneDestroyCoreAsync(
+            Scene scene, SimulationTickDriver driver, BattleBootstrap bootstrap, int version)
+        {
+            try
+            {
+                if (driver == null) return TryShutdownBattleRuntimeBeforeSceneDestroy(out _);
+                BattleRuntimeShutdownReport report = await driver.ShutdownBattleRuntimeAsync();
+                if (this == null || version != shutdownRequestVersion ||
+                    !ReferenceEquals(driver, SimulationTickDriver.Instance) ||
+                    SceneManager.GetSceneByName(battleSceneName) != scene ||
+                    report.Status == BattleRuntimeShutdownStatus.Failed || !report.RuntimeStagesCompleted)
+                    return false;
+                bootstrap?.DisablePresentation();
+                return driver.CompleteBattleRuntimeShutdownAfterMapCleanup(
+                    bootstrap == null || bootstrap.IsRuntimeMapCleared).IsComplete;
+            }
+            finally { battleShutdownPending = false; }
         }
 
         public bool TryShutdownBattleRuntimeBeforeSceneDestroy(

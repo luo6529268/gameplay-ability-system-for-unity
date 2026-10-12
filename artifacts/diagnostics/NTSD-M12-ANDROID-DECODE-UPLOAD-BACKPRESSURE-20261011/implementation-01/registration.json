@@ -1,0 +1,13 @@
+{
+  "time": "2026-10-11T17:15:55.385075+08:00",
+  "operation": "OP-NTSD-M12-IMPLEMENTATION-20261011",
+  "backups": 17,
+  "sourceEditsYet": 0,
+  "changeStatus": "IN_PROGRESS",
+  "approvedAdditionalScripts": [
+    "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+    "Assets/NTSD/Scripts/App/AppManager.cs"
+  ],
+  "preflightContract": "PLAN.md original parameters and finite tests plus shutdown-review exact approved expansion",
+  "stateOwners": "manager operation: waiter1 leases bounded by work, close/drain once; Driver captured manager1 acrossstages1/2/5 noautocreate; App close request1 owner/token, cancelfallback and clear oncomplete; no battlehotpath allocation"
+}

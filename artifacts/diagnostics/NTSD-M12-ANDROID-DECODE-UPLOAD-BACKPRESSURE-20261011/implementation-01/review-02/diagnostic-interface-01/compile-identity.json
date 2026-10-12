@@ -1,0 +1,14 @@
+{
+  "utc": "2026-10-11T12:28:08.866922+00:00",
+  "status": "COMPILE_PASS",
+  "runtimeSha256": "a8874f8784d60efa30d627f61e4140a89ecc9466c6a80115024eae4e2c8cbb8b",
+  "editorSha256": "86b1c83cc80f46e13038f5782e759ef70cc3f4be767c347797e0b670e1dabb66",
+  "sourceSha256": "e3e9324a032a62e5e173a46ea071e5e25b406a372597d26a0f5eb8c8ed39f9ce",
+  "newEditorAssembly": true,
+  "productionAssemblyUnchanged": true,
+  "freshDomainReload": true,
+  "csharpCompilerErrorsObserved": 0,
+  "consoleReturnedExceptionEntries": 2,
+  "consoleScope": "Both returned entries are MCP Client handler exited, retained. This is not a clean Console or runtime PASS.",
+  "playRun": false
+}

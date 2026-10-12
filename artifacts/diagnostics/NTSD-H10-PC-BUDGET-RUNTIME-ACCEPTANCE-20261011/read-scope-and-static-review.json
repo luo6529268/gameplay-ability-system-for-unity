@@ -1,0 +1,30 @@
+{
+  "time": "2026-10-11T10:37:15.040499+08:00",
+  "oldDiagnosticBodyUnchanged": true,
+  "newDiagnosticSha256": "ea940c1caa5d344f3a141b9f6b71ea1a2cd05623c434a0c33ae5cdb5cb51c1e6",
+  "bodiesRead": [
+    "H10ResidentClosureDiagnostics named audio fixture/tests/helpers",
+    "SoundPresentationDispatchEditorTests named dispatch/voice/DriverScope/emitter tests",
+    "NTSDSoundPlayer publicprepare/presentation/voice/lifecycle and its direct audio helpers",
+    "SimulationTickDriver soundpublication/dispatch/diagnosticworld/owner/shutdown/presentationcapacity seams",
+    "SimulationWorld.QueueSound and capacity declarations",
+    "SimulationBattleBufferModule.Prepare/TryQueueSound",
+    "BattleRuntimeLifecycle declarations",
+    "BattleContentSource path resolution",
+    "installed EditModeLauncher.OpenNewScene",
+    "MMSoundManager Awake/Start initializer; read only"
+  ],
+  "q06ProducerBodiesRead": false,
+  "onlyCodeWritePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\H10ResidentClosureDiagnostics.cs",
+  "staticCorrections": [
+    "constructor side effects moved after fixture is captured by caller",
+    "owned identities captured before first public shutdown",
+    "hot first-difference stored in finally",
+    "map completion constrained to isolated map-free fixture"
+  ],
+  "scopeLimits": [
+    "diagnostic World, not actual1000 entities",
+    "320MiB object domain reused;2/3GiB game-process unmeasured",
+    "real cues cover retrigger;no new65identity saturation claim"
+  ]
+}

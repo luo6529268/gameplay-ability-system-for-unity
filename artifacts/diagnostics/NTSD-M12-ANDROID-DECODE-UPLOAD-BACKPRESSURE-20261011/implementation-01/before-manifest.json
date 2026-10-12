@@ -1,0 +1,148 @@
+{
+  "time": "2026-10-11T17:15:46.035599+08:00",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Manager\\CharacterAnimtorManager.cs",
+      "sha256": "6990b2534ca6c832ab50c5fd692e3275ca335b2e2c77c1502bcc85eaa394ea34",
+      "bytes": 213082,
+      "backup": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/backups/00.before.bin",
+      "gitStatus": ""
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Runtime/BMPLoader.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Runtime\\BMPLoader.cs",
+      "sha256": "d94a25e9d70cb658366fc5539f345d0dfadb21e5354588bf2d39aca9ee6cdaaf",
+      "bytes": 24332,
+      "backup": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/backups/01.before.bin",
+      "gitStatus": ""
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+      "sha256": "b8600e56b3325fe6f27c35a9f62b6c4e08b0e02001b0ef8c7eeb7097defafbf7",
+      "bytes": 123513,
+      "backup": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/backups/02.before.bin",
+      "gitStatus": ""
+    },
+    {
+      "path": "Assets/NTSD/Scripts/App/AppManager.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\App\\AppManager.cs",
+      "sha256": "3cd50eabc70527a5633bab5dc644e479bfe4110ba476342b9c7a09e9c38680bc",
+      "bytes": 20716,
+      "backup": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/backups/03.before.bin",
+      "gitStatus": ""
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11AtomicPublicationEditorTests.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28B11AtomicPublicationEditorTests.cs",
+      "sha256": "ca88ce66b326aa60e695db179af8098b85737520827c8dbd610f16f5d129c737",
+      "bytes": 64145,
+      "backup": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/backups/04.before.bin",
+      "gitStatus": ""
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11SourceCacheCallerEditorTests.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28B11SourceCacheCallerEditorTests.cs",
+      "sha256": "35e25415c6e13e463db56eed5accbb22a1c9a1d158f4bf8bdf0bb3d677d4eef1",
+      "bytes": 40266,
+      "backup": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/backups/05.before.bin",
+      "gitStatus": ""
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "sha256": "c224178bbc736b75c2aa9241b384e2f717f3505d705d28a305d3c4a923a88772",
+      "bytes": 162568,
+      "backup": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/backups/06.before.bin",
+      "gitStatus": "M docs/ai/FILE-OPERATIONS/INDEX.md"
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CURRENT-AUTHORITY.md",
+      "sha256": "555377e3430065654cf260ab33c98fd3badf50dfe6f502958820c7cd1b1f3dde",
+      "bytes": 436841,
+      "backup": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/backups/07.before.bin",
+      "gitStatus": "M docs/ai/CURRENT-AUTHORITY.md"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "sha256": "84869a90a344c0cd7eb33e985320061b0ef4db01e088da4c31bb326eee8fe7c0",
+      "bytes": 1718214,
+      "backup": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/backups/08.before.bin",
+      "gitStatus": "M docs/ai/STATE.md"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "sha256": "0ec3f6bf9bb176dcd93cff9182738acedb6eef8fc6c9bf53a180b48cccd61fcf",
+      "bytes": 785321,
+      "backup": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/backups/09.before.bin",
+      "gitStatus": "M docs/ai/CHANGE-LEDGER.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "sha256": "033386e315e36f790c3610b34c0a11f4325d93bcd2cad54df99ac86dea4959c2",
+      "bytes": 1657059,
+      "backup": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/backups/10.before.bin",
+      "gitStatus": "M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-12-decode-upload-byte-backpressure.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\m-12-decode-upload-byte-backpressure.md",
+      "sha256": "e75292c0d9833d5a118e8d1bf375e7073105c82eafd124d08ca35f4c31e78c1a",
+      "bytes": 7474,
+      "backup": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/backups/11.before.bin",
+      "gitStatus": "M Assets/NTSD/Docs/android-mobile-readiness/m-12-decode-upload-byte-backpressure.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "sha256": "350cc6823a66c49d46950b41989e5a398b8b9b6c46c680bd4e43a8636ae1f43c",
+      "bytes": 277973,
+      "backup": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/backups/12.before.bin",
+      "gitStatus": "M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\DEPENDENCIES.md",
+      "sha256": "7d1903695a2c1c52de280a36ad5509e412555c889f11548c722da9902d51e59e",
+      "bytes": 32662,
+      "backup": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/backups/13.before.bin",
+      "gitStatus": "M docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011.md",
+      "sha256": "25c51f0ce867be9b00f6d852641a7caacc053ac05a028bca07cf5e9c4108c48c",
+      "bytes": 3407,
+      "backup": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/backups/14.before.bin",
+      "gitStatus": "?? docs/ai/TASKS/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011.md"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001.md",
+      "sha256": "ef1b51cc82b3c7b11051d94a65d2fc0bb4109965e9124bfe78b11faee8dd7b83",
+      "bytes": 4524,
+      "backup": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/backups/15.before.bin",
+      "gitStatus": "?? docs/ai/CHANGE-RECORDS/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-runtime-ordered-shutdown-contract.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-runtime-ordered-shutdown-contract.md",
+      "sha256": "9c59833dd718634dca484f567c60c65f46920c618de1fb99f5fe8301397c97a5",
+      "bytes": 20741,
+      "backup": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/backups/16.before.bin",
+      "gitStatus": ""
+    }
+  ],
+  "newPaths": [
+    "Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs.meta"
+  ],
+  "head": "8d55c6b68912560c7af755c424b41d3464a1921a",
+  "staged": "",
+  "command": "Recorded exact-patch source edits via apply_patch or SHA-guarded Python replacement, no whole-file restore. Per-revision backups before subsequent changes. Unity existingPID39108/TCP6402 read state, focused import/compile/run_tests only after safe idle. No Scene/resource/Settings/oldtask writes."
+}

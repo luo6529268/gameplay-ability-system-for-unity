@@ -1,0 +1,32 @@
+{
+  "time": "2026-10-11T11:26:25.421619+00:00",
+  "codeWrites": 0,
+  "unityCalls": 0,
+  "compileRuns": 0,
+  "testRuns": 0,
+  "newABBA": 0,
+  "groups": {
+    "previousApprovedReadFiles": {
+      "count": 10,
+      "drift": []
+    },
+    "sourceMetaAssemblies": {
+      "count": 11,
+      "drift": []
+    },
+    "protected": {
+      "count": 93,
+      "drift": []
+    },
+    "originalQ05AndAbba": {
+      "count": 6,
+      "drift": []
+    },
+    "thisReadAndSuppliedSources": {
+      "count": 8,
+      "drift": []
+    }
+  },
+  "verifiedCurrentDocumentPreimages": 11,
+  "fixtureFilesUnchanged": 6
+}

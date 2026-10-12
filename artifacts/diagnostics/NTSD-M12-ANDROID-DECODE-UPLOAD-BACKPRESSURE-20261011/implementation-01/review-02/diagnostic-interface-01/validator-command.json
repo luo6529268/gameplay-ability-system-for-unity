@@ -1,0 +1,14 @@
+{
+  "command": [
+    "C:\\Users\\Logan\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe",
+    "-NoProfile",
+    "-File",
+    "Tools/Validate-ChangeLedger.ps1",
+    "-RepositoryRoot",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity"
+  ],
+  "startedUtc": "2026-10-11T12:31:03.736094+00:00",
+  "endedUtc": "2026-10-11T12:31:23.224722+00:00",
+  "exitCode": 0,
+  "output": "validator.txt"
+}

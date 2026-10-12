@@ -1,0 +1,16 @@
+{
+  "utc": "2026-10-11T12:31:04.068934+00:00",
+  "protectedCount": 93,
+  "protectedDrift": [],
+  "oldRawCount": 6,
+  "oldRawDrift": [],
+  "backupCount": 27,
+  "backupDrift": [],
+  "scopedFingerprintChanges": [
+    "Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs",
+    "Library/ScriptAssemblies/Assembly-CSharp-Editor.dll"
+  ],
+  "originalPrefixByteEqual": true,
+  "appendedPayloadByteEqual": true,
+  "futurePlayRootExists": false
+}

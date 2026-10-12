@@ -1,0 +1,228 @@
+{
+  "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q02B_OverCeilingRejectsBeforeDecodePreservingPublication",
+  "released": true,
+  "resources": [
+    {
+      "InstanceId": -1266388,
+      "Type": "Sprite",
+      "Name": "sprite_0_0",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1266394,
+      "Type": "Sprite",
+      "Name": "spark_00",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1266396,
+      "Type": "Sprite",
+      "Name": "spark_01",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1266398,
+      "Type": "Sprite",
+      "Name": "spark_02",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1266400,
+      "Type": "Sprite",
+      "Name": "spark_03",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1266402,
+      "Type": "Sprite",
+      "Name": "spark_04",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1266404,
+      "Type": "Sprite",
+      "Name": "spark_05",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1266406,
+      "Type": "Sprite",
+      "Name": "spark_06",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1266408,
+      "Type": "Sprite",
+      "Name": "spark_07",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1266410,
+      "Type": "Sprite",
+      "Name": "spark_08",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1266412,
+      "Type": "Sprite",
+      "Name": "spark_09",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1266414,
+      "Type": "Sprite",
+      "Name": "spark_10",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1266416,
+      "Type": "Sprite",
+      "Name": "spark_11",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1266418,
+      "Type": "Sprite",
+      "Name": "spark_12",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1266420,
+      "Type": "Sprite",
+      "Name": "spark_13",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1266422,
+      "Type": "Sprite",
+      "Name": "spark_14",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1266424,
+      "Type": "Sprite",
+      "Name": "spark_15",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1266426,
+      "Type": "Sprite",
+      "Name": "spark_16",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1266428,
+      "Type": "Sprite",
+      "Name": "spark_17",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1266430,
+      "Type": "Sprite",
+      "Name": "spark_18",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1266432,
+      "Type": "Sprite",
+      "Name": "spark_19",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1266386,
+      "Type": "Texture2D",
+      "Name": "body",
+      "OwnerPhase": "publishedOwnedResources",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1266392,
+      "Type": "Texture2D",
+      "Name": "SPARK",
+      "OwnerPhase": "publishedOwnedResources",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1266434,
+      "Type": "Texture2D",
+      "Name": "NTSD Battle Atlas Page 0",
+      "OwnerPhase": "publishedOwnedResources",
+      "Generation": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587|D7B2E9408B459A759E2319A2D6209ABA366F9D4662919FE818F407F18F940D73|AD0A98E41698F4BE2CADE643629FDCB997A7E7E93F18B7CE0A3DE33C7C735F3D",
+      "SourceRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\2d0ff0dcbecc4166a46dac905b283587",
+      "destroyed": true
+    }
+  ],
+  "baselineNativeObjectCount": 909,
+  "oldNativeResidue": "UNKNOWN_UNTOUCHED",
+  "priorManagerRestored": true,
+  "priorDataRestored": true,
+  "priorUiRestored": true,
+  "configRestored": true
+}

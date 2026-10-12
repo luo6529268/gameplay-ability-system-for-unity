@@ -1,0 +1,36 @@
+{
+  "operation": "OP-NTSD-M12-IMPLEMENTATION-20261011",
+  "reason": "Approved test evidence output routing repair; original Editor compilation replaces derived assemblies only",
+  "files": [
+    {
+      "path": "Library/ScriptAssemblies/Assembly-CSharp.dll",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\resume-01\\backups\\compile-0.before.bin",
+      "sha256": "9255bf3da5973d1062ae425d0ba4157c0afa135a463e024c70e4b7b15f70278f",
+      "mtime": 1791712026.8201942
+    },
+    {
+      "path": "Library/ScriptAssemblies/Assembly-CSharp.pdb",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\resume-01\\backups\\compile-1.before.bin",
+      "sha256": "8e2bde769c02d7328459bd33f2cee7d84a674efb6054e5b847f67e4af1582e07",
+      "mtime": 1791712026.8171926
+    },
+    {
+      "path": "Library/ScriptAssemblies/Assembly-CSharp-Editor.dll",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\resume-01\\backups\\compile-2.before.bin",
+      "sha256": "c042eefd9931f4e3e7b4eceb7881454f0a8458116b950c278c15b9adfbf5efeb",
+      "mtime": 1791712037.5405066
+    },
+    {
+      "path": "Library/ScriptAssemblies/Assembly-CSharp-Editor.pdb",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\resume-01\\backups\\compile-3.before.bin",
+      "sha256": "9ae364f16040bd384e24d553b81456605eb57195c298323f0f86bc12327da464",
+      "mtime": 1791712037.5365064
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\resume-01\\backups\\compile-4.before.bin",
+      "sha256": "73d69a09e00d114778150c4b9ff1bd1918798889d423026293a651c2a8e22d33",
+      "mtime": 1791712342.811353
+    }
+  ]
+}

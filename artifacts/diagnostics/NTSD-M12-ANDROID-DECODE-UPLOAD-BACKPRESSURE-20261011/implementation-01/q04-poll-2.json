@@ -1,0 +1,51 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "763d19767a8f441a8cf9bf508f3f9e87",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791712321328,
+      "finished_unix_ms": 1791712330265,
+      "last_update_unix_ms": 1791712330265,
+      "progress": {
+        "completed": 1,
+        "total": 10733,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791712327421,
+        "last_finished_test_full_name": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q04_ExistingSynchronousShutdownAndPixels",
+        "last_finished_unix_ms": 1791712328456,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 1.4714916,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "Q04_ExistingSynchronousShutdownAndPixels",
+            "fullName": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q04_ExistingSynchronousShutdownAndPixels",
+            "state": "Passed",
+            "durationSeconds": 1.0346304,
+            "message": null,
+            "stackTrace": null,
+            "output": "<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>\r\n<color=cyan>[BMP 解析] 角色=NativeStoppedShared_A, 找到 1 个精灵文件定义</color>\r\n<color=cyan>[BMP 文件] c/body.png -> I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\7fdc3ab1ad33417d99b9e89d2a5a4dc2\\vfs\\c\\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>\r\n<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>\r\n<color=cyan>[BMP 解析] 角色=NativeStoppedShared_B, 找到 1 个精灵文件定义</color>\r\n<color=cyan>[BMP 文件] c/body.png -> I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\7fdc3ab1ad33417d99b9e89d2a5a4dc2\\vfs\\c\\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>\r\n<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>\r\n<color=cyan>[BMP 解析] 角色=NativeStoppedShared_A, 找到 1 个精灵文件定义</color>\r\n<color=cyan>[BMP 文件] c/body.png -> I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\7fdc3ab1ad33417d99b9e89d2a5a4dc2\\vfs\\c\\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>\r\n<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>\r\n<color=cyan>[BMP 解析] 角色=NativeStoppedShared_B, 找到 1 个精灵文件定义</color>\r\n<color=cyan>[BMP 文件] c/body.png -> I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AtomicPublication\\7fdc3ab1ad33417d99b9e89d2a5a4dc2\\vfs\\c\\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>\r\n<color=cyan>开始加载精灵，角色配置数量: 2</color>\r\n<color=cyan>共 2 个文件需要处理</color>\r\n[BMPLoader] 调色板偏移: 54, 最大颜色: 256, 实际颜色: 6\r\n"
+          }
+        ]
+      }
+    }
+  }
+}

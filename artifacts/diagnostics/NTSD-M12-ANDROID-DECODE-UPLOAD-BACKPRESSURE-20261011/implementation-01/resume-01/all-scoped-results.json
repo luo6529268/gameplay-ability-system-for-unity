@@ -1,0 +1,90 @@
+{
+  "finalRows": [
+    {
+      "key": "q01",
+      "evidence": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\q01-result.json",
+      "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q01_DescriptorIdentityDimensionsAndOriginalPixels",
+      "result": "Passed",
+      "reused": true
+    },
+    {
+      "key": "q02",
+      "evidence": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\q02-result.xml",
+      "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q02_ReservationFifoOversizeCancellationAndMoreThanSixLeases",
+      "result": "Passed",
+      "reused": true
+    },
+    {
+      "key": "q02b",
+      "evidence": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\q02b-result.xml",
+      "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q02B_OverCeilingRejectsBeforeDecodePreservingPublication",
+      "result": "Passed",
+      "reused": true
+    },
+    {
+      "key": "q03",
+      "evidence": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\q03-result.xml",
+      "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q03_RealDecodeShutdownPendingResumeAndStickyFailure",
+      "result": "Passed",
+      "reused": true
+    },
+    {
+      "key": "q03b",
+      "evidence": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\q03b-result.xml",
+      "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q03B_CompetingGenerationsWaitForOldWorker",
+      "result": "Passed",
+      "reused": true
+    },
+    {
+      "key": "q03c",
+      "evidence": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\q03c-result.xml",
+      "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q03C_FaultCannotFinishWhileAnotherWorkerIsBlocked",
+      "result": "Passed",
+      "reused": true
+    },
+    {
+      "key": "q03d",
+      "evidence": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\q03d-result.xml",
+      "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q03D_AppAsyncCloseSharesPendingOwner",
+      "result": "Passed",
+      "reused": true
+    },
+    {
+      "key": "q04",
+      "evidence": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\q04-result.xml",
+      "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q04_ExistingSynchronousShutdownAndPixels",
+      "result": "Passed",
+      "reused": true
+    },
+    {
+      "key": "q05",
+      "evidence": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\resume-01\\q05-result.xml",
+      "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q05_ExistingSourceAndAtlasPixelOracle",
+      "result": "Passed",
+      "reused": false
+    },
+    {
+      "key": "q06",
+      "evidence": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\resume-01\\q06-result.xml",
+      "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q06_PublicConfiguredOwnerAndFallback",
+      "result": "Passed",
+      "reused": false
+    },
+    {
+      "key": "q06b",
+      "evidence": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\resume-01\\q06b-result.xml",
+      "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q06B_SixRealSheetsGateSharedAndOffPixels",
+      "result": "Passed",
+      "reused": false
+    },
+    {
+      "key": "q07",
+      "evidence": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\resume-01\\q07-result.xml",
+      "test": "NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q07_OnlyOnceSameInputAbba",
+      "result": "Passed",
+      "reused": false
+    }
+  ],
+  "priorQ05Result": "Failed",
+  "priorQ05Label": "Error"
+}

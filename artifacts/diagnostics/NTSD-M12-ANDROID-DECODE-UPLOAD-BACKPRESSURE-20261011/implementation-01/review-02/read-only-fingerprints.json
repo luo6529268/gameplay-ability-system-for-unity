@@ -1,0 +1,88 @@
+{
+  "codeAndAssemblies": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "sha256": "fc5cc10c6dde66bb380e9e3d1f770d8ad9fcfc53f029d49831eadd37449c3d3f",
+      "bytes": 230289
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Runtime/BMPLoader.cs",
+      "sha256": "7c305c02f52a50acd109a1c3aea045e70dab5985b2345eba8dde6a7e8e86ab60",
+      "bytes": 30413
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+      "sha256": "412a332a7d553c0e1b5b319f2b9683405586fc10b670373db60f7efc17db4241",
+      "bytes": 129635
+    },
+    {
+      "path": "Assets/NTSD/Scripts/App/AppManager.cs",
+      "sha256": "965288ab21bd3ad839b643b1a909aa5324d3ca6b7a13803e77684d44c5493f81",
+      "bytes": 24683
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/H08ResidentVisualMemoryDiagnostics.cs",
+      "sha256": "1054fcde0e00599359ef9a89846a6e25832699d93b41584805e0ab7b05b52dc7",
+      "bytes": 45034
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs",
+      "sha256": "56ac00b0b837a702899fa9cefe737d544562a891a84c8b37f785445d91559350",
+      "bytes": 30936
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11AtomicPublicationEditorTests.cs",
+      "sha256": "1b6adc22ac9b95a665a656cc7208293113bba281a3259bdd3b011243a9a9bdc1",
+      "bytes": 64728
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11SourceCacheCallerEditorTests.cs",
+      "sha256": "e003a7d76955d6b7855077d1e2fd3476e9f19e4b6d30d169a692fcc3db5e171c",
+      "bytes": 40630
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs.meta",
+      "sha256": "5dc841a7d989a6ed8a6f7743b749d65bd60b19522fd321a2ab5b894b8be1169f",
+      "bytes": 254
+    },
+    {
+      "path": "Library/ScriptAssemblies/Assembly-CSharp.dll",
+      "sha256": "9255bf3da5973d1062ae425d0ba4157c0afa135a463e024c70e4b7b15f70278f",
+      "bytes": 4326912
+    },
+    {
+      "path": "Library/ScriptAssemblies/Assembly-CSharp-Editor.dll",
+      "sha256": "5e4faa0b8bcfd3c0f7465b44d2480336d18678c854655b59118c5bc4fd651d86",
+      "bytes": 7838720
+    }
+  ],
+  "rawEvidence": [
+    {
+      "path": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\q05-result.xml",
+      "sha256": "73d69a09e00d114778150c4b9ff1bd1918798889d423026293a651c2a8e22d33"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\resume-01\\abba-leg-1-4ad5999715b84f5082fb96f172a446de.json",
+      "sha256": "d2b394081a6652cf4e2884ab60c249de52ff7be93bd99705e7deefba5aa8a523"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\resume-01\\abba-leg-2-4ad5999715b84f5082fb96f172a446de.json",
+      "sha256": "ba3b415ba58e313bb4174ba972df6ebbbfcb62e4138415c8f7a28bd143726353"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\resume-01\\abba-leg-3-4ad5999715b84f5082fb96f172a446de.json",
+      "sha256": "c4e585ad5cebbc0219622838c21f39184a20528fae8c8f28673bcf1656c2ab64"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\resume-01\\abba-leg-4-4ad5999715b84f5082fb96f172a446de.json",
+      "sha256": "109a0cad802a060b24e161337fe384b102c5ae92c69813dd8bb09d9fdb10703d"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\resume-01\\abba-result-4ad5999715b84f5082fb96f172a446de.json",
+      "sha256": "ce1c4505a23bba7176f2149e14fa821bfe2e471f4d8eab3b6c6b402ac663a10c"
+    }
+  ],
+  "executorProtectedCount": 93,
+  "executorDrift": [],
+  "reviewerProtectedVerification": "NOT_CLAIMED"
+}

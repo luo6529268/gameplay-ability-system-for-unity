@@ -1,0 +1,16 @@
+{
+  "time": "2026-10-11T17:42:47.984438+08:00",
+  "command": "audited incremental patch; no rollback/delete",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "sha256": "c80ffd37e126bc48d6b76d76c2eae5bd73814d40b2a1d4b7c240b6806b6f26ca",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\backups\\revision-06-compile-repair-00.before.bin"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs",
+      "sha256": "af4f47f34c88fd64765ce31c10b7ab16baa15ae0a284f71e014fc90f75c8545b",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\backups\\revision-06-compile-repair-01.before.bin"
+    }
+  ]
+}

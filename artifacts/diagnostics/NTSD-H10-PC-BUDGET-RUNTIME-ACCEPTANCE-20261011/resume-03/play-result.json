@@ -1,0 +1,709 @@
+{
+  "failure": null,
+  "cleanupFailure": null,
+  "rows": [
+    {
+      "stage": "fixture-created",
+      "routes": [
+        {
+          "cue": "c/jira/w/e3.wav",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\c\\jira\\w\\e3.wav",
+          "key": "NTSD.AudioFile::c\\jira\\w\\e3.wav",
+          "exists": false
+        },
+        {
+          "cue": "c/kar/w/t.wav",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\c\\kar\\w\\t.wav",
+          "key": "NTSD.AudioFile::c\\kar\\w\\t.wav",
+          "exists": false
+        },
+        {
+          "cue": "c/dan/w/t.wav",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\c\\dan\\w\\t.wav",
+          "key": "NTSD.AudioFile::c\\dan\\w\\t.wav",
+          "exists": false
+        },
+        {
+          "cue": "data/001.wav",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\001.wav",
+          "key": "NTSD.AudioFile::data\\001.wav",
+          "exists": false
+        },
+        {
+          "cue": "c/kim/w/a1.wav",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\c\\kim\\w\\a1.wav",
+          "key": "NTSD.AudioFile::c\\kim\\w\\a1.wav",
+          "exists": false
+        },
+        {
+          "cue": "SFX_001",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_001",
+          "key": "NTSD.Audio::SFX_001",
+          "exists": false
+        },
+        {
+          "cue": "SFX_002",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_002",
+          "key": "NTSD.Audio::SFX_002",
+          "exists": false
+        },
+        {
+          "cue": "SFX_004",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_004",
+          "key": "NTSD.Audio::SFX_004",
+          "exists": false
+        },
+        {
+          "cue": "SFX_006",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_006",
+          "key": "NTSD.Audio::SFX_006",
+          "exists": false
+        },
+        {
+          "cue": "data\\016.wav",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\016.wav",
+          "key": "NTSD.AudioFile::data\\016.wav",
+          "exists": true
+        },
+        {
+          "cue": "SFX_016",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_016",
+          "key": "NTSD.Audio::SFX_016",
+          "exists": false
+        },
+        {
+          "cue": "SFX_010",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_010",
+          "key": "NTSD.Audio::SFX_010",
+          "exists": false
+        },
+        {
+          "cue": "SFX_011",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_011",
+          "key": "NTSD.Audio::SFX_011",
+          "exists": false
+        },
+        {
+          "cue": "SFX_017",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_017",
+          "key": "NTSD.Audio::SFX_017",
+          "exists": false
+        },
+        {
+          "cue": "SFX_020",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_020",
+          "key": "NTSD.Audio::SFX_020",
+          "exists": false
+        },
+        {
+          "cue": "SFX_021",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_021",
+          "key": "NTSD.Audio::SFX_021",
+          "exists": false
+        },
+        {
+          "cue": "SFX_025",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_025",
+          "key": "NTSD.Audio::SFX_025",
+          "exists": false
+        },
+        {
+          "cue": "SFX_032",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_032",
+          "key": "NTSD.Audio::SFX_032",
+          "exists": false
+        },
+        {
+          "cue": "SFX_033",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_033",
+          "key": "NTSD.Audio::SFX_033",
+          "exists": false
+        },
+        {
+          "cue": "SFX_039",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_039",
+          "key": "NTSD.Audio::SFX_039",
+          "exists": false
+        },
+        {
+          "cue": "SFX_065",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_065",
+          "key": "NTSD.Audio::SFX_065",
+          "exists": false
+        },
+        {
+          "cue": "SFX_066",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_066",
+          "key": "NTSD.Audio::SFX_066",
+          "exists": false
+        },
+        {
+          "cue": "SFX_068",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_068",
+          "key": "NTSD.Audio::SFX_068",
+          "exists": false
+        },
+        {
+          "cue": "SFX_085",
+          "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\SFX_085",
+          "key": "NTSD.Audio::SFX_085",
+          "exists": false
+        }
+      ],
+      "allowedKeys": [
+        "NTSD.AudioFile::data\\016.wav"
+      ],
+      "soundRoot": "NTSD/Sound",
+      "controller": "null; verified real empty AudioList fallback",
+      "noFullCatalog": true,
+      "builtinsAddedByPublicPrepare": true
+    },
+    {
+      "stage": "diagnostic-owner-before-await",
+      "capacity": 400,
+      "publishedCapacity": 51200,
+      "profile": "Authority400; audio requests only"
+    },
+    {
+      "stage": "prepared",
+      "cycle": 1,
+      "generation": 2,
+      "ownedIds": [
+        -1263812,
+        -1263798,
+        -1263802,
+        -1263806,
+        -1263810,
+        -1263816,
+        -1263820,
+        -1263824,
+        -1263828,
+        -1263834,
+        -1263838,
+        -1263842,
+        -1263846,
+        -1263850,
+        -1263854,
+        -1263858,
+        -1263862,
+        -1263866,
+        -1263870,
+        -1263874,
+        -1263878,
+        -1263882
+      ],
+      "sourceIds": [
+        -1263812
+      ],
+      "outputIds": [
+        -1263798,
+        -1263802,
+        -1263806,
+        -1263810,
+        -1263816,
+        -1263820,
+        -1263824,
+        -1263828,
+        -1263834,
+        -1263838,
+        -1263842,
+        -1263846,
+        -1263850,
+        -1263854,
+        -1263858,
+        -1263862,
+        -1263866,
+        -1263870,
+        -1263874,
+        -1263878,
+        -1263882
+      ],
+      "ownedBytes": 8431640,
+      "nonmonoCountedOnce": true,
+      "cacheCount": 1,
+      "genericId": -1263830,
+      "genericKey": "NTSD.AudioFile::data\\016.wav",
+      "genericSourcePath": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\016.wav",
+      "processScope": "Prior Unity Process.PrivateMemorySize64 zero unavailable; process budget not measured here"
+    },
+    {
+      "stage": "hot-complete",
+      "cycle": 1,
+      "measuredTicks": 7,
+      "actualFrames": 10,
+      "sameFrameBatchReplay": true,
+      "expectedVoiceCapacity": 64
+    },
+    {
+      "stage": "play-evidence",
+      "cycle": 1,
+      "voiceEnabled": true,
+      "voicePlayingObserved": true,
+      "listenerEnabled": true,
+      "outputMax": 1.0,
+      "outputSamples": 4096,
+      "hearingVerified": false,
+      "genericId": -1263830,
+      "genericVoiceEnabled": true,
+      "waveformStatus": "NONZERO_OUTPUT_OBSERVED"
+    },
+    {
+      "stage": "public-shutdown-return",
+      "label": "cycle-1",
+      "report": {
+        "Status": 0,
+        "CompletedStage": 10,
+        "FailureReason": "",
+        "DiscardedObjectPointTasks": 0,
+        "ReturnedRenderers": 0,
+        "ReturnedSpriteRenderers": 0,
+        "RemainingWorldObjects": 0,
+        "RemainingRuntimeSlots": 0,
+        "RemainingPoolBorrowers": 0,
+        "RuntimeStagesCompleted": true,
+        "IsComplete": false
+      },
+      "ids": [
+        -1263812,
+        -1263798,
+        -1263802,
+        -1263806,
+        -1263810,
+        -1263816,
+        -1263820,
+        -1263824,
+        -1263828,
+        -1263834,
+        -1263838,
+        -1263842,
+        -1263846,
+        -1263850,
+        -1263854,
+        -1263858,
+        -1263862,
+        -1263866,
+        -1263870,
+        -1263874,
+        -1263878,
+        -1263882
+      ],
+      "pendingAtPublicShutdownReturn": 0,
+      "aliveAtReturn": 22,
+      "tailDrained": true,
+      "observationPoint": "Entire public ShutdownBattleRuntime returned (stage10); not a separate stage5 sample"
+    },
+    {
+      "stage": "drained-next-frame",
+      "label": "cycle-1",
+      "complete": {
+        "Status": 1,
+        "CompletedStage": 11,
+        "FailureReason": "",
+        "DiscardedObjectPointTasks": 0,
+        "ReturnedRenderers": 0,
+        "ReturnedSpriteRenderers": 0,
+        "RemainingWorldObjects": 0,
+        "RemainingRuntimeSlots": 0,
+        "RemainingPoolBorrowers": 0,
+        "RuntimeStagesCompleted": true,
+        "IsComplete": true
+      },
+      "ownedGone": true,
+      "mapBoundary": "Isolated empty diagnostic world; no scene map carrier. Not loaded Battle map teardown."
+    },
+    {
+      "stage": "diagnostic-owner-before-await",
+      "capacity": 400,
+      "publishedCapacity": 51200,
+      "profile": "Authority400; audio requests only"
+    },
+    {
+      "stage": "prepared",
+      "cycle": 2,
+      "generation": 6,
+      "ownedIds": [
+        -1263930,
+        -1263916,
+        -1263920,
+        -1263924,
+        -1263928,
+        -1263934,
+        -1263938,
+        -1263942,
+        -1263946,
+        -1263950,
+        -1263954,
+        -1263958,
+        -1263962,
+        -1263966,
+        -1263970,
+        -1263974,
+        -1263978,
+        -1263982,
+        -1263986,
+        -1263990,
+        -1263994,
+        -1263998
+      ],
+      "sourceIds": [
+        -1263930
+      ],
+      "outputIds": [
+        -1263916,
+        -1263920,
+        -1263924,
+        -1263928,
+        -1263934,
+        -1263938,
+        -1263942,
+        -1263946,
+        -1263950,
+        -1263954,
+        -1263958,
+        -1263962,
+        -1263966,
+        -1263970,
+        -1263974,
+        -1263978,
+        -1263982,
+        -1263986,
+        -1263990,
+        -1263994,
+        -1263998
+      ],
+      "ownedBytes": 8431640,
+      "nonmonoCountedOnce": true,
+      "cacheCount": 1,
+      "genericId": -1263830,
+      "genericKey": "NTSD.AudioFile::data\\016.wav",
+      "genericSourcePath": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\016.wav",
+      "processScope": "Prior Unity Process.PrivateMemorySize64 zero unavailable; process budget not measured here"
+    },
+    {
+      "stage": "hot-complete",
+      "cycle": 2,
+      "measuredTicks": 7,
+      "actualFrames": 10,
+      "sameFrameBatchReplay": true,
+      "expectedVoiceCapacity": 64
+    },
+    {
+      "stage": "play-evidence",
+      "cycle": 2,
+      "voiceEnabled": true,
+      "voicePlayingObserved": true,
+      "listenerEnabled": true,
+      "outputMax": 1.0,
+      "outputSamples": 4096,
+      "hearingVerified": false,
+      "genericId": -1263830,
+      "genericVoiceEnabled": true,
+      "waveformStatus": "NONZERO_OUTPUT_OBSERVED"
+    },
+    {
+      "stage": "public-shutdown-return",
+      "label": "cycle-2",
+      "report": {
+        "Status": 0,
+        "CompletedStage": 10,
+        "FailureReason": "",
+        "DiscardedObjectPointTasks": 0,
+        "ReturnedRenderers": 0,
+        "ReturnedSpriteRenderers": 0,
+        "RemainingWorldObjects": 0,
+        "RemainingRuntimeSlots": 0,
+        "RemainingPoolBorrowers": 0,
+        "RuntimeStagesCompleted": true,
+        "IsComplete": false
+      },
+      "ids": [
+        -1263930,
+        -1263916,
+        -1263920,
+        -1263924,
+        -1263928,
+        -1263934,
+        -1263938,
+        -1263942,
+        -1263946,
+        -1263950,
+        -1263954,
+        -1263958,
+        -1263962,
+        -1263966,
+        -1263970,
+        -1263974,
+        -1263978,
+        -1263982,
+        -1263986,
+        -1263990,
+        -1263994,
+        -1263998
+      ],
+      "pendingAtPublicShutdownReturn": 0,
+      "aliveAtReturn": 22,
+      "tailDrained": true,
+      "observationPoint": "Entire public ShutdownBattleRuntime returned (stage10); not a separate stage5 sample"
+    },
+    {
+      "stage": "drained-next-frame",
+      "label": "cycle-2",
+      "complete": {
+        "Status": 1,
+        "CompletedStage": 11,
+        "FailureReason": "",
+        "DiscardedObjectPointTasks": 0,
+        "ReturnedRenderers": 0,
+        "ReturnedSpriteRenderers": 0,
+        "RemainingWorldObjects": 0,
+        "RemainingRuntimeSlots": 0,
+        "RemainingPoolBorrowers": 0,
+        "RuntimeStagesCompleted": true,
+        "IsComplete": true
+      },
+      "ownedGone": true,
+      "mapBoundary": "Isolated empty diagnostic world; no scene map carrier. Not loaded Battle map teardown."
+    },
+    {
+      "stage": "diagnostic-owner-before-await",
+      "capacity": 400,
+      "publishedCapacity": 51200,
+      "profile": "Authority400; audio requests only"
+    },
+    {
+      "stage": "prepared",
+      "cycle": 3,
+      "generation": 10,
+      "ownedIds": [
+        -1264028,
+        -1264014,
+        -1264018,
+        -1264022,
+        -1264026,
+        -1264032,
+        -1264036,
+        -1264040,
+        -1264044,
+        -1264048,
+        -1264052,
+        -1264056,
+        -1264060,
+        -1264064,
+        -1264068,
+        -1264072,
+        -1264076,
+        -1264080,
+        -1264084,
+        -1264088,
+        -1264092,
+        -1264096
+      ],
+      "sourceIds": [
+        -1264028
+      ],
+      "outputIds": [
+        -1264014,
+        -1264018,
+        -1264022,
+        -1264026,
+        -1264032,
+        -1264036,
+        -1264040,
+        -1264044,
+        -1264048,
+        -1264052,
+        -1264056,
+        -1264060,
+        -1264064,
+        -1264068,
+        -1264072,
+        -1264076,
+        -1264080,
+        -1264084,
+        -1264088,
+        -1264092,
+        -1264096
+      ],
+      "ownedBytes": 8431640,
+      "nonmonoCountedOnce": true,
+      "cacheCount": 1,
+      "genericId": -1263830,
+      "genericKey": "NTSD.AudioFile::data\\016.wav",
+      "genericSourcePath": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\016.wav",
+      "processScope": "Prior Unity Process.PrivateMemorySize64 zero unavailable; process budget not measured here"
+    },
+    {
+      "stage": "hot-complete",
+      "cycle": 3,
+      "measuredTicks": 7,
+      "actualFrames": 10,
+      "sameFrameBatchReplay": true,
+      "expectedVoiceCapacity": 64
+    },
+    {
+      "stage": "play-evidence",
+      "cycle": 3,
+      "voiceEnabled": true,
+      "voicePlayingObserved": true,
+      "listenerEnabled": true,
+      "outputMax": 1.0,
+      "outputSamples": 4096,
+      "hearingVerified": false,
+      "genericId": -1263830,
+      "genericVoiceEnabled": true,
+      "waveformStatus": "NONZERO_OUTPUT_OBSERVED"
+    },
+    {
+      "stage": "public-shutdown-return",
+      "label": "cycle-3",
+      "report": {
+        "Status": 0,
+        "CompletedStage": 10,
+        "FailureReason": "",
+        "DiscardedObjectPointTasks": 0,
+        "ReturnedRenderers": 0,
+        "ReturnedSpriteRenderers": 0,
+        "RemainingWorldObjects": 0,
+        "RemainingRuntimeSlots": 0,
+        "RemainingPoolBorrowers": 0,
+        "RuntimeStagesCompleted": true,
+        "IsComplete": false
+      },
+      "ids": [
+        -1264028,
+        -1264014,
+        -1264018,
+        -1264022,
+        -1264026,
+        -1264032,
+        -1264036,
+        -1264040,
+        -1264044,
+        -1264048,
+        -1264052,
+        -1264056,
+        -1264060,
+        -1264064,
+        -1264068,
+        -1264072,
+        -1264076,
+        -1264080,
+        -1264084,
+        -1264088,
+        -1264092,
+        -1264096
+      ],
+      "pendingAtPublicShutdownReturn": 0,
+      "aliveAtReturn": 22,
+      "tailDrained": true,
+      "observationPoint": "Entire public ShutdownBattleRuntime returned (stage10); not a separate stage5 sample"
+    },
+    {
+      "stage": "drained-next-frame",
+      "label": "cycle-3",
+      "complete": {
+        "Status": 1,
+        "CompletedStage": 11,
+        "FailureReason": "",
+        "DiscardedObjectPointTasks": 0,
+        "ReturnedRenderers": 0,
+        "ReturnedSpriteRenderers": 0,
+        "RemainingWorldObjects": 0,
+        "RemainingRuntimeSlots": 0,
+        "RemainingPoolBorrowers": 0,
+        "RuntimeStagesCompleted": true,
+        "IsComplete": true
+      },
+      "ownedGone": true,
+      "mapBoundary": "Isolated empty diagnostic world; no scene map carrier. Not loaded Battle map teardown."
+    },
+    {
+      "stage": "diagnostic-owner-before-await",
+      "capacity": 400,
+      "publishedCapacity": 51200,
+      "profile": "Authority400; audio requests only"
+    },
+    {
+      "stage": "before-pending-cancel",
+      "pendingLoads": 1,
+      "ownedIds": [
+        -1264112
+      ]
+    },
+    {
+      "stage": "public-shutdown-return",
+      "label": "pending-public-prepare-cancel",
+      "report": {
+        "Status": 0,
+        "CompletedStage": 10,
+        "FailureReason": "",
+        "DiscardedObjectPointTasks": 0,
+        "ReturnedRenderers": 0,
+        "ReturnedSpriteRenderers": 0,
+        "RemainingWorldObjects": 0,
+        "RemainingRuntimeSlots": 0,
+        "RemainingPoolBorrowers": 0,
+        "RuntimeStagesCompleted": true,
+        "IsComplete": false
+      },
+      "ids": [
+        -1264112
+      ],
+      "pendingAtPublicShutdownReturn": 1,
+      "aliveAtReturn": 1,
+      "tailDrained": false,
+      "observationPoint": "Entire public ShutdownBattleRuntime returned (stage10); not a separate stage5 sample"
+    },
+    {
+      "stage": "drained-next-frame",
+      "label": "pending-public-prepare-cancel",
+      "complete": {
+        "Status": 1,
+        "CompletedStage": 11,
+        "FailureReason": "",
+        "DiscardedObjectPointTasks": 0,
+        "ReturnedRenderers": 0,
+        "ReturnedSpriteRenderers": 0,
+        "RemainingWorldObjects": 0,
+        "RemainingRuntimeSlots": 0,
+        "RemainingPoolBorrowers": 0,
+        "RuntimeStagesCompleted": true,
+        "IsComplete": true
+      },
+      "ownedGone": true,
+      "mapBoundary": "Isolated empty diagnostic world; no scene map carrier. Not loaded Battle map teardown."
+    },
+    {
+      "stage": "pending-cancel",
+      "staleBefore": 0,
+      "staleAfter": 1,
+      "staleId": -1264114,
+      "drained": true
+    },
+    {
+      "stage": "before-natural-destroy",
+      "hostId": -1264116,
+      "naturalOwnedIds": [
+        -1264636
+      ],
+      "pendingLoads": 1
+    },
+    {
+      "stage": "natural-destroy-await",
+      "hostId": -1264116,
+      "naturalOwnedIds": [
+        -1264636
+      ],
+      "ownedGone": true,
+      "destroyedByUnityCallback": true,
+      "pendingOperationCompleted": true,
+      "tailDrained": true,
+      "staleId": -1264638,
+      "staleCount": 1
+    }
+  ],
+  "scope": "One isolated Play; diagnostic World and audio requests, not real1000 combat entities/Player/8GB certification",
+  "success": true,
+  "hearingVerified": false,
+  "fullEngineNativeAllocationClaimed": false
+}

@@ -1,0 +1,46 @@
+{
+  "time": "2026-10-11T10:54:24.230876+08:00",
+  "protectedFingerprintsChecked": 4094,
+  "protectedDrift": [],
+  "sourceAssemblyDriftSincePlay": [],
+  "sourceAssemblyAfter": {
+    "Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs": "5c9c349dd1a1e0a066a0a42a6e0dd67f95504b6c75923451deb07eb0f6d7d96d",
+    "Assets/NTSD/Scripts/App/NTSDSoundPlayer.cs": "2d540933e1661b7b679f9be7bd500da825d9c9706b97628c22bc8345145184ee",
+    "Assets/NTSD/Scripts/App/AppManager.cs": "3cd50eabc70527a5633bab5dc644e479bfe4110ba476342b9c7a09e9c38680bc",
+    "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs": "b8600e56b3325fe6f27c35a9f62b6c4e08b0e02001b0ef8c7eeb7097defafbf7",
+    "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs": "6990b2534ca6c832ab50c5fd692e3275ca335b2e2c77c1502bcc85eaa394ea34",
+    "Assets/NTSD/Scripts/Load/NTSDResourceLoader.cs": "17768f6bc8536e34b98a479c98c0aaa2ead867bee9d72b35a4c0c4b5abece9a9",
+    "Library/ScriptAssemblies/Assembly-CSharp.dll": "2a8884669c54bebdb5747e7808778912d5aa5a0bf41cbedd271141027003ab69",
+    "Library/ScriptAssemblies/Assembly-CSharp-Editor.dll": "06c09badf8c5a5cf3d2477cf6d8786a7b067160c14ba464ea3d2a2552b85c266"
+  },
+  "oldDiagnosticBodyUnchanged": true,
+  "actualInitialBackups": 10,
+  "invalidInitialBackups": [],
+  "headUnchanged": true,
+  "stagedUnchanged": true,
+  "oldUntrackedEntries": 14,
+  "missingOldUntracked": [],
+  "trackedChangedPaths": [
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+    "Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs",
+    "docs/ai/CHANGE-LEDGER.md",
+    "docs/ai/CURRENT-AUTHORITY.md",
+    "docs/ai/DECISIONS.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "docs/ai/STATE.md"
+  ],
+  "unexpectedTrackedChanges": [],
+  "gitCommandsExitCodes": {
+    "status-after.txt": 0,
+    "head-after.txt": 0,
+    "staged-after.patch": 0,
+    "tracked-after.patch": 0,
+    "scoped-diff.patch": 0,
+    "diff-check.log": 0
+  },
+  "noSourceEditAfterFailedPlay": true,
+  "scope": "Named protected files, full audited audio/catalog/config inputs, old-script-body preservation, exact backups and Git scope. Runtime restoration limited to recorded fixture/scene evidence; no whole disk or historical incident recovery claim."
+}

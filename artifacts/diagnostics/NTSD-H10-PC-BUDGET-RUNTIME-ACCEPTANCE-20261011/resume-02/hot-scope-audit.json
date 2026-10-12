@@ -1,0 +1,2737 @@
+{
+  "time": "2026-10-11T11:44:18.036374+08:00",
+  "status": "SCOPED_HOT_ALLOCATION_EVENTS_ZERO",
+  "cyclesWithHotScopes": 2,
+  "normalCyclesCompleted": 1,
+  "scopeCount": 42,
+  "totalAllocationEvents": 0,
+  "byCycle": [
+    {
+      "cycle": 1,
+      "warmTicks": 3,
+      "measuredTicks": 7,
+      "completedTickCount": 10,
+      "scopeRows": 21,
+      "sinkSamples": 20,
+      "requestCounts": [
+        1,
+        1000
+      ],
+      "cueCounts": [
+        1,
+        5
+      ],
+      "hotLoadBuildFailureRejectionDeltasZero": true,
+      "expectedPlayDeltasMatched": true
+    },
+    {
+      "cycle": 2,
+      "warmTicks": 3,
+      "measuredTicks": 7,
+      "completedTickCount": 10,
+      "scopeRows": 21,
+      "sinkSamples": 20,
+      "requestCounts": [
+        1,
+        1000
+      ],
+      "cueCounts": [
+        1,
+        5
+      ],
+      "hotLoadBuildFailureRejectionDeltasZero": true,
+      "expectedPlayDeltasMatched": true
+    }
+  ],
+  "rows": [
+    {
+      "cycle": 1,
+      "tick": 4,
+      "frame": 33,
+      "boundary": "queue",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 300
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 600
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 1,
+      "tick": 4,
+      "frame": 33,
+      "boundary": "present",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 400
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 400
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 1,
+      "tick": 4,
+      "frame": 33,
+      "boundary": "pipeline",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 400
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 1,
+      "tick": 5,
+      "frame": 34,
+      "boundary": "queue",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 400
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 1000
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 1,
+      "tick": 5,
+      "frame": 34,
+      "boundary": "present",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 400
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 1,
+      "tick": 5,
+      "frame": 34,
+      "boundary": "pipeline",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 300
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 1,
+      "tick": 6,
+      "frame": 35,
+      "boundary": "queue",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 500
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 600
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 1,
+      "tick": 6,
+      "frame": 35,
+      "boundary": "present",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 700
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 1,
+      "tick": 6,
+      "frame": 35,
+      "boundary": "pipeline",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 0
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 1,
+      "tick": 7,
+      "frame": 36,
+      "boundary": "queue",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 400
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 800
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 1,
+      "tick": 7,
+      "frame": 36,
+      "boundary": "present",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 100
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 1,
+      "tick": 7,
+      "frame": 36,
+      "boundary": "pipeline",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 400
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 1,
+      "tick": 8,
+      "frame": 37,
+      "boundary": "queue",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 800
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 1,
+      "tick": 8,
+      "frame": 37,
+      "boundary": "present",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 500
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 400
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 1,
+      "tick": 8,
+      "frame": 37,
+      "boundary": "pipeline",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 0
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 1,
+      "tick": 9,
+      "frame": 38,
+      "boundary": "queue",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 300
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 500
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 1,
+      "tick": 9,
+      "frame": 38,
+      "boundary": "present",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 1,
+      "tick": 9,
+      "frame": 38,
+      "boundary": "pipeline",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 100
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 1,
+      "tick": 10,
+      "frame": 39,
+      "boundary": "queue",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 400
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 1,
+      "tick": 10,
+      "frame": 39,
+      "boundary": "present",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 300
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 1,
+      "tick": 10,
+      "frame": 39,
+      "boundary": "pipeline",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 0
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 2,
+      "tick": 4,
+      "frame": 75,
+      "boundary": "queue",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 600
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 300
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 2,
+      "tick": 4,
+      "frame": 75,
+      "boundary": "present",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 300
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 2,
+      "tick": 4,
+      "frame": 75,
+      "boundary": "pipeline",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 0
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 2,
+      "tick": 5,
+      "frame": 76,
+      "boundary": "queue",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 300
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 400
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 2,
+      "tick": 5,
+      "frame": 76,
+      "boundary": "present",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 600
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 500
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 2,
+      "tick": 5,
+      "frame": 76,
+      "boundary": "pipeline",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 600
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 2,
+      "tick": 6,
+      "frame": 77,
+      "boundary": "queue",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 500
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 300
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 2,
+      "tick": 6,
+      "frame": 77,
+      "boundary": "present",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 300
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 2,
+      "tick": 6,
+      "frame": 77,
+      "boundary": "pipeline",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 0
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 2,
+      "tick": 7,
+      "frame": 78,
+      "boundary": "queue",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 400
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 2,
+      "tick": 7,
+      "frame": 78,
+      "boundary": "present",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 400
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 2,
+      "tick": 7,
+      "frame": 78,
+      "boundary": "pipeline",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 500
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 2,
+      "tick": 8,
+      "frame": 79,
+      "boundary": "queue",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 900
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 600
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 2,
+      "tick": 8,
+      "frame": 79,
+      "boundary": "present",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 600
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 2,
+      "tick": 8,
+      "frame": 79,
+      "boundary": "pipeline",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 500
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 2,
+      "tick": 9,
+      "frame": 80,
+      "boundary": "queue",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 800
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 600
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 2,
+      "tick": 9,
+      "frame": 80,
+      "boundary": "present",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 400
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 700
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 2,
+      "tick": 9,
+      "frame": 80,
+      "boundary": "pipeline",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 400
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 300
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 2,
+      "tick": 10,
+      "frame": 81,
+      "boundary": "queue",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 1100
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 900
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 2,
+      "tick": 10,
+      "frame": 81,
+      "boundary": "present",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 400
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 600
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    },
+    {
+      "cycle": 2,
+      "tick": 10,
+      "frame": 81,
+      "boundary": "pipeline",
+      "validZeroAllocationEvents": true,
+      "events": 0,
+      "rawValue": 0,
+      "unit": "TimeNanoseconds",
+      "capacity": 256,
+      "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 700
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 900
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      }
+    }
+  ],
+  "limitations": "Only measured QueueSound, prepared PresentSounds and publication+dispatch+player; no whole Driver/engine/1000entities/three-round certificate; loop scope times not added; Unit TimeNanoseconds not bytes or GC pause"
+}

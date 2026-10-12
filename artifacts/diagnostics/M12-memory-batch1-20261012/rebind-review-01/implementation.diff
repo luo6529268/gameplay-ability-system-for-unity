@@ -1,0 +1,261 @@
+--- artifacts/diagnostics/M12-memory-batch1-20261012/rebind-review-01/before/Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs
++++ Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs
+@@ -870,37 +870,73 @@
+                 device.SupportsRgba32Sampling, device.SupportsCopyTexture,
+                 device.AtlasMemoryBudgetBytes < 0 ? device.AtlasMemoryBudgetBytes :
+                     Math.Max(0, device.AtlasMemoryBudgetBytes - retainedAtlasBytes));
++            var memoryBudget = new BattleImageMemoryBudget(EstimateOwnedImageBytes());
++            var qualifiedSources = new Dictionary<Texture2D, BMPLoader.VerifiedImageLayout?>();
+             var decodedSources = new Dictionary<Texture2D, Color32[]>();
++            BMPLoader.VerifiedImageLayout? QualifySource(Texture2D texture, string path)
++            {
++                if (publishedLoganCandidate == null)
++                    return null;
++                LoganVisualContentCandidate.ImageInput image = null;
++                if (CommonVisualCatalog.TryGetSpark(0, out var spark) && spark.Texture == texture)
++                    image = publishedLoganCandidate.SparkInput.Image;
++                for (int sheet = 0; image == null && publishedLoganCandidate.WordsInput != null &&
++                    sheet < BattleCommonVisualCatalog.WordSheetCount; sheet++)
++                {
++                    if (CommonVisualCatalog.TryGetWordGlyph(sheet, 0, out var glyph) && glyph.Texture == texture)
++                        image = publishedLoganCandidate.WordsInput.Images[sheet];
++                }
++                string imagePath = image?.Path ?? path;
++                // Synthetic clamped cells and unknown common surfaces retain their source bindings.
++                if (!File.Exists(imagePath))
++                    return null;
++                string hash = image?.Sha256 ?? publishedLoganCandidate.GetImageSha256(imagePath);
++                var layout = BMPLoader.ReadVerifiedImageLayout(imagePath, hash);
++                if (layout.Width != texture.width || layout.Height != texture.height)
++                    throw new InvalidDataException("Match source geometry changed: " + imagePath);
++                return layout;
++            }
++            void CheckMatchSources(IEnumerable<KeyValuePair<string, Texture2D>> sources)
++            {
++                var counted = new HashSet<Texture2D>();
++                var atlasPaths = new HashSet<string>(StringComparer.Ordinal);
++                foreach (var source in sources)
++                {
++                    Texture2D texture = source.Value;
++                    if (counted.Add(texture))
++                    {
++                        if (texture.isReadable)
++                            memoryBudget.AddReadback(texture.width, texture.height);
++                        else
++                        {
++                            var layout = QualifySource(texture, source.Key);
++                            qualifiedSources.Add(texture, layout);
++                            if (layout.HasValue)
++                                memoryBudget.AddImage(layout.Value, true, false, false);
++                        }
++                    }
++                    if ((texture.isReadable || qualifiedSources[texture].HasValue) &&
++                        BattleAtlasLayoutPlanner.IsPageEligible(texture.width, texture.height))
++                        atlasPaths.Add(source.Key);
++                }
++                long atlasBytes = checked(atlasPaths.Count * BattleImageMemoryBudget.PageBytes);
++                if (available.AtlasMemoryBudgetBytes >= 0)
++                    atlasBytes = Math.Min(atlasBytes, available.AtlasMemoryBudgetBytes);
++                memoryBudget.ReserveAtlas(atlasBytes);
++                Debug.Log("[Match image batch budget] " + memoryBudget.Describe());
++            }
+             Color32[] DecodeSource(Texture2D texture, string path)
+             {
+                 if (decodedSources.TryGetValue(texture, out Color32[] pixels))
+                     return pixels;
+                 if (texture.isReadable)
+                     pixels = texture.GetPixels32();
+-                else if (publishedLoganCandidate != null)
+-                {
+-                    LoganVisualContentCandidate.ImageInput image = null;
++                else if (qualifiedSources.TryGetValue(texture, out var layout) && layout.HasValue)
++                {
++                    var decoded = BMPLoader.LoadVerifiedNativeImageData(layout.Value.FilePath, layout.Value);
+                     bool spark = CommonVisualCatalog.TryGetSpark(0, out var sparkBinding) &&
+                         sparkBinding.Texture == texture;
+-                    if (spark)
+-                        image = publishedLoganCandidate.SparkInput.Image;
+-                    for (int sheet = 0; image == null &&
+-                        publishedLoganCandidate.WordsInput != null &&
+-                        sheet < BattleCommonVisualCatalog.WordSheetCount; sheet++)
+-                    {
+-                        if (CommonVisualCatalog.TryGetWordGlyph(sheet, 0, out var glyph) &&
+-                            glyph.Texture == texture)
+-                            image = publishedLoganCandidate.WordsInput.Images[sheet];
+-                    }
+-                    string imagePath = image?.Path ?? path;
+-                    // Synthetic clamped cells and unknown common surfaces remain valid source bindings.
+-                    if (!File.Exists(imagePath))
+-                        return null;
+-                    string hash = image?.Sha256 ?? publishedLoganCandidate.GetImageSha256(imagePath);
+-                    var decoded = BMPLoader.LoadVerifiedImageData(imagePath, hash);
+-                    if (decoded == null || decoded.Width != texture.width || decoded.Height != texture.height)
+-                        throw new InvalidDataException("Match source geometry changed: " + imagePath);
+-                    pixels = spark ? ApplyNativeSparkBlackKey(ConvertToColor32(decoded.Pixels)) :
++                    pixels = spark ? ApplyNativeSparkBlackKey(decoded.PngPixels ?? ConvertToColor32(decoded.Pixels)) :
+                         PrepareBattleSheetPixels(decoded, publishedLoganCandidate.Catalog.Source);
+                 }
+                 if (pixels != null)
+@@ -916,7 +952,8 @@
+             if (!TryBuildMatchCentralAtlasPublication(SpriteCatalog, CommonVisualCatalog,
+                 sharedBindings ? (IReadOnlyCollection<int>)ids : Array.Empty<int>(),
+                 available, NTSD.App.GameConfig.Instance, atlasArguments, out var catalog, out var common,
+-                out var resources, out string diagnostic, out var decision, out var inputs, DecodeSource))
++                out var resources, out string diagnostic, out var decision, out var inputs, DecodeSource,
++                CheckMatchSources, bytes => memoryBudget.Validate(bytes)))
+                 throw new InvalidOperationException(diagnostic);
+             try
+             {
+@@ -974,7 +1011,9 @@
+             out BattleSpriteCatalog boundCatalog, out BattleCommonVisualCatalog boundCommon,
+             out HashSet<UnityEngine.Object> resources, out string diagnostic,
+             out BattleAtlasPolicyDecision decision, out BattleAtlasDiagnosticInputs inputs,
+-            Func<Texture2D, string, Color32[]> pixelProvider = null)
++            Func<Texture2D, string, Color32[]> pixelProvider = null,
++            Action<IEnumerable<KeyValuePair<string, Texture2D>>> beforePixelRead = null,
++            Action<long> beforeAtlasAllocation = null)
+         {
+             var sourceBindings = new Dictionary<BattleSpriteKey, BattleSpriteCentralBinding>();
+             var commonBindings = new Dictionary<BattleVisualResourceKey, BattleSpriteCentralBinding>();
+@@ -1037,12 +1076,11 @@
+                 if (selectedIds.Contains(pair.Key.VisualDataId))
+                     selectedPaths.Add(BattleAtlasLayoutPlanner.NormalizePath(entry.SourceSheetPath));
+             }
++            beforePixelRead?.Invoke(EnumerateSelectedMatchSources(catalog, common, selectedPaths));
+             foreach (BattleSpriteEntry entry in catalog.Entries.Values)
+             {
+                 string path = BattleAtlasLayoutPlanner.NormalizePath(entry.SourceSheetPath);
+-                if (selectedPaths.Contains(path))
+-                    AddSource(path, entry.SharedTexture);
+-                else
++                if (!selectedPaths.Contains(path))
+                     exclusions.Add(path);
+             }
+             var commonPaths = new Dictionary<BattleVisualResourceKey, string>();
+@@ -1051,12 +1089,28 @@
+                 string path = "__match-common/" + binding.Texture.GetInstanceID();
+                 commonPaths.Add(binding.Key, path);
+                 commonBindings.Add(binding.Key, SourceBinding(binding.Texture, binding.PixelRect, binding.NormalizedUv));
+-                AddSource(path, binding.Texture);
+-            }
++            }
++            foreach (var source in EnumerateSelectedMatchSources(catalog, common, selectedPaths))
++                AddSource(source.Key, source.Value);
+             return TryBuildUnifiedCentralAtlasPublication(
+                 catalog.WithCentralBindings(sourceBindings), common.WithCentralBindings(commonBindings),
+                 sources, commonPaths, exclusions, capabilities, config, arguments,
+-                out boundCatalog, out boundCommon, out resources, out diagnostic, out decision, out inputs);
++                out boundCatalog, out boundCommon, out resources, out diagnostic, out decision, out inputs,
++                beforeAtlasAllocation);
++        }
++
++        private static IEnumerable<KeyValuePair<string, Texture2D>> EnumerateSelectedMatchSources(
++            BattleSpriteCatalog catalog, BattleCommonVisualCatalog common, HashSet<string> selectedPaths)
++        {
++            foreach (BattleSpriteEntry entry in catalog.Entries.Values)
++            {
++                string path = BattleAtlasLayoutPlanner.NormalizePath(entry.SourceSheetPath);
++                if (selectedPaths.Contains(path))
++                    yield return new KeyValuePair<string, Texture2D>(path, entry.SharedTexture);
++            }
++            foreach (var binding in EnumerateMatchCommonBindings(common))
++                yield return new KeyValuePair<string, Texture2D>(
++                    "__match-common/" + binding.Texture.GetInstanceID(), binding.Texture);
+         }
+ 
+         #endregion
+--- artifacts/diagnostics/M12-memory-batch1-20261012/rebind-review-01/before/Assets/NTSD/Scripts/Animation/Runtime/BattleImageMemoryBudget.cs
++++ Assets/NTSD/Scripts/Animation/Runtime/BattleImageMemoryBudget.cs
+@@ -32,15 +32,16 @@
+             LoadingLimit = loadingLimit;
+         }
+ 
+-        internal void AddImage(BMPLoader.VerifiedImageLayout image, bool retainPixels, bool readableTexture)
++        internal void AddImage(BMPLoader.VerifiedImageLayout image, bool retainPixels, bool readableTexture,
++            bool createSourceTexture = true)
+         {
+             long pixels = PixelBytes(image.Width, image.Height);
+             checked
+             {
+-                SourceTextureBytes += pixels;
++                if (createSourceTexture) SourceTextureBytes += pixels;
+                 if (readableTexture) ReadableTextureBytes += pixels;
+                 if (retainPixels) RetainedPixelBytes += pixels;
+-                maximumUploadBytes = Math.Max(maximumUploadBytes, pixels);
++                if (createSourceTexture) maximumUploadBytes = Math.Max(maximumUploadBytes, pixels);
+                 // RGBA output + compact copy, compressed data/IDAT copies and row buffers.
+                 // Legacy BMP keeps the float route; count its additional 16 bytes/pixel.
+                 long work = pixels * (image.IsPng ? 2 : 6) + 4 * image.FileBytes +
+@@ -53,6 +54,11 @@
+                     work = displaced;
+                 }
+             }
++        }
++
++        internal void AddReadback(int width, int height)
++        {
++            RetainedPixelBytes = checked(RetainedPixelBytes + PixelBytes(width, height));
+         }
+ 
+         internal void AddClampedCell(int width, int height)
+--- artifacts/diagnostics/M12-memory-batch1-20261012/rebind-review-01/before/Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs
++++ Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs
+@@ -2508,6 +2508,58 @@
+         }
+ 
+         [Test]
++        public void RebindDecodeAndReadbackDoNotDoubleCountAlreadyResidentTextures()
++        {
++            var budget = new BattleImageMemoryBudget(256, long.MaxValue, long.MaxValue);
++            budget.AddImage(new BMPLoader.VerifiedImageLayout("a", "hash", 100, 8, 4, true), true, false, false);
++            budget.AddReadback(8, 4);
++            budget.ReserveAtlas(0);
++            Assert.AreEqual(0, budget.SourceTextureBytes);
++            Assert.AreEqual(256, budget.RetainedPixelBytes);
++            Assert.AreEqual(256, budget.ResidentBytes);
++            Assert.Greater(budget.LoadingBytes, budget.ResidentBytes + budget.RetainedPixelBytes);
++        }
++
++        [Test]
++        public void MatchBatchRefusalHappensBeforeAnyPixelProviderOrNewPublication()
++        {
++            var texture = new Texture2D(8, 4, TextureFormat.RGBA32, false);
++            try
++            {
++                var key = new BattleSpriteKey(1, 0);
++                var original = new BattleSpriteCatalog(new Dictionary<BattleSpriteKey, BattleSpriteEntry>
++                {
++                    [key] = new BattleSpriteEntry(key, "a.png", texture, new Rect(0, 0, 8, 4), Vector2.zero, null),
++                });
++                int pixelReads = 0;
++                var capabilities = new BattleRenderingDeviceCapabilities("test", "test", "test",
++                    false, 2048, 1, true, false, long.MaxValue);
++                Assert.Throws<InvalidDataException>(() => CharacterAnimtorManager.TryBuildMatchCentralAtlasPublication(
++                    original, BattleCommonVisualCatalog.Empty, new[] { 1 }, capabilities, null, null,
++                    out _, out _, out _, out _, out _, out _,
++                    (source, path) => { pixelReads++; return source.GetPixels32(); },
++                    sources =>
++                    {
++                        using (var iterator = sources.GetEnumerator())
++                        {
++                            Assert.IsTrue(iterator.MoveNext());
++                            Assert.AreSame(texture, iterator.Current.Value);
++                            var budget = new BattleImageMemoryBudget(256, long.MaxValue, 128);
++                            budget.AddReadback(texture.width, texture.height);
++                            budget.ReserveAtlas(0);
++                        }
++                    }));
++                Assert.AreEqual(0, pixelReads);
++                Assert.AreEqual(1, original.Count);
++                Assert.AreSame(texture, original.Entries[key].CentralBinding.Texture);
++            }
++            finally
++            {
++                UnityEngine.Object.DestroyImmediate(texture);
++            }
++        }
++
++        [Test]
+         public void InvalidDimensionsAndArithmeticOverflowCannotBecomeSmallBudgets()
+         {
+             Assert.Throws<InvalidDataException>(() => BattleImageMemoryBudget.PixelBytes(0, 1));

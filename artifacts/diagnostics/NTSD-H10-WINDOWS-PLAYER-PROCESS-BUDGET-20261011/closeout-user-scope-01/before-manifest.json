@@ -1,0 +1,156 @@
+{
+  "operationId": "OP-NTSD-H10-USER-SCOPE-CLOSEOUT-20261011",
+  "time": "2026-10-11T15:48:27.322793+08:00",
+  "pid": 13588,
+  "executorThread": "01a1201b-7930-7c93-8c84-5bc7baada43f",
+  "humanQuote": "如果只是需要出个包验收，也就不叫收尾，没必要这样子。如果后续没有其他处理，H10就可以结束了。",
+  "source": "Human decision relayed by main thread01a11fe2-bfaa-72f3-a9ed-c8260f63b193 in this conversation; exact finite governance closeout delegation",
+  "plannedCommand": "PowerShell heredoc | python -X utf8 -; current-SHA-guarded prepend/append, exact named H10 current-table rows, Player Task terminal status and Change metadata PLANNED->ABANDONED; CreateNew Decision/Operation/REPORT/RESULT/evidence; one original ChangeLedger validation",
+  "files": [
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CURRENT-AUTHORITY.md",
+      "bytes": 432346,
+      "sha256": "40e404d4e27e103872fcc35f7c1012c23120b49d712cc48fd4fb3b3f58f188ca",
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/closeout-user-scope-01/backups/docs/ai/CURRENT-AUTHORITY.md",
+      "gitStatus": "M docs/ai/CURRENT-AUTHORITY.md"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1713719,
+      "sha256": "cc2b94c5b403f5f69e3cc45e849fefaa46996ad21a1b248de6c93bbd30f5aa69",
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/closeout-user-scope-01/backups/docs/ai/STATE.md",
+      "gitStatus": "M docs/ai/STATE.md"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 780851,
+      "sha256": "cd001a500c9d38912f2d9224a215ef09424eb2c3dd5d2e154001ff435f8ad908",
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/closeout-user-scope-01/backups/docs/ai/CHANGE-LEDGER.md",
+      "gitStatus": "M docs/ai/CHANGE-LEDGER.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1652541,
+      "sha256": "c5d47863b99ea9c3bddaa2547da5f4f9b52ae26535780a9ab398d39147a1d8ef",
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/closeout-user-scope-01/backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "gitStatus": "M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-10-battle-audio-pcm-memory.md",
+      "bytes": 24451,
+      "sha256": "70b666f325c4155da14f344621de02b3aa56ea53504815047e9949bfb586d136",
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/closeout-user-scope-01/backups/Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+      "gitStatus": "M Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 272789,
+      "sha256": "76135635677bccf918034f52c44614cf15846404304ccfbd22907ae54fc4ccfa",
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/closeout-user-scope-01/backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "gitStatus": "M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "bytes": 379700,
+      "sha256": "31d968f63d29eb2d56f46e897be9b5bb46433855f96b99928fcbcf84fd571175",
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/closeout-user-scope-01/backups/Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "gitStatus": "M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011.md",
+      "bytes": 30939,
+      "sha256": "b13e15d7d2a0f136a79a64860f37390f643b712f4bfc0ed25535d2c528b81da3",
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/closeout-user-scope-01/backups/docs/ai/TASKS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011.md",
+      "gitStatus": "?? docs/ai/TASKS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011.md"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001.md",
+      "bytes": 13342,
+      "sha256": "9d4d58309945a453b3627422e79a329babe8857059fa50cab75c97d45d5499db",
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/closeout-user-scope-01/backups/docs/ai/CHANGE-RECORDS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001.md",
+      "gitStatus": "?? docs/ai/CHANGE-RECORDS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001.md"
+    },
+    {
+      "path": "docs/ai/DECISIONS.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\DECISIONS.md",
+      "bytes": 47509,
+      "sha256": "5e569d07e4bc178c742eb72967800500c9fe7080e1f10580a95fe636587e6945",
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/closeout-user-scope-01/backups/docs/ai/DECISIONS.md",
+      "gitStatus": "M docs/ai/DECISIONS.md"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 161180,
+      "sha256": "54e9e8f8411fc1d7a8236033aed9979e8bb719d72554f031f9e9aa5440d7876d",
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/closeout-user-scope-01/backups/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "gitStatus": "M docs/ai/FILE-OPERATIONS/INDEX.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness-priority-risk-register.md",
+      "bytes": 57061,
+      "sha256": "2f480fc5bb4e816fc86ba75e0e6131d8b32563460dc21c9eacbfdef41a3de4ad",
+      "backup": "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/closeout-user-scope-01/backups/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "gitStatus": ""
+    }
+  ],
+  "newDecision": "docs/ai/DECISIONS/NTSD-H10-USER-SCOPE-CLOSEOUT-20261011.md",
+  "newOperationRecord": "docs/ai/FILE-OPERATIONS/OP-NTSD-H10-USER-SCOPE-CLOSEOUT-20261011/RECORD.md",
+  "head": "8d55c6b68912560c7af755c424b41d3464a1921a",
+  "staged": "",
+  "trackedStatus": " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md\n M Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md\n M Assets/NTSD/Docs/battle-optimization-progress-tracker.md\n M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md\n M Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs\n M docs/ai/CHANGE-LEDGER.md\n M docs/ai/CURRENT-AUTHORITY.md\n M docs/ai/DECISIONS.md\n M docs/ai/FILE-OPERATIONS/INDEX.md\n M docs/ai/STATE.md\n",
+  "originalUntrackedCount": 589,
+  "protectedFiles": {
+    "Assets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressHarness.cs": "4de75ae969f9f398469d3bdc8b8dd68409f575da99a49ae7377174dba7305802",
+    "Assets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressPlayerBootstrap.cs": "4e278fecea28b3a6b2050bec65536cc2695c6576992cf0227b99ab6a670bf559",
+    "Assets/NTSD/Scripts/Test/NTSD28Q07MenuFirstWindowsPlayerProbe.cs": "cb0770784a311d97b5f82b5d5d008d0da2fe3dd15101fcde0bcb699fee88cd86",
+    "Assets/NTSD/Scripts/Test/NTSD28Q07WindowsPlayerRuntimeProbe.cs": "ae13e15d43bdd57be35e0ad49f8b75b62242d65e6c6828eb7b8dd3ec9e4553ce",
+    "Assets/NTSD/Scripts/Test/Editor/ProductionEntityStressPlayerBuild.cs": "b5befa321a650ead29b4415051d94768dbc3eb3d860bd83b6a0d3df74b260323",
+    "Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs": "d36cd18e6bffc68090891dea9874ea8c5d2ff56ae13d826dcef792e2edfd8b4e",
+    "Assets/NTSD/Scripts/Test/Editor/BattleScopedGcAllocationRecorder.cs": "5d53aee14baefdd7af8e9971de5182e8c2b860a00ee8c9258229cd9a08b82336",
+    "Library/ScriptAssemblies/Assembly-CSharp.dll": "2a8884669c54bebdb5747e7808778912d5aa5a0bf41cbedd271141027003ab69",
+    "Library/ScriptAssemblies/Assembly-CSharp-Editor.dll": "1ac32f7bad57dcc6a28a8a6dc552f28b12c6bdb42fa9d07ab5fcd236f6d5f9c3",
+    "AGENTS.md": "4c8cae02dfcf6b2365f724a7fcd60f90b7be17f67e319eeeb0bce1c656169f1f",
+    "docs/ai/file-removal-audit-contract.md": "053cf4268d0b391094b286a0a2c649c62c2b89b617a0f6c99d862931165e99f1",
+    "ProjectSettings/ProjectSettings.asset": "25475e98ddf5ae903c1ce4685353715f843d004485d088e0bed33bea98792338",
+    "ProjectSettings/EditorBuildSettings.asset": "8d621a077642b5154ba305861ca57dfb549ff4fde5bc58f3e284536a5982f01e",
+    "ProjectSettings/BurstAotSettings_StandaloneWindows.json": "72601656f7f4b74e53d13c65a01cf8a26a450257d75a3f145a0d5d6ebf5d1296",
+    "ProjectSettings/CommonBurstAotSettings.json": "0831b2bc3ddc23d7d49336fa2e2675ac2badbcc194acd29f6382641d2701e814",
+    "Assets/NTSD/Config/GameConfig/GameConfig.asset": "25c8e08f4d1be55ee55d0404aaf4e46d099afc6c2ba3d9040e1c5203f654d9ff",
+    "Assets/NTSD/Scene/NTSD_Menu.unity": "f2ee25d075548b78380be817209152047b919c4c15da8743d75d2e0c165cbea1",
+    "Assets/NTSD/Scene/NTSD_Battle.unity": "253b2ebad322aa6ec18488dfbbf555bb93ad897940a342e4130e77ce778f9010",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07WindowsContentBuildProcessor.cs": "079bb670fdd08c5a20785bddfc725362ddc41ed60130fee97c7851b8d439fc48",
+    "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PLAN.md": "1e49723b54fa28d72d797752aed6487541b66a8118347640e60aa246bc68f93d",
+    "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PRE-FLIGHT-01.md": "460e223ff53511101d55c1e91d9d79932a25378f6b92d7f9eb22bedf69719c22",
+    "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/CONVERGENCE-RESULT.md": "6ced16a4f9027ae0421d8c28d6723d91edce15794fcdf8e48af001dd253e6007",
+    "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/FINAL-PATH-BINDING-REQUEST.md": "44b5b83d92ed444df0e49864892d0a491e835c53293cb8316828f23f27cd8737",
+    "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/resolved-input-deployment-comparison.json": "71fed1e501594b4c726fda002346d3c0c809316de6df13f6bd4a81d8615390c4",
+    "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/kill-icon-input-data-check.json": "f37b92942d3348f9b6eb3e8a11fe67ee8d3353132e67bc65f8ae883186751acb",
+    "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/cold-entry-source-fingerprints.json": "33e1c76c18e8d9c8dbd41ce2a448da179bd6eb64e61d6df2fb532f688db35827",
+    "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/convergence-before-manifest.json": "4b707748bdc7acf0214cb379686a21ba05cfbfcee39229fea7e08b88997ecc85",
+    "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/convergence-operation-after.json": "c36c1e70dd0a09cbe17ea657457132982e081caa7ed5abb95e0a97a79351ef86",
+    "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/convergence-protection.json": "3e0920f56f7a3da197ab30fa41106539add2e5346b5c4f26d344e6662b720bf1",
+    "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/validator-convergence.json": "952a49d4fad8259ca35dd3708a3f90bec09f831f8bfa76d95813b05934420e7b",
+    "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/change-ledger-convergence.log": "62c1ebd57486529c18eef20d0e118a3c9512d0ca587c8193fbd83a26a043862d",
+    "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/cold-qualification-before-manifest.json": "8460064511c04a58cbe2cfacb25cb79f0eebcceb905d7cc3bbc0f691e7b577e6",
+    "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/cold-qualification-operation-after.json": "955940146eca7831bdd12927aa9dab31fa9c5fddeed1d100f5e350a49e58d5a3",
+    "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/preflight-final-protection.json": "ab40bba935fad00a5aac39e9d32458b72a04744efb3258764a87883b0c74e3da",
+    "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/validator-preflight-final.json": "2923fcf9ef4afec4fffcf4a67819497206f71ab7b13acbfbf21f6e186ea0aa87",
+    "artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/change-ledger-preflight-final.log": "62c1ebd57486529c18eef20d0e118a3c9512d0ca587c8193fbd83a26a043862d",
+    "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/REPORT.md": "5106b60adcf35626625bf0d080a2e89a2175f355b127da2b850fce8d8734d265",
+    "artifacts/diagnostics/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011/REPORT.md": "ec5a83a7897cebc62450a6f859ab3866bc1c7d5d340ba9ebd2723cfbf6f3ec09",
+    "artifacts/diagnostics/NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-20261010/REPORT.md": "b29ffe8281955766461f92cccc41e1d4b56862ea0c191d4ca9afb8d3b6051da2",
+    "artifacts/diagnostics/NTSD-H10-BOUNDED-PCM-CONVERSION-20261010/REPORT.md": "1670782b8ecc5049df91c40701bd2f3a8579c69966293d399e4a54c706ade521"
+  },
+  "forbiddenActions": "No source/assets/Settings/Unity/parser/compile/tests/measure/build/Player/sampler/Git writes or automation action; no old file deletion/move/overwrite"
+}

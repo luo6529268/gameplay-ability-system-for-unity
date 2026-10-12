@@ -1,0 +1,21 @@
+{
+  "time": "2026-10-11T12:22:30.026467+08:00",
+  "command": [
+    "git",
+    "diff",
+    "--check",
+    "--",
+    "Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs",
+    "docs/ai/TASKS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011.md",
+    "docs/ai/CHANGE-RECORDS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001.md",
+    "docs/ai/CHANGE-LEDGER.md",
+    "docs/ai/STATE.md",
+    "docs/ai/CURRENT-AUTHORITY.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md"
+  ],
+  "exitCode": 0
+}

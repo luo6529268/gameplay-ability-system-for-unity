@@ -1,0 +1,1367 @@
+diff --git a/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md b/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+index f0b09dc0..7e496f6c 100644
+--- a/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
++++ b/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+@@ -1,3 +1,80 @@
++> **2026-10-11 M12 repair-01／correction-02：诊断最小修复及冷态有限验证完成，FOCUSED_TEST_PASS。** 最终仅将R03输出标签改为u3（所有冷态路径最长242–249字符且先验无碰撞）；一次原Editor窄编译通过，R03–R07各一次共5/5PASS，R02原1/1PASS按未改方法及比较helper复用，六项冷态门通过。5夹具均有cloneAbsent/singleton保持最终回执；原Menu clean8、Editor idle/nonPlay、无hotowner、Console本次0。原R01首差、R03 Set断言FAIL、长路径R03 ERROR及旧P1全部原件保留；不把新夹具释放覆盖旧run外部中断/Dispose UNKNOWN。源码仅既有M12独立诊断区，原40652字节/ReadStaticPlan/8菜单不变，生产未改；最终源d408f359324adedea3304ffc0b3c4b378f548872a27220cf133fb04336098bfa。93保护/旧6/旧run10及外部回执不变，24复制目标匹配；18源WAV匹配、6Temp源缺失原因UNKNOWN且未补建。完整报告见diagnostic-interface-01/REPORT.md文末correction-02。M12父OPEN/ACTIVE、字节DEFAULT_OFF/H08ON；下一仅同M12真实生命周期缺口审阅，P1不得自动重跑，其他hold不恢复。下方失败/等待状态保留为历史。
++
++> **2026-10-11 M12 repair-01最新：R03_TEST_OUTPUT_ERROR / BLOCKED。** 精确R03断言修订仅改release/decoded.Wait(0)与独立输出标签，原Set断言FAIL保留；安全窄编译通过。修订R03仅运行一次，新的DirectoryNotFoundException落在fixture-finally证据写入：目录实际存在，first-failure路径258字符成功，warmup263/owned269/finally260字符无成功回执，符合Windows/Mono长路径限制现象但未另做复验。已停，R04–R07未运行，未缩短路径再试/改生产/P1。当前Editor idle/nonPlay、Menu clean8、无hotowner，Console返回0；最终清理回执缺失，不能称本修订R03或全窄门通过。clone包装层原因已修、R02 1/1PASS复用；旧P1外部中断/Dispose UNKNOWN不变。源SHAb7eb9768308ed507b5db8d6e53f5650fc6967600eb951b2df96c24fa8cce849e；同Task/Change/Operation，M12父OPEN/ACTIVE、字节DEFAULT_OFF/H08ON。准确新失败见repair-01/r03-correction-path-failure.json与r03-correction-01-results.xml。下方为此前阶段。
++
++> **2026-10-11 M12 repair-01：CLONE_CAUSE_FIXED / COMPILE_PASS / R03_ASSERTION_FAILED，后续已停。** 用户手动重启后原Editor确认idle/nonPlay、Menu clean8、旧owner不存在；旧P1外部中断/Dispose UNKNOWN保留。一次冷R01首差FAIL留存：实际JSON有MonoBehaviour包装层，旧代码在错误顶层改name/root；原始差异仅这两项，25引用相同。仅既有M12独立诊断区修正准确路径及已批早期自有释放/外部观察，原40652字节、ReadStaticPlan、8菜单不变。两次依赖性窄编译通过；修复后R02 1/1PASS；R03在Dispose后Set应抛ObjectDisposedException的断言失败，未改断言/重跑，R04–R07未执行。R03自有clone消失/原singleton保持/Dispose回执与失败并存，非旧run释放证明。原十回执/93保护/旧6证据不变；24复制目标仍匹配，重启后发现6个原Temp源缺失（未清理/未恢复，责任未归因）；旧run新增external-interruption原件ownedResourcesReleased=false。完整报告见 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/REPORT.md 文末repair-01。Task/Change/Operation沿用，Change BLOCKED、M12父OPEN/ACTIVE、字节DEFAULT_OFF/H08ON；无P1重跑/H07/Android通过，其他hold保持。下方为历史时点。
++
++> **2026-10-11 M12 repair-01：原Scene已外部恢复并核验，旧owner处置待明确，源码修复尚未开始。** 当前原Editor稳定nonPlay/idle；唯一NTSD_Menu loaded/active/clean/root8与Prepare相同，文件字节保持，本任务没有重复加载。旧owner仍存活、cloneReleased/handlesDisposed=false，原首差和Warmup异常保留。已核现有编译类型和全部相关支持接口：unity_reflect仅元数据、无活owner方法调用，M12 Cleanup/Exit要求Play；没有无需导入的合法EditMode精确释放路径。动态代码/再进Play/先reload丢owner仍禁用。已请求具体处置决定：用户手动重启Editor并保留旧run外部中断/Dispose UNKNOWN，随后才续已批准的最小修复；未获答前0源码/compile/test/P1。源码/两DLL/保护93/旧6/24输入/十run原件均匹配。证据 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/post-external-exit-repair-01/interface-gap-proof.json；同Task/Change/Operation，M12父OPEN/ACTIVE、Change BLOCKED、DEFAULT_OFF/H08ON。下方为此前时点。
++
++> **2026-10-11 M12 外部退出后只读核对：EXTERNAL_INTERRUPTION / NOT_RESTORED，最小修复仅提案。** 用户决定手动退出；本轮实际观察稳定nonPlay/idle、非编译/更新/测试，原诊断owner仍存活，playing=false、cloneReleased=false、handlesDisposed=false。当前仍单一空Scene clean/root0，原Menu clean8未恢复。原runRoot十个回执不变，无external-interruption/安全Exit/reload/result新原件；本轮仅另存外部观察，不补造。Console两次0条，实际Read Status从精确Editor.log取得，旧首差/退出Exception保留；native clone当前身份、句柄Dispose完成及退出边界日志完整性未证明。源码/两DLL/具名保护93/旧6/24输入均匹配；0源码/compile/test/Scene变更/P1重跑。单一诊断文件的clone首差、分阶段自有释放、严格失败与安全释放分离、外部退出观察及独立Scene恢复提案见 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/REPORT.md 文末post-external-exit-review-01。Task/Change/Operation沿用；M12父OPEN/ACTIVE、Change BLOCKED、字节DEFAULT_OFF/H08ON，其他hold不恢复。以下保留此前事实。
++
++> **2026-10-11 M12 唯一P1：FIRST_DIFFERENCE / EXIT_GUARD_HOLD（未恢复Scene）。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。Prepare实际回执与24项232571B复制校验通过；同runGuid一次Enter/一次Run在menu_load的“Clone changed fields other than runtime root.”守卫停止，尚未加载真实Menu/Battle或开始两个周期。一次Cleanup获接受，实际状态FAILED_CLEAN_SAFE；Exit If Safe因“Warmup identity was never observed.”拒绝。最后存活owner仍playing=true，native/Loading/close pending=false，errors1/persisted1/writers0/late0；clone未释放、句柄未dispose，空Scene clean0，未退出/未恢复。FAILED_CLEAN_SAFE不等于安全退出完成。无改代码/编译/重跑/第二I/新ABBA。M12父OPEN/ACTIVE、字节门DEFAULT_OFF、H08ON；下一只交回首差及早期失败安全收尾缺口审阅，不恢复其他hold/Goal。完整结果见 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/REPORT.md 文末P1；以下为此前时点。
++
++> **2026-10-11 M12 P1一次有限执行 IN_PROGRESS。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011；revision-01 R/C2经有限独立接受，现只派固定runGuid的Prepare→一次Play双周期→守卫允许的清理/退出/恢复。准确24输入232571B、复制目标/原SHA/Scene和失败HOLD门已先登记于diagnostic-interface-01/p1-execution-01。无源码/编译/第二I/旧测试/ABBA/设备或其他点；首差即停，不换根重试。当前尚无P1结果，M12父OPEN/ACTIVE、默认OFF、H08ON。以下为此前时点。
++
++> **2026-10-11 M12 revision-01：R/C2完成，P未派发/未运行。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。仅修独立诊断区的修订身份、自有clone/句柄收尾、完整取消condition与日志落盘、单次cleanup；24文件232571B未来输入已冻结、复制0。原40652字节、ReadStaticPlan方法与八菜单均保持。原Editor一次C2窄编译/new DLL/reload通过、Menu clean8，Console1条MCP连接退出Exception保留；所有菜单调用0，不做第二次I。旧C/I仅复用旧SHA下未改方法/路由，不称新源码运行PASS。源码1bf39d4793a1212561a39a2a10d5b822e336c875d0583fd6ac8a648bf503e3b7。下一同M12独立审阅此修订、严格取消归属/实际释放/音频/退出观察门，再派原定单Play两周期；M12父OPEN/ACTIVE、字节门默认OFF、H08ON，其他hold保持。完整本轮见implementation-01/review-02/diagnostic-interface-01/REPORT.md文末revision-01。以下保留历史。
++
++> **2026-10-11 M12 revision-01 IN_PROGRESS。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。独立审阅已有限接受旧S/G/C/I；本轮仅修既有独立诊断区的Prepare身份门、自有clone/句柄收尾、完整取消日志与持久化、at-most-once cleanup，冻结24文件232571B未来输入。原40652字节、ReadStaticPlan方法及八菜单保持；没有复制、菜单或Play。下一仅C2窄编译和G，不重复I。字节门OFF、H08ON、M12父OPEN，其他hold不恢复。见diagnostic-interface-01/revision-01/PLAN.md；以下为此前时点。
++
++> **2026-10-11 M12 diagnostic-interface-01：COMPILE_PASS / COLD_INTERFACE_PASS，P未运行。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。仅既有M12测试文件追加独立诊断和8菜单，原40652字节完全保留。原Editor一次窄编译完成；唯一一次Read Static Plan实际回执确认PID39108、Authority400/400、CentralOnly、源码/DLL匹配，Menu clean8；无hot owner、无内容/音频准备、无Play目录/运行。Console返回2条MCP连接退出Exception记录原样保留，不称Console零异常。下一仍同M12独立审阅实现及C/I证据、明确音频和退出观察资格后再派原单Play两周期；其他菜单未派发。原C1/F1–F4、旧ABBA按各自SHA/覆盖复用。M12父OPEN/字节门默认OFF、H08ON；其他hold保持。完整报告：artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/REPORT.md。此前execute_code与进程参数观察不再作为方案/资格依据；以下保留历史。
++
++> **2026-10-11 M12 diagnostic-interface-01 IN_PROGRESS。** 同 Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。仅在既有 M12 测试文件追加独立诊断类型及八个显式菜单，原40652字节保持；范围为代码、原Editor窄编译及一次 Read Static Plan 冷态资格。Prepare/Enter/Run/关闭/恢复均未派发，不运行Play。此前 execute_code 路线撤销，禁止替代动态求值；此前进程参数读取观察撤回，不作为配置权威、不再收集或复述参数。实际配置只认本次 Resolve 结果回执。原 C1/F1–F4 与旧ABBA按各自SHA和覆盖复用；M12父OPEN、字节门默认OFF、H08ON，其他hold保持。见 implementation-01/review-02/diagnostic-interface-01/IMPLEMENTATION-PLAN.md。以下保留此前时点。
++
++> **2026-10-11 M12 P0-static-03：原容量/资源及独立Editor诊断方案已收敛，P1仍未写／未运行。** 同Task/Change/Operation。当前原Editor无NTSD覆盖，静态解析Authority400/400、CentralOnly；clone仅改六文件根。拟在同已声明测试文件新增独立Editor-only类型，通过现有execute_code显式分段调用；不继承旧fixture、不用UTR枚举/LogAssert/NoUnexpectedReceived，不自动退出Play。只在无活跃事务的预期reload边界接回冷记录，hot owner丢失不重建/重跑。完整资源/接口/两周期/日志/安全退出表见implementation-01/REPORT.md文末。仅余Spark材质捕获653–662与formal声音路径609–639两个准确来源读证；接口本轮未向Editor调用。0脚本/Unity/编译/测试/Play/新ABBA，原门复用；M12 OPEN/默认OFF、H08 ON，其他hold保持。
++
++> **2026-10-11 M12 P0-static-02：Driver创建与六文件输入已核，完整双周期表仍为提案。** 同Task/Change/Operation；ShowLoading只切面板，文本队列空不要求currentText清零，Warmup纹理/Sprite没有已证归还。clone仅改BattleContentRuntimeRoot，严格日志、await/timeout、对象观察和恢复见implementation-01/REPORT.md文末。下一只读pool/空players闭包、UTR精确日志及Enter/ExitPlay三组局部；P1未实施/尚不具执行资格。本轮0脚本/Unity/编译/测试/Play/新ABBA，C1/F1–F4复用、旧ABBA留旧SHA。M12 OPEN/默认OFF、H08 ON，其他hold保持。
++
++> **2026-10-11 M12 P0-static-01：四类获准只读事实已复核，P1尚未实施。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。Singleton/clone首次赋值、EnterPlay两键、Loading完整任务和两个Scene指定绑定已核；native drain不能替代Loading/Core/Start/池/UI收尾。完整一次Play双周期提案集中于implementation-01/REPORT.md文末：首周期加载/准备期取消，次周期完整准备后关闭，分别join并在首个Battle回调先撤订。下一准确局部读证仅Driver两段、Loading合法caller及getter/Warmup/Update；未读新正文、未写驱动。本轮0源码/Unity/编译/测试/ABBA，复用本版C1/F1–F4。字节门默认OFF、M12父OPEN、H08 ON；其他hold保持。以下为此前时点。
++
++> **2026-10-11 M12 review-02/focused-01：最小修复已实现，FOCUSED_TEST_PASS。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。manager失败/取消主线程Stop先于Dispose；App普通pending自动接现有异步关闭、真实completed才更新菜单；Driver只回原LF；两个新增focused＋原Q03C/Q03D，原Editor一次编译及4/4通过。F2固定4分支第三decode0、waiter取消/另一owner保留后全归零。未写Play驱动、无P0/P1/新ABBA；旧成本只属旧SHA。真实Scene下一路线改为合法Menu在途→Scene加载准备期关闭，精确4类静态读证请求集中于implementation-01/REPORT.md文末。字节门OFF/M12 OPEN，H08 ON，其他hold不恢复。以下保留此前时点。
++
++> **2026-10-11 M12 review-02/focused-01 IN_PROGRESS。** 同Task/Change/Operation，在既有直接人类M12及Driver/App授权内落实已审最小修复：manager两个worker主线程Stop-before-Dispose；App普通/选角pending共享与真正completed后菜单状态；Driver仅恢复当前逻辑LF；既有M12测试只新增两个focused。先原Editor窄编译，再F1/F2/F3旧Q03C/F4旧Q03D各一次，首差停止；不写Play驱动、不执行P0/P1/新ABBA。17真实当前前件含源码、治理、程序集与XML已保存。字节门OFF、父M12 OPEN，原结果继续绑定旧SHA。
++
++> **2026-10-11 M12 review-02：REVIEW_GAPS_CONFIRMED / NEXT_FIX_PROPOSED，尚未实施新修复。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。只读确认失败worker先归还额度、外层后Stop的普通waiter窗口，以及UnloadBattle主菜单pending未恢复/提前MenuMain两点；Driver另有整文件换行差异。原12PASS与唯一ABBA冻结于原SHA；PendingPixels不覆盖decoder内部或登记前瞬间，不称GC/整进程峰值。准确最小四文件提案、4项focused及待授权单一双周期真实Scene表集中在 implementation-01/REPORT.md 文末review-02。本轮0源码变更、0Unity/测试；M12 OPEN/字节门OFF，原关闭保护已接线，H08 ON。其他hold/Goal不恢复。以下保留此前证据时点。
++
++> **2026-10-11 M12有限候选验证完成：FOCUSED_TEST_PASS / DEFAULT_OFF。** Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。原Editor编译通过，11项正确性/生命周期门通过（8复用、3续跑），首次且唯一ABBA1/1：worker像素payload峰值18.125→5MiB（-72.41%），retained3.625MiB不变，耗时比1.0496（非加速）。旧Q05 CreateNew冲突ERROR保留；获批仅修H08辅助证据路径后续跑。四生产/四测试文件，字节门OFF、H08共享ON；关闭保护已接线。真实Scene卸载/重入、30秒超时、强制退出、完整内容/进程/Android未验，M12父项OPEN。下一仅同M12原件审阅及准确缺失门，不恢复其他hold/Goal。报告 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/REPORT.md。以下保留此前时点。
++
++> **2026-10-11 M12实施 IN_PROGRESS。** 用户已明确批准Driver/App两个生产文件的限定关闭扩域。Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001：先阶段1取消、阶段2实际native drain、阶段5清理与pending恢复；再原128MiB/固定E字节准入及有限验证。原十一阶段/规则保持，强制Editor退出另报边界，不改其桥接脚本。Operation OP-NTSD-M12-IMPLEMENTATION-20261011；17真实前件已备份，候选默认OFF，其他hold/旧Goal不恢复。当前尚未编译/验证，不声明PASS。
++
++> **2026-10-11 M12继续授权／实际关闭链已核清：AWAITING_EXACT_SHUTDOWN_SCOPE_DECISION。** 用户已批准原M12实施与有限验证，但要求扩大关闭域前先报告。阶段1取消非drain，阶段2只管dedicated worker，阶段5/Stopped未检查图片任务；原同步App也不会await/resume。为保留真实drain后才关闭的门，现提出仅新增Driver关闭/重建guard与App正常异步关闭接线两个生产文件，关闭合同仅补原阶段映射；尚未修改这些文件或任何生产/测试脚本。Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001仍PLANNED；[准确证据和范围](../../../artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/shutdown-review-01/REPORT.md)。本轮Unity/编译/测试0，M12 OPEN，其他hold保持。下方preflight-only授权说明为此前阶段，不覆盖本次附条件继续授权。
++
++> **2026-10-11 M12 手机优先有限预检：PLANNED / PRE_FLIGHT_READY_FOR_REVIEW。** Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011；Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。准确方案已形成：native PNG共享/显式OFF两路解码前按字节准入，128MiB普通权重＋超大单张独占上界439799644B为待审建议，非手机内存预算。703header/长度静态核验；真实clamp哈希临时字节另计，候选>128MiB为9项。M12不能单独解决大源/全量atlas驻留。主审需核准确Driver stage1/2/5与图片任务drain区别；本轮未读Driver/Q06方法体、未改脚本、未操作Unity/编译/测试/测量。10份真实治理前件已备份；[唯一完整方案](../../../artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/PLAN.md)。M12保持OPEN，下一为同Task独立审阅后准确派实施，不默认暂停或关闭；H10 CLOSED／Player ABANDONED及其余hold不恢复。以下保留历史时点。
++
++> **2026-10-11 用户方向更正：Android 手机优先。** 后续先以手机的 CPU、内存与加载峰值约束共用实现，PC再提高表现规格；Android验收后置不等于设计标准后置。M-12先补手机预算建议和实际必要性，具体档位/数值未冻结。本次仅文档；H10保持CLOSED、已取消Player路线与其它hold不恢复。
++
++[Android-first decision](../../../docs/ai/DECISIONS/NTSD-ANDROID-FIRST-OPTIMIZATION-BASELINE-20261011.md)
++
++> **2026-10-11 H10 CLOSED：按用户决定结束当前优化范围。** 用户取消新增Windows Player出包验收路线，未实施Task NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011与Change NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001均ABANDONED；原因是范围取消，不是运行失败。第四processor待批事项撤销，三个新脚本/两个meta不创建，兼容提案不实施。PCM有界/逐局formal owned、同输入320MiB对象门及resume03隔离Editor三轮音频门按原scope保留；Player、整进程2/3GiB、目标8GB型号、完整千人预算、人工听感仍未验证，但不再是本次H10 active待办或结项前置。旧compat13/14、成本尖峰、失败/事件不追溯改PASS。决定：docs/ai/DECISIONS/NTSD-H10-USER-SCOPE-CLOSEOUT-20261011.md；结项：artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/closeout-user-scope-01/REPORT.md。当前H10已结束，下一无自动启动项；H08/H07/M03/producer/H06等hold、33ms/十一阶段及全部原边界保持。下方旧OPEN/等待第四域/继续出包和旧统计只保留为被本决定替代的历史。
++
++> **2026-10-11 H10 PRE-FLIGHT已收敛交回：PLANNED，完整有限表与构建前冷资格已明确，尚无实施派发。** formal根与public Candidate/Catalog/显式snapshot有限读证已闭合；703body双审0差，实际head/small/common集合留给backend/build前的一次冷资格。已准原new probe内UNITY_EDITOR静态桥接调用公开Capture/既有internal Copy，冷解析/managed分配据实记录；必须保护原publication/cache/player/singleton/Scene。CASE/Ordinal/记录粒度/预算已审，compile/Q/build/两PID三轮均NOT_RUN，第四processor直接人类确认及完整派发未到。当前完整表见 artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PLAN.md 与 PRE-FLIGHT-01.md 文末，结果CONVERGENCE-RESULT.md。H10父项OPEN，不暂停或转其它点；无源码/资源/Settings/Unity/build/Player变更。以下保留此前时点。
++
++> **2026-10-11 H10 PRE-FLIGHT 收敛：当前方案集中回现有PLAN/PRE-FLIGHT，仍PLANNED／未授实施。** 主审已冻结真实静态VS0/1来源及普通四目标全窗/千人全请求计数加首批64明细的证据颗粒度；未运行。旧已解析body703/703与manifest现SHA/长度同，两个DAT及两种SPARK已含；WORDS六图、KillIcon三候选图缺失分别保留其既有nullable/skip合同，不补资源。head/small实际清单与Source根绑定尚待精确读证；没有证明新增部署项，也不称完整闭包。完整1build/2PID×3轮表和安全恢复门见 `artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PLAN.md` 文末收敛表及 `PRE-FLIGHT-01.md`，剩余读域 `FINAL-PATH-BINDING-REQUEST.md`。第四processor确认由主会话处理，Task/Change与H10父项状态保持；0脚本/Settings/build/Player/其它点。以下保留此前时点。
++
++> **2026-10-11 H10 PRE-FLIGHT-01 review-03：公开队伍/静态VS来源与精确raw身份已补齐，仍PLANNED。** 三槽候选team1/2/3；Menu真实序列化mode0/1与组件GUID已核，实际Player资格仍待验证。旧1000raw已含builtin/mode；Ordinal先原raw后缺失单属alias共1968，14冲突键由原raw优先，1024/2048容量对旧集有据。V3小写分析保留但不用于实施。普通目标完整明细与千人全窗计数/限定首批明细候选分开，4096不作千人上界；诊断容量失败不冒称生产丢音。新件 `artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/REVIEW-03-CASE-CAPACITY-CLARIFICATIONS.md`、`RAW-KEY-RESOLUTION-V4-ORDINAL.json`、`RAW-UI-NEXT-READ-REQUEST.md`。下一仅Candidate输入/路径最小读证和方案审查；第四写域/完整派发未到，无脚本/Settings/build/Player/其它点，H10父项OPEN。以下保留此前时点。
++
++> **2026-10-11 H10 PRE-FLIGHT-01 review-02：已证旧Windows回调1373清单与当前2334源冲突，第四写域仅提案待直接人类确认。** 原callback和严格门不绕过；一次H10上下文选择完整新清单提案已独立审阅，尚无代码/Settings/build/Player授权。输入/tee容量与恢复已细化；GameModeConfig普通两字段对象身份已更正；撤回三人同队候选，待公开队伍/真实VS映射。Task/Change仍PLANNED、H10父项OPEN、不推进其它点。新原件：`artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/POSTPROCESSOR-COMPATIBILITY-PROPOSAL.md`、`CASE-SAMPLING-RESTORE-V2.md`、`REVIEW-02-CONTRACT-CLARIFICATIONS.md`、`TEAM-ENTRY-CORRECTION.md`。旧证据保留，以下为此前时点。
++
++> **2026-10-11 H10 Player PRE-FLIGHT-01方案补齐，仍PLANNED／未授权实现。** R1-R3由主会话具名供证；新增具体2/16/507三轮技能候选及采样质量提案。发现现有Windows postprocessor部署交叠和MatchConfirmed后原cfg自动加载，须准确补齐后再build。原validator PASSED1423/4534 warnings（本计划3）；4094保护/406旧artifact无漂移为已保存执行审计。0脚本/Settings修改、0编译/测试/build/Player/sidecar。入口 `artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PREFLIGHT-ADDENDUM-01.md`、`CASE-MATRIX-CANDIDATE.md`、`NEW-READ-DEPENDENCIES-01.md`、`OBSERVATION-SEAM-REQUEST.md`、`EMPTY-WORLD-ENTRY-ORDER.md`。H10父项继续OPEN、不默认暂停、不推进其它点；以下保留此前时点。
++
++> **2026-10-11 H10 Windows Player预算 PRE-FLIGHT-01完成，PLANNED / 具名读域待独立审查。** Task NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011 / Change NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001。仅只读harness/App具名合同及新方案；0脚本/Settings修改、0build/Player/sidecar。2752已知资源条目SHA manifest尚未部署，UI/空players/suppression/三轮重入仍需R1-R4读证。候选1build、2进程各1smoke+2formal，未自授执行额度。resume-03成功与全部旧失败冻结，H10父项OPEN、不推进其它点。入口 artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PRE-FLIGHT-01.md 与 PLAN.md/READ-SCOPE-REQUESTS.md。以下为此前时点。
++
++> **2026-10-11 H10 resume-03：RUNTIME_AUDIO_GATES_VERIFIED（限定隔离Editor音频运行门）。** Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 VERIFIED仅本轮。首次编译、资格2/2及唯一三轮Play1/1PASS；六次真实启动声源身份/计数/clip/在播通过，轮2/3复现旧selector停播而本次新源在播，旧FAIL保留。63有效校准scope0事件；三轮非零输出/公开关闭重入、真实pending取消迟到/自然Destroy与精确清理通过，当前Menu clean8/组件/config恢复。非1000实体/完整Battle/Player/整进程/目标PC，H10父项OPEN、预算/218.313758MiB对象门复用保持，无H07/Android/Goal/其它点。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/REPORT.md；下一仅同H10原件独立审阅与缺失门。以下为此前时点。
++
++> **2026-10-11 H10 resume-03 IN_PROGRESS。** 同Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001。仅PcBudget冷播放观察：复制voice/序号前后值识别本次真正启动源，完整证据先于断言，公开关闭前后精确借用观察。旧helper/三recorder/ExerciseHot/生产冻结。两项本版资格通过后仅一次三轮Play组，首差停止。旧失败保留；H10父项OPEN、预算/对象门复用不变，无Player/Goal/其它点。计划 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/PLAN.md；Operation OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME03-20261011。下方为此前时点。
++
++> **2026-10-11 H10 resume-02：SCOPED_HOT_0EVENTS_PASS / SECOND_CYCLE_GENERIC_PLAY_OBSERVATION_FAILED。** Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 BLOCKED。首次编译及新资格2/2PASS，raw-key/两轮cold wrapper与generic同引用通过；两轮各7tick×3范围共42有效校准scope0事件，无热load/build/reject增量，非整Driver/千人实体。第一轮实际播放/非零输出及公开关闭重入完成；唯一Play整体0/1FAIL于第二轮genericVoice在播断言，首个同clip voice选择器有观察风险，实际原因未证明，未改生产/追加组。两次关闭/owned后帧归零/精确generic清理及当前Menu组件/config恢复通过。4094保护/9指纹/196旧artifact保持。三轮/pending/natural/Player/进程门未完成，H10父项OPEN；预算与对象门复用不变。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/REPORT.md，下一仅同H10精确播放观察独立审阅。无新Goal/队列/其他点，以下是旧时点。
++
++> **2026-10-11 H10 resume-02 IN_PROGRESS。** 同Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001，经独立审阅仅修PcBudget真实raw-key、无解码成员资格、cold wrapper guard及关闭证据字段；三个已通过recorder算法不改。先编译/本版资格2项，全过后仅一次新版Play，首差停止。原两失败/生产/预算及对象门复用保持，H10父项OPEN。计划 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/PLAN.md；Operation OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME02-20261011；无Player/Settings/其他点/Goal。下方保留旧时点。
++
++> **2026-10-11 H10 resume-01：MEASUREMENT_QUALIFIED_FIXTURE_CUE_ID_MISMATCH。** Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 BLOCKED（本轮夹具）。首次编译PASS，无解码资格2/2PASS：三个独立GC.Alloc recorder前后正控有效/empty0，Unit原样TimeNanoseconds；不是生产热0GC。唯一新Play0/1 Error，冷generic查询data/016与实际注册data\016 raw key不一致，wrapper null，未进热循环；归属执行者夹具错误，生产未改，不追加组。22owned失败清理公开stage10/空地图stage11及下一帧释放通过，generic016精确清理；当前Menu clean8/组件快照/config/MM settings相同。4094保护/旧105artifact无漂移，旧其他方法体保持。预算已批准与218.313758MiB对象门复用保持；三轮/播放/取消/Player/进程门未过，H10父项OPEN。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/REPORT.md；下一仅同H10精确raw-key/guard修正独立审阅，不自动运行，无新Goal/队列/Player。下方保留此前时点。
++
++> **2026-10-11 H10 resume-01 IN_PROGRESS。** 独立审阅后恢复Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001。仅PcBudget诊断计量/负控/保护修正，先无解码资格，全部通过后仅一次新版本三轮Play组；首差停止。旧分配校准FAIL原件保留，生产/Scene/资源/Settings冻结，预算已批准/对象门复用保持，H10父项OPEN，无Player/其他点/Goal。计划 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/PLAN.md；Operation OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME01-20261011。下方为此前时点。
++
++> **2026-10-11 H10：PC_TARGETS_ADOPTED；本轮 RUNTIME_CALIBRATION_FAILED，父项继续 OPEN。** 人类已批准暂定PC基础/推荐候选及AudioClip≤320MiB、游戏进程Private稳态≤2GiB/过渡采样峰≤3GiB，尚未认证硬件。Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 BLOCKED（本轮测量夹具）。1682项当前输入指纹匹配，旧228,918,567B对象账本可复用通过320MiB对象门；非整进程证书。原Editor编译通过、窄资格1/1 PASS；唯一Play组0/1 FAIL：byte[97]分配正控计数为0，正式热样本前停止，未重跑。第一轮22个owned clip准备后，失败清理公开关闭stage10/空地图完成stage11、drain/下一帧释放与精确generic016清理通过，Menu clean8恢复。三轮/热0GC/实际播放/取消等门未完成；不覆盖旧13/14、Menu UNKNOWN或既有事件。下一仅同H10测量夹具修正独立审阅及剩余Play门，Player仅已有只读方案，不自动build/改Settings。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/REPORT.md；预算决定 docs/ai/DECISIONS/NTSD-PC-TEMP-ENGINEERING-TARGETS-20261011.md。下方UNDECIDED等为历史时点；无H07/Android通过，无Goal/34队列恢复。
++
++
++> 2026-10-11 **PC_TARGETS_ADOPTED / H10 runtime acceptance IN_PROGRESS.** Human approved concrete provisional PC tiers and AudioClip<=320MiB / game-process private steady<=2GiB / transition sampled peak<=3GiB; not certified hardware. Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 PLANNED. Exact single diagnostic script; original production/old evidence retained. Decision: docs/ai/DECISIONS/NTSD-PC-TEMP-ENGINEERING-TARGETS-20261011.md. Old budget UNDECIDED below is historical, not current blocker. Three-session Play and process gates not yet verified; H10 parent OPEN, no H07/Android/Goal/queue.
++
+ > **2026-10-11 H10全目录音频账本完成：FULL_CATALOG_AUDIO_ENVELOPE_MEASURED。** Task NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 / Change NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 VERIFIED（仅Editor诊断）。真实330定义/1000cue，两轮public准备关闭唯一组1/1 PASS；每轮978formal+72generic去重228,918,567B（218.313758MiB），formal逐局归零、同72generic跨轮复用，最终仅精确释放新增72key/clip，原4clips及Menu clean8保持。首次资格FAIL及事件保留，修正资格/恢复检查/无音频所有权负控各1/1；测量后仅诊断guard哈希变化，生产冻结。71283保护无漂移。报告 artifacts/diagnostics/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011/REPORT.md。音频数字预算UNDECIDED、producer完整闭包未准入，H10父项OPEN；下一仅同H10预算/覆盖合同审阅，不自动其他点/Goal/队列。以下为此前时点。
+ 
+ > 2026-10-11 NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 IN_PROGRESS / NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 PLANNED. H10 continues: complete real catalog/generic inventory, protected2resource fixture first, then one bounded2session audio-only envelope if safe. Production frozen; parent budget/coverage remain OPEN. No other point or Goal.
+@@ -6047,3 +6124,17 @@ NTSD28-336B44-BODY-DEPTH-CANDIDATE-001 / VERIFIED and NTSD28-336B44-SAGE-FIRST-R
+ > NTSD-H08-RESIDENT-VISUAL-MEMORY-REVIEW-20261010 IN_PROGRESS / NTSD-H08-RESIDENT-VISUAL-MEMORY-REVIEW-001 IN_PROGRESS: user-approved H08 current-content inventory and bounded Editor duplicate-source verification. Production unchanged; no handoff yet.
+ 
+ > NTSD-H08-RESIDENT-VISUAL-MEMORY-REVIEW-20261010 SCOPED_REVIEW_COMPLETE / NTSD-H08-RESIDENT-VISUAL-MEMORY-REVIEW-001 VERIFIED diagnostic only: actual C#773 live refs/703paths, repeated RGBA32 estimate184792652B; real loader duplicate2/2 and existing owner-helper1/1 pass. Production unchanged. Exact native per-publication source-sharing handoff ready; dispatch receipt authoritative. H08 parent OPEN.
++
++
++## 2026-10-11 用户范围结项（当前终态）
++
++H10 CLOSED；未实施Player路线ABANDONED。用户取消新增出包验收条件，第四processor待批事项撤销，不再等答复或完整实施派发。三个新脚本/两个meta不创建，全部preflight/proposal/FAIL保留。已实施PCM/逐局formal owned、320MiB同输入对象门/resume03限定音频门按原scope保留；Player/2与3GiB进程/8GB型号/完整千人/人工听感仍未验证，不列本次active后继。旧compat13/14/成本尖峰/失败不改PASS。决定见docs/ai/DECISIONS/NTSD-H10-USER-SCOPE-CLOSEOUT-20261011.md，报告见既有Player输出根closeout-user-scope-01/REPORT.md。仅治理检查，无源码/资源/Settings/Unity/编译/测试/测量/build/Player/sampler；无下一项/Goal，其他hold与所有原边界不变。此前PLANNED/OPEN/等待第四域/继续出包仅为被本决定替代的历史，不再授执行权限。
++
++
++### M12 repair-01 source work authorized after human restart
++
++Same Task/Change/Operation; old OWNER_LOST/Dispose UNKNOWN retained. Plan artifacts\diagnostics\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\implementation-01\review-02\diagnostic-interface-01\post-external-exit-repair-01\IMPLEMENTATION-PLAN.md. Exact independent diagnostic region only; cold firstdiff then evidence-driven minimum fix/narrow EditMode checks, no P1. M12 OPEN/defaultOFF/H08ON. Current repair IN_PROGRESS; prior statements above are history.
++
++M12 R03 exact cold-test API correction IN_PROGRESS within same repair; original FAIL retained, no P1. See repair-01/r03-correction-before-manifest.json and detailed report.
++
++M12 correction-02 exact R03 evidence-label fix IN_PROGRESS; same Task/Change/Operation, no P1, see repair-01/correction02-before-manifest.json. Prior failure/WAIT wording is historical.
+diff --git a/Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md b/Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md
+index a5481103..bff51531 100644
+--- a/Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md
++++ b/Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md
+@@ -1,3 +1,36 @@
++> **2026-10-11 M12 手机优先有限预检：PLANNED / PRE_FLIGHT_READY_FOR_REVIEW。** Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011；Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。准确方案已形成：native PNG共享/显式OFF两路解码前按字节准入，128MiB普通权重＋超大单张独占上界439799644B为待审建议，非手机内存预算。703header/长度静态核验；真实clamp哈希临时字节另计，候选>128MiB为9项。M12不能单独解决大源/全量atlas驻留。主审需核准确Driver stage1/2/5与图片任务drain区别；本轮未读Driver/Q06方法体、未改脚本、未操作Unity/编译/测试/测量。10份真实治理前件已备份；[唯一完整方案](../../../artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/PLAN.md)。M12保持OPEN，下一为同Task独立审阅后准确派实施，不默认暂停或关闭；H10 CLOSED／Player ABANDONED及其余hold不恢复。以下保留历史时点。
++
++> **2026-10-11 H10 CLOSED：按用户决定结束当前优化范围。** 用户取消新增Windows Player出包验收路线，未实施Task NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011与Change NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001均ABANDONED；原因是范围取消，不是运行失败。第四processor待批事项撤销，三个新脚本/两个meta不创建，兼容提案不实施。PCM有界/逐局formal owned、同输入320MiB对象门及resume03隔离Editor三轮音频门按原scope保留；Player、整进程2/3GiB、目标8GB型号、完整千人预算、人工听感仍未验证，但不再是本次H10 active待办或结项前置。旧compat13/14、成本尖峰、失败/事件不追溯改PASS。决定：docs/ai/DECISIONS/NTSD-H10-USER-SCOPE-CLOSEOUT-20261011.md；结项：artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/closeout-user-scope-01/REPORT.md。当前H10已结束，下一无自动启动项；H08/H07/M03/producer/H06等hold、33ms/十一阶段及全部原边界保持。下方旧OPEN/等待第四域/继续出包和旧统计只保留为被本决定替代的历史。
++
++> **2026-10-11 H10 PRE-FLIGHT已收敛交回：PLANNED，完整有限表与构建前冷资格已明确，尚无实施派发。** formal根与public Candidate/Catalog/显式snapshot有限读证已闭合；703body双审0差，实际head/small/common集合留给backend/build前的一次冷资格。已准原new probe内UNITY_EDITOR静态桥接调用公开Capture/既有internal Copy，冷解析/managed分配据实记录；必须保护原publication/cache/player/singleton/Scene。CASE/Ordinal/记录粒度/预算已审，compile/Q/build/两PID三轮均NOT_RUN，第四processor直接人类确认及完整派发未到。当前完整表见 artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PLAN.md 与 PRE-FLIGHT-01.md 文末，结果CONVERGENCE-RESULT.md。H10父项OPEN，不暂停或转其它点；无源码/资源/Settings/Unity/build/Player变更。以下保留此前时点。
++
++> **2026-10-11 H10 PRE-FLIGHT 收敛：当前方案集中回现有PLAN/PRE-FLIGHT，仍PLANNED／未授实施。** 主审已冻结真实静态VS0/1来源及普通四目标全窗/千人全请求计数加首批64明细的证据颗粒度；未运行。旧已解析body703/703与manifest现SHA/长度同，两个DAT及两种SPARK已含；WORDS六图、KillIcon三候选图缺失分别保留其既有nullable/skip合同，不补资源。head/small实际清单与Source根绑定尚待精确读证；没有证明新增部署项，也不称完整闭包。完整1build/2PID×3轮表和安全恢复门见 `artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PLAN.md` 文末收敛表及 `PRE-FLIGHT-01.md`，剩余读域 `FINAL-PATH-BINDING-REQUEST.md`。第四processor确认由主会话处理，Task/Change与H10父项状态保持；0脚本/Settings/build/Player/其它点。以下保留此前时点。
++
++> **2026-10-11 H10 PRE-FLIGHT-01 review-03：公开队伍/静态VS来源与精确raw身份已补齐，仍PLANNED。** 三槽候选team1/2/3；Menu真实序列化mode0/1与组件GUID已核，实际Player资格仍待验证。旧1000raw已含builtin/mode；Ordinal先原raw后缺失单属alias共1968，14冲突键由原raw优先，1024/2048容量对旧集有据。V3小写分析保留但不用于实施。普通目标完整明细与千人全窗计数/限定首批明细候选分开，4096不作千人上界；诊断容量失败不冒称生产丢音。新件 `artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/REVIEW-03-CASE-CAPACITY-CLARIFICATIONS.md`、`RAW-KEY-RESOLUTION-V4-ORDINAL.json`、`RAW-UI-NEXT-READ-REQUEST.md`。下一仅Candidate输入/路径最小读证和方案审查；第四写域/完整派发未到，无脚本/Settings/build/Player/其它点，H10父项OPEN。以下保留此前时点。
++
++> **2026-10-11 H10 PRE-FLIGHT-01 review-02：已证旧Windows回调1373清单与当前2334源冲突，第四写域仅提案待直接人类确认。** 原callback和严格门不绕过；一次H10上下文选择完整新清单提案已独立审阅，尚无代码/Settings/build/Player授权。输入/tee容量与恢复已细化；GameModeConfig普通两字段对象身份已更正；撤回三人同队候选，待公开队伍/真实VS映射。Task/Change仍PLANNED、H10父项OPEN、不推进其它点。新原件：`artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/POSTPROCESSOR-COMPATIBILITY-PROPOSAL.md`、`CASE-SAMPLING-RESTORE-V2.md`、`REVIEW-02-CONTRACT-CLARIFICATIONS.md`、`TEAM-ENTRY-CORRECTION.md`。旧证据保留，以下为此前时点。
++
++> **2026-10-11 H10 Player PRE-FLIGHT-01方案补齐，仍PLANNED／未授权实现。** R1-R3由主会话具名供证；新增具体2/16/507三轮技能候选及采样质量提案。发现现有Windows postprocessor部署交叠和MatchConfirmed后原cfg自动加载，须准确补齐后再build。原validator PASSED1423/4534 warnings（本计划3）；4094保护/406旧artifact无漂移为已保存执行审计。0脚本/Settings修改、0编译/测试/build/Player/sidecar。入口 `artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PREFLIGHT-ADDENDUM-01.md`、`CASE-MATRIX-CANDIDATE.md`、`NEW-READ-DEPENDENCIES-01.md`、`OBSERVATION-SEAM-REQUEST.md`、`EMPTY-WORLD-ENTRY-ORDER.md`。H10父项继续OPEN、不默认暂停、不推进其它点；以下保留此前时点。
++
++> **2026-10-11 H10 Windows Player预算 PRE-FLIGHT-01完成，PLANNED / 具名读域待独立审查。** Task NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011 / Change NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001。仅只读harness/App具名合同及新方案；0脚本/Settings修改、0build/Player/sidecar。2752已知资源条目SHA manifest尚未部署，UI/空players/suppression/三轮重入仍需R1-R4读证。候选1build、2进程各1smoke+2formal，未自授执行额度。resume-03成功与全部旧失败冻结，H10父项OPEN、不推进其它点。入口 artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PRE-FLIGHT-01.md 与 PLAN.md/READ-SCOPE-REQUESTS.md。以下为此前时点。
++
++> **2026-10-11 H10 resume-03：RUNTIME_AUDIO_GATES_VERIFIED（限定隔离Editor音频运行门）。** Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 VERIFIED仅本轮。首次编译、资格2/2及唯一三轮Play1/1PASS；六次真实启动声源身份/计数/clip/在播通过，轮2/3复现旧selector停播而本次新源在播，旧FAIL保留。63有效校准scope0事件；三轮非零输出/公开关闭重入、真实pending取消迟到/自然Destroy与精确清理通过，当前Menu clean8/组件/config恢复。非1000实体/完整Battle/Player/整进程/目标PC，H10父项OPEN、预算/218.313758MiB对象门复用保持，无H07/Android/Goal/其它点。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/REPORT.md；下一仅同H10原件独立审阅与缺失门。以下为此前时点。
++
++> **2026-10-11 H10 resume-03 IN_PROGRESS。** 同Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001。仅PcBudget冷播放观察：复制voice/序号前后值识别本次真正启动源，完整证据先于断言，公开关闭前后精确借用观察。旧helper/三recorder/ExerciseHot/生产冻结。两项本版资格通过后仅一次三轮Play组，首差停止。旧失败保留；H10父项OPEN、预算/对象门复用不变，无Player/Goal/其它点。计划 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/PLAN.md；Operation OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME03-20261011。下方为此前时点。
++
++> **2026-10-11 H10 resume-02：SCOPED_HOT_0EVENTS_PASS / SECOND_CYCLE_GENERIC_PLAY_OBSERVATION_FAILED。** Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 BLOCKED。首次编译及新资格2/2PASS，raw-key/两轮cold wrapper与generic同引用通过；两轮各7tick×3范围共42有效校准scope0事件，无热load/build/reject增量，非整Driver/千人实体。第一轮实际播放/非零输出及公开关闭重入完成；唯一Play整体0/1FAIL于第二轮genericVoice在播断言，首个同clip voice选择器有观察风险，实际原因未证明，未改生产/追加组。两次关闭/owned后帧归零/精确generic清理及当前Menu组件/config恢复通过。4094保护/9指纹/196旧artifact保持。三轮/pending/natural/Player/进程门未完成，H10父项OPEN；预算与对象门复用不变。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/REPORT.md，下一仅同H10精确播放观察独立审阅。无新Goal/队列/其他点，以下是旧时点。
++
++> **2026-10-11 H10 resume-02 IN_PROGRESS。** 同Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001，经独立审阅仅修PcBudget真实raw-key、无解码成员资格、cold wrapper guard及关闭证据字段；三个已通过recorder算法不改。先编译/本版资格2项，全过后仅一次新版Play，首差停止。原两失败/生产/预算及对象门复用保持，H10父项OPEN。计划 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/PLAN.md；Operation OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME02-20261011；无Player/Settings/其他点/Goal。下方保留旧时点。
++
++> **2026-10-11 H10 resume-01：MEASUREMENT_QUALIFIED_FIXTURE_CUE_ID_MISMATCH。** Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 BLOCKED（本轮夹具）。首次编译PASS，无解码资格2/2PASS：三个独立GC.Alloc recorder前后正控有效/empty0，Unit原样TimeNanoseconds；不是生产热0GC。唯一新Play0/1 Error，冷generic查询data/016与实际注册data\016 raw key不一致，wrapper null，未进热循环；归属执行者夹具错误，生产未改，不追加组。22owned失败清理公开stage10/空地图stage11及下一帧释放通过，generic016精确清理；当前Menu clean8/组件快照/config/MM settings相同。4094保护/旧105artifact无漂移，旧其他方法体保持。预算已批准与218.313758MiB对象门复用保持；三轮/播放/取消/Player/进程门未过，H10父项OPEN。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/REPORT.md；下一仅同H10精确raw-key/guard修正独立审阅，不自动运行，无新Goal/队列/Player。下方保留此前时点。
++
++> **2026-10-11 H10 resume-01 IN_PROGRESS。** 独立审阅后恢复Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001。仅PcBudget诊断计量/负控/保护修正，先无解码资格，全部通过后仅一次新版本三轮Play组；首差停止。旧分配校准FAIL原件保留，生产/Scene/资源/Settings冻结，预算已批准/对象门复用保持，H10父项OPEN，无Player/其他点/Goal。计划 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/PLAN.md；Operation OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME01-20261011。下方为此前时点。
++
++> **2026-10-11 H10：PC_TARGETS_ADOPTED；本轮 RUNTIME_CALIBRATION_FAILED，父项继续 OPEN。** 人类已批准暂定PC基础/推荐候选及AudioClip≤320MiB、游戏进程Private稳态≤2GiB/过渡采样峰≤3GiB，尚未认证硬件。Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 BLOCKED（本轮测量夹具）。1682项当前输入指纹匹配，旧228,918,567B对象账本可复用通过320MiB对象门；非整进程证书。原Editor编译通过、窄资格1/1 PASS；唯一Play组0/1 FAIL：byte[97]分配正控计数为0，正式热样本前停止，未重跑。第一轮22个owned clip准备后，失败清理公开关闭stage10/空地图完成stage11、drain/下一帧释放与精确generic016清理通过，Menu clean8恢复。三轮/热0GC/实际播放/取消等门未完成；不覆盖旧13/14、Menu UNKNOWN或既有事件。下一仅同H10测量夹具修正独立审阅及剩余Play门，Player仅已有只读方案，不自动build/改Settings。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/REPORT.md；预算决定 docs/ai/DECISIONS/NTSD-PC-TEMP-ENGINEERING-TARGETS-20261011.md。下方UNDECIDED等为历史时点；无H07/Android通过，无Goal/34队列恢复。
++
++
++> 2026-10-11 **PC_TARGETS_ADOPTED / H10 runtime acceptance IN_PROGRESS.** Human approved concrete provisional PC tiers and AudioClip<=320MiB / game-process private steady<=2GiB / transition sampled peak<=3GiB; not certified hardware. Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 PLANNED. Exact single diagnostic script; original production/old evidence retained. Decision: docs/ai/DECISIONS/NTSD-PC-TEMP-ENGINEERING-TARGETS-20261011.md. Old budget UNDECIDED below is historical, not current blocker. Three-session Play and process gates not yet verified; H10 parent OPEN, no H07/Android/Goal/queue.
++
+ > **2026-10-06 阴影残留共用显示修复限定验收：** NTSD28-BATTLE-SHADOW-RETIREMENT-20261006 / SCOPED_SHADOW_DISPLAY_FIX_VERIFIED；NTSD28-BATTLE-SHADOW-RETIREMENT-001 / VERIFIED。原 Editor 聚焦12/12＋既有几何self-check1/1通过；原saved Battle300tick，石头碎片central阴影20→0，仙法手里剑命中HP500→295、结束阴影0；有序关闭objects/slots/borrowers0，Scene clean/SHA不变。仅向下离开画面的非角色共用阴影显示门，不删仍活跃的native碎片，不改DAT/模拟/非战斗；受控释放/破碎入口，不称物理按键/随机掉落或正式EXE全World/GPU一致。旧总目标收尾保持，下方PLANNED为事前快照。 [Record](../../../docs/ai/CHANGE-RECORDS/NTSD28-BATTLE-SHADOW-RETIREMENT-001.md)。
+ 
+ > **2026-10-06 阴影残留定向任务：** NTSD28-BATTLE-SHADOW-RETIREMENT-20261006 / IN_PROGRESS；NTSD28-BATTLE-SHADOW-RETIREMENT-001 / PLANNED。用户报告武器破碎/投掷命中/技能消失残留阴影，只查共用生命周期和表现首差，先新聚焦测试；无生产结论，不改DAT/Scene/非战斗，旧总目标收尾及红线修复保持。 [Record](../../../docs/ai/CHANGE-RECORDS/NTSD28-BATTLE-SHADOW-RETIREMENT-001.md)。
+@@ -924,3 +957,8 @@ R01～R18 仍用旧总表的定义，按触发而非全量重跑：输入/帧/
+ 2026-10-06 red-line Task IN_PROGRESS; NTSD28-BATTLE-SPRITE-RED-LINE-001 FOCUSED_TEST_PASS. Shared shader lookup clamp at authored texel centers, no crop/geometry/source color change. Original Editor exact18/18 PASS (0e92e1e8a29643589f7b53458ace4bd3), GPU105 placements zero gutter; original saved Battle targeted capture started. Old campaign closure retained; no full suite/roster. Report artifacts/diagnostics/NTSD28-BATTLE-SPRITE-RED-LINE-20261006/REPORT.md.
+ 
+ 2026-10-06 reported foot red-line fix SCOPED_CROP_SAMPLING_FIX_VERIFIED; NTSD28-BATTLE-SPRITE-RED-LINE-001 VERIFIED(scoped). GPU RED3 paths each118 gutter pixels at half-pixel placement; unchanged-source crop4 PASS. Shared mesh carries per-quad texel-center bounds, shaders clamp lookup; original UV/size/pivot/scale/RGBA unchanged. Current exact18/18 PASS (0e92e1e8a29643589f7b53458ace4bd3). Original saved Battle01 PASS tick5 actual Naruto2/pic1/SourceTexture2D stride44, central submitted, GPU21 placements maxGutter0; ordered11-stage shutdown objects/slot/borrower0, Scene clean/SHA unchanged, original Editor idle/non-Play. Accepted actual mesh PNG; Editor ScreenCapture rejected as full Game View evidence. No DAT/PNG/importer/Scene/settings/nonbattle/delete/Git changes. Report artifacts/diagnostics/NTSD28-BATTLE-SPRITE-RED-LINE-20261006/REPORT.md. Old campaign scoped closure preserved; not full roster/camera/device parity.
++
++
++## 2026-10-11 用户范围结项（当前终态）
++
++H10 CLOSED；未实施Player路线ABANDONED。用户取消新增出包验收条件，第四processor待批事项撤销，不再等答复或完整实施派发。三个新脚本/两个meta不创建，全部preflight/proposal/FAIL保留。已实施PCM/逐局formal owned、320MiB同输入对象门/resume03限定音频门按原scope保留；Player/2与3GiB进程/8GB型号/完整千人/人工听感仍未验证，不列本次active后继。旧compat13/14/成本尖峰/失败不改PASS。决定见docs/ai/DECISIONS/NTSD-H10-USER-SCOPE-CLOSEOUT-20261011.md，报告见既有Player输出根closeout-user-scope-01/REPORT.md。仅治理检查，无源码/资源/Settings/Unity/编译/测试/测量/build/Player/sampler；无下一项/Goal，其他hold与所有原边界不变。此前PLANNED/OPEN/等待第四域/继续出包仅为被本决定替代的历史，不再授执行权限。
+diff --git a/Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs b/Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs
+index dcfbebe3..8fb2a290 100644
+--- a/Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs
++++ b/Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs
+@@ -113,7 +113,7 @@ namespace NTSD.Animation
+                 {
+                     try
+                     {
+-                        await UniTask.RunOnThreadPool(existing.AssertInputsCurrent);
++                        await RunNativePrewarmWorkAsync(existing.AssertInputsCurrent);
+                         candidate = existing;
+                     }
+                     catch (Exception error) when (error is IOException || error is InvalidDataException)
+@@ -127,7 +127,7 @@ namespace NTSD.Animation
+                     else loader.RemoveCache(locatorKey);
+                 }
+                 if (candidate == null)
+-                    candidate = await UniTask.RunOnThreadPool(() =>
++                    candidate = await RunNativePrewarmWorkAsync(() =>
+                         LoganVisualContentCandidate.Capture(source, modeSnapshot));
+                 await UniTask.SwitchToMainThread();
+                 RequireConfiguredContentScope(generation);
+@@ -230,6 +230,11 @@ namespace NTSD.Animation
+             internal bool Cancelled;
+             internal bool Committed;
+             internal bool ReuseNativeBodySheets;
++            internal NativeDecodeAdmission Admission;
++            internal NativeDecodeAdmission Metrics;
++            internal NativeDecodeAdmission Accounting => Admission ?? Metrics;
++            internal Action<string> DecodeStarted;
++            internal Func<UniTask> BeforeUpload;
+             internal LoganVisualContentCandidate Candidate;
+             internal GameDataManager Data;
+             internal CharacterUIResourceManager UI;
+@@ -241,6 +246,182 @@ namespace NTSD.Animation
+ 
+         private readonly HashSet<NativePrewarmOperation> nativePrewarmOperations = new HashSet<NativePrewarmOperation>();
+         private NativePrewarmOperation activeNativePrewarm;
++        private int nativePrewarmWorkCount;
++        private int nativeLoadRequestVersion;
++        private UniTaskCompletionSource nativePrewarmDrained;
++        private bool useNativeDecodeAdmission;
++        private long nativeDecodeBudget = 128L * 1024 * 1024;
++        private long nativeDecodeMaximum = 439799644L;
++        internal Action<string> NativeDecodeStartedForDiagnostics;
++        internal Func<UniTask> NativeBeforeUploadForDiagnostics;
++        internal NativeDecodeAdmission LastNativeDecodeAdmission { get; private set; }
++
++        public bool HasPendingNativePrewarmWork => nativePrewarmWorkCount != 0;
++
++        public UniTask WaitForNativePrewarmDrainAsync()
++        {
++            return nativePrewarmWorkCount == 0 ? UniTask.CompletedTask : nativePrewarmDrained.Task;
++        }
++
++        private void BeginNativePrewarmWork()
++        {
++            if (nativePrewarmWorkCount++ == 0) nativePrewarmDrained = new UniTaskCompletionSource();
++        }
++
++        private void EndNativePrewarmWork()
++        {
++            if (--nativePrewarmWorkCount < 0)
++                throw new InvalidOperationException("Native prewarm work was returned twice.");
++            if (nativePrewarmWorkCount == 0)
++            {
++                UniTaskCompletionSource completed = nativePrewarmDrained;
++                nativePrewarmDrained = null;
++                completed.TrySetResult();
++            }
++        }
++
++        private async UniTask<T> RunNativePrewarmWorkAsync<T>(Func<T> work)
++        {
++            BeginNativePrewarmWork();
++            try { return await UniTask.RunOnThreadPool(work); }
++            finally
++            {
++                await UniTask.SwitchToMainThread();
++                EndNativePrewarmWork();
++            }
++        }
++
++        private UniTask RunNativePrewarmWorkAsync(Action work)
++        {
++            return RunNativePrewarmWorkAsync(() => { work(); return true; }).AsUniTask();
++        }
++
++        internal void ConfigureNativeDecodeAdmission(bool enabled, long budget = 134217728L,
++            long maximum = 439799644L)
++        {
++            if (spritePrewarmDisposed || activeNativePrewarm != null || HasPendingNativePrewarmWork ||
++                !NativeContentBoundaryIsOpen())
++                throw new InvalidOperationException("Decode admission only changes at a cold boundary.");
++            if (budget <= 0 || maximum < budget) throw new ArgumentOutOfRangeException(nameof(budget));
++            useNativeDecodeAdmission = enabled;
++            nativeDecodeBudget = budget;
++            nativeDecodeMaximum = maximum;
++        }
++
++        // M12: main-thread, one-producer admission. Retained atlas pixels never wait on this budget.
++        internal sealed class NativeDecodeAdmission
++        {
++            internal readonly long Budget, Maximum;
++            internal long Reserved { get; private set; }
++            internal long PeakReserved { get; private set; }
++            internal long RetainedPixels { get; private set; }
++            internal long PendingPixels { get; private set; }
++            internal long PeakPendingPixels { get; private set; }
++            internal int Active { get; private set; }
++            internal int PeakActive { get; private set; }
++            internal int Waiting => waiter == null ? 0 : 1;
++            private bool stopped;
++            private long waitingBytes;
++            private UniTaskCompletionSource<Reservation> waiter;
++
++            internal NativeDecodeAdmission(long budget, long maximum)
++            {
++                if (budget <= 0 || maximum < budget) throw new ArgumentOutOfRangeException(nameof(budget));
++                Budget = budget;
++                Maximum = maximum;
++            }
++
++            internal static long Weight(BMPLoader.VerifiedImageLayout layout, long maximumCellPixels)
++            {
++                if (!layout.IsPng || maximumCellPixels < 0) throw new ArgumentOutOfRangeException();
++                return checked(24L * layout.Width * layout.Height + 4L * layout.FileBytes +
++                    8L * layout.Width + 65536L + 8L * maximumCellPixels + 8L);
++            }
++
++            internal UniTask<Reservation> AcquireAsync(long bytes)
++            {
++                if (stopped) throw new OperationCanceledException();
++                if (bytes <= 0 || bytes > Maximum) throw new InvalidDataException("Native image exceeds decode admission limit.");
++                if (waiter != null) throw new InvalidOperationException("Decode admission permits one FIFO producer.");
++                if (Fits(bytes)) return UniTask.FromResult(Take(bytes));
++                waitingBytes = bytes;
++                waiter = new UniTaskCompletionSource<Reservation>();
++                return waiter.Task;
++            }
++
++            private bool Fits(long bytes) => bytes > Budget ? Reserved == 0 : Reserved <= Budget - bytes;
++            private Reservation Take(long bytes)
++            {
++                Reserved = checked(Reserved + bytes);
++                PeakReserved = Math.Max(PeakReserved, Reserved);
++                Active++;
++                PeakActive = Math.Max(PeakActive, Active);
++                return new Reservation(this, bytes);
++            }
++
++            internal void Stop()
++            {
++                stopped = true;
++                var pending = waiter;
++                waiter = null;
++                waitingBytes = 0;
++                pending?.TrySetCanceled();
++            }
++
++            internal void AddPendingPixels(long bytes)
++            {
++                PendingPixels = checked(PendingPixels + bytes);
++                PeakPendingPixels = Math.Max(PeakPendingPixels, PendingPixels);
++            }
++
++            internal void RemovePendingPixels(long bytes)
++            {
++                PendingPixels -= bytes;
++                if (PendingPixels < 0) throw new InvalidOperationException("Native pixel accounting underflow.");
++            }
++
++            internal void AddRetainedPixels(long bytes) => RetainedPixels = checked(RetainedPixels + bytes);
++
++            internal void RecordRetained(List<BattleAtlasSourcePixels> sources, int start)
++            {
++                for (int i = start; i < sources.Count; i++)
++                {
++                    Color32[] pixels = sources[i].Pixels;
++                    bool counted = false;
++                    for (int j = 0; j < i; j++)
++                        if (ReferenceEquals(pixels, sources[j].Pixels)) { counted = true; break; }
++                    if (!counted && pixels != null) AddRetainedPixels(4L * pixels.Length);
++                }
++            }
++
++            private void Return(long bytes)
++            {
++                Reserved -= bytes;
++                Active--;
++                if (Reserved < 0 || Active < 0) throw new InvalidOperationException("Decode reservation underflow.");
++                if (!stopped && waiter != null && Fits(waitingBytes))
++                {
++                    var pending = waiter;
++                    long requested = waitingBytes;
++                    waiter = null;
++                    waitingBytes = 0;
++                    pending.TrySetResult(Take(requested));
++                }
++            }
++
++            internal sealed class Reservation : IDisposable
++            {
++                private NativeDecodeAdmission owner;
++                private readonly long bytes;
++                internal Reservation(NativeDecodeAdmission owner, long bytes) { this.owner = owner; this.bytes = bytes; }
++                public void Dispose()
++                {
++                    NativeDecodeAdmission previous = owner;
++                    owner = null;
++                    previous?.Return(bytes);
++                }
++            }
++        }
+         private bool reuseNativeBodySheetsForDiagnostics = true;
+ 
+         internal bool ReuseNativeBodySheetsForDiagnostics
+@@ -318,9 +499,17 @@ namespace NTSD.Animation
+             if (spritePrewarmDisposed || !NativeContentBoundaryIsOpen())
+                 throw new InvalidOperationException("Native content cannot change across an active battle boundary.");
+             CancelNativeContentPrewarm();
++            int requestVersion = nativeLoadRequestVersion;
++            await WaitForNativePrewarmDrainAsync();
++            if (requestVersion != nativeLoadRequestVersion || spritePrewarmDisposed ||
++                !NativeContentBoundaryIsOpen() || (canContinue != null && !canContinue())) return false;
+             ReleaseCancelledNativeContentStaging();
+             var operation = new NativePrewarmOperation { Candidate = candidate, Data = data, UI = ui, CanContinue = canContinue,
+-                ReuseNativeBodySheets = reuseNativeBodySheetsForDiagnostics };
++                ReuseNativeBodySheets = reuseNativeBodySheetsForDiagnostics,
++                Admission = useNativeDecodeAdmission ? new NativeDecodeAdmission(nativeDecodeBudget, nativeDecodeMaximum) : null,
++                Metrics = new NativeDecodeAdmission(nativeDecodeBudget, nativeDecodeMaximum),
++                DecodeStarted = NativeDecodeStartedForDiagnostics, BeforeUpload = NativeBeforeUploadForDiagnostics };
++            LastNativeDecodeAdmission = operation.Admission ?? operation.Metrics;
+             nativePrewarmOperations.Add(operation);
+             activeNativePrewarm = operation;
+             try
+@@ -350,11 +539,13 @@ namespace NTSD.Animation
+ 
+         public void CancelNativeContentPrewarm()
+         {
++            nativeLoadRequestVersion++;
+             bool invalidated = false;
+             foreach (NativePrewarmOperation operation in nativePrewarmOperations)
+             {
+                 if (operation.Committed) continue;
+                 operation.Cancelled = true;
++                operation.Admission?.Stop();
+                 invalidated = true;
+             }
+             if (invalidated) spritePrewarmGeneration++;
+@@ -362,6 +553,7 @@ namespace NTSD.Animation
+ 
+         public void ReleaseCancelledNativeContentStaging()
+         {
++            if (HasPendingNativePrewarmWork) return;
+             foreach (NativePrewarmOperation operation in nativePrewarmOperations)
+                 if (operation.Cancelled && !operation.Committed) RecycleNativeStaging(operation);
+         }
+@@ -400,7 +592,11 @@ namespace NTSD.Animation
+             progress?.Invoke(FormatLoadingResourcePath(path));
+             if (!CanCompleteSpritePrewarmInvocation(operation.Invocation)) throw new OperationCanceledException();
+             string hash = operation.Candidate.GetImageSha256(path);
+-            BMPLoader.BmpData pixels = await UniTask.RunOnThreadPool(() => BMPLoader.LoadVerifiedImageData(path, hash));
++            BeginNativePrewarmWork();
++            BMPLoader.BmpData pixels = null;
++            try
++            {
++                pixels = await UniTask.RunOnThreadPool(() => BMPLoader.LoadVerifiedImageData(path, hash));
+             await UniTask.SwitchToMainThread();
+             if (!CanCompleteSpritePrewarmInvocation(operation.Invocation)) throw new OperationCanceledException();
+             if (pixels == null || pixels.Pixels == null)
+@@ -416,6 +612,13 @@ namespace NTSD.Animation
+             operation.Sprites.Add(sprite);
+             sprite.name = Path.GetFileNameWithoutExtension(path);
+             return sprite;
++            }
++            finally
++            {
++                await UniTask.SwitchToMainThread();
++                pixels = null;
++                EndNativePrewarmWork();
++            }
+         }
+ 
+         private bool TryCommitNativePublication(NativePrewarmOperation operation,
+@@ -1762,7 +1965,7 @@ namespace NTSD.Animation
+             if (native != null)
+             {
+                 native.Invocation = invocation;
+-                await UniTask.RunOnThreadPool(() => native.Candidate.AssertInputsCurrent());
++                await RunNativePrewarmWorkAsync(() => native.Candidate.AssertInputsCurrent());
+                 if (!CanCompleteSpritePrewarmInvocation(invocation)) return false;
+             }
+             BattleContentSource source = native?.Candidate.Catalog.Source;
+@@ -1813,69 +2016,111 @@ namespace NTSD.Animation
+             var uploadSemaphore = new System.Threading.SemaphoreSlim(1);
+             var pendingTasks = new List<UniTask>();
+ 
+-            if (native != null && native.ReuseNativeBodySheets)
++            if (native != null) BeginNativePrewarmWork();
++            try
+             {
+-                foreach (NativeBodySheetGroup group in BuildNativeBodySheetGroups(allFileInfos, native.Candidate))
++                if (native != null && native.ReuseNativeBodySheets)
+                 {
+-                    if (!CanCompleteSpritePrewarmInvocation(invocation)) break;
+-                    await cpuSemaphore.WaitAsync();
+-                    if (!CanCompleteSpritePrewarmInvocation(invocation))
++                    foreach (NativeBodySheetGroup group in BuildNativeBodySheetGroups(allFileInfos, native.Candidate))
+                     {
+-                        cpuSemaphore.Release();
+-                        break;
++                        if (!CanCompleteSpritePrewarmInvocation(invocation)) break;
++                        NativeBodyDecodeRequest request = await AcquireNativeDecodeAsync(native,
++                            group.Members[0].fileInfo.filePath, group.ExpectedSha256, group.Members.Max(item => checked((long)item.fileInfo.width * item.fileInfo.height)));
++                        try
++                        {
++                        await cpuSemaphore.WaitAsync();
++                        if (!CanCompleteSpritePrewarmInvocation(invocation))
++                        {
++                            cpuSemaphore.Release();
++                            break;
++                        }
++                        pendingTasks.Add(ProcessNativeBodySheetGroupAsync(group, stagedSprites,
++                            stagedCreatedSprites, stagedTextures, stagedAtlasSources, clampedSpritesByContent,
++                            clampedSourcePathsBySprite, onProgressText, cpuSemaphore, uploadSemaphore, source,
++                            () => CanCompleteSpritePrewarmInvocation(invocation), native, request).ContinueWith(result =>
++                            {
++                                System.Threading.Interlocked.Add(ref failedSheets, result.failed);
++                                if (result.failed > 0) native?.Admission?.Stop();
++                                System.Threading.Interlocked.Add(ref totalCreated, result.created);
++                            }));
++                        request = null;
++                        }
++                        finally { request?.Dispose(); }
+                     }
+-                    pendingTasks.Add(ProcessNativeBodySheetGroupAsync(group, stagedSprites,
+-                        stagedCreatedSprites, stagedTextures, stagedAtlasSources, clampedSpritesByContent,
+-                        clampedSourcePathsBySprite, onProgressText, cpuSemaphore, uploadSemaphore, source,
+-                        () => CanCompleteSpritePrewarmInvocation(invocation)).ContinueWith(result =>
++                }
++                else
++                {
++                    foreach (var (characterId, fileInfo, ownedEffectivePics) in allFileInfos)
++                    {
++                        if (native != null && !CanCompleteSpritePrewarmInvocation(invocation)) break;
++                        if (native != null && native.Candidate.IsMissingBodySheet(fileInfo.filePath))
++                            continue;
++                        NativeBodyDecodeRequest request = await AcquireNativeDecodeAsync(native,
++                            fileInfo.filePath, native?.Candidate.GetImageSha256(fileInfo.filePath), checked((long)fileInfo.width * fileInfo.height));
++                        try
++                        {
++                        await cpuSemaphore.WaitAsync();
++                        if (native != null && !CanCompleteSpritePrewarmInvocation(invocation))
+                         {
+-                            System.Threading.Interlocked.Add(ref failedSheets, result.failed);
+-                            System.Threading.Interlocked.Add(ref totalCreated, result.created);
+-                        }));
++                            cpuSemaphore.Release();
++                            break;
++                        }
++                        var task = ProcessAndCreateSpritesForCandidateAsync(
++                                characterId,
++                                fileInfo,
++                                ownedEffectivePics,
++                                stagedSprites,
++                                stagedCreatedSprites,
++                                stagedTextures,
++                                stagedAtlasSources,
++                                clampedSpritesByContent,
++                                clampedSourcePathsBySprite,
++                                onProgressText,
++                                cpuSemaphore,
++                                uploadSemaphore,
++                                source,
++                                native?.Candidate.GetImageSha256(fileInfo.filePath),
++                                native == null ? null : new Func<bool>(() => CanCompleteSpritePrewarmInvocation(invocation)), native, request)
++                            .ContinueWith(count =>
++                            {
++                                if (count < 0)
++                                {
++                                    System.Threading.Interlocked.Increment(ref failedSheets);
++                                    native?.Admission?.Stop();
++                                }
++                                else
++                                    System.Threading.Interlocked.Add(ref totalCreated, count);
++                            });
++                        pendingTasks.Add(task);
++                        request = null;
++                        }
++                        finally { request?.Dispose(); }
++                    }
+                 }
++
+             }
+-            else
++            catch
++            {
++                native?.Admission?.Stop();
++                throw;
++            }
++            finally
+             {
+-                foreach (var (characterId, fileInfo, ownedEffectivePics) in allFileInfos)
++                // Workers return failures as values. Always drain even if descriptor/admission failed.
++                Exception drainFailure = null;
++                foreach (UniTask pending in pendingTasks)
+                 {
+-                    if (native != null && !CanCompleteSpritePrewarmInvocation(invocation)) break;
+-                    if (native != null && native.Candidate.IsMissingBodySheet(fileInfo.filePath))
+-                        continue;
+-                    await cpuSemaphore.WaitAsync();
+-                    if (native != null && !CanCompleteSpritePrewarmInvocation(invocation))
+-                    {
+-                        cpuSemaphore.Release();
+-                        break;
+-                    }
+-                    var task = ProcessAndCreateSpritesForCandidateAsync(
+-                            characterId,
+-                            fileInfo,
+-                            ownedEffectivePics,
+-                            stagedSprites,
+-                            stagedCreatedSprites,
+-                            stagedTextures,
+-                            stagedAtlasSources,
+-                            clampedSpritesByContent,
+-                            clampedSourcePathsBySprite,
+-                            onProgressText,
+-                            cpuSemaphore,
+-                            uploadSemaphore,
+-                            source,
+-                            native?.Candidate.GetImageSha256(fileInfo.filePath),
+-                            native == null ? null : new Func<bool>(() => CanCompleteSpritePrewarmInvocation(invocation)))
+-                        .ContinueWith(count =>
+-                        {
+-                            if (count < 0)
+-                                System.Threading.Interlocked.Increment(ref failedSheets);
+-                            else
+-                                System.Threading.Interlocked.Add(ref totalCreated, count);
+-                        });
+-                    pendingTasks.Add(task);
++                    try { await pending; }
++                    catch (Exception error) { if (drainFailure == null) drainFailure = error; }
+                 }
++                await UniTask.SwitchToMainThread();
++                pendingTasks.Clear();
++                cpuSemaphore.Dispose();
++                uploadSemaphore.Dispose();
++                if (native != null) EndNativePrewarmWork();
++                if (drainFailure != null) throw drainFailure;
+             }
+ 
+-            await UniTask.WhenAll(pendingTasks);
+-
+             if (!CanCompleteSpritePrewarmInvocation(invocation))
+             {
+                 await UniTask.SwitchToMainThread();
+@@ -1906,6 +2151,9 @@ namespace NTSD.Animation
+             {
+                 stagedCatalog = BuildBattleSpriteCatalog(
+                     stagedConfigs, stagedSprites, clampedSourcePathsBySprite);
++                if (native != null) BeginNativePrewarmWork();
++                try
++                {
+                 stagedSpark = await BuildSparkPublicationAsync(
+                     invocation, native?.Candidate.SparkInput);
+                 if (stagedSpark == null || stagedSpark.Texture == null ||
+@@ -1935,6 +2183,13 @@ namespace NTSD.Animation
+                         stagedTextures,
+                         stagedResources);
+ 
++                }
++                finally
++                {
++                    await UniTask.SwitchToMainThread();
++                    if (native != null) EndNativePrewarmWork();
++                }
++
+                 await UniTask.SwitchToMainThread();
+                 if (!CanCompleteSpritePrewarmInvocation(invocation))
+                 {
+@@ -2012,7 +2267,7 @@ namespace NTSD.Animation
+             {
+                 Dictionary<int, CharacterUISprites> stagedUI = await PrepareNativeUISpritesAsync(native, stagedConfigs, onProgressText);
+                 if (!CanCompleteSpritePrewarmInvocation(invocation)) return false;
+-                await UniTask.RunOnThreadPool(() => native.Candidate.AssertInputsCurrent());
++                await RunNativePrewarmWorkAsync(() => native.Candidate.AssertInputsCurrent());
+                 await UniTask.SwitchToMainThread();
+                 if (!TryCommitNativePublication(native, stagedConfigs, stagedSprites, stagedCatalog, stagedUI, commonVisualCatalog, atlasDiagnostic))
+                     return false;
+@@ -2765,16 +3020,43 @@ namespace NTSD.Animation
+             return result;
+         }
+ 
++        private sealed class NativeBodyDecodeRequest : IDisposable
++        {
++            internal BMPLoader.VerifiedImageLayout Layout;
++            internal NativeDecodeAdmission.Reservation Reservation;
++            public void Dispose() { Reservation?.Dispose(); Reservation = null; }
++        }
++
++        private async UniTask<NativeBodyDecodeRequest> AcquireNativeDecodeAsync(
++            NativePrewarmOperation operation, string path, string hash, long cellPixels)
++        {
++            if (operation?.Admission == null) return null;
++            BMPLoader.VerifiedImageLayout layout = await UniTask.RunOnThreadPool(() =>
++                BMPLoader.ReadVerifiedImageLayout(path, hash));
++            await UniTask.SwitchToMainThread();
++            if (!CanCompleteSpritePrewarmInvocation(operation.Invocation)) throw new OperationCanceledException();
++            if (!layout.IsPng) return null;
++            var reservation = await operation.Admission.AcquireAsync(NativeDecodeAdmission.Weight(layout, cellPixels));
++            return new NativeBodyDecodeRequest { Layout = layout, Reservation = reservation };
++        }
++
+         private static async UniTask<(int created, int failed)> ProcessNativeBodySheetGroupAsync(
+             NativeBodySheetGroup group, Dictionary<int, List<Sprite>> stagedSprites,
+             HashSet<Sprite> stagedCreatedSprites, HashSet<Texture2D> stagedTextures,
+             List<BattleAtlasSourcePixels> stagedAtlasSources, Dictionary<string, Sprite> clampedSpritesByContent,
+             Dictionary<Sprite, string> clampedSourcePathsBySprite, Action<string> onProgressText,
+             System.Threading.SemaphoreSlim cpuSemaphore, System.Threading.SemaphoreSlim uploadSemaphore,
+-            BattleContentSource source, Func<bool> canMaterialize)
++            BattleContentSource source, Func<bool> canMaterialize, NativePrewarmOperation native, NativeBodyDecodeRequest request)
+         {
+             bool cpuHeld = true, uploadHeld = false;
++            bool completed = false;
+             int created = 0, failed = 0;
++            BMPLoader.BmpData bmpData = null;
++            Color32[] pixels = null;
++            BodySheetSpritePlan[] plans = null;
++            long pendingBytes = 0;
++            int retainedStart = -1;
++            NativeDecodeAdmission accounting = native.Accounting;
+             int affectedDeclarations = group.Members.Count;
+             string filePath = group.Members[0].fileInfo.filePath;
+             try
+@@ -2785,15 +3067,24 @@ namespace NTSD.Animation
+                     onProgressText?.Invoke(FormatLoadingResourcePath(item.fileInfo.filePath));
+                     if (!canMaterialize()) return (0, 0);
+                 }
+-                var bmpData = await UniTask.RunOnThreadPool(() =>
+-                    BMPLoader.LoadVerifiedImageData(filePath, group.ExpectedSha256));
++                bmpData = await UniTask.RunOnThreadPool(() =>
++                {
++                    native.DecodeStarted?.Invoke(filePath);
++                    return request == null ? BMPLoader.LoadVerifiedImageData(filePath, group.ExpectedSha256)
++                        : BMPLoader.LoadVerifiedImageData(filePath, request.Layout);
++                });
+                 await UniTask.SwitchToMainThread();
+                 if (!canMaterialize()) return (0, 0);
+                 if (bmpData == null || bmpData.Pixels == null) return (0, affectedDeclarations);
+-                var pixels = await UniTask.RunOnThreadPool(() => PrepareBattleSheetPixels(bmpData, source));
++                pendingBytes = 16L * bmpData.Pixels.Length;
++                accounting.AddPendingPixels(pendingBytes);
++                int textureWidth = bmpData.Width, textureHeight = bmpData.Height;
++                pixels = await UniTask.RunOnThreadPool(() => PrepareBattleSheetPixels(bmpData, source));
+                 await UniTask.SwitchToMainThread();
+                 if (!canMaterialize()) return (0, 0);
+-                var plans = new BodySheetSpritePlan[group.Members.Count];
++                accounting.AddPendingPixels(4L * pixels.Length);
++                pendingBytes += 4L * pixels.Length;
++                plans = new BodySheetSpritePlan[group.Members.Count];
+                 for (int i = 0; i < group.Members.Count; i++)
+                 {
+                     var item = group.Members[i];
+@@ -2809,13 +3100,23 @@ namespace NTSD.Animation
+                     }
+                 }
+                 if (failed > 0 || !canMaterialize()) return (0, failed);
++                if (request != null)
++                {
++                    long floatBytes = 16L * bmpData.Pixels.Length;
++                    bmpData = null;
++                    pendingBytes -= floatBytes;
++                    accounting.RemovePendingPixels(floatBytes);
++                }
+                 cpuSemaphore.Release();
+                 cpuHeld = false;
+                 await uploadSemaphore.WaitAsync();
+                 uploadHeld = true;
+                 await UniTask.SwitchToMainThread();
+                 if (!canMaterialize()) return (0, 0);
+-                Texture2D texture = CreateBodySheetTexture(filePath, bmpData.Width, bmpData.Height,
++                if (native.BeforeUpload != null) await native.BeforeUpload();
++                if (!canMaterialize()) return (0, 0);
++                retainedStart = stagedAtlasSources.Count;
++                Texture2D texture = CreateBodySheetTexture(filePath, textureWidth, textureHeight,
+                     pixels, stagedTextures, stagedAtlasSources);
+                 for (int i = 0; i < group.Members.Count; i++)
+                 {
+@@ -2827,7 +3128,15 @@ namespace NTSD.Animation
+                         stagedAtlasSources, clampedSpritesByContent, clampedSourcePathsBySprite,
+                         plans[i], pixels, texture);
+                 }
++                accounting.RecordRetained(stagedAtlasSources, retainedStart);
++                retainedStart = -1;
++                accounting.RemovePendingPixels(4L * pixels.Length);
++                pendingBytes -= 4L * pixels.Length;
++                pixels = null;
++                plans = null;
+                 await UniTask.Yield();
++                GC.KeepAlive(bmpData);
++                completed = true;
+                 return (created, 0);
+             }
+             catch (Exception error)
+@@ -2837,6 +3146,14 @@ namespace NTSD.Animation
+             }
+             finally
+             {
++                await UniTask.SwitchToMainThread();
++                if (!completed) native.Admission?.Stop();
++                if (retainedStart >= 0) accounting.RecordRetained(stagedAtlasSources, retainedStart);
++                bmpData = null;
++                pixels = null;
++                plans = null;
++                accounting.RemovePendingPixels(pendingBytes);
++                request?.Dispose();
+                 if (cpuHeld) cpuSemaphore.Release();
+                 if (uploadHeld) uploadSemaphore.Release();
+             }
+@@ -3025,11 +3342,18 @@ namespace NTSD.Animation
+             Action<string> onProgressText,
+             System.Threading.SemaphoreSlim cpuSemaphore,
+             System.Threading.SemaphoreSlim uploadSemaphore,
+-            BattleContentSource source, string expectedSha256, Func<bool> canMaterialize)
++            BattleContentSource source, string expectedSha256, Func<bool> canMaterialize, NativePrewarmOperation native = null, NativeBodyDecodeRequest request = null)
+         {
+             int created = 0;
++            BMPLoader.BmpData bmpData = null;
++            Color32[] processedSheet = null;
++            BodySheetSpritePlan plan = null;
++            long pendingBytes = 0;
++            int retainedStart = -1;
++            NativeDecodeAdmission accounting = native?.Accounting;
+             bool cpuSemaphoreHeld = true;
+             bool uploadSemaphoreHeld = false;
++            bool completed = false;
+             try
+             {
+                 if (canMaterialize != null && !canMaterialize()) return -1;
+@@ -3037,8 +3361,13 @@ namespace NTSD.Animation
+                 onProgressText?.Invoke(FormatLoadingResourcePath(filePath));
+ 
+                 if (canMaterialize != null && !canMaterialize()) return -1;
+-                var bmpData = await UniTask.RunOnThreadPool(() => expectedSha256 == null
+-                    ? BMPLoader.LoadBmpData(filePath) : BMPLoader.LoadVerifiedImageData(filePath, expectedSha256));
++                bmpData = await UniTask.RunOnThreadPool(() =>
++                {
++                    if (native != null) native.DecodeStarted?.Invoke(filePath);
++                    return request != null ? BMPLoader.LoadVerifiedImageData(filePath, request.Layout)
++                        : expectedSha256 == null ? BMPLoader.LoadBmpData(filePath)
++                        : BMPLoader.LoadVerifiedImageData(filePath, expectedSha256);
++                });
+                 if (canMaterialize != null)
+                 {
+                     await UniTask.SwitchToMainThread();
+@@ -3052,11 +3381,23 @@ namespace NTSD.Animation
+                 int textureWidth = bmpData.Width;
+                 int textureHeight = bmpData.Height;
+ 
+-                var processedSheet = await UniTask.RunOnThreadPool(() => PrepareBattleSheetPixels(bmpData, source));
+-                BodySheetSpritePlan plan = PrepareBodySheetSpritePlan(
++                pendingBytes = 16L * bmpData.Pixels.Length;
++                accounting?.AddPendingPixels(pendingBytes);
++                processedSheet = await UniTask.RunOnThreadPool(() => PrepareBattleSheetPixels(bmpData, source));
++                await UniTask.SwitchToMainThread();
++                accounting?.AddPendingPixels(4L * processedSheet.Length);
++                pendingBytes += 4L * processedSheet.Length;
++                plan = PrepareBodySheetSpritePlan(
+                     fileInfo, ownedEffectivePics, bmpData, processedSheet, source);
+                 if (plan == null) return -1;
+ 
++                if (request != null)
++                {
++                    long floatBytes = 16L * bmpData.Pixels.Length;
++                    bmpData = null;
++                    pendingBytes -= floatBytes;
++                    accounting.RemovePendingPixels(floatBytes);
++                }
+                 cpuSemaphore.Release();
+                 cpuSemaphoreHeld = false;
+ 
+@@ -3065,15 +3406,26 @@ namespace NTSD.Animation
+                 await UniTask.SwitchToMainThread();
+                 if (canMaterialize != null && !canMaterialize()) return -1;
+ 
++                if (native != null && native.BeforeUpload != null) await native.BeforeUpload();
++                if (canMaterialize != null && !canMaterialize()) return -1;
++                retainedStart = stagedAtlasSources.Count;
+                 var allSprites = stagedSprites[characterId];
+                 Texture2D texture = CreateBodySheetTexture(filePath, textureWidth, textureHeight,
+                     processedSheet, stagedTextures, stagedAtlasSources);
+                 created = CreateBodySheetSprites(fileInfo, ownedEffectivePics, allSprites,
+                     stagedCreatedSprites, stagedTextures, stagedAtlasSources, clampedSpritesByContent,
+                     clampedSourcePathsBySprite, plan, processedSheet, texture);
++                accounting?.RecordRetained(stagedAtlasSources, retainedStart);
++                retainedStart = -1;
++                accounting?.RemovePendingPixels(4L * processedSheet.Length);
++                pendingBytes -= 4L * processedSheet.Length;
++                processedSheet = null;
++                plan = null;
+                 await UniTask.Yield();
++                GC.KeepAlive(bmpData);
+                 uploadSemaphore.Release();
+                 uploadSemaphoreHeld = false;
++                completed = true;
+             }
+             catch (System.Exception e)
+             {
+@@ -3082,6 +3434,14 @@ namespace NTSD.Animation
+             }
+             finally
+             {
++                await UniTask.SwitchToMainThread();
++                if (!completed) native?.Admission?.Stop();
++                if (retainedStart >= 0) accounting?.RecordRetained(stagedAtlasSources, retainedStart);
++                bmpData = null;
++                processedSheet = null;
++                plan = null;
++                accounting?.RemovePendingPixels(pendingBytes);
++                request?.Dispose();
+                 if (cpuSemaphoreHeld)
+                     cpuSemaphore?.Release();
+                 if (uploadSemaphoreHeld)
+diff --git a/Assets/NTSD/Scripts/Animation/Runtime/BMPLoader.cs b/Assets/NTSD/Scripts/Animation/Runtime/BMPLoader.cs
+index 85b4de37..3da7d472 100644
+--- a/Assets/NTSD/Scripts/Animation/Runtime/BMPLoader.cs
++++ b/Assets/NTSD/Scripts/Animation/Runtime/BMPLoader.cs
+@@ -68,6 +68,100 @@ namespace NTSD.Animation
+             return LoadDataCore(filePath, expectedSha256);
+         }
+ 
++        internal readonly struct VerifiedImageLayout
++        {
++            internal readonly string FilePath, ExpectedSha256;
++            internal readonly long FileBytes;
++            internal readonly int Width, Height;
++            internal readonly bool IsPng;
++
++            internal VerifiedImageLayout(string path, string hash, long bytes, int width, int height, bool png)
++            {
++                FilePath = path; ExpectedSha256 = hash; FileBytes = bytes;
++                Width = width; Height = height; IsPng = png;
++            }
++        }
++
++        internal static VerifiedImageLayout ReadVerifiedImageLayout(string filePath, string expectedSha256)
++        {
++            if (string.IsNullOrEmpty(expectedSha256) || expectedSha256.Length != 64)
++                throw new System.ArgumentException("An expected SHA-256 image identity is required.");
++            string fullPath = Path.GetFullPath(filePath);
++            using (var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read))
++            using (var hash = SHA256.Create())
++            {
++                long length = stream.Length;
++                if (length <= 0 || length > int.MaxValue)
++                    throw new InvalidDataException("Image length is outside the supported range.");
++                var header = new byte[33];
++                int headerCount = 0;
++                var buffer = new byte[65536];
++                long readBytes = 0;
++                int count;
++                while ((count = stream.Read(buffer, 0, buffer.Length)) != 0)
++                {
++                    int copy = System.Math.Min(header.Length - headerCount, count);
++                    if (copy > 0) System.Buffer.BlockCopy(buffer, 0, header, headerCount, copy);
++                    headerCount += copy;
++                    readBytes = checked(readBytes + count);
++                    if (readBytes > length) throw new InvalidDataException("Image grew during qualification.");
++                    hash.TransformBlock(buffer, 0, count, buffer, 0);
++                }
++                hash.TransformFinalBlock(System.Array.Empty<byte>(), 0, 0);
++                if (readBytes != length || stream.Length != length ||
++                    !string.Equals(System.BitConverter.ToString(hash.Hash).Replace("-", string.Empty),
++                        expectedSha256, System.StringComparison.OrdinalIgnoreCase))
++                    throw new InvalidDataException("Image changed during qualification: " + filePath);
++                return ReadLayout(fullPath, expectedSha256, length, header, headerCount);
++            }
++        }
++
++        private static VerifiedImageLayout ReadLayout(string path, string hash, long length, byte[] header, int count)
++        {
++            bool png = count >= 8 && PngPixelDecoder.HasSignature(header);
++            if (!png) return new VerifiedImageLayout(path, hash, length, 0, 0, false);
++            if (count < 33 || header[8] != 0 || header[9] != 0 || header[10] != 0 || header[11] != 13 ||
++                header[12] != 73 || header[13] != 72 || header[14] != 68 || header[15] != 82)
++                throw new InvalidDataException("PNG has no complete leading IHDR.");
++            long width = ((long)header[16] << 24) | ((long)header[17] << 16) | ((long)header[18] << 8) | header[19];
++            long height = ((long)header[20] << 24) | ((long)header[21] << 16) | ((long)header[22] << 8) | header[23];
++            if (width <= 0 || height <= 0 || width > int.MaxValue || height > int.MaxValue ||
++                checked(width * height) > 32L * 1024 * 1024)
++                throw new InvalidDataException("PNG dimensions exceed the existing decoder limit.");
++            return new VerifiedImageLayout(path, hash, length, (int)width, (int)height, true);
++        }
++
++        internal static BmpData LoadVerifiedImageData(string filePath, VerifiedImageLayout layout)
++        {
++            if (!string.Equals(Path.GetFullPath(filePath), layout.FilePath, System.StringComparison.Ordinal))
++                throw new InvalidDataException("Qualified image path changed.");
++            byte[] bytes;
++            using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
++            {
++                if (layout.FileBytes <= 0 || layout.FileBytes > int.MaxValue || stream.Length != layout.FileBytes)
++                    throw new InvalidDataException("Qualified image length changed before allocation.");
++                bytes = new byte[(int)layout.FileBytes];
++                int offset = 0;
++                while (offset < bytes.Length)
++                {
++                    int count = stream.Read(bytes, offset, bytes.Length - offset);
++                    if (count == 0) throw new InvalidDataException("Qualified image was truncated.");
++                    offset += count;
++                }
++                if (stream.ReadByte() != -1 || stream.Length != layout.FileBytes)
++                    throw new InvalidDataException("Qualified image grew before decoding.");
++            }
++            using (var hash = SHA256.Create())
++                if (!string.Equals(System.BitConverter.ToString(hash.ComputeHash(bytes)).Replace("-", string.Empty),
++                    layout.ExpectedSha256, System.StringComparison.OrdinalIgnoreCase))
++                    throw new InvalidDataException("Qualified image bytes changed before decoding.");
++            VerifiedImageLayout current = ReadLayout(layout.FilePath, layout.ExpectedSha256, bytes.Length,
++                bytes, System.Math.Min(bytes.Length, 33));
++            if (current.IsPng != layout.IsPng || current.Width != layout.Width || current.Height != layout.Height)
++                throw new InvalidDataException("Qualified image dimensions changed before decoding.");
++            return DecodeImageData(bytes, filePath);
++        }
++
+         private static BmpData LoadDataCore(string filePath, string expectedSha256)
+         {
+             if (!File.Exists(filePath))
+@@ -90,6 +184,11 @@ namespace NTSD.Animation
+                 }
+             }
+ 
++            return DecodeImageData(fileData, filePath);
++        }
++
++        private static BmpData DecodeImageData(byte[] fileData, string filePath)
++        {
+             // TryLoadWithUnityData 依赖 Texture2D（主线程 API），后台线程直接走手动解析
+             if (System.Threading.Thread.CurrentThread.ManagedThreadId != 1)
+             {
+diff --git a/docs/ai/CHANGE-LEDGER.md b/docs/ai/CHANGE-LEDGER.md
+index f141188e..3ab8c3e0 100644
+--- a/docs/ai/CHANGE-LEDGER.md
++++ b/docs/ai/CHANGE-LEDGER.md
+@@ -1,3 +1,82 @@
++> **2026-10-11 M12 repair-01／correction-02：诊断最小修复及冷态有限验证完成，FOCUSED_TEST_PASS。** 最终仅将R03输出标签改为u3（所有冷态路径最长242–249字符且先验无碰撞）；一次原Editor窄编译通过，R03–R07各一次共5/5PASS，R02原1/1PASS按未改方法及比较helper复用，六项冷态门通过。5夹具均有cloneAbsent/singleton保持最终回执；原Menu clean8、Editor idle/nonPlay、无hotowner、Console本次0。原R01首差、R03 Set断言FAIL、长路径R03 ERROR及旧P1全部原件保留；不把新夹具释放覆盖旧run外部中断/Dispose UNKNOWN。源码仅既有M12独立诊断区，原40652字节/ReadStaticPlan/8菜单不变，生产未改；最终源d408f359324adedea3304ffc0b3c4b378f548872a27220cf133fb04336098bfa。93保护/旧6/旧run10及外部回执不变，24复制目标匹配；18源WAV匹配、6Temp源缺失原因UNKNOWN且未补建。完整报告见diagnostic-interface-01/REPORT.md文末correction-02。M12父OPEN/ACTIVE、字节DEFAULT_OFF/H08ON；下一仅同M12真实生命周期缺口审阅，P1不得自动重跑，其他hold不恢复。下方失败/等待状态保留为历史。
++
++> **2026-10-11 M12 repair-01最新：R03_TEST_OUTPUT_ERROR / BLOCKED。** 精确R03断言修订仅改release/decoded.Wait(0)与独立输出标签，原Set断言FAIL保留；安全窄编译通过。修订R03仅运行一次，新的DirectoryNotFoundException落在fixture-finally证据写入：目录实际存在，first-failure路径258字符成功，warmup263/owned269/finally260字符无成功回执，符合Windows/Mono长路径限制现象但未另做复验。已停，R04–R07未运行，未缩短路径再试/改生产/P1。当前Editor idle/nonPlay、Menu clean8、无hotowner，Console返回0；最终清理回执缺失，不能称本修订R03或全窄门通过。clone包装层原因已修、R02 1/1PASS复用；旧P1外部中断/Dispose UNKNOWN不变。源SHAb7eb9768308ed507b5db8d6e53f5650fc6967600eb951b2df96c24fa8cce849e；同Task/Change/Operation，M12父OPEN/ACTIVE、字节DEFAULT_OFF/H08ON。准确新失败见repair-01/r03-correction-path-failure.json与r03-correction-01-results.xml。下方为此前阶段。
++
++> **2026-10-11 M12 repair-01：CLONE_CAUSE_FIXED / COMPILE_PASS / R03_ASSERTION_FAILED，后续已停。** 用户手动重启后原Editor确认idle/nonPlay、Menu clean8、旧owner不存在；旧P1外部中断/Dispose UNKNOWN保留。一次冷R01首差FAIL留存：实际JSON有MonoBehaviour包装层，旧代码在错误顶层改name/root；原始差异仅这两项，25引用相同。仅既有M12独立诊断区修正准确路径及已批早期自有释放/外部观察，原40652字节、ReadStaticPlan、8菜单不变。两次依赖性窄编译通过；修复后R02 1/1PASS；R03在Dispose后Set应抛ObjectDisposedException的断言失败，未改断言/重跑，R04–R07未执行。R03自有clone消失/原singleton保持/Dispose回执与失败并存，非旧run释放证明。原十回执/93保护/旧6证据不变；24复制目标仍匹配，重启后发现6个原Temp源缺失（未清理/未恢复，责任未归因）；旧run新增external-interruption原件ownedResourcesReleased=false。完整报告见 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/REPORT.md 文末repair-01。Task/Change/Operation沿用，Change BLOCKED、M12父OPEN/ACTIVE、字节DEFAULT_OFF/H08ON；无P1重跑/H07/Android通过，其他hold保持。下方为历史时点。
++
++> **2026-10-11 M12 repair-01：原Scene已外部恢复并核验，旧owner处置待明确，源码修复尚未开始。** 当前原Editor稳定nonPlay/idle；唯一NTSD_Menu loaded/active/clean/root8与Prepare相同，文件字节保持，本任务没有重复加载。旧owner仍存活、cloneReleased/handlesDisposed=false，原首差和Warmup异常保留。已核现有编译类型和全部相关支持接口：unity_reflect仅元数据、无活owner方法调用，M12 Cleanup/Exit要求Play；没有无需导入的合法EditMode精确释放路径。动态代码/再进Play/先reload丢owner仍禁用。已请求具体处置决定：用户手动重启Editor并保留旧run外部中断/Dispose UNKNOWN，随后才续已批准的最小修复；未获答前0源码/compile/test/P1。源码/两DLL/保护93/旧6/24输入/十run原件均匹配。证据 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/post-external-exit-repair-01/interface-gap-proof.json；同Task/Change/Operation，M12父OPEN/ACTIVE、Change BLOCKED、DEFAULT_OFF/H08ON。下方为此前时点。
++
++> **2026-10-11 M12 外部退出后只读核对：EXTERNAL_INTERRUPTION / NOT_RESTORED，最小修复仅提案。** 用户决定手动退出；本轮实际观察稳定nonPlay/idle、非编译/更新/测试，原诊断owner仍存活，playing=false、cloneReleased=false、handlesDisposed=false。当前仍单一空Scene clean/root0，原Menu clean8未恢复。原runRoot十个回执不变，无external-interruption/安全Exit/reload/result新原件；本轮仅另存外部观察，不补造。Console两次0条，实际Read Status从精确Editor.log取得，旧首差/退出Exception保留；native clone当前身份、句柄Dispose完成及退出边界日志完整性未证明。源码/两DLL/具名保护93/旧6/24输入均匹配；0源码/compile/test/Scene变更/P1重跑。单一诊断文件的clone首差、分阶段自有释放、严格失败与安全释放分离、外部退出观察及独立Scene恢复提案见 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/REPORT.md 文末post-external-exit-review-01。Task/Change/Operation沿用；M12父OPEN/ACTIVE、Change BLOCKED、字节DEFAULT_OFF/H08ON，其他hold不恢复。以下保留此前事实。
++
++> **2026-10-11 M12 唯一P1：FIRST_DIFFERENCE / EXIT_GUARD_HOLD（未恢复Scene）。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。Prepare实际回执与24项232571B复制校验通过；同runGuid一次Enter/一次Run在menu_load的“Clone changed fields other than runtime root.”守卫停止，尚未加载真实Menu/Battle或开始两个周期。一次Cleanup获接受，实际状态FAILED_CLEAN_SAFE；Exit If Safe因“Warmup identity was never observed.”拒绝。最后存活owner仍playing=true，native/Loading/close pending=false，errors1/persisted1/writers0/late0；clone未释放、句柄未dispose，空Scene clean0，未退出/未恢复。FAILED_CLEAN_SAFE不等于安全退出完成。无改代码/编译/重跑/第二I/新ABBA。M12父OPEN/ACTIVE、字节门DEFAULT_OFF、H08ON；下一只交回首差及早期失败安全收尾缺口审阅，不恢复其他hold/Goal。完整结果见 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/REPORT.md 文末P1；以下为此前时点。
++
++> **2026-10-11 M12 P1一次有限执行 IN_PROGRESS。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011；revision-01 R/C2经有限独立接受，现只派固定runGuid的Prepare→一次Play双周期→守卫允许的清理/退出/恢复。准确24输入232571B、复制目标/原SHA/Scene和失败HOLD门已先登记于diagnostic-interface-01/p1-execution-01。无源码/编译/第二I/旧测试/ABBA/设备或其他点；首差即停，不换根重试。当前尚无P1结果，M12父OPEN/ACTIVE、默认OFF、H08ON。以下为此前时点。
++
++> **2026-10-11 M12 revision-01：R/C2完成，P未派发/未运行。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。仅修独立诊断区的修订身份、自有clone/句柄收尾、完整取消condition与日志落盘、单次cleanup；24文件232571B未来输入已冻结、复制0。原40652字节、ReadStaticPlan方法与八菜单均保持。原Editor一次C2窄编译/new DLL/reload通过、Menu clean8，Console1条MCP连接退出Exception保留；所有菜单调用0，不做第二次I。旧C/I仅复用旧SHA下未改方法/路由，不称新源码运行PASS。源码1bf39d4793a1212561a39a2a10d5b822e336c875d0583fd6ac8a648bf503e3b7。下一同M12独立审阅此修订、严格取消归属/实际释放/音频/退出观察门，再派原定单Play两周期；M12父OPEN/ACTIVE、字节门默认OFF、H08ON，其他hold保持。完整本轮见implementation-01/review-02/diagnostic-interface-01/REPORT.md文末revision-01。以下保留历史。
++
++> **2026-10-11 M12 revision-01 IN_PROGRESS。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。独立审阅已有限接受旧S/G/C/I；本轮仅修既有独立诊断区的Prepare身份门、自有clone/句柄收尾、完整取消日志与持久化、at-most-once cleanup，冻结24文件232571B未来输入。原40652字节、ReadStaticPlan方法及八菜单保持；没有复制、菜单或Play。下一仅C2窄编译和G，不重复I。字节门OFF、H08ON、M12父OPEN，其他hold不恢复。见diagnostic-interface-01/revision-01/PLAN.md；以下为此前时点。
++
++> **2026-10-11 M12 diagnostic-interface-01：COMPILE_PASS / COLD_INTERFACE_PASS，P未运行。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。仅既有M12测试文件追加独立诊断和8菜单，原40652字节完全保留。原Editor一次窄编译完成；唯一一次Read Static Plan实际回执确认PID39108、Authority400/400、CentralOnly、源码/DLL匹配，Menu clean8；无hot owner、无内容/音频准备、无Play目录/运行。Console返回2条MCP连接退出Exception记录原样保留，不称Console零异常。下一仍同M12独立审阅实现及C/I证据、明确音频和退出观察资格后再派原单Play两周期；其他菜单未派发。原C1/F1–F4、旧ABBA按各自SHA/覆盖复用。M12父OPEN/字节门默认OFF、H08ON；其他hold保持。完整报告：artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/REPORT.md。此前execute_code与进程参数观察不再作为方案/资格依据；以下保留历史。
++
++> **2026-10-11 M12 diagnostic-interface-01 IN_PROGRESS。** 同 Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。仅在既有 M12 测试文件追加独立诊断类型及八个显式菜单，原40652字节保持；范围为代码、原Editor窄编译及一次 Read Static Plan 冷态资格。Prepare/Enter/Run/关闭/恢复均未派发，不运行Play。此前 execute_code 路线撤销，禁止替代动态求值；此前进程参数读取观察撤回，不作为配置权威、不再收集或复述参数。实际配置只认本次 Resolve 结果回执。原 C1/F1–F4 与旧ABBA按各自SHA和覆盖复用；M12父OPEN、字节门默认OFF、H08ON，其他hold保持。见 implementation-01/review-02/diagnostic-interface-01/IMPLEMENTATION-PLAN.md。以下保留此前时点。
++
++> **2026-10-11 M12 P0-static-03：原容量/资源及独立Editor诊断方案已收敛，P1仍未写／未运行。** 同Task/Change/Operation。当前原Editor无NTSD覆盖，静态解析Authority400/400、CentralOnly；clone仅改六文件根。拟在同已声明测试文件新增独立Editor-only类型，通过现有execute_code显式分段调用；不继承旧fixture、不用UTR枚举/LogAssert/NoUnexpectedReceived，不自动退出Play。只在无活跃事务的预期reload边界接回冷记录，hot owner丢失不重建/重跑。完整资源/接口/两周期/日志/安全退出表见implementation-01/REPORT.md文末。仅余Spark材质捕获653–662与formal声音路径609–639两个准确来源读证；接口本轮未向Editor调用。0脚本/Unity/编译/测试/Play/新ABBA，原门复用；M12 OPEN/默认OFF、H08 ON，其他hold保持。
++
++> **2026-10-11 M12 P0-static-02：Driver创建与六文件输入已核，完整双周期表仍为提案。** 同Task/Change/Operation；ShowLoading只切面板，文本队列空不要求currentText清零，Warmup纹理/Sprite没有已证归还。clone仅改BattleContentRuntimeRoot，严格日志、await/timeout、对象观察和恢复见implementation-01/REPORT.md文末。下一只读pool/空players闭包、UTR精确日志及Enter/ExitPlay三组局部；P1未实施/尚不具执行资格。本轮0脚本/Unity/编译/测试/Play/新ABBA，C1/F1–F4复用、旧ABBA留旧SHA。M12 OPEN/默认OFF、H08 ON，其他hold保持。
++
++> **2026-10-11 M12 P0-static-01：四类获准只读事实已复核，P1尚未实施。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。Singleton/clone首次赋值、EnterPlay两键、Loading完整任务和两个Scene指定绑定已核；native drain不能替代Loading/Core/Start/池/UI收尾。完整一次Play双周期提案集中于implementation-01/REPORT.md文末：首周期加载/准备期取消，次周期完整准备后关闭，分别join并在首个Battle回调先撤订。下一准确局部读证仅Driver两段、Loading合法caller及getter/Warmup/Update；未读新正文、未写驱动。本轮0源码/Unity/编译/测试/ABBA，复用本版C1/F1–F4。字节门默认OFF、M12父OPEN、H08 ON；其他hold保持。以下为此前时点。
++
++> **2026-10-11 M12 review-02/focused-01：最小修复已实现，FOCUSED_TEST_PASS。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。manager失败/取消主线程Stop先于Dispose；App普通pending自动接现有异步关闭、真实completed才更新菜单；Driver只回原LF；两个新增focused＋原Q03C/Q03D，原Editor一次编译及4/4通过。F2固定4分支第三decode0、waiter取消/另一owner保留后全归零。未写Play驱动、无P0/P1/新ABBA；旧成本只属旧SHA。真实Scene下一路线改为合法Menu在途→Scene加载准备期关闭，精确4类静态读证请求集中于implementation-01/REPORT.md文末。字节门OFF/M12 OPEN，H08 ON，其他hold不恢复。以下保留此前时点。
++
++> **2026-10-11 M12 review-02/focused-01 IN_PROGRESS。** 同Task/Change/Operation，在既有直接人类M12及Driver/App授权内落实已审最小修复：manager两个worker主线程Stop-before-Dispose；App普通/选角pending共享与真正completed后菜单状态；Driver仅恢复当前逻辑LF；既有M12测试只新增两个focused。先原Editor窄编译，再F1/F2/F3旧Q03C/F4旧Q03D各一次，首差停止；不写Play驱动、不执行P0/P1/新ABBA。17真实当前前件含源码、治理、程序集与XML已保存。字节门OFF、父M12 OPEN，原结果继续绑定旧SHA。
++
++> **2026-10-11 M12 review-02：REVIEW_GAPS_CONFIRMED / NEXT_FIX_PROPOSED，尚未实施新修复。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。只读确认失败worker先归还额度、外层后Stop的普通waiter窗口，以及UnloadBattle主菜单pending未恢复/提前MenuMain两点；Driver另有整文件换行差异。原12PASS与唯一ABBA冻结于原SHA；PendingPixels不覆盖decoder内部或登记前瞬间，不称GC/整进程峰值。准确最小四文件提案、4项focused及待授权单一双周期真实Scene表集中在 implementation-01/REPORT.md 文末review-02。本轮0源码变更、0Unity/测试；M12 OPEN/字节门OFF，原关闭保护已接线，H08 ON。其他hold/Goal不恢复。以下保留此前证据时点。
++
++> **2026-10-11 M12有限候选验证完成：FOCUSED_TEST_PASS / DEFAULT_OFF。** Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。原Editor编译通过，11项正确性/生命周期门通过（8复用、3续跑），首次且唯一ABBA1/1：worker像素payload峰值18.125→5MiB（-72.41%），retained3.625MiB不变，耗时比1.0496（非加速）。旧Q05 CreateNew冲突ERROR保留；获批仅修H08辅助证据路径后续跑。四生产/四测试文件，字节门OFF、H08共享ON；关闭保护已接线。真实Scene卸载/重入、30秒超时、强制退出、完整内容/进程/Android未验，M12父项OPEN。下一仅同M12原件审阅及准确缺失门，不恢复其他hold/Goal。报告 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/REPORT.md。以下保留此前时点。
++
++> **2026-10-11 M12实施 IN_PROGRESS。** 用户已明确批准Driver/App两个生产文件的限定关闭扩域。Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001：先阶段1取消、阶段2实际native drain、阶段5清理与pending恢复；再原128MiB/固定E字节准入及有限验证。原十一阶段/规则保持，强制Editor退出另报边界，不改其桥接脚本。Operation OP-NTSD-M12-IMPLEMENTATION-20261011；17真实前件已备份，候选默认OFF，其他hold/旧Goal不恢复。当前尚未编译/验证，不声明PASS。
++
++> **2026-10-11 M12继续授权／实际关闭链已核清：AWAITING_EXACT_SHUTDOWN_SCOPE_DECISION。** 用户已批准原M12实施与有限验证，但要求扩大关闭域前先报告。阶段1取消非drain，阶段2只管dedicated worker，阶段5/Stopped未检查图片任务；原同步App也不会await/resume。为保留真实drain后才关闭的门，现提出仅新增Driver关闭/重建guard与App正常异步关闭接线两个生产文件，关闭合同仅补原阶段映射；尚未修改这些文件或任何生产/测试脚本。Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001仍PLANNED；[准确证据和范围](../../artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/shutdown-review-01/REPORT.md)。本轮Unity/编译/测试0，M12 OPEN，其他hold保持。下方preflight-only授权说明为此前阶段，不覆盖本次附条件继续授权。
++
++> **2026-10-11 M12 手机优先有限预检：PLANNED / PRE_FLIGHT_READY_FOR_REVIEW。** Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011；Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。准确方案已形成：native PNG共享/显式OFF两路解码前按字节准入，128MiB普通权重＋超大单张独占上界439799644B为待审建议，非手机内存预算。703header/长度静态核验；真实clamp哈希临时字节另计，候选>128MiB为9项。M12不能单独解决大源/全量atlas驻留。主审需核准确Driver stage1/2/5与图片任务drain区别；本轮未读Driver/Q06方法体、未改脚本、未操作Unity/编译/测试/测量。10份真实治理前件已备份；[唯一完整方案](../../artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/PLAN.md)。M12保持OPEN，下一为同Task独立审阅后准确派实施，不默认暂停或关闭；H10 CLOSED／Player ABANDONED及其余hold不恢复。以下保留历史时点。
++
++| NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001 | FOCUSED_TEST_PASS | [Record](CHANGE-RECORDS/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001.md) |
++
++> **2026-10-11 H10 CLOSED：按用户决定结束当前优化范围。** 用户取消新增Windows Player出包验收路线，未实施Task NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011与Change NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001均ABANDONED；原因是范围取消，不是运行失败。第四processor待批事项撤销，三个新脚本/两个meta不创建，兼容提案不实施。PCM有界/逐局formal owned、同输入320MiB对象门及resume03隔离Editor三轮音频门按原scope保留；Player、整进程2/3GiB、目标8GB型号、完整千人预算、人工听感仍未验证，但不再是本次H10 active待办或结项前置。旧compat13/14、成本尖峰、失败/事件不追溯改PASS。决定：docs/ai/DECISIONS/NTSD-H10-USER-SCOPE-CLOSEOUT-20261011.md；结项：artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/closeout-user-scope-01/REPORT.md。当前H10已结束，下一无自动启动项；H08/H07/M03/producer/H06等hold、33ms/十一阶段及全部原边界保持。下方旧OPEN/等待第四域/继续出包和旧统计只保留为被本决定替代的历史。
++
++| Change ID | 当前状态 | 记录 | 当前结论 |
++|---|---|---|---|
++| NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001 | ABANDONED | [Record](CHANGE-RECORDS/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001.md) | 用户取消未实施Player验收路线；H10范围结束，无代码/运行失败或新PASS |
++
++> **2026-10-11 H10 PRE-FLIGHT已收敛交回：PLANNED，完整有限表与构建前冷资格已明确，尚无实施派发。** formal根与public Candidate/Catalog/显式snapshot有限读证已闭合；703body双审0差，实际head/small/common集合留给backend/build前的一次冷资格。已准原new probe内UNITY_EDITOR静态桥接调用公开Capture/既有internal Copy，冷解析/managed分配据实记录；必须保护原publication/cache/player/singleton/Scene。CASE/Ordinal/记录粒度/预算已审，compile/Q/build/两PID三轮均NOT_RUN，第四processor直接人类确认及完整派发未到。当前完整表见 artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PLAN.md 与 PRE-FLIGHT-01.md 文末，结果CONVERGENCE-RESULT.md。H10父项OPEN，不暂停或转其它点；无源码/资源/Settings/Unity/build/Player变更。以下保留此前时点。
++
++> **2026-10-11 H10 PRE-FLIGHT 收敛：当前方案集中回现有PLAN/PRE-FLIGHT，仍PLANNED／未授实施。** 主审已冻结真实静态VS0/1来源及普通四目标全窗/千人全请求计数加首批64明细的证据颗粒度；未运行。旧已解析body703/703与manifest现SHA/长度同，两个DAT及两种SPARK已含；WORDS六图、KillIcon三候选图缺失分别保留其既有nullable/skip合同，不补资源。head/small实际清单与Source根绑定尚待精确读证；没有证明新增部署项，也不称完整闭包。完整1build/2PID×3轮表和安全恢复门见 `artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PLAN.md` 文末收敛表及 `PRE-FLIGHT-01.md`，剩余读域 `FINAL-PATH-BINDING-REQUEST.md`。第四processor确认由主会话处理，Task/Change与H10父项状态保持；0脚本/Settings/build/Player/其它点。以下保留此前时点。
++
++> **2026-10-11 H10 PRE-FLIGHT-01 review-03：公开队伍/静态VS来源与精确raw身份已补齐，仍PLANNED。** 三槽候选team1/2/3；Menu真实序列化mode0/1与组件GUID已核，实际Player资格仍待验证。旧1000raw已含builtin/mode；Ordinal先原raw后缺失单属alias共1968，14冲突键由原raw优先，1024/2048容量对旧集有据。V3小写分析保留但不用于实施。普通目标完整明细与千人全窗计数/限定首批明细候选分开，4096不作千人上界；诊断容量失败不冒称生产丢音。新件 `artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/REVIEW-03-CASE-CAPACITY-CLARIFICATIONS.md`、`RAW-KEY-RESOLUTION-V4-ORDINAL.json`、`RAW-UI-NEXT-READ-REQUEST.md`。下一仅Candidate输入/路径最小读证和方案审查；第四写域/完整派发未到，无脚本/Settings/build/Player/其它点，H10父项OPEN。以下保留此前时点。
++
++> **2026-10-11 H10 PRE-FLIGHT-01 review-02：已证旧Windows回调1373清单与当前2334源冲突，第四写域仅提案待直接人类确认。** 原callback和严格门不绕过；一次H10上下文选择完整新清单提案已独立审阅，尚无代码/Settings/build/Player授权。输入/tee容量与恢复已细化；GameModeConfig普通两字段对象身份已更正；撤回三人同队候选，待公开队伍/真实VS映射。Task/Change仍PLANNED、H10父项OPEN、不推进其它点。新原件：`artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/POSTPROCESSOR-COMPATIBILITY-PROPOSAL.md`、`CASE-SAMPLING-RESTORE-V2.md`、`REVIEW-02-CONTRACT-CLARIFICATIONS.md`、`TEAM-ENTRY-CORRECTION.md`。旧证据保留，以下为此前时点。
++
++> **2026-10-11 H10 Player PRE-FLIGHT-01方案补齐，仍PLANNED／未授权实现。** R1-R3由主会话具名供证；新增具体2/16/507三轮技能候选及采样质量提案。发现现有Windows postprocessor部署交叠和MatchConfirmed后原cfg自动加载，须准确补齐后再build。原validator PASSED1423/4534 warnings（本计划3）；4094保护/406旧artifact无漂移为已保存执行审计。0脚本/Settings修改、0编译/测试/build/Player/sidecar。入口 `artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PREFLIGHT-ADDENDUM-01.md`、`CASE-MATRIX-CANDIDATE.md`、`NEW-READ-DEPENDENCIES-01.md`、`OBSERVATION-SEAM-REQUEST.md`、`EMPTY-WORLD-ENTRY-ORDER.md`。H10父项继续OPEN、不默认暂停、不推进其它点；以下保留此前时点。
++
++> **2026-10-11 H10 Windows Player预算 PRE-FLIGHT-01完成，PLANNED / 具名读域待独立审查。** Task NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011 / Change NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001。仅只读harness/App具名合同及新方案；0脚本/Settings修改、0build/Player/sidecar。2752已知资源条目SHA manifest尚未部署，UI/空players/suppression/三轮重入仍需R1-R4读证。候选1build、2进程各1smoke+2formal，未自授执行额度。resume-03成功与全部旧失败冻结，H10父项OPEN、不推进其它点。入口 artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PRE-FLIGHT-01.md 与 PLAN.md/READ-SCOPE-REQUESTS.md。以下为此前时点。
++
++> **2026-10-11 H10 resume-03：RUNTIME_AUDIO_GATES_VERIFIED（限定隔离Editor音频运行门）。** Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 VERIFIED仅本轮。首次编译、资格2/2及唯一三轮Play1/1PASS；六次真实启动声源身份/计数/clip/在播通过，轮2/3复现旧selector停播而本次新源在播，旧FAIL保留。63有效校准scope0事件；三轮非零输出/公开关闭重入、真实pending取消迟到/自然Destroy与精确清理通过，当前Menu clean8/组件/config恢复。非1000实体/完整Battle/Player/整进程/目标PC，H10父项OPEN、预算/218.313758MiB对象门复用保持，无H07/Android/Goal/其它点。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/REPORT.md；下一仅同H10原件独立审阅与缺失门。以下为此前时点。
++
++> **2026-10-11 H10 resume-03 IN_PROGRESS。** 同Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001。仅PcBudget冷播放观察：复制voice/序号前后值识别本次真正启动源，完整证据先于断言，公开关闭前后精确借用观察。旧helper/三recorder/ExerciseHot/生产冻结。两项本版资格通过后仅一次三轮Play组，首差停止。旧失败保留；H10父项OPEN、预算/对象门复用不变，无Player/Goal/其它点。计划 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/PLAN.md；Operation OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME03-20261011。下方为此前时点。
++
++> **2026-10-11 H10 resume-02：SCOPED_HOT_0EVENTS_PASS / SECOND_CYCLE_GENERIC_PLAY_OBSERVATION_FAILED。** Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 BLOCKED。首次编译及新资格2/2PASS，raw-key/两轮cold wrapper与generic同引用通过；两轮各7tick×3范围共42有效校准scope0事件，无热load/build/reject增量，非整Driver/千人实体。第一轮实际播放/非零输出及公开关闭重入完成；唯一Play整体0/1FAIL于第二轮genericVoice在播断言，首个同clip voice选择器有观察风险，实际原因未证明，未改生产/追加组。两次关闭/owned后帧归零/精确generic清理及当前Menu组件/config恢复通过。4094保护/9指纹/196旧artifact保持。三轮/pending/natural/Player/进程门未完成，H10父项OPEN；预算与对象门复用不变。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/REPORT.md，下一仅同H10精确播放观察独立审阅。无新Goal/队列/其他点，以下是旧时点。
++
++> **2026-10-11 H10 resume-02 IN_PROGRESS。** 同Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001，经独立审阅仅修PcBudget真实raw-key、无解码成员资格、cold wrapper guard及关闭证据字段；三个已通过recorder算法不改。先编译/本版资格2项，全过后仅一次新版Play，首差停止。原两失败/生产/预算及对象门复用保持，H10父项OPEN。计划 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/PLAN.md；Operation OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME02-20261011；无Player/Settings/其他点/Goal。下方保留旧时点。
++
++> **2026-10-11 H10 resume-01：MEASUREMENT_QUALIFIED_FIXTURE_CUE_ID_MISMATCH。** Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 BLOCKED（本轮夹具）。首次编译PASS，无解码资格2/2PASS：三个独立GC.Alloc recorder前后正控有效/empty0，Unit原样TimeNanoseconds；不是生产热0GC。唯一新Play0/1 Error，冷generic查询data/016与实际注册data\016 raw key不一致，wrapper null，未进热循环；归属执行者夹具错误，生产未改，不追加组。22owned失败清理公开stage10/空地图stage11及下一帧释放通过，generic016精确清理；当前Menu clean8/组件快照/config/MM settings相同。4094保护/旧105artifact无漂移，旧其他方法体保持。预算已批准与218.313758MiB对象门复用保持；三轮/播放/取消/Player/进程门未过，H10父项OPEN。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/REPORT.md；下一仅同H10精确raw-key/guard修正独立审阅，不自动运行，无新Goal/队列/Player。下方保留此前时点。
++
++> **2026-10-11 H10 resume-01 IN_PROGRESS。** 独立审阅后恢复Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001。仅PcBudget诊断计量/负控/保护修正，先无解码资格，全部通过后仅一次新版本三轮Play组；首差停止。旧分配校准FAIL原件保留，生产/Scene/资源/Settings冻结，预算已批准/对象门复用保持，H10父项OPEN，无Player/其他点/Goal。计划 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/PLAN.md；Operation OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME01-20261011。下方为此前时点。
++
++> **2026-10-11 H10：PC_TARGETS_ADOPTED；本轮 RUNTIME_CALIBRATION_FAILED，父项继续 OPEN。** 人类已批准暂定PC基础/推荐候选及AudioClip≤320MiB、游戏进程Private稳态≤2GiB/过渡采样峰≤3GiB，尚未认证硬件。Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 BLOCKED（本轮测量夹具）。1682项当前输入指纹匹配，旧228,918,567B对象账本可复用通过320MiB对象门；非整进程证书。原Editor编译通过、窄资格1/1 PASS；唯一Play组0/1 FAIL：byte[97]分配正控计数为0，正式热样本前停止，未重跑。第一轮22个owned clip准备后，失败清理公开关闭stage10/空地图完成stage11、drain/下一帧释放与精确generic016清理通过，Menu clean8恢复。三轮/热0GC/实际播放/取消等门未完成；不覆盖旧13/14、Menu UNKNOWN或既有事件。下一仅同H10测量夹具修正独立审阅及剩余Play门，Player仅已有只读方案，不自动build/改Settings。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/REPORT.md；预算决定 docs/ai/DECISIONS/NTSD-PC-TEMP-ENGINEERING-TARGETS-20261011.md。下方UNDECIDED等为历史时点；无H07/Android通过，无Goal/34队列恢复。
++
++
++> 2026-10-11 **PC_TARGETS_ADOPTED / H10 runtime acceptance IN_PROGRESS.** Human approved concrete provisional PC tiers and AudioClip<=320MiB / game-process private steady<=2GiB / transition sampled peak<=3GiB; not certified hardware. Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 PLANNED. Exact single diagnostic script; original production/old evidence retained. Decision: docs/ai/DECISIONS/NTSD-PC-TEMP-ENGINEERING-TARGETS-20261011.md. Old budget UNDECIDED below is historical, not current blocker. Three-session Play and process gates not yet verified; H10 parent OPEN, no H07/Android/Goal/queue.
++
+ > **2026-10-11 H10全目录音频账本完成：FULL_CATALOG_AUDIO_ENVELOPE_MEASURED。** Task NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 / Change NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 VERIFIED（仅Editor诊断）。真实330定义/1000cue，两轮public准备关闭唯一组1/1 PASS；每轮978formal+72generic去重228,918,567B（218.313758MiB），formal逐局归零、同72generic跨轮复用，最终仅精确释放新增72key/clip，原4clips及Menu clean8保持。首次资格FAIL及事件保留，修正资格/恢复检查/无音频所有权负控各1/1；测量后仅诊断guard哈希变化，生产冻结。71283保护无漂移。报告 artifacts/diagnostics/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011/REPORT.md。音频数字预算UNDECIDED、producer完整闭包未准入，H10父项OPEN；下一仅同H10预算/覆盖合同审阅，不自动其他点/Goal/队列。以下为此前时点。
+ 
+ > 2026-10-11 NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 IN_PROGRESS / NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 PLANNED. H10 continues: complete real catalog/generic inventory, protected2resource fixture first, then one bounded2session audio-only envelope if safe. Production frozen; parent budget/coverage remain OPEN. No other point or Goal.
+@@ -2365,3 +2444,17 @@ NTSD28-336B44-BODY-DEPTH-CANDIDATE-001 / FOCUSED_TEST_PASS: original compile/err
+ | NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-001 | VERIFIED | [Record](CHANGE-RECORDS/NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-001.md) |
+ 
+ | NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 | VERIFIED | [Record](CHANGE-RECORDS/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001.md) |
++
++
++## 2026-10-11 用户范围结项（当前终态）
++
++H10 CLOSED；未实施Player路线ABANDONED。用户取消新增出包验收条件，第四processor待批事项撤销，不再等答复或完整实施派发。三个新脚本/两个meta不创建，全部preflight/proposal/FAIL保留。已实施PCM/逐局formal owned、320MiB同输入对象门/resume03限定音频门按原scope保留；Player/2与3GiB进程/8GB型号/完整千人/人工听感仍未验证，不列本次active后继。旧compat13/14/成本尖峰/失败不改PASS。决定见docs/ai/DECISIONS/NTSD-H10-USER-SCOPE-CLOSEOUT-20261011.md，报告见既有Player输出根closeout-user-scope-01/REPORT.md。仅治理检查，无源码/资源/Settings/Unity/编译/测试/测量/build/Player/sampler；无下一项/Goal，其他hold与所有原边界不变。此前PLANNED/OPEN/等待第四域/继续出包仅为被本决定替代的历史，不再授执行权限。
++
++
++### M12 repair-01 source work authorized after human restart
++
++Same Task/Change/Operation; old OWNER_LOST/Dispose UNKNOWN retained. Plan artifacts\diagnostics\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\implementation-01\review-02\diagnostic-interface-01\post-external-exit-repair-01\IMPLEMENTATION-PLAN.md. Exact independent diagnostic region only; cold firstdiff then evidence-driven minimum fix/narrow EditMode checks, no P1. M12 OPEN/defaultOFF/H08ON. Current repair IN_PROGRESS; prior statements above are history.
++
++M12 R03 exact cold-test API correction IN_PROGRESS within same repair; original FAIL retained, no P1. See repair-01/r03-correction-before-manifest.json and detailed report.
++
++M12 correction-02 exact R03 evidence-label fix IN_PROGRESS; same Task/Change/Operation, no P1, see repair-01/correction02-before-manifest.json. Prior failure/WAIT wording is historical.
+diff --git a/docs/ai/CURRENT-AUTHORITY.md b/docs/ai/CURRENT-AUTHORITY.md
+index d98d65d5..c301ef01 100644
+--- a/docs/ai/CURRENT-AUTHORITY.md
++++ b/docs/ai/CURRENT-AUTHORITY.md
+@@ -1,3 +1,80 @@
++> **2026-10-11 M12 repair-01／correction-02：诊断最小修复及冷态有限验证完成，FOCUSED_TEST_PASS。** 最终仅将R03输出标签改为u3（所有冷态路径最长242–249字符且先验无碰撞）；一次原Editor窄编译通过，R03–R07各一次共5/5PASS，R02原1/1PASS按未改方法及比较helper复用，六项冷态门通过。5夹具均有cloneAbsent/singleton保持最终回执；原Menu clean8、Editor idle/nonPlay、无hotowner、Console本次0。原R01首差、R03 Set断言FAIL、长路径R03 ERROR及旧P1全部原件保留；不把新夹具释放覆盖旧run外部中断/Dispose UNKNOWN。源码仅既有M12独立诊断区，原40652字节/ReadStaticPlan/8菜单不变，生产未改；最终源d408f359324adedea3304ffc0b3c4b378f548872a27220cf133fb04336098bfa。93保护/旧6/旧run10及外部回执不变，24复制目标匹配；18源WAV匹配、6Temp源缺失原因UNKNOWN且未补建。完整报告见diagnostic-interface-01/REPORT.md文末correction-02。M12父OPEN/ACTIVE、字节DEFAULT_OFF/H08ON；下一仅同M12真实生命周期缺口审阅，P1不得自动重跑，其他hold不恢复。下方失败/等待状态保留为历史。
++
++> **2026-10-11 M12 repair-01最新：R03_TEST_OUTPUT_ERROR / BLOCKED。** 精确R03断言修订仅改release/decoded.Wait(0)与独立输出标签，原Set断言FAIL保留；安全窄编译通过。修订R03仅运行一次，新的DirectoryNotFoundException落在fixture-finally证据写入：目录实际存在，first-failure路径258字符成功，warmup263/owned269/finally260字符无成功回执，符合Windows/Mono长路径限制现象但未另做复验。已停，R04–R07未运行，未缩短路径再试/改生产/P1。当前Editor idle/nonPlay、Menu clean8、无hotowner，Console返回0；最终清理回执缺失，不能称本修订R03或全窄门通过。clone包装层原因已修、R02 1/1PASS复用；旧P1外部中断/Dispose UNKNOWN不变。源SHAb7eb9768308ed507b5db8d6e53f5650fc6967600eb951b2df96c24fa8cce849e；同Task/Change/Operation，M12父OPEN/ACTIVE、字节DEFAULT_OFF/H08ON。准确新失败见repair-01/r03-correction-path-failure.json与r03-correction-01-results.xml。下方为此前阶段。
++
++> **2026-10-11 M12 repair-01：CLONE_CAUSE_FIXED / COMPILE_PASS / R03_ASSERTION_FAILED，后续已停。** 用户手动重启后原Editor确认idle/nonPlay、Menu clean8、旧owner不存在；旧P1外部中断/Dispose UNKNOWN保留。一次冷R01首差FAIL留存：实际JSON有MonoBehaviour包装层，旧代码在错误顶层改name/root；原始差异仅这两项，25引用相同。仅既有M12独立诊断区修正准确路径及已批早期自有释放/外部观察，原40652字节、ReadStaticPlan、8菜单不变。两次依赖性窄编译通过；修复后R02 1/1PASS；R03在Dispose后Set应抛ObjectDisposedException的断言失败，未改断言/重跑，R04–R07未执行。R03自有clone消失/原singleton保持/Dispose回执与失败并存，非旧run释放证明。原十回执/93保护/旧6证据不变；24复制目标仍匹配，重启后发现6个原Temp源缺失（未清理/未恢复，责任未归因）；旧run新增external-interruption原件ownedResourcesReleased=false。完整报告见 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/REPORT.md 文末repair-01。Task/Change/Operation沿用，Change BLOCKED、M12父OPEN/ACTIVE、字节DEFAULT_OFF/H08ON；无P1重跑/H07/Android通过，其他hold保持。下方为历史时点。
++
++> **2026-10-11 M12 repair-01：原Scene已外部恢复并核验，旧owner处置待明确，源码修复尚未开始。** 当前原Editor稳定nonPlay/idle；唯一NTSD_Menu loaded/active/clean/root8与Prepare相同，文件字节保持，本任务没有重复加载。旧owner仍存活、cloneReleased/handlesDisposed=false，原首差和Warmup异常保留。已核现有编译类型和全部相关支持接口：unity_reflect仅元数据、无活owner方法调用，M12 Cleanup/Exit要求Play；没有无需导入的合法EditMode精确释放路径。动态代码/再进Play/先reload丢owner仍禁用。已请求具体处置决定：用户手动重启Editor并保留旧run外部中断/Dispose UNKNOWN，随后才续已批准的最小修复；未获答前0源码/compile/test/P1。源码/两DLL/保护93/旧6/24输入/十run原件均匹配。证据 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/post-external-exit-repair-01/interface-gap-proof.json；同Task/Change/Operation，M12父OPEN/ACTIVE、Change BLOCKED、DEFAULT_OFF/H08ON。下方为此前时点。
++
++> **2026-10-11 M12 外部退出后只读核对：EXTERNAL_INTERRUPTION / NOT_RESTORED，最小修复仅提案。** 用户决定手动退出；本轮实际观察稳定nonPlay/idle、非编译/更新/测试，原诊断owner仍存活，playing=false、cloneReleased=false、handlesDisposed=false。当前仍单一空Scene clean/root0，原Menu clean8未恢复。原runRoot十个回执不变，无external-interruption/安全Exit/reload/result新原件；本轮仅另存外部观察，不补造。Console两次0条，实际Read Status从精确Editor.log取得，旧首差/退出Exception保留；native clone当前身份、句柄Dispose完成及退出边界日志完整性未证明。源码/两DLL/具名保护93/旧6/24输入均匹配；0源码/compile/test/Scene变更/P1重跑。单一诊断文件的clone首差、分阶段自有释放、严格失败与安全释放分离、外部退出观察及独立Scene恢复提案见 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/REPORT.md 文末post-external-exit-review-01。Task/Change/Operation沿用；M12父OPEN/ACTIVE、Change BLOCKED、字节DEFAULT_OFF/H08ON，其他hold不恢复。以下保留此前事实。
++
++> **2026-10-11 M12 唯一P1：FIRST_DIFFERENCE / EXIT_GUARD_HOLD（未恢复Scene）。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。Prepare实际回执与24项232571B复制校验通过；同runGuid一次Enter/一次Run在menu_load的“Clone changed fields other than runtime root.”守卫停止，尚未加载真实Menu/Battle或开始两个周期。一次Cleanup获接受，实际状态FAILED_CLEAN_SAFE；Exit If Safe因“Warmup identity was never observed.”拒绝。最后存活owner仍playing=true，native/Loading/close pending=false，errors1/persisted1/writers0/late0；clone未释放、句柄未dispose，空Scene clean0，未退出/未恢复。FAILED_CLEAN_SAFE不等于安全退出完成。无改代码/编译/重跑/第二I/新ABBA。M12父OPEN/ACTIVE、字节门DEFAULT_OFF、H08ON；下一只交回首差及早期失败安全收尾缺口审阅，不恢复其他hold/Goal。完整结果见 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/REPORT.md 文末P1；以下为此前时点。
++
++> **2026-10-11 M12 P1一次有限执行 IN_PROGRESS。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011；revision-01 R/C2经有限独立接受，现只派固定runGuid的Prepare→一次Play双周期→守卫允许的清理/退出/恢复。准确24输入232571B、复制目标/原SHA/Scene和失败HOLD门已先登记于diagnostic-interface-01/p1-execution-01。无源码/编译/第二I/旧测试/ABBA/设备或其他点；首差即停，不换根重试。当前尚无P1结果，M12父OPEN/ACTIVE、默认OFF、H08ON。以下为此前时点。
++
++> **2026-10-11 M12 revision-01：R/C2完成，P未派发/未运行。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。仅修独立诊断区的修订身份、自有clone/句柄收尾、完整取消condition与日志落盘、单次cleanup；24文件232571B未来输入已冻结、复制0。原40652字节、ReadStaticPlan方法与八菜单均保持。原Editor一次C2窄编译/new DLL/reload通过、Menu clean8，Console1条MCP连接退出Exception保留；所有菜单调用0，不做第二次I。旧C/I仅复用旧SHA下未改方法/路由，不称新源码运行PASS。源码1bf39d4793a1212561a39a2a10d5b822e336c875d0583fd6ac8a648bf503e3b7。下一同M12独立审阅此修订、严格取消归属/实际释放/音频/退出观察门，再派原定单Play两周期；M12父OPEN/ACTIVE、字节门默认OFF、H08ON，其他hold保持。完整本轮见implementation-01/review-02/diagnostic-interface-01/REPORT.md文末revision-01。以下保留历史。
++
++> **2026-10-11 M12 revision-01 IN_PROGRESS。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。独立审阅已有限接受旧S/G/C/I；本轮仅修既有独立诊断区的Prepare身份门、自有clone/句柄收尾、完整取消日志与持久化、at-most-once cleanup，冻结24文件232571B未来输入。原40652字节、ReadStaticPlan方法及八菜单保持；没有复制、菜单或Play。下一仅C2窄编译和G，不重复I。字节门OFF、H08ON、M12父OPEN，其他hold不恢复。见diagnostic-interface-01/revision-01/PLAN.md；以下为此前时点。
++
++> **2026-10-11 M12 diagnostic-interface-01：COMPILE_PASS / COLD_INTERFACE_PASS，P未运行。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。仅既有M12测试文件追加独立诊断和8菜单，原40652字节完全保留。原Editor一次窄编译完成；唯一一次Read Static Plan实际回执确认PID39108、Authority400/400、CentralOnly、源码/DLL匹配，Menu clean8；无hot owner、无内容/音频准备、无Play目录/运行。Console返回2条MCP连接退出Exception记录原样保留，不称Console零异常。下一仍同M12独立审阅实现及C/I证据、明确音频和退出观察资格后再派原单Play两周期；其他菜单未派发。原C1/F1–F4、旧ABBA按各自SHA/覆盖复用。M12父OPEN/字节门默认OFF、H08ON；其他hold保持。完整报告：artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/REPORT.md。此前execute_code与进程参数观察不再作为方案/资格依据；以下保留历史。
++
++> **2026-10-11 M12 diagnostic-interface-01 IN_PROGRESS。** 同 Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。仅在既有 M12 测试文件追加独立诊断类型及八个显式菜单，原40652字节保持；范围为代码、原Editor窄编译及一次 Read Static Plan 冷态资格。Prepare/Enter/Run/关闭/恢复均未派发，不运行Play。此前 execute_code 路线撤销，禁止替代动态求值；此前进程参数读取观察撤回，不作为配置权威、不再收集或复述参数。实际配置只认本次 Resolve 结果回执。原 C1/F1–F4 与旧ABBA按各自SHA和覆盖复用；M12父OPEN、字节门默认OFF、H08ON，其他hold保持。见 implementation-01/review-02/diagnostic-interface-01/IMPLEMENTATION-PLAN.md。以下保留此前时点。
++
++> **2026-10-11 M12 P0-static-03：原容量/资源及独立Editor诊断方案已收敛，P1仍未写／未运行。** 同Task/Change/Operation。当前原Editor无NTSD覆盖，静态解析Authority400/400、CentralOnly；clone仅改六文件根。拟在同已声明测试文件新增独立Editor-only类型，通过现有execute_code显式分段调用；不继承旧fixture、不用UTR枚举/LogAssert/NoUnexpectedReceived，不自动退出Play。只在无活跃事务的预期reload边界接回冷记录，hot owner丢失不重建/重跑。完整资源/接口/两周期/日志/安全退出表见implementation-01/REPORT.md文末。仅余Spark材质捕获653–662与formal声音路径609–639两个准确来源读证；接口本轮未向Editor调用。0脚本/Unity/编译/测试/Play/新ABBA，原门复用；M12 OPEN/默认OFF、H08 ON，其他hold保持。
++
++> **2026-10-11 M12 P0-static-02：Driver创建与六文件输入已核，完整双周期表仍为提案。** 同Task/Change/Operation；ShowLoading只切面板，文本队列空不要求currentText清零，Warmup纹理/Sprite没有已证归还。clone仅改BattleContentRuntimeRoot，严格日志、await/timeout、对象观察和恢复见implementation-01/REPORT.md文末。下一只读pool/空players闭包、UTR精确日志及Enter/ExitPlay三组局部；P1未实施/尚不具执行资格。本轮0脚本/Unity/编译/测试/Play/新ABBA，C1/F1–F4复用、旧ABBA留旧SHA。M12 OPEN/默认OFF、H08 ON，其他hold保持。
++
++> **2026-10-11 M12 P0-static-01：四类获准只读事实已复核，P1尚未实施。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。Singleton/clone首次赋值、EnterPlay两键、Loading完整任务和两个Scene指定绑定已核；native drain不能替代Loading/Core/Start/池/UI收尾。完整一次Play双周期提案集中于implementation-01/REPORT.md文末：首周期加载/准备期取消，次周期完整准备后关闭，分别join并在首个Battle回调先撤订。下一准确局部读证仅Driver两段、Loading合法caller及getter/Warmup/Update；未读新正文、未写驱动。本轮0源码/Unity/编译/测试/ABBA，复用本版C1/F1–F4。字节门默认OFF、M12父OPEN、H08 ON；其他hold保持。以下为此前时点。
++
++> **2026-10-11 M12 review-02/focused-01：最小修复已实现，FOCUSED_TEST_PASS。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。manager失败/取消主线程Stop先于Dispose；App普通pending自动接现有异步关闭、真实completed才更新菜单；Driver只回原LF；两个新增focused＋原Q03C/Q03D，原Editor一次编译及4/4通过。F2固定4分支第三decode0、waiter取消/另一owner保留后全归零。未写Play驱动、无P0/P1/新ABBA；旧成本只属旧SHA。真实Scene下一路线改为合法Menu在途→Scene加载准备期关闭，精确4类静态读证请求集中于implementation-01/REPORT.md文末。字节门OFF/M12 OPEN，H08 ON，其他hold不恢复。以下保留此前时点。
++
++> **2026-10-11 M12 review-02/focused-01 IN_PROGRESS。** 同Task/Change/Operation，在既有直接人类M12及Driver/App授权内落实已审最小修复：manager两个worker主线程Stop-before-Dispose；App普通/选角pending共享与真正completed后菜单状态；Driver仅恢复当前逻辑LF；既有M12测试只新增两个focused。先原Editor窄编译，再F1/F2/F3旧Q03C/F4旧Q03D各一次，首差停止；不写Play驱动、不执行P0/P1/新ABBA。17真实当前前件含源码、治理、程序集与XML已保存。字节门OFF、父M12 OPEN，原结果继续绑定旧SHA。
++
++> **2026-10-11 M12 review-02：REVIEW_GAPS_CONFIRMED / NEXT_FIX_PROPOSED，尚未实施新修复。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。只读确认失败worker先归还额度、外层后Stop的普通waiter窗口，以及UnloadBattle主菜单pending未恢复/提前MenuMain两点；Driver另有整文件换行差异。原12PASS与唯一ABBA冻结于原SHA；PendingPixels不覆盖decoder内部或登记前瞬间，不称GC/整进程峰值。准确最小四文件提案、4项focused及待授权单一双周期真实Scene表集中在 implementation-01/REPORT.md 文末review-02。本轮0源码变更、0Unity/测试；M12 OPEN/字节门OFF，原关闭保护已接线，H08 ON。其他hold/Goal不恢复。以下保留此前证据时点。
++
++> **2026-10-11 M12有限候选验证完成：FOCUSED_TEST_PASS / DEFAULT_OFF。** Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。原Editor编译通过，11项正确性/生命周期门通过（8复用、3续跑），首次且唯一ABBA1/1：worker像素payload峰值18.125→5MiB（-72.41%），retained3.625MiB不变，耗时比1.0496（非加速）。旧Q05 CreateNew冲突ERROR保留；获批仅修H08辅助证据路径后续跑。四生产/四测试文件，字节门OFF、H08共享ON；关闭保护已接线。真实Scene卸载/重入、30秒超时、强制退出、完整内容/进程/Android未验，M12父项OPEN。下一仅同M12原件审阅及准确缺失门，不恢复其他hold/Goal。报告 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/REPORT.md。以下保留此前时点。
++
++> **2026-10-11 M12实施 IN_PROGRESS。** 用户已明确批准Driver/App两个生产文件的限定关闭扩域。Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001：先阶段1取消、阶段2实际native drain、阶段5清理与pending恢复；再原128MiB/固定E字节准入及有限验证。原十一阶段/规则保持，强制Editor退出另报边界，不改其桥接脚本。Operation OP-NTSD-M12-IMPLEMENTATION-20261011；17真实前件已备份，候选默认OFF，其他hold/旧Goal不恢复。当前尚未编译/验证，不声明PASS。
++
++> **2026-10-11 M12继续授权／实际关闭链已核清：AWAITING_EXACT_SHUTDOWN_SCOPE_DECISION。** 用户已批准原M12实施与有限验证，但要求扩大关闭域前先报告。阶段1取消非drain，阶段2只管dedicated worker，阶段5/Stopped未检查图片任务；原同步App也不会await/resume。为保留真实drain后才关闭的门，现提出仅新增Driver关闭/重建guard与App正常异步关闭接线两个生产文件，关闭合同仅补原阶段映射；尚未修改这些文件或任何生产/测试脚本。Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001仍PLANNED；[准确证据和范围](../../artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/shutdown-review-01/REPORT.md)。本轮Unity/编译/测试0，M12 OPEN，其他hold保持。下方preflight-only授权说明为此前阶段，不覆盖本次附条件继续授权。
++
++> **2026-10-11 M12 手机优先有限预检：PLANNED / PRE_FLIGHT_READY_FOR_REVIEW。** Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011；Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。准确方案已形成：native PNG共享/显式OFF两路解码前按字节准入，128MiB普通权重＋超大单张独占上界439799644B为待审建议，非手机内存预算。703header/长度静态核验；真实clamp哈希临时字节另计，候选>128MiB为9项。M12不能单独解决大源/全量atlas驻留。主审需核准确Driver stage1/2/5与图片任务drain区别；本轮未读Driver/Q06方法体、未改脚本、未操作Unity/编译/测试/测量。10份真实治理前件已备份；[唯一完整方案](../../artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/PLAN.md)。M12保持OPEN，下一为同Task独立审阅后准确派实施，不默认暂停或关闭；H10 CLOSED／Player ABANDONED及其余hold不恢复。以下保留历史时点。
++
++> **2026-10-11 用户方向更正：Android 手机优先。** 后续先以手机的 CPU、内存与加载峰值约束共用实现，PC再提高表现规格；Android验收后置不等于设计标准后置。M-12先补手机预算建议和实际必要性，具体档位/数值未冻结。本次仅文档；H10保持CLOSED、已取消Player路线与其它hold不恢复。
++
++[Android-first decision](DECISIONS/NTSD-ANDROID-FIRST-OPTIMIZATION-BASELINE-20261011.md)
++
++> **2026-10-11 H10 CLOSED：按用户决定结束当前优化范围。** 用户取消新增Windows Player出包验收路线，未实施Task NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011与Change NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001均ABANDONED；原因是范围取消，不是运行失败。第四processor待批事项撤销，三个新脚本/两个meta不创建，兼容提案不实施。PCM有界/逐局formal owned、同输入320MiB对象门及resume03隔离Editor三轮音频门按原scope保留；Player、整进程2/3GiB、目标8GB型号、完整千人预算、人工听感仍未验证，但不再是本次H10 active待办或结项前置。旧compat13/14、成本尖峰、失败/事件不追溯改PASS。决定：docs/ai/DECISIONS/NTSD-H10-USER-SCOPE-CLOSEOUT-20261011.md；结项：artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/closeout-user-scope-01/REPORT.md。当前H10已结束，下一无自动启动项；H08/H07/M03/producer/H06等hold、33ms/十一阶段及全部原边界保持。下方旧OPEN/等待第四域/继续出包和旧统计只保留为被本决定替代的历史。
++
++> **2026-10-11 H10 PRE-FLIGHT已收敛交回：PLANNED，完整有限表与构建前冷资格已明确，尚无实施派发。** formal根与public Candidate/Catalog/显式snapshot有限读证已闭合；703body双审0差，实际head/small/common集合留给backend/build前的一次冷资格。已准原new probe内UNITY_EDITOR静态桥接调用公开Capture/既有internal Copy，冷解析/managed分配据实记录；必须保护原publication/cache/player/singleton/Scene。CASE/Ordinal/记录粒度/预算已审，compile/Q/build/两PID三轮均NOT_RUN，第四processor直接人类确认及完整派发未到。当前完整表见 artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PLAN.md 与 PRE-FLIGHT-01.md 文末，结果CONVERGENCE-RESULT.md。H10父项OPEN，不暂停或转其它点；无源码/资源/Settings/Unity/build/Player变更。以下保留此前时点。
++
++> **2026-10-11 H10 PRE-FLIGHT 收敛：当前方案集中回现有PLAN/PRE-FLIGHT，仍PLANNED／未授实施。** 主审已冻结真实静态VS0/1来源及普通四目标全窗/千人全请求计数加首批64明细的证据颗粒度；未运行。旧已解析body703/703与manifest现SHA/长度同，两个DAT及两种SPARK已含；WORDS六图、KillIcon三候选图缺失分别保留其既有nullable/skip合同，不补资源。head/small实际清单与Source根绑定尚待精确读证；没有证明新增部署项，也不称完整闭包。完整1build/2PID×3轮表和安全恢复门见 `artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PLAN.md` 文末收敛表及 `PRE-FLIGHT-01.md`，剩余读域 `FINAL-PATH-BINDING-REQUEST.md`。第四processor确认由主会话处理，Task/Change与H10父项状态保持；0脚本/Settings/build/Player/其它点。以下保留此前时点。
++
++> **2026-10-11 H10 PRE-FLIGHT-01 review-03：公开队伍/静态VS来源与精确raw身份已补齐，仍PLANNED。** 三槽候选team1/2/3；Menu真实序列化mode0/1与组件GUID已核，实际Player资格仍待验证。旧1000raw已含builtin/mode；Ordinal先原raw后缺失单属alias共1968，14冲突键由原raw优先，1024/2048容量对旧集有据。V3小写分析保留但不用于实施。普通目标完整明细与千人全窗计数/限定首批明细候选分开，4096不作千人上界；诊断容量失败不冒称生产丢音。新件 `artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/REVIEW-03-CASE-CAPACITY-CLARIFICATIONS.md`、`RAW-KEY-RESOLUTION-V4-ORDINAL.json`、`RAW-UI-NEXT-READ-REQUEST.md`。下一仅Candidate输入/路径最小读证和方案审查；第四写域/完整派发未到，无脚本/Settings/build/Player/其它点，H10父项OPEN。以下保留此前时点。
++
++> **2026-10-11 H10 PRE-FLIGHT-01 review-02：已证旧Windows回调1373清单与当前2334源冲突，第四写域仅提案待直接人类确认。** 原callback和严格门不绕过；一次H10上下文选择完整新清单提案已独立审阅，尚无代码/Settings/build/Player授权。输入/tee容量与恢复已细化；GameModeConfig普通两字段对象身份已更正；撤回三人同队候选，待公开队伍/真实VS映射。Task/Change仍PLANNED、H10父项OPEN、不推进其它点。新原件：`artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/POSTPROCESSOR-COMPATIBILITY-PROPOSAL.md`、`CASE-SAMPLING-RESTORE-V2.md`、`REVIEW-02-CONTRACT-CLARIFICATIONS.md`、`TEAM-ENTRY-CORRECTION.md`。旧证据保留，以下为此前时点。
++
++> **2026-10-11 H10 Player PRE-FLIGHT-01方案补齐，仍PLANNED／未授权实现。** R1-R3由主会话具名供证；新增具体2/16/507三轮技能候选及采样质量提案。发现现有Windows postprocessor部署交叠和MatchConfirmed后原cfg自动加载，须准确补齐后再build。原validator PASSED1423/4534 warnings（本计划3）；4094保护/406旧artifact无漂移为已保存执行审计。0脚本/Settings修改、0编译/测试/build/Player/sidecar。入口 `artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PREFLIGHT-ADDENDUM-01.md`、`CASE-MATRIX-CANDIDATE.md`、`NEW-READ-DEPENDENCIES-01.md`、`OBSERVATION-SEAM-REQUEST.md`、`EMPTY-WORLD-ENTRY-ORDER.md`。H10父项继续OPEN、不默认暂停、不推进其它点；以下保留此前时点。
++
++> **2026-10-11 H10 Windows Player预算 PRE-FLIGHT-01完成，PLANNED / 具名读域待独立审查。** Task NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011 / Change NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001。仅只读harness/App具名合同及新方案；0脚本/Settings修改、0build/Player/sidecar。2752已知资源条目SHA manifest尚未部署，UI/空players/suppression/三轮重入仍需R1-R4读证。候选1build、2进程各1smoke+2formal，未自授执行额度。resume-03成功与全部旧失败冻结，H10父项OPEN、不推进其它点。入口 artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PRE-FLIGHT-01.md 与 PLAN.md/READ-SCOPE-REQUESTS.md。以下为此前时点。
++
++> **2026-10-11 H10 resume-03：RUNTIME_AUDIO_GATES_VERIFIED（限定隔离Editor音频运行门）。** Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 VERIFIED仅本轮。首次编译、资格2/2及唯一三轮Play1/1PASS；六次真实启动声源身份/计数/clip/在播通过，轮2/3复现旧selector停播而本次新源在播，旧FAIL保留。63有效校准scope0事件；三轮非零输出/公开关闭重入、真实pending取消迟到/自然Destroy与精确清理通过，当前Menu clean8/组件/config恢复。非1000实体/完整Battle/Player/整进程/目标PC，H10父项OPEN、预算/218.313758MiB对象门复用保持，无H07/Android/Goal/其它点。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/REPORT.md；下一仅同H10原件独立审阅与缺失门。以下为此前时点。
++
++> **2026-10-11 H10 resume-03 IN_PROGRESS。** 同Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001。仅PcBudget冷播放观察：复制voice/序号前后值识别本次真正启动源，完整证据先于断言，公开关闭前后精确借用观察。旧helper/三recorder/ExerciseHot/生产冻结。两项本版资格通过后仅一次三轮Play组，首差停止。旧失败保留；H10父项OPEN、预算/对象门复用不变，无Player/Goal/其它点。计划 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/PLAN.md；Operation OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME03-20261011。下方为此前时点。
++
++> **2026-10-11 H10 resume-02：SCOPED_HOT_0EVENTS_PASS / SECOND_CYCLE_GENERIC_PLAY_OBSERVATION_FAILED。** Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 BLOCKED。首次编译及新资格2/2PASS，raw-key/两轮cold wrapper与generic同引用通过；两轮各7tick×3范围共42有效校准scope0事件，无热load/build/reject增量，非整Driver/千人实体。第一轮实际播放/非零输出及公开关闭重入完成；唯一Play整体0/1FAIL于第二轮genericVoice在播断言，首个同clip voice选择器有观察风险，实际原因未证明，未改生产/追加组。两次关闭/owned后帧归零/精确generic清理及当前Menu组件/config恢复通过。4094保护/9指纹/196旧artifact保持。三轮/pending/natural/Player/进程门未完成，H10父项OPEN；预算与对象门复用不变。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/REPORT.md，下一仅同H10精确播放观察独立审阅。无新Goal/队列/其他点，以下是旧时点。
++
++> **2026-10-11 H10 resume-02 IN_PROGRESS。** 同Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001，经独立审阅仅修PcBudget真实raw-key、无解码成员资格、cold wrapper guard及关闭证据字段；三个已通过recorder算法不改。先编译/本版资格2项，全过后仅一次新版Play，首差停止。原两失败/生产/预算及对象门复用保持，H10父项OPEN。计划 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/PLAN.md；Operation OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME02-20261011；无Player/Settings/其他点/Goal。下方保留旧时点。
++
++> **2026-10-11 H10 resume-01：MEASUREMENT_QUALIFIED_FIXTURE_CUE_ID_MISMATCH。** Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 BLOCKED（本轮夹具）。首次编译PASS，无解码资格2/2PASS：三个独立GC.Alloc recorder前后正控有效/empty0，Unit原样TimeNanoseconds；不是生产热0GC。唯一新Play0/1 Error，冷generic查询data/016与实际注册data\016 raw key不一致，wrapper null，未进热循环；归属执行者夹具错误，生产未改，不追加组。22owned失败清理公开stage10/空地图stage11及下一帧释放通过，generic016精确清理；当前Menu clean8/组件快照/config/MM settings相同。4094保护/旧105artifact无漂移，旧其他方法体保持。预算已批准与218.313758MiB对象门复用保持；三轮/播放/取消/Player/进程门未过，H10父项OPEN。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/REPORT.md；下一仅同H10精确raw-key/guard修正独立审阅，不自动运行，无新Goal/队列/Player。下方保留此前时点。
++
++> **2026-10-11 H10 resume-01 IN_PROGRESS。** 独立审阅后恢复Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001。仅PcBudget诊断计量/负控/保护修正，先无解码资格，全部通过后仅一次新版本三轮Play组；首差停止。旧分配校准FAIL原件保留，生产/Scene/资源/Settings冻结，预算已批准/对象门复用保持，H10父项OPEN，无Player/其他点/Goal。计划 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/PLAN.md；Operation OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME01-20261011。下方为此前时点。
++
++> **2026-10-11 H10：PC_TARGETS_ADOPTED；本轮 RUNTIME_CALIBRATION_FAILED，父项继续 OPEN。** 人类已批准暂定PC基础/推荐候选及AudioClip≤320MiB、游戏进程Private稳态≤2GiB/过渡采样峰≤3GiB，尚未认证硬件。Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 BLOCKED（本轮测量夹具）。1682项当前输入指纹匹配，旧228,918,567B对象账本可复用通过320MiB对象门；非整进程证书。原Editor编译通过、窄资格1/1 PASS；唯一Play组0/1 FAIL：byte[97]分配正控计数为0，正式热样本前停止，未重跑。第一轮22个owned clip准备后，失败清理公开关闭stage10/空地图完成stage11、drain/下一帧释放与精确generic016清理通过，Menu clean8恢复。三轮/热0GC/实际播放/取消等门未完成；不覆盖旧13/14、Menu UNKNOWN或既有事件。下一仅同H10测量夹具修正独立审阅及剩余Play门，Player仅已有只读方案，不自动build/改Settings。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/REPORT.md；预算决定 docs/ai/DECISIONS/NTSD-PC-TEMP-ENGINEERING-TARGETS-20261011.md。下方UNDECIDED等为历史时点；无H07/Android通过，无Goal/34队列恢复。
++
++
++> 2026-10-11 **PC_TARGETS_ADOPTED / H10 runtime acceptance IN_PROGRESS.** Human approved concrete provisional PC tiers and AudioClip<=320MiB / game-process private steady<=2GiB / transition sampled peak<=3GiB; not certified hardware. Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 PLANNED. Exact single diagnostic script; original production/old evidence retained. Decision: docs/ai/DECISIONS/NTSD-PC-TEMP-ENGINEERING-TARGETS-20261011.md. Old budget UNDECIDED below is historical, not current blocker. Three-session Play and process gates not yet verified; H10 parent OPEN, no H07/Android/Goal/queue.
++
+ > **2026-10-11 H10全目录音频账本完成：FULL_CATALOG_AUDIO_ENVELOPE_MEASURED。** Task NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 / Change NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 VERIFIED（仅Editor诊断）。真实330定义/1000cue，两轮public准备关闭唯一组1/1 PASS；每轮978formal+72generic去重228,918,567B（218.313758MiB），formal逐局归零、同72generic跨轮复用，最终仅精确释放新增72key/clip，原4clips及Menu clean8保持。首次资格FAIL及事件保留，修正资格/恢复检查/无音频所有权负控各1/1；测量后仅诊断guard哈希变化，生产冻结。71283保护无漂移。报告 artifacts/diagnostics/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011/REPORT.md。音频数字预算UNDECIDED、producer完整闭包未准入，H10父项OPEN；下一仅同H10预算/覆盖合同审阅，不自动其他点/Goal/队列。以下为此前时点。
+ 
+ > 2026-10-11 NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 IN_PROGRESS / NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 PLANNED. H10 continues: complete real catalog/generic inventory, protected2resource fixture first, then one bounded2session audio-only envelope if safe. Production frozen; parent budget/coverage remain OPEN. No other point or Goal.
+@@ -1524,3 +1601,17 @@ owner propagation仍不得抢先并入。
+ 2026-10-06 NTSD28-BATTLE-SPRITE-RED-LINE-20261006 IN_PROGRESS; NTSD28-BATTLE-SPRITE-RED-LINE-001 PLANNED. User red line beneath character; targeted crop/GPU diagnosis then exact common fix, no red color-key/image/DAT/Scene/nonbattle changes. [Record](docs/ai/CHANGE-RECORDS/NTSD28-BATTLE-SPRITE-RED-LINE-001.md).
+ 
+ 2026-10-10 HUMAN_APPROVED_SCOPE_CORRECTION via discussion thread: user "开始吧，只要能达到优化条件就行". Continue same Task/Change/Operation. Exact five code paths replace Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs with Core/SimulationWorld.cs; Core only cold configure/disable restore/status/count facade near existing input-pass diagnostics, no existing methods/Q06/partial/algorithms/cache. Pass owns bool/long, reset stage8 disables. Original RED and BLOCKED checkpoint retained historically. Before Core edit actual bytes/SHA/Git captured in core-approved-before.json; 15 prior backups retained. All original tests/unique no-detail ABBA/hard failure stop/defaultOFF contracts unchanged. Status IN_PROGRESS.
++
++
++## 2026-10-11 用户范围结项（当前终态）
++
++H10 CLOSED；未实施Player路线ABANDONED。用户取消新增出包验收条件，第四processor待批事项撤销，不再等答复或完整实施派发。三个新脚本/两个meta不创建，全部preflight/proposal/FAIL保留。已实施PCM/逐局formal owned、320MiB同输入对象门/resume03限定音频门按原scope保留；Player/2与3GiB进程/8GB型号/完整千人/人工听感仍未验证，不列本次active后继。旧compat13/14/成本尖峰/失败不改PASS。决定见docs/ai/DECISIONS/NTSD-H10-USER-SCOPE-CLOSEOUT-20261011.md，报告见既有Player输出根closeout-user-scope-01/REPORT.md。仅治理检查，无源码/资源/Settings/Unity/编译/测试/测量/build/Player/sampler；无下一项/Goal，其他hold与所有原边界不变。此前PLANNED/OPEN/等待第四域/继续出包仅为被本决定替代的历史，不再授执行权限。
++
++
++### M12 repair-01 source work authorized after human restart
++
++Same Task/Change/Operation; old OWNER_LOST/Dispose UNKNOWN retained. Plan artifacts\diagnostics\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\implementation-01\review-02\diagnostic-interface-01\post-external-exit-repair-01\IMPLEMENTATION-PLAN.md. Exact independent diagnostic region only; cold firstdiff then evidence-driven minimum fix/narrow EditMode checks, no P1. M12 OPEN/defaultOFF/H08ON. Current repair IN_PROGRESS; prior statements above are history.
++
++M12 R03 exact cold-test API correction IN_PROGRESS within same repair; original FAIL retained, no P1. See repair-01/r03-correction-before-manifest.json and detailed report.
++
++M12 correction-02 exact R03 evidence-label fix IN_PROGRESS; same Task/Change/Operation, no P1, see repair-01/correction02-before-manifest.json. Prior failure/WAIT wording is historical.
+diff --git a/docs/ai/FILE-OPERATIONS/INDEX.md b/docs/ai/FILE-OPERATIONS/INDEX.md
+index 717e1d8f..fc727c38 100644
+--- a/docs/ai/FILE-OPERATIONS/INDEX.md
++++ b/docs/ai/FILE-OPERATIONS/INDEX.md
+@@ -1,3 +1,29 @@
++- [OP-NTSD-M12-IMPLEMENTATION-20261011](OP-NTSD-M12-IMPLEMENTATION-20261011/RECORD.md) — PARTIAL; originalMenu already externally restored/verified clean8, oldowner unreleased/interface gap proven. Exact disposition requested before source import; no source/compile/cold clone/P1 or Scene mutation in repair-01 yet.13 current governance backups recorded; old failures retained.
++
++- [OP-NTSD-M12-SHUTDOWN-SEAM-REVIEW-20261011](OP-NTSD-M12-SHUTDOWN-SEAM-REVIEW-20261011/RECORD.md) — PLANNED；M12实际关闭链核验与准确扩域提案，10份真实前件，源码/Unity0。
++
++- [OP-NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-PREFLIGHT01-20261011](OP-NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-PREFLIGHT01-20261011/RECORD.md) — VERIFIED（仅文档操作）；M12 Task/Change仍PLANNED，完整方案与三项审阅决定已交回，生产/Unity为0。
++
++- [OP-NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-PREFLIGHT01-20261011](OP-NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-PREFLIGHT01-20261011/RECORD.md) — PLANNED，M12手机优先有限预检；10份真实治理前件，生产和Unity未操作。
++
++- [OP-NTSD-ANDROID-FIRST-OPTIMIZATION-BASELINE-20261011](OP-NTSD-ANDROID-FIRST-OPTIMIZATION-BASELINE-20261011/RECORD.md) - VERIFIED: Android-first policy; original document bytes retained; nine backups and 17 named protections verified.
++
++- [OP-NTSD-ANDROID-FIRST-OPTIMIZATION-BASELINE-20261011](OP-NTSD-ANDROID-FIRST-OPTIMIZATION-BASELINE-20261011/RECORD.md) - PLANNED: Android-first optimization policy, documentation only.
++
++- [OP-NTSD-H10-USER-SCOPE-CLOSEOUT-20261011](OP-NTSD-H10-USER-SCOPE-CLOSEOUT-20261011/RECORD.md) — H10用户范围结项文档操作；Player未实施路线取消，真实前件/实际结果见记录，无源码或运行操作。
++
++> **2026-10-11 H10 resume-02：SCOPED_HOT_0EVENTS_PASS / SECOND_CYCLE_GENERIC_PLAY_OBSERVATION_FAILED。** Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 BLOCKED。首次编译及新资格2/2PASS，raw-key/两轮cold wrapper与generic同引用通过；两轮各7tick×3范围共42有效校准scope0事件，无热load/build/reject增量，非整Driver/千人实体。第一轮实际播放/非零输出及公开关闭重入完成；唯一Play整体0/1FAIL于第二轮genericVoice在播断言，首个同clip voice选择器有观察风险，实际原因未证明，未改生产/追加组。两次关闭/owned后帧归零/精确generic清理及当前Menu组件/config恢复通过。4094保护/9指纹/196旧artifact保持。三轮/pending/natural/Player/进程门未完成，H10父项OPEN；预算与对象门复用不变。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/REPORT.md，下一仅同H10精确播放观察独立审阅。无新Goal/队列/其他点，以下是旧时点。
++
++> **2026-10-11 H10 resume-02 IN_PROGRESS。** 同Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001，经独立审阅仅修PcBudget真实raw-key、无解码成员资格、cold wrapper guard及关闭证据字段；三个已通过recorder算法不改。先编译/本版资格2项，全过后仅一次新版Play，首差停止。原两失败/生产/预算及对象门复用保持，H10父项OPEN。计划 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/PLAN.md；Operation OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME02-20261011；无Player/Settings/其他点/Goal。下方保留旧时点。
++
++> **2026-10-11 H10 resume-01：MEASUREMENT_QUALIFIED_FIXTURE_CUE_ID_MISMATCH。** Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 BLOCKED（本轮夹具）。首次编译PASS，无解码资格2/2PASS：三个独立GC.Alloc recorder前后正控有效/empty0，Unit原样TimeNanoseconds；不是生产热0GC。唯一新Play0/1 Error，冷generic查询data/016与实际注册data\016 raw key不一致，wrapper null，未进热循环；归属执行者夹具错误，生产未改，不追加组。22owned失败清理公开stage10/空地图stage11及下一帧释放通过，generic016精确清理；当前Menu clean8/组件快照/config/MM settings相同。4094保护/旧105artifact无漂移，旧其他方法体保持。预算已批准与218.313758MiB对象门复用保持；三轮/播放/取消/Player/进程门未过，H10父项OPEN。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/REPORT.md；下一仅同H10精确raw-key/guard修正独立审阅，不自动运行，无新Goal/队列/Player。下方保留此前时点。
++
++> **2026-10-11 H10 resume-01 IN_PROGRESS。** 独立审阅后恢复Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001。仅PcBudget诊断计量/负控/保护修正，先无解码资格，全部通过后仅一次新版本三轮Play组；首差停止。旧分配校准FAIL原件保留，生产/Scene/资源/Settings冻结，预算已批准/对象门复用保持，H10父项OPEN，无Player/其他点/Goal。计划 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/PLAN.md；Operation OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME01-20261011。下方为此前时点。
++
++- OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 | PARTIAL | source/docs applied; unique Play calibration FAIL, cleanup complete; old evidence retained | [Record](OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/RECORD.md)
++
++- OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 | PLANNED | exact ten preimages backed up; approved PC targets and sole H10 Editor diagnostic | [Record](OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/RECORD.md)
++
+ > **2026-10-11 H10全目录音频账本完成：FULL_CATALOG_AUDIO_ENVELOPE_MEASURED。** Task NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 / Change NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 VERIFIED（仅Editor诊断）。真实330定义/1000cue，两轮public准备关闭唯一组1/1 PASS；每轮978formal+72generic去重228,918,567B（218.313758MiB），formal逐局归零、同72generic跨轮复用，最终仅精确释放新增72key/clip，原4clips及Menu clean8保持。首次资格FAIL及事件保留，修正资格/恢复检查/无音频所有权负控各1/1；测量后仅诊断guard哈希变化，生产冻结。71283保护无漂移。报告 artifacts/diagnostics/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011/REPORT.md。音频数字预算UNDECIDED、producer完整闭包未准入，H10父项OPEN；下一仅同H10预算/覆盖合同审阅，不自动其他点/Goal/队列。以下为此前时点。
+ 
+ > 2026-10-11 NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 IN_PROGRESS / NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 PLANNED. H10 continues: complete real catalog/generic inventory, protected2resource fixture first, then one bounded2session audio-only envelope if safe. Production frozen; parent budget/coverage remain OPEN. No other point or Goal.
+@@ -800,3 +826,27 @@ NTSD-H10-BOUNDED-PCM-CONVERSION-20261010 VERIFIED (file operation; task cost-spi
+ - NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-20261010 | COMPLETED_SCOPED | [Record](NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-20261010/RECORD.md)
+ 
+ - NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 | COMPLETED_MEASURED | [Record](NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011/RECORD.md)
++
++- [OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME03-20261011](OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME03-20261011/RECORD.md) — PLANNED；仅PcBudget冷观察，11真实dirty备份，原失败证据冻结。
++
++- OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME03-20261011 — runtime checks VERIFIED；精确冷观察/一次新组通过，原件保护与validator收尾见Record追加；H10父项OPEN。
++
++- [OP-NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-PREFLIGHT01-20261011](OP-NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-PREFLIGHT01-20261011/RECORD.md) — PLANNED；预检文档/新Task/Change与原dirty10备份，尚无代码/Settings/build/运行。
++
++- 同Operation PRE-FLIGHT-01 addendum-01：15份当前真实前件，补具名供证/有限CASE候选/部署及空World顺序缺口；仍PLANNED，未执行源/Settings/build/Player。见Operation RECORD与addendum-01-before-manifest。
++
++
++### M12 repair-01 source work authorized after human restart
++
++Same Task/Change/Operation; old OWNER_LOST/Dispose UNKNOWN retained. Plan artifacts\diagnostics\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\implementation-01\review-02\diagnostic-interface-01\post-external-exit-repair-01\IMPLEMENTATION-PLAN.md. Exact independent diagnostic region only; cold firstdiff then evidence-driven minimum fix/narrow EditMode checks, no P1. M12 OPEN/defaultOFF/H08ON. Current repair IN_PROGRESS; prior statements above are history.
++
++
++> **2026-10-11 M12 repair-01：CLONE_CAUSE_FIXED / COMPILE_PASS / R03_ASSERTION_FAILED，后续已停。** 用户手动重启后原Editor确认idle/nonPlay、Menu clean8、旧owner不存在；旧P1外部中断/Dispose UNKNOWN保留。一次冷R01首差FAIL留存：实际JSON有MonoBehaviour包装层，旧代码在错误顶层改name/root；原始差异仅这两项，25引用相同。仅既有M12独立诊断区修正准确路径及已批早期自有释放/外部观察，原40652字节、ReadStaticPlan、8菜单不变。两次依赖性窄编译通过；修复后R02 1/1PASS；R03在Dispose后Set应抛ObjectDisposedException的断言失败，未改断言/重跑，R04–R07未执行。R03自有clone消失/原singleton保持/Dispose回执与失败并存，非旧run释放证明。原十回执/93保护/旧6证据不变；24复制目标仍匹配，重启后发现6个原Temp源缺失（未清理/未恢复，责任未归因）；旧run新增external-interruption原件ownedResourcesReleased=false。完整报告见 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/REPORT.md 文末repair-01。Task/Change/Operation沿用，Change BLOCKED、M12父OPEN/ACTIVE、字节DEFAULT_OFF/H08ON；无P1重跑/H07/Android通过，其他hold保持。下方为历史时点。
++
++
++> **2026-10-11 M12 repair-01最新：R03_TEST_OUTPUT_ERROR / BLOCKED。** 精确R03断言修订仅改release/decoded.Wait(0)与独立输出标签，原Set断言FAIL保留；安全窄编译通过。修订R03仅运行一次，新的DirectoryNotFoundException落在fixture-finally证据写入：目录实际存在，first-failure路径258字符成功，warmup263/owned269/finally260字符无成功回执，符合Windows/Mono长路径限制现象但未另做复验。已停，R04–R07未运行，未缩短路径再试/改生产/P1。当前Editor idle/nonPlay、Menu clean8、无hotowner，Console返回0；最终清理回执缺失，不能称本修订R03或全窄门通过。clone包装层原因已修、R02 1/1PASS复用；旧P1外部中断/Dispose UNKNOWN不变。源SHAb7eb9768308ed507b5db8d6e53f5650fc6967600eb951b2df96c24fa8cce849e；同Task/Change/Operation，M12父OPEN/ACTIVE、字节DEFAULT_OFF/H08ON。准确新失败见repair-01/r03-correction-path-failure.json与r03-correction-01-results.xml。下方为此前阶段。
++
++M12 correction-02 exact R03 evidence-label fix IN_PROGRESS; same Task/Change/Operation, no P1, see repair-01/correction02-before-manifest.json. Prior failure/WAIT wording is historical.
++
++
++> **2026-10-11 M12 repair-01／correction-02：诊断最小修复及冷态有限验证完成，FOCUSED_TEST_PASS。** 最终仅将R03输出标签改为u3（所有冷态路径最长242–249字符且先验无碰撞）；一次原Editor窄编译通过，R03–R07各一次共5/5PASS，R02原1/1PASS按未改方法及比较helper复用，六项冷态门通过。5夹具均有cloneAbsent/singleton保持最终回执；原Menu clean8、Editor idle/nonPlay、无hotowner、Console本次0。原R01首差、R03 Set断言FAIL、长路径R03 ERROR及旧P1全部原件保留；不把新夹具释放覆盖旧run外部中断/Dispose UNKNOWN。源码仅既有M12独立诊断区，原40652字节/ReadStaticPlan/8菜单不变，生产未改；最终源d408f359324adedea3304ffc0b3c4b378f548872a27220cf133fb04336098bfa。93保护/旧6/旧run10及外部回执不变，24复制目标匹配；18源WAV匹配、6Temp源缺失原因UNKNOWN且未补建。完整报告见diagnostic-interface-01/REPORT.md文末correction-02。M12父OPEN/ACTIVE、字节DEFAULT_OFF/H08ON；下一仅同M12真实生命周期缺口审阅，P1不得自动重跑，其他hold不恢复。下方失败/等待状态保留为历史。
+diff --git a/docs/ai/STATE.md b/docs/ai/STATE.md
+index b52b303d..efafe6e3 100644
+--- a/docs/ai/STATE.md
++++ b/docs/ai/STATE.md
+@@ -1,3 +1,80 @@
++> **2026-10-11 M12 repair-01／correction-02：诊断最小修复及冷态有限验证完成，FOCUSED_TEST_PASS。** 最终仅将R03输出标签改为u3（所有冷态路径最长242–249字符且先验无碰撞）；一次原Editor窄编译通过，R03–R07各一次共5/5PASS，R02原1/1PASS按未改方法及比较helper复用，六项冷态门通过。5夹具均有cloneAbsent/singleton保持最终回执；原Menu clean8、Editor idle/nonPlay、无hotowner、Console本次0。原R01首差、R03 Set断言FAIL、长路径R03 ERROR及旧P1全部原件保留；不把新夹具释放覆盖旧run外部中断/Dispose UNKNOWN。源码仅既有M12独立诊断区，原40652字节/ReadStaticPlan/8菜单不变，生产未改；最终源d408f359324adedea3304ffc0b3c4b378f548872a27220cf133fb04336098bfa。93保护/旧6/旧run10及外部回执不变，24复制目标匹配；18源WAV匹配、6Temp源缺失原因UNKNOWN且未补建。完整报告见diagnostic-interface-01/REPORT.md文末correction-02。M12父OPEN/ACTIVE、字节DEFAULT_OFF/H08ON；下一仅同M12真实生命周期缺口审阅，P1不得自动重跑，其他hold不恢复。下方失败/等待状态保留为历史。
++
++> **2026-10-11 M12 repair-01最新：R03_TEST_OUTPUT_ERROR / BLOCKED。** 精确R03断言修订仅改release/decoded.Wait(0)与独立输出标签，原Set断言FAIL保留；安全窄编译通过。修订R03仅运行一次，新的DirectoryNotFoundException落在fixture-finally证据写入：目录实际存在，first-failure路径258字符成功，warmup263/owned269/finally260字符无成功回执，符合Windows/Mono长路径限制现象但未另做复验。已停，R04–R07未运行，未缩短路径再试/改生产/P1。当前Editor idle/nonPlay、Menu clean8、无hotowner，Console返回0；最终清理回执缺失，不能称本修订R03或全窄门通过。clone包装层原因已修、R02 1/1PASS复用；旧P1外部中断/Dispose UNKNOWN不变。源SHAb7eb9768308ed507b5db8d6e53f5650fc6967600eb951b2df96c24fa8cce849e；同Task/Change/Operation，M12父OPEN/ACTIVE、字节DEFAULT_OFF/H08ON。准确新失败见repair-01/r03-correction-path-failure.json与r03-correction-01-results.xml。下方为此前阶段。
++
++> **2026-10-11 M12 repair-01：CLONE_CAUSE_FIXED / COMPILE_PASS / R03_ASSERTION_FAILED，后续已停。** 用户手动重启后原Editor确认idle/nonPlay、Menu clean8、旧owner不存在；旧P1外部中断/Dispose UNKNOWN保留。一次冷R01首差FAIL留存：实际JSON有MonoBehaviour包装层，旧代码在错误顶层改name/root；原始差异仅这两项，25引用相同。仅既有M12独立诊断区修正准确路径及已批早期自有释放/外部观察，原40652字节、ReadStaticPlan、8菜单不变。两次依赖性窄编译通过；修复后R02 1/1PASS；R03在Dispose后Set应抛ObjectDisposedException的断言失败，未改断言/重跑，R04–R07未执行。R03自有clone消失/原singleton保持/Dispose回执与失败并存，非旧run释放证明。原十回执/93保护/旧6证据不变；24复制目标仍匹配，重启后发现6个原Temp源缺失（未清理/未恢复，责任未归因）；旧run新增external-interruption原件ownedResourcesReleased=false。完整报告见 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/REPORT.md 文末repair-01。Task/Change/Operation沿用，Change BLOCKED、M12父OPEN/ACTIVE、字节DEFAULT_OFF/H08ON；无P1重跑/H07/Android通过，其他hold保持。下方为历史时点。
++
++> **2026-10-11 M12 repair-01：原Scene已外部恢复并核验，旧owner处置待明确，源码修复尚未开始。** 当前原Editor稳定nonPlay/idle；唯一NTSD_Menu loaded/active/clean/root8与Prepare相同，文件字节保持，本任务没有重复加载。旧owner仍存活、cloneReleased/handlesDisposed=false，原首差和Warmup异常保留。已核现有编译类型和全部相关支持接口：unity_reflect仅元数据、无活owner方法调用，M12 Cleanup/Exit要求Play；没有无需导入的合法EditMode精确释放路径。动态代码/再进Play/先reload丢owner仍禁用。已请求具体处置决定：用户手动重启Editor并保留旧run外部中断/Dispose UNKNOWN，随后才续已批准的最小修复；未获答前0源码/compile/test/P1。源码/两DLL/保护93/旧6/24输入/十run原件均匹配。证据 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/post-external-exit-repair-01/interface-gap-proof.json；同Task/Change/Operation，M12父OPEN/ACTIVE、Change BLOCKED、DEFAULT_OFF/H08ON。下方为此前时点。
++
++> **2026-10-11 M12 外部退出后只读核对：EXTERNAL_INTERRUPTION / NOT_RESTORED，最小修复仅提案。** 用户决定手动退出；本轮实际观察稳定nonPlay/idle、非编译/更新/测试，原诊断owner仍存活，playing=false、cloneReleased=false、handlesDisposed=false。当前仍单一空Scene clean/root0，原Menu clean8未恢复。原runRoot十个回执不变，无external-interruption/安全Exit/reload/result新原件；本轮仅另存外部观察，不补造。Console两次0条，实际Read Status从精确Editor.log取得，旧首差/退出Exception保留；native clone当前身份、句柄Dispose完成及退出边界日志完整性未证明。源码/两DLL/具名保护93/旧6/24输入均匹配；0源码/compile/test/Scene变更/P1重跑。单一诊断文件的clone首差、分阶段自有释放、严格失败与安全释放分离、外部退出观察及独立Scene恢复提案见 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/REPORT.md 文末post-external-exit-review-01。Task/Change/Operation沿用；M12父OPEN/ACTIVE、Change BLOCKED、字节DEFAULT_OFF/H08ON，其他hold不恢复。以下保留此前事实。
++
++> **2026-10-11 M12 唯一P1：FIRST_DIFFERENCE / EXIT_GUARD_HOLD（未恢复Scene）。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。Prepare实际回执与24项232571B复制校验通过；同runGuid一次Enter/一次Run在menu_load的“Clone changed fields other than runtime root.”守卫停止，尚未加载真实Menu/Battle或开始两个周期。一次Cleanup获接受，实际状态FAILED_CLEAN_SAFE；Exit If Safe因“Warmup identity was never observed.”拒绝。最后存活owner仍playing=true，native/Loading/close pending=false，errors1/persisted1/writers0/late0；clone未释放、句柄未dispose，空Scene clean0，未退出/未恢复。FAILED_CLEAN_SAFE不等于安全退出完成。无改代码/编译/重跑/第二I/新ABBA。M12父OPEN/ACTIVE、字节门DEFAULT_OFF、H08ON；下一只交回首差及早期失败安全收尾缺口审阅，不恢复其他hold/Goal。完整结果见 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/REPORT.md 文末P1；以下为此前时点。
++
++> **2026-10-11 M12 P1一次有限执行 IN_PROGRESS。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011；revision-01 R/C2经有限独立接受，现只派固定runGuid的Prepare→一次Play双周期→守卫允许的清理/退出/恢复。准确24输入232571B、复制目标/原SHA/Scene和失败HOLD门已先登记于diagnostic-interface-01/p1-execution-01。无源码/编译/第二I/旧测试/ABBA/设备或其他点；首差即停，不换根重试。当前尚无P1结果，M12父OPEN/ACTIVE、默认OFF、H08ON。以下为此前时点。
++
++> **2026-10-11 M12 revision-01：R/C2完成，P未派发/未运行。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。仅修独立诊断区的修订身份、自有clone/句柄收尾、完整取消condition与日志落盘、单次cleanup；24文件232571B未来输入已冻结、复制0。原40652字节、ReadStaticPlan方法与八菜单均保持。原Editor一次C2窄编译/new DLL/reload通过、Menu clean8，Console1条MCP连接退出Exception保留；所有菜单调用0，不做第二次I。旧C/I仅复用旧SHA下未改方法/路由，不称新源码运行PASS。源码1bf39d4793a1212561a39a2a10d5b822e336c875d0583fd6ac8a648bf503e3b7。下一同M12独立审阅此修订、严格取消归属/实际释放/音频/退出观察门，再派原定单Play两周期；M12父OPEN/ACTIVE、字节门默认OFF、H08ON，其他hold保持。完整本轮见implementation-01/review-02/diagnostic-interface-01/REPORT.md文末revision-01。以下保留历史。
++
++> **2026-10-11 M12 revision-01 IN_PROGRESS。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。独立审阅已有限接受旧S/G/C/I；本轮仅修既有独立诊断区的Prepare身份门、自有clone/句柄收尾、完整取消日志与持久化、at-most-once cleanup，冻结24文件232571B未来输入。原40652字节、ReadStaticPlan方法及八菜单保持；没有复制、菜单或Play。下一仅C2窄编译和G，不重复I。字节门OFF、H08ON、M12父OPEN，其他hold不恢复。见diagnostic-interface-01/revision-01/PLAN.md；以下为此前时点。
++
++> **2026-10-11 M12 diagnostic-interface-01：COMPILE_PASS / COLD_INTERFACE_PASS，P未运行。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。仅既有M12测试文件追加独立诊断和8菜单，原40652字节完全保留。原Editor一次窄编译完成；唯一一次Read Static Plan实际回执确认PID39108、Authority400/400、CentralOnly、源码/DLL匹配，Menu clean8；无hot owner、无内容/音频准备、无Play目录/运行。Console返回2条MCP连接退出Exception记录原样保留，不称Console零异常。下一仍同M12独立审阅实现及C/I证据、明确音频和退出观察资格后再派原单Play两周期；其他菜单未派发。原C1/F1–F4、旧ABBA按各自SHA/覆盖复用。M12父OPEN/字节门默认OFF、H08ON；其他hold保持。完整报告：artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/REPORT.md。此前execute_code与进程参数观察不再作为方案/资格依据；以下保留历史。
++
++> **2026-10-11 M12 diagnostic-interface-01 IN_PROGRESS。** 同 Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001／Operation OP-NTSD-M12-IMPLEMENTATION-20261011。仅在既有 M12 测试文件追加独立诊断类型及八个显式菜单，原40652字节保持；范围为代码、原Editor窄编译及一次 Read Static Plan 冷态资格。Prepare/Enter/Run/关闭/恢复均未派发，不运行Play。此前 execute_code 路线撤销，禁止替代动态求值；此前进程参数读取观察撤回，不作为配置权威、不再收集或复述参数。实际配置只认本次 Resolve 结果回执。原 C1/F1–F4 与旧ABBA按各自SHA和覆盖复用；M12父OPEN、字节门默认OFF、H08ON，其他hold保持。见 implementation-01/review-02/diagnostic-interface-01/IMPLEMENTATION-PLAN.md。以下保留此前时点。
++
++> **2026-10-11 M12 P0-static-03：原容量/资源及独立Editor诊断方案已收敛，P1仍未写／未运行。** 同Task/Change/Operation。当前原Editor无NTSD覆盖，静态解析Authority400/400、CentralOnly；clone仅改六文件根。拟在同已声明测试文件新增独立Editor-only类型，通过现有execute_code显式分段调用；不继承旧fixture、不用UTR枚举/LogAssert/NoUnexpectedReceived，不自动退出Play。只在无活跃事务的预期reload边界接回冷记录，hot owner丢失不重建/重跑。完整资源/接口/两周期/日志/安全退出表见implementation-01/REPORT.md文末。仅余Spark材质捕获653–662与formal声音路径609–639两个准确来源读证；接口本轮未向Editor调用。0脚本/Unity/编译/测试/Play/新ABBA，原门复用；M12 OPEN/默认OFF、H08 ON，其他hold保持。
++
++> **2026-10-11 M12 P0-static-02：Driver创建与六文件输入已核，完整双周期表仍为提案。** 同Task/Change/Operation；ShowLoading只切面板，文本队列空不要求currentText清零，Warmup纹理/Sprite没有已证归还。clone仅改BattleContentRuntimeRoot，严格日志、await/timeout、对象观察和恢复见implementation-01/REPORT.md文末。下一只读pool/空players闭包、UTR精确日志及Enter/ExitPlay三组局部；P1未实施/尚不具执行资格。本轮0脚本/Unity/编译/测试/Play/新ABBA，C1/F1–F4复用、旧ABBA留旧SHA。M12 OPEN/默认OFF、H08 ON，其他hold保持。
++
++> **2026-10-11 M12 P0-static-01：四类获准只读事实已复核，P1尚未实施。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。Singleton/clone首次赋值、EnterPlay两键、Loading完整任务和两个Scene指定绑定已核；native drain不能替代Loading/Core/Start/池/UI收尾。完整一次Play双周期提案集中于implementation-01/REPORT.md文末：首周期加载/准备期取消，次周期完整准备后关闭，分别join并在首个Battle回调先撤订。下一准确局部读证仅Driver两段、Loading合法caller及getter/Warmup/Update；未读新正文、未写驱动。本轮0源码/Unity/编译/测试/ABBA，复用本版C1/F1–F4。字节门默认OFF、M12父OPEN、H08 ON；其他hold保持。以下为此前时点。
++
++> **2026-10-11 M12 review-02/focused-01：最小修复已实现，FOCUSED_TEST_PASS。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。manager失败/取消主线程Stop先于Dispose；App普通pending自动接现有异步关闭、真实completed才更新菜单；Driver只回原LF；两个新增focused＋原Q03C/Q03D，原Editor一次编译及4/4通过。F2固定4分支第三decode0、waiter取消/另一owner保留后全归零。未写Play驱动、无P0/P1/新ABBA；旧成本只属旧SHA。真实Scene下一路线改为合法Menu在途→Scene加载准备期关闭，精确4类静态读证请求集中于implementation-01/REPORT.md文末。字节门OFF/M12 OPEN，H08 ON，其他hold不恢复。以下保留此前时点。
++
++> **2026-10-11 M12 review-02/focused-01 IN_PROGRESS。** 同Task/Change/Operation，在既有直接人类M12及Driver/App授权内落实已审最小修复：manager两个worker主线程Stop-before-Dispose；App普通/选角pending共享与真正completed后菜单状态；Driver仅恢复当前逻辑LF；既有M12测试只新增两个focused。先原Editor窄编译，再F1/F2/F3旧Q03C/F4旧Q03D各一次，首差停止；不写Play驱动、不执行P0/P1/新ABBA。17真实当前前件含源码、治理、程序集与XML已保存。字节门OFF、父M12 OPEN，原结果继续绑定旧SHA。
++
++> **2026-10-11 M12 review-02：REVIEW_GAPS_CONFIRMED / NEXT_FIX_PROPOSED，尚未实施新修复。** 同Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。只读确认失败worker先归还额度、外层后Stop的普通waiter窗口，以及UnloadBattle主菜单pending未恢复/提前MenuMain两点；Driver另有整文件换行差异。原12PASS与唯一ABBA冻结于原SHA；PendingPixels不覆盖decoder内部或登记前瞬间，不称GC/整进程峰值。准确最小四文件提案、4项focused及待授权单一双周期真实Scene表集中在 implementation-01/REPORT.md 文末review-02。本轮0源码变更、0Unity/测试；M12 OPEN/字节门OFF，原关闭保护已接线，H08 ON。其他hold/Goal不恢复。以下保留此前证据时点。
++
++> **2026-10-11 M12有限候选验证完成：FOCUSED_TEST_PASS / DEFAULT_OFF。** Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。原Editor编译通过，11项正确性/生命周期门通过（8复用、3续跑），首次且唯一ABBA1/1：worker像素payload峰值18.125→5MiB（-72.41%），retained3.625MiB不变，耗时比1.0496（非加速）。旧Q05 CreateNew冲突ERROR保留；获批仅修H08辅助证据路径后续跑。四生产/四测试文件，字节门OFF、H08共享ON；关闭保护已接线。真实Scene卸载/重入、30秒超时、强制退出、完整内容/进程/Android未验，M12父项OPEN。下一仅同M12原件审阅及准确缺失门，不恢复其他hold/Goal。报告 artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/REPORT.md。以下保留此前时点。
++
++> **2026-10-11 M12实施 IN_PROGRESS。** 用户已明确批准Driver/App两个生产文件的限定关闭扩域。Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001：先阶段1取消、阶段2实际native drain、阶段5清理与pending恢复；再原128MiB/固定E字节准入及有限验证。原十一阶段/规则保持，强制Editor退出另报边界，不改其桥接脚本。Operation OP-NTSD-M12-IMPLEMENTATION-20261011；17真实前件已备份，候选默认OFF，其他hold/旧Goal不恢复。当前尚未编译/验证，不声明PASS。
++
++> **2026-10-11 M12继续授权／实际关闭链已核清：AWAITING_EXACT_SHUTDOWN_SCOPE_DECISION。** 用户已批准原M12实施与有限验证，但要求扩大关闭域前先报告。阶段1取消非drain，阶段2只管dedicated worker，阶段5/Stopped未检查图片任务；原同步App也不会await/resume。为保留真实drain后才关闭的门，现提出仅新增Driver关闭/重建guard与App正常异步关闭接线两个生产文件，关闭合同仅补原阶段映射；尚未修改这些文件或任何生产/测试脚本。Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011／Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001仍PLANNED；[准确证据和范围](../../artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/shutdown-review-01/REPORT.md)。本轮Unity/编译/测试0，M12 OPEN，其他hold保持。下方preflight-only授权说明为此前阶段，不覆盖本次附条件继续授权。
++
++> **2026-10-11 M12 手机优先有限预检：PLANNED / PRE_FLIGHT_READY_FOR_REVIEW。** Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011；Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。准确方案已形成：native PNG共享/显式OFF两路解码前按字节准入，128MiB普通权重＋超大单张独占上界439799644B为待审建议，非手机内存预算。703header/长度静态核验；真实clamp哈希临时字节另计，候选>128MiB为9项。M12不能单独解决大源/全量atlas驻留。主审需核准确Driver stage1/2/5与图片任务drain区别；本轮未读Driver/Q06方法体、未改脚本、未操作Unity/编译/测试/测量。10份真实治理前件已备份；[唯一完整方案](../../artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/PLAN.md)。M12保持OPEN，下一为同Task独立审阅后准确派实施，不默认暂停或关闭；H10 CLOSED／Player ABANDONED及其余hold不恢复。以下保留历史时点。
++
++> **2026-10-11 用户方向更正：Android 手机优先。** 后续先以手机的 CPU、内存与加载峰值约束共用实现，PC再提高表现规格；Android验收后置不等于设计标准后置。M-12先补手机预算建议和实际必要性，具体档位/数值未冻结。本次仅文档；H10保持CLOSED、已取消Player路线与其它hold不恢复。
++
++[Android-first decision](DECISIONS/NTSD-ANDROID-FIRST-OPTIMIZATION-BASELINE-20261011.md)
++
++> **2026-10-11 H10 CLOSED：按用户决定结束当前优化范围。** 用户取消新增Windows Player出包验收路线，未实施Task NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011与Change NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001均ABANDONED；原因是范围取消，不是运行失败。第四processor待批事项撤销，三个新脚本/两个meta不创建，兼容提案不实施。PCM有界/逐局formal owned、同输入320MiB对象门及resume03隔离Editor三轮音频门按原scope保留；Player、整进程2/3GiB、目标8GB型号、完整千人预算、人工听感仍未验证，但不再是本次H10 active待办或结项前置。旧compat13/14、成本尖峰、失败/事件不追溯改PASS。决定：docs/ai/DECISIONS/NTSD-H10-USER-SCOPE-CLOSEOUT-20261011.md；结项：artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/closeout-user-scope-01/REPORT.md。当前H10已结束，下一无自动启动项；H08/H07/M03/producer/H06等hold、33ms/十一阶段及全部原边界保持。下方旧OPEN/等待第四域/继续出包和旧统计只保留为被本决定替代的历史。
++
++> **2026-10-11 H10 PRE-FLIGHT已收敛交回：PLANNED，完整有限表与构建前冷资格已明确，尚无实施派发。** formal根与public Candidate/Catalog/显式snapshot有限读证已闭合；703body双审0差，实际head/small/common集合留给backend/build前的一次冷资格。已准原new probe内UNITY_EDITOR静态桥接调用公开Capture/既有internal Copy，冷解析/managed分配据实记录；必须保护原publication/cache/player/singleton/Scene。CASE/Ordinal/记录粒度/预算已审，compile/Q/build/两PID三轮均NOT_RUN，第四processor直接人类确认及完整派发未到。当前完整表见 artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PLAN.md 与 PRE-FLIGHT-01.md 文末，结果CONVERGENCE-RESULT.md。H10父项OPEN，不暂停或转其它点；无源码/资源/Settings/Unity/build/Player变更。以下保留此前时点。
++
++> **2026-10-11 H10 PRE-FLIGHT 收敛：当前方案集中回现有PLAN/PRE-FLIGHT，仍PLANNED／未授实施。** 主审已冻结真实静态VS0/1来源及普通四目标全窗/千人全请求计数加首批64明细的证据颗粒度；未运行。旧已解析body703/703与manifest现SHA/长度同，两个DAT及两种SPARK已含；WORDS六图、KillIcon三候选图缺失分别保留其既有nullable/skip合同，不补资源。head/small实际清单与Source根绑定尚待精确读证；没有证明新增部署项，也不称完整闭包。完整1build/2PID×3轮表和安全恢复门见 `artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PLAN.md` 文末收敛表及 `PRE-FLIGHT-01.md`，剩余读域 `FINAL-PATH-BINDING-REQUEST.md`。第四processor确认由主会话处理，Task/Change与H10父项状态保持；0脚本/Settings/build/Player/其它点。以下保留此前时点。
++
++> **2026-10-11 H10 PRE-FLIGHT-01 review-03：公开队伍/静态VS来源与精确raw身份已补齐，仍PLANNED。** 三槽候选team1/2/3；Menu真实序列化mode0/1与组件GUID已核，实际Player资格仍待验证。旧1000raw已含builtin/mode；Ordinal先原raw后缺失单属alias共1968，14冲突键由原raw优先，1024/2048容量对旧集有据。V3小写分析保留但不用于实施。普通目标完整明细与千人全窗计数/限定首批明细候选分开，4096不作千人上界；诊断容量失败不冒称生产丢音。新件 `artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/REVIEW-03-CASE-CAPACITY-CLARIFICATIONS.md`、`RAW-KEY-RESOLUTION-V4-ORDINAL.json`、`RAW-UI-NEXT-READ-REQUEST.md`。下一仅Candidate输入/路径最小读证和方案审查；第四写域/完整派发未到，无脚本/Settings/build/Player/其它点，H10父项OPEN。以下保留此前时点。
++
++> **2026-10-11 H10 PRE-FLIGHT-01 review-02：已证旧Windows回调1373清单与当前2334源冲突，第四写域仅提案待直接人类确认。** 原callback和严格门不绕过；一次H10上下文选择完整新清单提案已独立审阅，尚无代码/Settings/build/Player授权。输入/tee容量与恢复已细化；GameModeConfig普通两字段对象身份已更正；撤回三人同队候选，待公开队伍/真实VS映射。Task/Change仍PLANNED、H10父项OPEN、不推进其它点。新原件：`artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/POSTPROCESSOR-COMPATIBILITY-PROPOSAL.md`、`CASE-SAMPLING-RESTORE-V2.md`、`REVIEW-02-CONTRACT-CLARIFICATIONS.md`、`TEAM-ENTRY-CORRECTION.md`。旧证据保留，以下为此前时点。
++
++> **2026-10-11 H10 Player PRE-FLIGHT-01方案补齐，仍PLANNED／未授权实现。** R1-R3由主会话具名供证；新增具体2/16/507三轮技能候选及采样质量提案。发现现有Windows postprocessor部署交叠和MatchConfirmed后原cfg自动加载，须准确补齐后再build。原validator PASSED1423/4534 warnings（本计划3）；4094保护/406旧artifact无漂移为已保存执行审计。0脚本/Settings修改、0编译/测试/build/Player/sidecar。入口 `artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PREFLIGHT-ADDENDUM-01.md`、`CASE-MATRIX-CANDIDATE.md`、`NEW-READ-DEPENDENCIES-01.md`、`OBSERVATION-SEAM-REQUEST.md`、`EMPTY-WORLD-ENTRY-ORDER.md`。H10父项继续OPEN、不默认暂停、不推进其它点；以下保留此前时点。
++
++> **2026-10-11 H10 Windows Player预算 PRE-FLIGHT-01完成，PLANNED / 具名读域待独立审查。** Task NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011 / Change NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001。仅只读harness/App具名合同及新方案；0脚本/Settings修改、0build/Player/sidecar。2752已知资源条目SHA manifest尚未部署，UI/空players/suppression/三轮重入仍需R1-R4读证。候选1build、2进程各1smoke+2formal，未自授执行额度。resume-03成功与全部旧失败冻结，H10父项OPEN、不推进其它点。入口 artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/preflight-01/PRE-FLIGHT-01.md 与 PLAN.md/READ-SCOPE-REQUESTS.md。以下为此前时点。
++
++> **2026-10-11 H10 resume-03：RUNTIME_AUDIO_GATES_VERIFIED（限定隔离Editor音频运行门）。** Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 VERIFIED仅本轮。首次编译、资格2/2及唯一三轮Play1/1PASS；六次真实启动声源身份/计数/clip/在播通过，轮2/3复现旧selector停播而本次新源在播，旧FAIL保留。63有效校准scope0事件；三轮非零输出/公开关闭重入、真实pending取消迟到/自然Destroy与精确清理通过，当前Menu clean8/组件/config恢复。非1000实体/完整Battle/Player/整进程/目标PC，H10父项OPEN、预算/218.313758MiB对象门复用保持，无H07/Android/Goal/其它点。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/REPORT.md；下一仅同H10原件独立审阅与缺失门。以下为此前时点。
++
++> **2026-10-11 H10 resume-03 IN_PROGRESS。** 同Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001。仅PcBudget冷播放观察：复制voice/序号前后值识别本次真正启动源，完整证据先于断言，公开关闭前后精确借用观察。旧helper/三recorder/ExerciseHot/生产冻结。两项本版资格通过后仅一次三轮Play组，首差停止。旧失败保留；H10父项OPEN、预算/对象门复用不变，无Player/Goal/其它点。计划 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-03/PLAN.md；Operation OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME03-20261011。下方为此前时点。
++
++> **2026-10-11 H10 resume-02：SCOPED_HOT_0EVENTS_PASS / SECOND_CYCLE_GENERIC_PLAY_OBSERVATION_FAILED。** Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 BLOCKED。首次编译及新资格2/2PASS，raw-key/两轮cold wrapper与generic同引用通过；两轮各7tick×3范围共42有效校准scope0事件，无热load/build/reject增量，非整Driver/千人实体。第一轮实际播放/非零输出及公开关闭重入完成；唯一Play整体0/1FAIL于第二轮genericVoice在播断言，首个同clip voice选择器有观察风险，实际原因未证明，未改生产/追加组。两次关闭/owned后帧归零/精确generic清理及当前Menu组件/config恢复通过。4094保护/9指纹/196旧artifact保持。三轮/pending/natural/Player/进程门未完成，H10父项OPEN；预算与对象门复用不变。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/REPORT.md，下一仅同H10精确播放观察独立审阅。无新Goal/队列/其他点，以下是旧时点。
++
++> **2026-10-11 H10 resume-02 IN_PROGRESS。** 同Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001，经独立审阅仅修PcBudget真实raw-key、无解码成员资格、cold wrapper guard及关闭证据字段；三个已通过recorder算法不改。先编译/本版资格2项，全过后仅一次新版Play，首差停止。原两失败/生产/预算及对象门复用保持，H10父项OPEN。计划 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/PLAN.md；Operation OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME02-20261011；无Player/Settings/其他点/Goal。下方保留旧时点。
++
++> **2026-10-11 H10 resume-01：MEASUREMENT_QUALIFIED_FIXTURE_CUE_ID_MISMATCH。** Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 BLOCKED（本轮夹具）。首次编译PASS，无解码资格2/2PASS：三个独立GC.Alloc recorder前后正控有效/empty0，Unit原样TimeNanoseconds；不是生产热0GC。唯一新Play0/1 Error，冷generic查询data/016与实际注册data\016 raw key不一致，wrapper null，未进热循环；归属执行者夹具错误，生产未改，不追加组。22owned失败清理公开stage10/空地图stage11及下一帧释放通过，generic016精确清理；当前Menu clean8/组件快照/config/MM settings相同。4094保护/旧105artifact无漂移，旧其他方法体保持。预算已批准与218.313758MiB对象门复用保持；三轮/播放/取消/Player/进程门未过，H10父项OPEN。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/REPORT.md；下一仅同H10精确raw-key/guard修正独立审阅，不自动运行，无新Goal/队列/Player。下方保留此前时点。
++
++> **2026-10-11 H10 resume-01 IN_PROGRESS。** 独立审阅后恢复Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001。仅PcBudget诊断计量/负控/保护修正，先无解码资格，全部通过后仅一次新版本三轮Play组；首差停止。旧分配校准FAIL原件保留，生产/Scene/资源/Settings冻结，预算已批准/对象门复用保持，H10父项OPEN，无Player/其他点/Goal。计划 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-01/PLAN.md；Operation OP-NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-RESUME01-20261011。下方为此前时点。
++
++> **2026-10-11 H10：PC_TARGETS_ADOPTED；本轮 RUNTIME_CALIBRATION_FAILED，父项继续 OPEN。** 人类已批准暂定PC基础/推荐候选及AudioClip≤320MiB、游戏进程Private稳态≤2GiB/过渡采样峰≤3GiB，尚未认证硬件。Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 BLOCKED（本轮测量夹具）。1682项当前输入指纹匹配，旧228,918,567B对象账本可复用通过320MiB对象门；非整进程证书。原Editor编译通过、窄资格1/1 PASS；唯一Play组0/1 FAIL：byte[97]分配正控计数为0，正式热样本前停止，未重跑。第一轮22个owned clip准备后，失败清理公开关闭stage10/空地图完成stage11、drain/下一帧释放与精确generic016清理通过，Menu clean8恢复。三轮/热0GC/实际播放/取消等门未完成；不覆盖旧13/14、Menu UNKNOWN或既有事件。下一仅同H10测量夹具修正独立审阅及剩余Play门，Player仅已有只读方案，不自动build/改Settings。报告 artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/REPORT.md；预算决定 docs/ai/DECISIONS/NTSD-PC-TEMP-ENGINEERING-TARGETS-20261011.md。下方UNDECIDED等为历史时点；无H07/Android通过，无Goal/34队列恢复。
++
++
++> 2026-10-11 **PC_TARGETS_ADOPTED / H10 runtime acceptance IN_PROGRESS.** Human approved concrete provisional PC tiers and AudioClip<=320MiB / game-process private steady<=2GiB / transition sampled peak<=3GiB; not certified hardware. Task NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011 / Change NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001 PLANNED. Exact single diagnostic script; original production/old evidence retained. Decision: docs/ai/DECISIONS/NTSD-PC-TEMP-ENGINEERING-TARGETS-20261011.md. Old budget UNDECIDED below is historical, not current blocker. Three-session Play and process gates not yet verified; H10 parent OPEN, no H07/Android/Goal/queue.
++
+ > **2026-10-11 H10全目录音频账本完成：FULL_CATALOG_AUDIO_ENVELOPE_MEASURED。** Task NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 / Change NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 VERIFIED（仅Editor诊断）。真实330定义/1000cue，两轮public准备关闭唯一组1/1 PASS；每轮978formal+72generic去重228,918,567B（218.313758MiB），formal逐局归零、同72generic跨轮复用，最终仅精确释放新增72key/clip，原4clips及Menu clean8保持。首次资格FAIL及事件保留，修正资格/恢复检查/无音频所有权负控各1/1；测量后仅诊断guard哈希变化，生产冻结。71283保护无漂移。报告 artifacts/diagnostics/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011/REPORT.md。音频数字预算UNDECIDED、producer完整闭包未准入，H10父项OPEN；下一仅同H10预算/覆盖合同审阅，不自动其他点/Goal/队列。以下为此前时点。
+ 
+ > 2026-10-11 NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 IN_PROGRESS / NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 PLANNED. H10 continues: complete real catalog/generic inventory, protected2resource fixture first, then one bounded2session audio-only envelope if safe. Production frozen; parent budget/coverage remain OPEN. No other point or Goal.
+@@ -6887,3 +6964,17 @@ NTSD28-336B44-BODY-DEPTH-CANDIDATE-001 / VERIFIED and NTSD28-336B44-SAGE-FIRST-R
+ > NTSD-H08-RESIDENT-VISUAL-MEMORY-REVIEW-20261010 IN_PROGRESS / NTSD-H08-RESIDENT-VISUAL-MEMORY-REVIEW-001 IN_PROGRESS: user-approved H08 current-content inventory and bounded Editor duplicate-source verification. Production unchanged; no handoff yet.
+ 
+ > NTSD-H08-RESIDENT-VISUAL-MEMORY-REVIEW-20261010 SCOPED_REVIEW_COMPLETE / NTSD-H08-RESIDENT-VISUAL-MEMORY-REVIEW-001 VERIFIED diagnostic only: actual C#773 live refs/703paths, repeated RGBA32 estimate184792652B; real loader duplicate2/2 and existing owner-helper1/1 pass. Production unchanged. Exact native per-publication source-sharing handoff ready; dispatch receipt authoritative. H08 parent OPEN.
++
++
++## 2026-10-11 用户范围结项（当前终态）
++
++H10 CLOSED；未实施Player路线ABANDONED。用户取消新增出包验收条件，第四processor待批事项撤销，不再等答复或完整实施派发。三个新脚本/两个meta不创建，全部preflight/proposal/FAIL保留。已实施PCM/逐局formal owned、320MiB同输入对象门/resume03限定音频门按原scope保留；Player/2与3GiB进程/8GB型号/完整千人/人工听感仍未验证，不列本次active后继。旧compat13/14/成本尖峰/失败不改PASS。决定见docs/ai/DECISIONS/NTSD-H10-USER-SCOPE-CLOSEOUT-20261011.md，报告见既有Player输出根closeout-user-scope-01/REPORT.md。仅治理检查，无源码/资源/Settings/Unity/编译/测试/测量/build/Player/sampler；无下一项/Goal，其他hold与所有原边界不变。此前PLANNED/OPEN/等待第四域/继续出包仅为被本决定替代的历史，不再授执行权限。
++
++
++### M12 repair-01 source work authorized after human restart
++
++Same Task/Change/Operation; old OWNER_LOST/Dispose UNKNOWN retained. Plan artifacts\diagnostics\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\implementation-01\review-02\diagnostic-interface-01\post-external-exit-repair-01\IMPLEMENTATION-PLAN.md. Exact independent diagnostic region only; cold firstdiff then evidence-driven minimum fix/narrow EditMode checks, no P1. M12 OPEN/defaultOFF/H08ON. Current repair IN_PROGRESS; prior statements above are history.
++
++M12 R03 exact cold-test API correction IN_PROGRESS within same repair; original FAIL retained, no P1. See repair-01/r03-correction-before-manifest.json and detailed report.
++
++M12 correction-02 exact R03 evidence-label fix IN_PROGRESS; same Task/Change/Operation, no P1, see repair-01/correction02-before-manifest.json. Prior failure/WAIT wording is historical.

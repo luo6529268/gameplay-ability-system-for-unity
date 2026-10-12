@@ -1,0 +1,54 @@
+{
+  "request": {
+    "type": "get_test_job",
+    "params": {
+      "job_id": "e704052f015f4e37b1246338a7524bd0",
+      "includeDetails": true,
+      "includeFailedTests": true
+    }
+  },
+  "result": {
+    "job_id": "e704052f015f4e37b1246338a7524bd0",
+    "status": "succeeded",
+    "mode": "EditMode",
+    "started_unix_ms": 1791733301456,
+    "finished_unix_ms": 1791733310053,
+    "last_update_unix_ms": 1791733310053,
+    "progress": {
+      "completed": 1,
+      "total": 10742,
+      "current_test_full_name": null,
+      "current_test_started_unix_ms": 1791733309392,
+      "last_finished_test_full_name": "NTSD.Test.M12DiagnosticRepairTests.R03_UninstalledCloneAndNeverReachedWarmupRelease",
+      "last_finished_unix_ms": 1791733309463,
+      "stuck_suspected": false,
+      "editor_is_focused": false,
+      "blocked_reason": null,
+      "failures_so_far": [],
+      "failures_capped": false
+    },
+    "error": null,
+    "result": {
+      "mode": "EditMode",
+      "summary": {
+        "total": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "durationSeconds": 0.5397472,
+        "resultState": "Passed"
+      },
+      "results": [
+        {
+          "name": "R03_UninstalledCloneAndNeverReachedWarmupRelease",
+          "fullName": "NTSD.Test.M12DiagnosticRepairTests.R03_UninstalledCloneAndNeverReachedWarmupRelease",
+          "state": "Passed",
+          "durationSeconds": 0.0664448,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        }
+      ]
+    }
+  }
+}

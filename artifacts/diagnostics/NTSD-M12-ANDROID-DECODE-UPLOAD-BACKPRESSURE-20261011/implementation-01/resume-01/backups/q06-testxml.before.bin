@@ -1,0 +1,32 @@
+<test-suite type="TestSuite" id="13443" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="10733" result="Passed" start-time="2026-10-11 10:03:59Z" end-time="2026-10-11 10:04:02Z" duration="2.743795" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-suite type="Assembly" id="25845" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="10725" result="Passed" start-time="2026-10-11 10:03:59Z" end-time="2026-10-11 10:04:02Z" duration="2.532759" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="39108" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><test-suite type="TestSuite" id="25846" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="10725" result="Passed" start-time="2026-10-11 10:03:59Z" end-time="2026-10-11 10:04:02Z" duration="2.448989" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-suite type="TestSuite" id="25854" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="9922" result="Passed" start-time="2026-10-11 10:03:59Z" end-time="2026-10-11 10:04:02Z" duration="2.345862" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-suite type="TestFixture" id="15036" name="M12DecodeUploadBackpressureEditorTests" fullname="NTSD.Test.M12DecodeUploadBackpressureEditorTests" classname="NTSD.Test.M12DecodeUploadBackpressureEditorTests" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-10-11 10:03:59Z" end-time="2026-10-11 10:04:02Z" duration="2.318023" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-case id="15045" name="Q05_ExistingSourceAndAtlasPixelOracle" fullname="NTSD.Test.M12DecodeUploadBackpressureEditorTests.Q05_ExistingSourceAndAtlasPixelOracle" methodname="Q05_ExistingSourceAndAtlasPixelOracle" classname="NTSD.Test.M12DecodeUploadBackpressureEditorTests" runstate="Runnable" seed="1013167013" result="Passed" start-time="2026-10-11 10:04:00Z" end-time="2026-10-11 10:04:02Z" duration="2.198864" asserts="0"><properties><property name="_JOINTYPE" value="UnityCombinatorial" /></properties><output><![CDATA[<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeSourcePixels_A, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\98099803496b46639803e37d0a91cc8a\vfs\c\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeSourcePixels_B, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\98099803496b46639803e37d0a91cc8a\vfs\c\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeSourcePixels_A, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\98099803496b46639803e37d0a91cc8a\vfs\c\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeSourcePixels_B, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\98099803496b46639803e37d0a91cc8a\vfs\c\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>
+<color=cyan>开始加载精灵，角色配置数量: 2</color>
+<color=cyan>共 2 个文件需要处理</color>
+[BMPLoader] 调色板偏移: 54, 最大颜色: 256, 实际颜色: 6
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeAtlasPixels_A, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\2e7a1a67a46648da9c9cd885dc506e11\vfs\c\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeAtlasPixels_B, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\2e7a1a67a46648da9c9cd885dc506e11\vfs\c\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeAtlasPixels_A, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\2e7a1a67a46648da9c9cd885dc506e11\vfs\c\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeAtlasPixels_B, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\2e7a1a67a46648da9c9cd885dc506e11\vfs\c\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>
+<color=cyan>开始加载精灵，角色配置数量: 2</color>
+<color=cyan>共 2 个文件需要处理</color>
+[BMPLoader] 调色板偏移: 54, 最大颜色: 256, 实际颜色: 6
+<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client connected 127.0.0.1:7375 (active clients: 1)
+]]></output></test-case></test-suite></test-suite></test-suite></test-suite></test-suite>

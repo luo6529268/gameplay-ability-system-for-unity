@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using System;
 using MoreMountains.Tools;
@@ -285,6 +286,11 @@ namespace NTSD.Simulation
         private long _rejectedLatePresentationComponentCreateCount;
         private readonly BattleRuntimeAllocationGate _allocationGate =
             new BattleRuntimeAllocationGate();
+        private CharacterAnimtorManager _shutdownImageOwner;
+        private bool _shutdownWaitingForImages;
+        private bool _shutdownAsyncRunning;
+        private UniTask<BattleRuntimeShutdownReport> _shutdownAsyncTask;
+        private int _shutdownTransactionVersion;
         private readonly BattleRuntimeShutdownDiagnostics _shutdownDiagnostics =
             new BattleRuntimeShutdownDiagnostics();
         private LF2ObjectPointFactory _battleObjectPointFactory;
@@ -1654,29 +1660,35 @@ namespace NTSD.Simulation
                 return BuildShutdownReport(BattleRuntimeShutdownStatus.AlreadyStopped);
             if (lifecycleState == BattleRuntimeLifecycleState.Stopping)
             {
-                return string.IsNullOrEmpty(_shutdownDiagnostics.FailureReason)
-                    ? BuildShutdownReport(
-                        _shutdownDiagnostics.CompletedStage >=
-                            BattleRuntimeShutdownStage.ObjectPoolQuiesced
-                            ? BattleRuntimeShutdownStatus.AwaitingRuntimeMapCleanup
-                            : BattleRuntimeShutdownStatus.AlreadyStopping)
-                    : BuildShutdownReport(BattleRuntimeShutdownStatus.Failed);
+                if (!string.IsNullOrEmpty(_shutdownDiagnostics.FailureReason))
+                    return BuildShutdownReport(BattleRuntimeShutdownStatus.Failed);
+                if (!_shutdownWaitingForImages ||
+                    (!ReferenceEquals(_shutdownImageOwner, null) && _shutdownImageOwner.HasPendingNativePrewarmWork))
+                    return BuildShutdownReport(_shutdownDiagnostics.CompletedStage >= BattleRuntimeShutdownStage.ObjectPoolQuiesced
+                        ? BattleRuntimeShutdownStatus.AwaitingRuntimeMapCleanup : BattleRuntimeShutdownStatus.AlreadyStopping);
+                _shutdownWaitingForImages = false;
             }
 
-            lifecycleState = BattleRuntimeLifecycleState.Stopping;
-            _battleSoundPlayer?.BeginBattleSoundShutdown();
-            CharacterAnimtorManager.TryGetInstance()?.CancelConfiguredContentPrewarm();
-            CharacterAnimtorManager.TryGetInstance()?.CancelNativeContentPrewarm();
-            paused = true;
-            _battleFunctionKeyInputLatch.Clear();
-            ClearNativeFunctionKeyRoutingState();
-            _hostControlPhysicalEdgeLatch.Clear();
-            _pendingHostControlCommands = SimulationHostControlCommand.None;
-            ResetLocalHostDebt();
-            _frameInputProvider?.Reset();
-            _localFrameInputProvider.Reset();
-            _shutdownDiagnostics.Reset();
-            CompleteShutdownStage(BattleRuntimeShutdownStage.TickAndInputClosed);
+            else
+            {
+                _shutdownTransactionVersion++;
+                _shutdownImageOwner = CharacterAnimtorManager.TryGetInstance();
+                lifecycleState = BattleRuntimeLifecycleState.Stopping;
+                _battleSoundPlayer?.BeginBattleSoundShutdown();
+                _shutdownImageOwner?.CancelConfiguredContentPrewarm();
+                _shutdownImageOwner?.CancelNativeContentPrewarm();
+                paused = true;
+                _battleFunctionKeyInputLatch.Clear();
+                ClearNativeFunctionKeyRoutingState();
+                _hostControlPhysicalEdgeLatch.Clear();
+                _pendingHostControlCommands = SimulationHostControlCommand.None;
+                ResetLocalHostDebt();
+                _frameInputProvider?.Reset();
+                _localFrameInputProvider.Reset();
+                _shutdownDiagnostics.Reset();
+                CompleteShutdownStage(BattleRuntimeShutdownStage.TickAndInputClosed);
+
+            }
 
             try
             {
@@ -1687,6 +1699,11 @@ namespace NTSD.Simulation
                     return FailShutdown(
                         BattleRuntimeShutdownStage.TickAndInputClosed,
                         "dedicated-simulation-worker-did-not-stop");
+                }
+                if (!ReferenceEquals(_shutdownImageOwner, null) && _shutdownImageOwner.HasPendingNativePrewarmWork)
+                {
+                    _shutdownWaitingForImages = true;
+                    return BuildShutdownReport(BattleRuntimeShutdownStatus.AlreadyStopping);
                 }
                 CompleteShutdownStage(BattleRuntimeShutdownStage.WorkerStopped);
 
@@ -1703,7 +1720,7 @@ namespace NTSD.Simulation
                 _world?.HudChanges.Reset(stop: true);
                 DispatchBattleHudChanges(allowClear: true);
                 _entityOverlayRenderer?.StopForBattleShutdown();
-                CharacterAnimtorManager.TryGetInstance()?.ReleaseCancelledNativeContentStaging();
+                _shutdownImageOwner?.ReleaseCancelledNativeContentStaging();
                 BattleCentralRenderSystem.ResetRuntime();
                 _world?.BattlePresentation.ClearKnockoutFeedSession();
                 _world?.BattlePresentation.Reset();
@@ -1779,11 +1796,49 @@ namespace NTSD.Simulation
             }
         }
 
+        public UniTask<BattleRuntimeShutdownReport> ShutdownBattleRuntimeAsync()
+        {
+            if (_shutdownAsyncRunning) return _shutdownAsyncTask;
+            BattleRuntimeShutdownReport report = ShutdownBattleRuntime();
+            if (!_shutdownWaitingForImages || report.Status == BattleRuntimeShutdownStatus.Failed)
+                return UniTask.FromResult(report);
+            _shutdownAsyncRunning = true;
+            _shutdownAsyncTask = WaitForShutdownImagesAsync(_shutdownImageOwner, _world,
+                _shutdownTransactionVersion).Preserve();
+            return _shutdownAsyncTask;
+        }
+
+        private async UniTask<BattleRuntimeShutdownReport> WaitForShutdownImagesAsync(
+            CharacterAnimtorManager owner, SimulationWorld world, int transaction)
+        {
+            try
+            {
+                await owner.WaitForNativePrewarmDrainAsync().Timeout(TimeSpan.FromSeconds(30));
+                await UniTask.Yield();
+                if (this == null || transaction != _shutdownTransactionVersion ||
+                    !ReferenceEquals(owner, _shutdownImageOwner) ||
+                    (!ReferenceEquals(world, _world) && _shutdownDiagnostics.CompletedStage < BattleRuntimeShutdownStage.ObjectPoolQuiesced))
+                    return FailShutdown(_shutdownDiagnostics.CompletedStage, "image-shutdown-owner-changed");
+                return ShutdownBattleRuntime();
+            }
+            catch (Exception error)
+            {
+                return FailShutdown(_shutdownDiagnostics.CompletedStage,
+                    "image-prewarm-drain-failed: " + error.GetType().Name);
+            }
+            finally { _shutdownAsyncRunning = false; }
+        }
+
         public BattleRuntimeShutdownReport CompleteBattleRuntimeShutdownAfterMapCleanup(
             bool runtimeMapCleared)
         {
             if (lifecycleState == BattleRuntimeLifecycleState.Stopped)
                 return BuildShutdownReport(BattleRuntimeShutdownStatus.AlreadyStopped);
+            if (!string.IsNullOrEmpty(_shutdownDiagnostics.FailureReason))
+                return BuildShutdownReport(BattleRuntimeShutdownStatus.Failed);
+            if (_shutdownAsyncRunning || _shutdownWaitingForImages ||
+                (!ReferenceEquals(_shutdownImageOwner, null) && _shutdownImageOwner.HasPendingNativePrewarmWork))
+                return BuildShutdownReport(BattleRuntimeShutdownStatus.AlreadyStopping);
             if (lifecycleState != BattleRuntimeLifecycleState.Stopping ||
                 _shutdownDiagnostics.CompletedStage <
                     BattleRuntimeShutdownStage.ObjectPoolQuiesced)
@@ -2484,15 +2539,15 @@ namespace NTSD.Simulation
         public void UnbindWorld()
         {
             BattleRuntimeShutdownReport report = ShutdownBattleRuntime();
-            if (report.Status != BattleRuntimeShutdownStatus.Failed)
+            if (report.RuntimeStagesCompleted && report.Status != BattleRuntimeShutdownStatus.Failed)
                 CompleteBattleRuntimeShutdownAfterMapCleanup(true);
         }
 
         public void RecreateWorld()
         {
             BattleRuntimeShutdownReport shutdown = ShutdownBattleRuntime();
-            if (shutdown.Status == BattleRuntimeShutdownStatus.Failed)
-                throw new InvalidOperationException(shutdown.FailureReason);
+            if (shutdown.Status == BattleRuntimeShutdownStatus.Failed || !shutdown.RuntimeStagesCompleted || _shutdownAsyncRunning)
+                throw new InvalidOperationException("Ordered shutdown has not drained: " + shutdown.FailureReason);
             CompleteBattleRuntimeShutdownAfterMapCleanup(true);
             CreateProductionWorld();
             ResetDriverStateAfterWorldCreation();
@@ -2675,7 +2730,8 @@ namespace NTSD.Simulation
             BattleRuntimeShutdownStage completedStage,
             string failureReason)
         {
-            _shutdownDiagnostics.Fail(completedStage, failureReason);
+            if (string.IsNullOrEmpty(_shutdownDiagnostics.FailureReason))
+                _shutdownDiagnostics.Fail(completedStage, failureReason);
             shutdownStage = _shutdownDiagnostics.CompletedStage;
             lifecycleState = BattleRuntimeLifecycleState.Stopping;
             paused = true;

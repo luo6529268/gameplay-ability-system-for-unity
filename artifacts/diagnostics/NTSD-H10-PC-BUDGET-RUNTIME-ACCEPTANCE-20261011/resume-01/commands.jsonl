@@ -1,0 +1,20 @@
+{"time": "2026-10-11T11:07:09.206161+08:00", "tool": "get_editor_state", "params": {}, "evidence": "initial-editor.json"}
+{"time": "2026-10-11T11:07:09.225159+08:00", "tool": "manage_scene", "params": {"action": "get_loaded_scenes"}, "evidence": "initial-scenes.json"}
+{"time": "2026-10-11T11:15:05.193608+08:00", "tool": "get_editor_state", "params": {}, "evidence": "before-compile-editor.json"}
+{"time": "2026-10-11T11:15:05.296261+08:00", "tool": "manage_scene", "params": {"action": "get_loaded_scenes"}, "evidence": "before-compile-scenes.json"}
+{"time": "2026-10-11T11:15:05.348305+08:00", "tool": "refresh_unity", "params": {"mode": "if_dirty", "scope": "scripts", "compile": "request", "wait_for_ready": false}, "evidence": "compile-request-01.json"}
+{"time": "2026-10-11T11:15:37.170861+08:00", "tool": "get_editor_state", "params": {}, "evidence": "compile-state-01.json"}
+{"time": "2026-10-11T11:15:37.211922+08:00", "tool": "read_console", "params": {"action": "get", "types": ["error"], "count": 10, "format": "detailed"}, "evidence": "compile-console-01.json"}
+{"time": "2026-10-11T11:16:04.030715+08:00", "tool": "get_editor_state", "params": {}, "evidence": "qualification-ready.json"}
+{"time": "2026-10-11T11:16:04.146649+08:00", "tool": "manage_scene", "params": {"action": "get_loaded_scenes"}, "evidence": "qualification-scenes.json"}
+{"time": "2026-10-11T11:16:04.429882+08:00", "tool": "run_tests", "params": {"mode": "EditMode", "testNames": ["NTSD.Test.Editor.H10ResidentClosureDiagnostics.PcBudgetAllocationMeasurementQualification", "NTSD.Test.Editor.H10ResidentClosureDiagnostics.PcBudgetRuntimeQualification"]}, "evidence": "qualification-run.json"}
+{"time": "2026-10-11T11:16:39.257736+08:00", "tool": "get_test_job", "params": {"job_id": "9da6e4f63e3445a3818a842540832e87", "include_details": true, "include_failed_tests": true}, "evidence": "qualification-result.json"}
+{"time": "2026-10-11T11:17:44.871075+08:00", "tool": "get_editor_state", "params": {}, "evidence": "unique-play-ready.json"}
+{"time": "2026-10-11T11:17:44.969919+08:00", "tool": "manage_scene", "params": {"action": "get_loaded_scenes"}, "evidence": "unique-play-scenes.json"}
+{"time": "2026-10-11T11:17:45.137512+08:00", "tool": "run_tests", "params": {"mode": "EditMode", "testNames": ["NTSD.Test.Editor.H10ResidentClosureDiagnostics.PcBudgetRuntimeThreeSessionsPlay"]}, "evidence": "unique-play-run.json"}
+{"time": "2026-10-11T11:19:15.554116+08:00", "tool": "get_test_job", "params": {"job_id": "fde8ef10276c4f4b85bcb4322f479124", "include_details": true, "include_failed_tests": true}, "evidence": "unique-play-job-final.json"}
+{"time": "2026-10-11T11:19:15.581155+08:00", "tool": "get_editor_state", "params": {}, "evidence": "after-play-editor.json"}
+{"time": "2026-10-11T11:19:15.732412+08:00", "tool": "manage_scene", "params": {"action": "get_loaded_scenes"}, "evidence": "after-play-scenes.json"}
+{"time": "2026-10-11T11:19:15.804870+08:00", "tool": "read_console", "params": {"action": "get", "types": ["error"], "count": 10, "format": "detailed"}, "evidence": "after-play-console.json"}
+{"time": "2026-10-11T11:24:43.874525+08:00", "tool": "terminal", "command": ["pwsh", "-NoProfile", "-File", "Tools/Validate-ChangeLedger.ps1", "-RepositoryRoot", "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity"], "exitCode": 0, "evidence": "validator-result.json"}
+{"time": "2026-10-11T11:27:07.194209+08:00", "tool": "terminal", "commands": [["git", "status", "--short", "--branch"], ["git", "rev-parse", "HEAD"], ["git", "diff", "--cached", "--binary"], ["git", "diff", "--check"]], "exitCodes": {"status-final.txt": 0, "head-final.txt": 0, "staged-final.patch": 0, "diff-check-final.log": 0}, "evidence": "final-audit.json"}

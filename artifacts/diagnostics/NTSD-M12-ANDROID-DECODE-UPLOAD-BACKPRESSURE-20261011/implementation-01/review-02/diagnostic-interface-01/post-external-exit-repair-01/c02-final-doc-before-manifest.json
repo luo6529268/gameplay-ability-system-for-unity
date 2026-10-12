@@ -1,0 +1,98 @@
+{
+  "utc": "2026-10-11T15:44:35.449119+00:00",
+  "operation": "OP-NTSD-M12-IMPLEMENTATION-20261011",
+  "reason": "Update actual scoped cold verification completion and remaining runtime gates; retain all failed history",
+  "files": [
+    {
+      "path": "docs\\ai\\CURRENT-AUTHORITY.md",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\post-external-exit-repair-01\\c02-final-doc-before\\00.bin",
+      "bytes": 454272,
+      "sha256": "2842c98e4a016e9cb03765c2231d270ce79e766ed7d4ac92998232a153c698eb",
+      "gitStatus": "M docs/ai/CURRENT-AUTHORITY.md"
+    },
+    {
+      "path": "docs\\ai\\STATE.md",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\post-external-exit-repair-01\\c02-final-doc-before\\01.bin",
+      "bytes": 1735645,
+      "sha256": "d06d09b561777ab94ccc5b27d2c57f99e4a96f90c0dd0cc47fabb121cd9361c8",
+      "gitStatus": "M docs/ai/STATE.md"
+    },
+    {
+      "path": "docs\\ai\\CHANGE-LEDGER.md",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\post-external-exit-repair-01\\c02-final-doc-before\\02.bin",
+      "bytes": 802752,
+      "sha256": "f00b3acf693e367c8ebcfeeb9ce642b48f3db6710561e965a697bf573f7f67f6",
+      "gitStatus": "M docs/ai/CHANGE-LEDGER.md"
+    },
+    {
+      "path": "Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\post-external-exit-repair-01\\c02-final-doc-before\\03.bin",
+      "bytes": 1674490,
+      "sha256": "392b89c09335338e79e006f2e4df2ae56124e96f7f4d10215d25897281807a1b",
+      "gitStatus": "M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "path": "Assets\\NTSD\\Docs\\android-mobile-readiness\\m-12-decode-upload-byte-backpressure.md",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\post-external-exit-repair-01\\c02-final-doc-before\\04.bin",
+      "bytes": 24482,
+      "sha256": "ed38ffc11192db41c26ceaff0293e3d8269c6c458b3629c7e9ea871ff905b350",
+      "gitStatus": "M Assets/NTSD/Docs/android-mobile-readiness/m-12-decode-upload-byte-backpressure.md"
+    },
+    {
+      "path": "Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\post-external-exit-repair-01\\c02-final-doc-before\\05.bin",
+      "bytes": 294900,
+      "sha256": "17d85e026bdf06d9e7939415d0331f470ae86c8b5475b7a4de21beea4e353f52",
+      "gitStatus": "M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+    },
+    {
+      "path": "docs\\ai\\OPTIMIZATION-REVIEW-20261009\\DEPENDENCIES.md",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\post-external-exit-repair-01\\c02-final-doc-before\\06.bin",
+      "bytes": 49497,
+      "sha256": "5796d1e05249b74711908ba1a7dc5cad14a8c64732eca8cc92eb008c07a44aab",
+      "gitStatus": "M docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md"
+    },
+    {
+      "path": "docs\\ai\\TASKS\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011.md",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\post-external-exit-repair-01\\c02-final-doc-before\\07.bin",
+      "bytes": 60389,
+      "sha256": "c72c3b6d3e5e7ee945e2d8e3681ab1b16b9935f05e5d84b9c44ef901d8b7da89",
+      "gitStatus": "?? docs/ai/TASKS/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011.md"
+    },
+    {
+      "path": "docs\\ai\\CHANGE-RECORDS\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001.md",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\post-external-exit-repair-01\\c02-final-doc-before\\08.bin",
+      "bytes": 79517,
+      "sha256": "c1d7d9e7bf1d4f55d32c0fe0ea767fb78a839a9ef366acc28b31aede3bd9498f",
+      "gitStatus": "?? docs/ai/CHANGE-RECORDS/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001.md"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\REPORT.md",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\post-external-exit-repair-01\\c02-final-doc-before\\09.bin",
+      "bytes": 124476,
+      "sha256": "6bbd6289bd798092e7e6073579563479bdba864ef468180762a6978935f5d959",
+      "gitStatus": "?? artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/REPORT.md"
+    },
+    {
+      "path": "docs\\ai\\FILE-OPERATIONS\\OP-NTSD-M12-IMPLEMENTATION-20261011\\RECORD.md",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\post-external-exit-repair-01\\c02-final-doc-before\\10.bin",
+      "bytes": 77293,
+      "sha256": "a0ef74310dc4b83f133a50b997d31452e47ea7d7e4bd776bd53744f30151c358",
+      "gitStatus": "?? docs/ai/FILE-OPERATIONS/OP-NTSD-M12-IMPLEMENTATION-20261011/RECORD.md"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\REPORT.md",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\post-external-exit-repair-01\\c02-final-doc-before\\11.bin",
+      "bytes": 82356,
+      "sha256": "7671c665d7895e871136ff86237b9dc597ddbd7e9f6b6d423505f3b5879cb70d",
+      "gitStatus": "?? artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/implementation-01/review-02/diagnostic-interface-01/REPORT.md"
+    },
+    {
+      "path": "docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\review-02\\diagnostic-interface-01\\post-external-exit-repair-01\\c02-final-doc-before\\12.bin",
+      "bytes": 166044,
+      "sha256": "ffc61d00c6216e39f47ba36db6000bfe50280cecfa56164edecb835d57ca6ee5",
+      "gitStatus": "M docs/ai/FILE-OPERATIONS/INDEX.md"
+    }
+  ]
+}

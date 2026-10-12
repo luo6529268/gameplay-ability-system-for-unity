@@ -1,0 +1,14 @@
+{
+  "status": "VERIFIED_DOCUMENT_ONLY",
+  "checkedUtc": "2026-10-11T08:20:39.746280+00:00",
+  "head": "8d55c6b68912560c7af755c424b41d3464a1921a",
+  "stagingUnchanged": true,
+  "realBackupsVerified": 9,
+  "oldDocumentBodiesPreserved": 8,
+  "namedProtectedHashesVerified": 17,
+  "baselineStatusPathsRemoved": [],
+  "outsideStatusChanges": [],
+  "gitDiffCheckExitCode": 0,
+  "errors": [],
+  "limits": "17 named protected byte hashes plus Git status paths; not a full repository or untracked-content hash audit; no compilation/runtime/device proof"
+}

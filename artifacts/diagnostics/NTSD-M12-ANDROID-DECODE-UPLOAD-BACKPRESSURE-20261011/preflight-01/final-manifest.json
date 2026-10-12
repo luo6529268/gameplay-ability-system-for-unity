@@ -1,0 +1,120 @@
+{
+  "time": "2026-10-11T17:03:08.478395+08:00",
+  "files": [
+    {
+      "path": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/before-manifest.json",
+      "sha256": "05486142cdb7e648603bbdaf0c34c204280ef845174b87cd6c818ce400297e4e",
+      "bytes": 6076
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/change-ledger.log",
+      "sha256": "d50b5821b9bfd75af242c816a4177ad9916499f32c300d0f1f36026672d5f928",
+      "bytes": 818626
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/completion-0.before.bin",
+      "sha256": "0484c01550d5a1861bc4bfc76607fd3ce6de671b39bf1bb5541fdc27bdfe2afd",
+      "bytes": 1929
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/completion-1.before.bin",
+      "sha256": "63575f0358d35a766b0014273fd49ef6efab5b3762cd2644a189aeed6fa7a60b",
+      "bytes": 162088
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/completion-after.json",
+      "sha256": "afa9c3145d713762c6b158a88843f93121eb5ceb55fed33e19154a66b151f681",
+      "bytes": 466
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/completion-before.json",
+      "sha256": "bb7c775541a465caa7f99f641d533acc5f61039574f94fc31bb2d4607f061e7e",
+      "bytes": 810
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/diff-check.txt",
+      "sha256": "81d2c446361cd677ecaa1a031cc5154eb259d6fc98c86a2bfd1b68bb5f613242",
+      "bytes": 1402
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/git-after.txt",
+      "sha256": "f798b9f7ab44abfcd6932f6d92617b928be56aa90a3b15f92333b03bde05847e",
+      "bytes": 80604
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/git-before.txt",
+      "sha256": "ed251112f99dfe998983d08353cfc329aa45f44e73938754839402422fecbfa4",
+      "bytes": 77362
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/governance-write-intent.json",
+      "sha256": "01285cf6dd15d51fda21a31e71998c7ad5d5150d07246e27037f207af8f5a639",
+      "bytes": 1205
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/mutation-after.json",
+      "sha256": "333670f86edcea048a4224e0f34a53bd186a097cc2860813d276d0f185db2290",
+      "bytes": 3307
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/operation-before-execution-append.bin",
+      "sha256": "c01d8c513f63ebad85eb65c390845e0def7011871be910cf8b5cce0d85b610c3",
+      "bytes": 1562
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/PLAN.md",
+      "sha256": "1a3170c2acf6346f307347a1e719a6ceb7c5dac7ce57ee142c3bb814cfee42a7",
+      "bytes": 16459
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/protected-before.json",
+      "sha256": "bd148de7ac856bf6acc2919a6f2227d83e19f8aa6092eb56b0b2eb70ec138815",
+      "bytes": 7878
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/protection.json",
+      "sha256": "460afaa2b9c164028de9a352cbf6c06d79497ef312a34036ae89b329bef1d519",
+      "bytes": 680
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/registration-after.json",
+      "sha256": "ec27179559b4fec2c98a597ec76fe5683eb7ea6e9d82739d37f4b25952d83105",
+      "bytes": 333
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/RESULT.json",
+      "sha256": "6ae023772dbe3039f379fcddf80a9957efefebda3b4e358d6a72d67643a683e6",
+      "bytes": 2750
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/RESULT.md",
+      "sha256": "a2a2cb7d381c631a3ada45fad46c143aa3bd465cf1c2c3c3a716d969cd0fc2ea",
+      "bytes": 6136
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/static-model.json",
+      "sha256": "8ee462019308c526ac0b77ecdc013f2d529826c1a0d37e26f3a7e31e97aabe7f",
+      "bytes": 293595
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/tracked-before.patch",
+      "sha256": "fb723952b01eec4138c41a37b226d4d2bdb77bd84540d6f003c3666da68f6e61",
+      "bytes": 229718
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/validator.json",
+      "sha256": "3bbfa014aafd77d1377751a2bfffb13217cf09ddf9514922b34a6f18274fabb0",
+      "bytes": 1363
+    }
+  ],
+  "TaskChange": [
+    {
+      "path": "docs/ai/TASKS/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011.md",
+      "sha256": "99ef2b6a833333ab0abf0140c6c9087d805574a3d68624a299881f303d596fbf"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001.md",
+      "sha256": "68090ec6b8ec952192aa1ddb3de97db30c8269c160450e7335bf6ee2ab58a58e"
+    }
+  ]
+}

@@ -1,0 +1,400 @@
+{
+  "previous_count": 1921,
+  "current_count": 1999,
+  "status_changes": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Runtime/BattleAtlasResources.cs",
+      "before": null,
+      "after": " M"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Runtime/BattleImageMemoryBudget.cs",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Runtime/BattleImageMemoryBudget.cs.meta",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/REPORT.md",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/before-manifest.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/before/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/before/Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/before/Assets/NTSD/Scene/NTSD_Battle.unity",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/before/Assets/NTSD/Scene/NTSD_Menu.unity",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/before/Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/before/Assets/NTSD/Scripts/Animation/Runtime/BMPLoader.cs",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/before/Assets/NTSD/Scripts/Animation/Runtime/BattleAtlasResources.cs",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/before/Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/before/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/before/Library/ScriptAssemblies/Assembly-CSharp.dll",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/before/ProjectSettings/EditorSettings.asset",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/before/ProjectSettings/ProjectSettings.asset",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/before/docs/ai/CHANGE-LEDGER.md",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/before/docs/ai/CURRENT-AUTHORITY.md",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/before/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/before/docs/ai/STATE.md",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/closeout-before/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/closeout-before/Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/closeout-before/artifacts/diagnostics/M12-memory-batch1-20261012/REPORT.md",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/closeout-before/docs/ai/CHANGE-LEDGER.md",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/closeout-before/docs/ai/CHANGE-RECORDS/NTSD-M12-IMAGE-MEMORY-BATCH1-001.md",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/closeout-before/docs/ai/CURRENT-AUTHORITY.md",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/closeout-before/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/closeout-before/docs/ai/FILE-OPERATIONS/OP-NTSD-M12-IMAGE-MEMORY-BATCH1-20261012/RECORD.md",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/closeout-before/docs/ai/STATE.md",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/closeout-before/docs/ai/TASKS/NTSD-M12-IMAGE-MEMORY-BATCH1-20261012.md",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/closeout-preimages.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/compile-attempt-01.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/compile-final-identity.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/compile-observation-01.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/compile-observation-02.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/compile-preflight.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/editor-after-final.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/editor-before.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/excluded-history-metadata.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/final-source.diff",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/focused-result-01.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/focused-start-01.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/git-before.diff",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/git-before.z",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/implementation.diff",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/new-script-import-01.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/preparation-correction.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/protected-before.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/protection-after.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/rebind-review-01/before-manifest.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/rebind-review-01/before/Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/rebind-review-01/before/Assets/NTSD/Scripts/Animation/Runtime/BattleImageMemoryBudget.cs",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/rebind-review-01/before/Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/rebind-review-01/before/docs/ai/CHANGE-RECORDS/NTSD-M12-IMAGE-MEMORY-BATCH1-001.md",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/rebind-review-01/before/docs/ai/FILE-OPERATIONS/OP-NTSD-M12-IMAGE-MEMORY-BATCH1-20261012/RECORD.md",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/rebind-review-01/compile-attempt.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/rebind-review-01/compile-correction-attempt.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/rebind-review-01/compile-correction-final.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/rebind-review-01/compile-correction.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/rebind-review-01/compile-final.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/rebind-review-01/compile-preflight.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/rebind-review-01/focused-result.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/rebind-review-01/focused-start.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/rebind-review-01/implementation.diff",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/rebind-review-01/test-before-namespace-fix.cs.backup",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/test-append-proof.json",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/test-inputs/19d7f08058fe41e59ad0943b0021de61/image.png",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/test-inputs/55f66153c4d34cf5a25da1fd09c68249/image.png",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/test-inputs/6742cdc1abad42c2868d6b48ab111547/image.png",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/test-inputs/73afd096375f43c98a61b91733bab219/image.png",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/test-inputs/9b3fda8f7a624b098534aa51f4baa80b/image.png",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/test-inputs/aecd18500e7d44babd3e33722508c24a/image.png",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/test-inputs/cdf335f46e7d46d6b3c065f8f0f311a1/image.png",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-memory-batch1-20261012/test-inputs/dfba27daca404868a086d181f03caa25/image.png",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-M12-IMAGE-MEMORY-BATCH1-001.md",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/OP-NTSD-M12-IMAGE-MEMORY-BATCH1-20261012/RECORD.md",
+      "before": null,
+      "after": "??"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-M12-IMAGE-MEMORY-BATCH1-20261012.md",
+      "before": null,
+      "after": "??"
+    }
+  ],
+  "unexpected_status_change": [],
+  "staged_bytes": 0,
+  "same_existing_protection_audit": "protection-after.json",
+  "not_a_full_git_content_clean_claim": true
+}

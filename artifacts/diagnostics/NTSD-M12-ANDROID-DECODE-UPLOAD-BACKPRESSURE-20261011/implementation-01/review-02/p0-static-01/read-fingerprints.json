@@ -1,0 +1,42 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Tools/SingletonBehaviour.cs",
+    "sha256": "6b7ee0f93bffe9bd72e921d2694f70498c1f2a111c6909e72e2ae994bef6dab7"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/UI/LoadingPrewarmController.cs",
+    "sha256": "057fd4d65b9317110ed5bcf356f92bbeb7a5f9217e09c715e95a036cf20cb32b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/App/GameConfig.cs",
+    "sha256": "822f372e00a6cdc2001b19dbf5b1b08242fb12c1472b8add558649a7f2b85c54"
+  },
+  {
+    "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "sha256": "f2ee25d075548b78380be817209152047b919c4c15da8743d75d2e0c165cbea1"
+  },
+  {
+    "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+    "sha256": "253b2ebad322aa6ec18488dfbbf555bb93ad897940a342e4130e77ce778f9010"
+  },
+  {
+    "path": "ProjectSettings/EditorSettings.asset",
+    "sha256": "6f8761b516f06ff2f0373b6310571cf7951f63afb86c56bfd7be832e06a9987b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/App/AppManager.cs.meta",
+    "sha256": "f9133ca6931707b4d81a84cc94d6a436ecaf6228f5ba953ed4ab6dda52521223"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/App/BattleBootstrap.cs.meta",
+    "sha256": "11c55a92db45b18fa8da04e579c0ccba63e7e0d6875c7acde807ad8c73d17442"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs.meta",
+    "sha256": "9468b3ad2e9db2f7f6205be88b0813816f8cb8e35ecd36f97aa756192c6a7636"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/UI/LoadingPrewarmController.cs.meta",
+    "sha256": "f724e642c9d896aaf93ef13a0b2ae8eded3e3e94aaecd7b776f07b6af3b8cede"
+  }
+]

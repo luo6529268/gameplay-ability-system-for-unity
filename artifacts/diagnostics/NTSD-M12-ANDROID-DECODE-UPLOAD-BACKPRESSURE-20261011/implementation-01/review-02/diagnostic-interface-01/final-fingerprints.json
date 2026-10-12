@@ -1,0 +1,87 @@
+{
+  "utc": "2026-10-11T12:32:12.694842+00:00",
+  "files": [
+    {
+      "path": "docs\\ai\\CURRENT-AUTHORITY.md",
+      "sha256": "6454391abdf7c92f8d11344ed0ca9c7e37bd5c3d8205ecba8248559fe905ddb7",
+      "bytes": 444973
+    },
+    {
+      "path": "docs\\ai\\STATE.md",
+      "sha256": "04b4ea32af14d8d3b18dc3901302d92ee796459c01dc526c7f1ba0b16bc378d3",
+      "bytes": 1726346
+    },
+    {
+      "path": "docs\\ai\\CHANGE-LEDGER.md",
+      "sha256": "62f37710b9b1f9cf6258f6624faf2412b8b5b508a27b0f8e5a485b75f9778c55",
+      "bytes": 793458
+    },
+    {
+      "path": "Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "sha256": "6e2ab25249b46d55b9e021c6ba3e8933e6524e0f1b91866cf92493f3143ca1f1",
+      "bytes": 1665191
+    },
+    {
+      "path": "Assets\\NTSD\\Docs\\android-mobile-readiness\\m-12-decode-upload-byte-backpressure.md",
+      "sha256": "d18a29f0054949a8a18ab53e6014f52d738c8d0ae27cc6e04ed6753f38d54716",
+      "bytes": 15189
+    },
+    {
+      "path": "Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "sha256": "ad53228408f5dec98220a4fcd5d45ad6f9b68557f928e6e9afc5f9db2b0a26b8",
+      "bytes": 285803
+    },
+    {
+      "path": "docs\\ai\\OPTIMIZATION-REVIEW-20261009\\DEPENDENCIES.md",
+      "sha256": "ad57495df6a02a1693587962cda4280f29f1ff6ab00ccb3e6c67792f8f8d203f",
+      "bytes": 40198
+    },
+    {
+      "path": "docs\\ai\\TASKS\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011.md",
+      "sha256": "a5734fd54f8cba04e0b7827fcb77e5d72acb796141b91991509715a61f13f7c8",
+      "bytes": 25070
+    },
+    {
+      "path": "docs\\ai\\CHANGE-RECORDS\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001.md",
+      "sha256": "3f5d5ecc0dbd113a956b77eb03f6384dba287941f3857ad7a4c58837476bef11",
+      "bytes": 38643
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\REPORT.md",
+      "sha256": "454e31790a5e9fb0603316db0ca49c9e35dc79ecce5e7a95f02408669afcf3f4",
+      "bytes": 106918
+    },
+    {
+      "path": "docs\\ai\\FILE-OPERATIONS\\OP-NTSD-M12-IMPLEMENTATION-20261011\\RECORD.md",
+      "sha256": "e02ef644c293dd6a1dd9fe27a8712ee8fdea1c69d73add12af0bf00888956405",
+      "bytes": 23730
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Test\\Editor\\M12DecodeUploadBackpressureEditorTests.cs",
+      "sha256": "e3e9324a032a62e5e173a46ea071e5e25b406a372597d26a0f5eb8c8ed39f9ce",
+      "bytes": 91596
+    },
+    {
+      "path": "Library\\ScriptAssemblies\\Assembly-CSharp.dll",
+      "sha256": "a8874f8784d60efa30d627f61e4140a89ecc9466c6a80115024eae4e2c8cbb8b",
+      "bytes": 4327936
+    },
+    {
+      "path": "Library\\ScriptAssemblies\\Assembly-CSharp.pdb",
+      "sha256": "7be32d37ed47a619d0deb7640cff68fd6102daa7f952f81a6504787a0f749d64",
+      "bytes": 1706348
+    },
+    {
+      "path": "Library\\ScriptAssemblies\\Assembly-CSharp-Editor.dll",
+      "sha256": "86b1c83cc80f46e13038f5782e759ef70cc3f4be767c347797e0b670e1dabb66",
+      "bytes": 7948288
+    },
+    {
+      "path": "Library\\ScriptAssemblies\\Assembly-CSharp-Editor.pdb",
+      "sha256": "f02a7aaa17e10fa600f8be9fdc12229458a7128ab043ea9079e5edee0442f102",
+      "bytes": 2381104
+    }
+  ],
+  "status": "COMPILE_PASS_COLD_INTERFACE_PASS_P_NOT_RUN",
+  "productionUnchangedThisStage": true
+}

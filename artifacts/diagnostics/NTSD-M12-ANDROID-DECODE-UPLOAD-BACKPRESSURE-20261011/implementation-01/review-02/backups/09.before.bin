@@ -1,0 +1,87 @@
+# M12 implementation-01 / resume-01 有限候选验证报告
+
+2026-10-11。Task `NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011`；Change `NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001`；Operation `OP-NTSD-M12-IMPLEMENTATION-20261011`。
+
+## 当前结论
+
+`FOCUSED_TEST_PASS / LIMITED_CANDIDATE_VALIDATION_COMPLETE / DEFAULT_OFF`。本方案内有限实现与验证完成：原项目 Editor 编译通过，11 项正确性/生命周期测试通过（8 项复用、3 项续跑），首次且唯一固定 ABBA 1/1 通过。该结论只覆盖本报告列明的 Editor 候选范围；M12 父项仍 OPEN，生产默认准入尚未进行，H07 与 Android 未认证。
+
+候选字节门默认 OFF；H08 源 sheet 共享仍默认 ON。四个生产文件的本版实现已在工作树中：其中图片实际 drain、Driver/App 正常关闭保护并非由字节门开关整体禁用，不能把“候选 OFF”误读为关闭代码未接线。正常真实 Scene 卸载与重入仍需后续有限验证。
+
+## 变更与授权
+
+- `CharacterAnimtorManager.cs`：按 operation 持有 native PNG body 字节 reservation，单 producer/单 waiter，权重限制普通并行与超大独占；共享与显式 OFF 都接入。真实 qualification/body/UI/common 工作计数用于取消后 drain，后续世代等待旧世代实际结束；任何一个工作失败仍等待全部已启动任务返回。只对 native PNG body 做字节门，legacy/non-PNG/UI/common 不扩为本门覆盖。
+- `BMPLoader.cs`：冷读取验证长度/SHA/PNG 头尺寸，guarded 内部读取在原始数组分配前验证长度，并对实际读取内容再次核 SHA/尺寸；原 decoder、像素和公共入口语义保持。
+- `SimulationTickDriver.cs` / `AppManager.cs`：用户已明确批准的两个关闭扩域。原阶段1取消与停止接单，阶段2在 dedicated worker Stop/Join 后等待图片实际 drain，阶段5才进入原 publication/staging 清理。pending 保持 Stopping；重复请求共享等待，失败保持首个原因，禁止提前解绑/重建/卸载。十一阶段顺序不变。
+- 新 `M12DecodeUploadBackpressureEditorTests.cs` 与两个既有 B11 fixture：准确候选入口、所有权观察和独立证据目录。测试不以强制清空计数冒充 drain。
+- 本次续跑另获人类明确批准 `H08ResidentVisualMemoryDiagnostics.cs`：仅 `SaveCandidate` / `VerifySharedPublicationDraw` 可选 evidenceDirectory 参数和转发。旧默认目录、所有绘制断言、`FileMode.CreateNew` 保持。Atomic fixture 的可空 `DrawEvidenceDirectory` 由本测试实例持有；M12 每次 SetUp 创建 GUID 路径，不新增生产缓存/worker/热状态，也不接入 runtime 十一阶段。
+
+生产默认参数 C=134,217,728 B、E=439,799,644 B。C<W<=E 的单张独占是明确合同，因而 PeakReserved 可超过 C；这不是漏限。该权重是工程准入权重，不是手机 RAM 或整进程内存预算。正式内容的大源和全量 retained/atlas 驻留问题未由本任务解决。
+
+## 实际执行与结果
+
+原项目 Unity 2022.3.62f3，既有 Editor PID 39108，TCP bridge `127.0.0.1:6402`。未启动第二个占用同 Library 的 Editor；测试前查询非 Play、无编译/测试、`NTSD_Menu` clean、8 roots。请求/响应、NUnit XML 均保留。
+
+编译命令为既有桥接 `refresh_unity({mode:"force",scope:"scripts",compile:"request",wait_for_ready:false})`。初次 CS7036、第二次 CS0120 保留在 compile01/02 原件；修正旧 static wrapper 的可选参数/静态调用兼容后通过。新增测试首次使用 `manage_asset({action:"import",path:"Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs"})` 导入。本次 resume 编译成功、Editor DLL/PDB 更新并完成 domain reload；生产 DLL/PDB 与续跑前逐字节相同。`resume-01/compile-state-01.json`、`compile-console.json` 和 `compile-operation.json` 可核验。
+
+每项实际调用：`run_tests({mode:"EditMode",testNames:["NTSD.Test.M12DecodeUploadBackpressureEditorTests.<下表方法>"]})`；用 `get_test_job` 获取终态。没有全量回归。旧工具展示的可用测试总数不当作执行数。
+
+| 方法 | 本版结果与证据 |
+|---|---|
+| Q01_DescriptorIdentityDimensionsAndOriginalPixels | PASS，复用 `q01-result.json`：内容身份、grow/truncate/same-size mutation、尺寸边界、原像素、BMP 排除 |
+| Q02_ReservationFifoOversizeCancellationAndMoreThanSixLeases | PASS，复用 `q02-result.json/xml`：FIFO、C/E 边界、超大独占、取消、重复归还、9 个小 lease |
+| Q02B_OverCeilingRejectsBeforeDecodePreservingPublication | PASS，复用 `q02b-result.json/xml`：真实候选超 E 在解码前失败，旧 publication 保持 |
+| Q03_RealDecodeShutdownPendingResumeAndStickyFailure | PASS，复用 `q03-result.json/xml`：实际阻塞图片 worker、关闭 pending/恢复、禁止重建、失败保持 |
+| Q03B_CompetingGenerationsWaitForOldWorker | PASS，复用 `q03b-result.json/xml`：old/middle/latest 竞争世代 |
+| Q03C_FaultCannotFinishWhileAnotherWorkerIsBlocked | PASS，复用 `q03c-result.json/xml`：一任务 fault 时另一实际阻塞任务未返回，整组不能假结束 |
+| Q03D_AppAsyncCloseSharesPendingOwner | PASS，复用 `q03d-result.json/xml`：App 重复等待同 owner；空地图边界，不是真实 Scene unload |
+| Q04_ExistingSynchronousShutdownAndPixels | PASS，复用 `q04-result.json/xml`：已有 head-callback 关闭门 |
+| Q05_ExistingSourceAndAtlasPixelOracle | resume PASS 1/1，`resume-01/q05-result.json/xml` |
+| Q06_PublicConfiguredOwnerAndFallback | resume PASS 1/1，`resume-01/q06-result.json/xml` |
+| Q06B_SixRealSheetsGateSharedAndOffPixels | resume PASS 1/1，`resume-01/q06b-result.json/xml` |
+| Q07_OnlyOnceSameInputAbba | 首次且唯一组 PASS 1/1，`resume-01/q07-result.json/xml` |
+
+Q05 最初是 ERROR：旧固定输出 `NTSD-H08-NATIVE-SHEET-SHARING-20261010/overlap-Source2D.json` 已存在，CreateNew 抛 IOException；当时立即停止余下测试/ABBA。旧 `q05-result.xml` 不更名、不覆盖、不追溯改 PASS。获批修复证据路径后才续跑。旧 overlap 文件 SHA-256 仍为 `40e1951441196b2584c8f3a79f4c28f7398c3663439266deb171ff7c4c14c7e8`。
+
+前8项复用理由：resume 仅证据路径参数/fixture 转发；不变更生产实现、测试断言或这8项执行逻辑，生产程序集也未变化。原 H08 内存比较、703 header 静态盘点和未受影响算法证据仅沿用各自原 scope，不冒充本次 runtime/手机证明。`unchanged-algorithms.json` 记录5段像素准备、clamp hash、sprite plan、texture/sprite 创建原方法不变；PngPixelDecoder 等保护项另有 SHA。
+
+Q05 两种模式各比较 9,216 像素，非空内容 1,548，逆序负控差异396；exactPixels=true、publicationUnchanged=true、未解析命令 fail-closed 后 segment=0。原件在 `resume-01/draw/6921df21e4fb40c792d3e367189840d7/`。Q06B 六张 PNG 为 256/384/512 各两张，测试 C=8 MiB、5次 Yield 上传延迟，shared true/false 各通过原 loader 像素及 rect 对照。
+
+## 唯一 ABBA 数字与口径
+
+同一六张 PNG、相同 catalog/输入、shared ON、固定 8 MiB 测试 C、5次 Yield 上传延迟，顺序 A OFF / B ON / B ON / A OFF。每腿原始 JSON 先落盘再断言；没有第二组或刷 PASS。
+
+| 腿 | 耗时 ms | PeakPendingPixels B | RetainedPixels B | PeakReserved B |
+|---|---:|---:|---:|---:|
+| A1 | 4267.6354 | 19,005,440 | 3,801,088 | 0 |
+| B1 | 4057.8416 | 5,242,880 | 3,801,088 | 8,490,668 |
+| B2 | 4238.2228 | 5,242,880 | 3,801,088 | 8,490,668 |
+| A2 | 3636.7020 | 19,005,440 | 3,801,088 | 0 |
+
+- body worker 强引用持有的 float/processed 像素 payload 峰值：18.125 MiB → 5 MiB，下降72.4138%，通过原 >=25% 门。
+- 最终 retained 像素均3.625 MiB；publication identity 相同。每腿结束 reservation/pending/active/waiter 全归零。
+- 总 B/总 A 时间比1.0495584867，约增加4.96%，通过 <=1.2 门；不声称加载加速、P95/P99 或无抖动。
+- 8,490,668 B 超 C 的一次峰值按超大单张独占合同发生，仍小于 E；不是8 MiB硬内存预算证明。
+
+精确原件：`resume-01/abba-result-4ad5999715b84f5082fb96f172a446de.json`。这是带显式上传延迟的小夹具强引用载荷账本，不是 GC 回收、RSS、native/GPU、整进程或全703内容峰值，不外推128 MiB生产设置的实际幅度。
+
+## 保护、关闭与剩余边界
+
+本次5份 cleanup 记录涉及381条 owned resource 观察记录，全部 destroyed；各 fixture 的 manager/data/UI/config 恢复，配置缓存回到原条目数。记录条数含不同观察阶段，不宣称381个全局 distinct 对象。旧9份 cleanup 结果保留。既存 native 残留仍 UNKNOWN_UNTOUCHED，没有做全局清理。最终原 Editor idle/non-Play，Menu clean8，见 `resume-01/after-editor.json` / `after-scene.json`。Console 查询保留 MCP transport 的 Client handler exited 日志，不能宣称 Console 所有 error 项为0；本版编译与测试结果独立给出。
+
+已有93项保护指纹保持；Scene/资源/ProjectSettings/Input/Gen/Plugins/Server/PNG decoder/Editor shutdown bridge未改。备份基于真实 dirty 字节而非 HEAD，见 before-manifest、revision01..07、resume before-manifest、compile-operation、final-governance-operation。旧失败与未跟踪内容保留。无 reset/clean/stash/push，无旧Goal或其他hold恢复。
+
+未执行且不冒称通过：实际生产 Scene unload/重入、实际30秒超时分支、Editor/OS强制退出、全703图片解码/完整加载峰值、全局 GC/进程峰值、目标手机预算、Windows Player、Android。sticky failure 用失败地图后置条件验证，不能替代超时触发。App 测试采用不存在的独立测试 Scene 名称和自有 Driver，只证明等待/空地图完成链。
+
+下一项仍是同 M12 的本报告审阅：先确认有限收益与关闭证据是否足以进入准确的正常 Scene 关闭/重入验证，再决定手机预算和更大内容验证范围。默认推广、资源调整、新路线/独立专项须按授权边界另作决定；不恢复 M05/H07/H06/H10 Player 或其他暂缓项。
+
+Change 状态为 FOCUSED_TEST_PASS，父项 OPEN。治理检查和最终指纹补充见下方执行附记。
+
+
+## 最终执行附记
+
+- `pwsh -NoProfile -File Tools/Validate-ChangeLedger.ps1 -RepositoryRoot I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity` 实际退出0，PASSED；1424 records、9个受治理脚本diff（本任务8个＋既有未改H10 dirty）、4435 warnings、0 errors。原件 `resume-01/validator-final.txt` 和 `validator-final-command.json`。全库旧记录声明当前不在diff路径产生警告，不改历史消警告。
+- `git diff --check` 退出0，只有既有Git LF/CRLF提示；没有改Git配置。暂存diff为空。`resume-01/git-status-final.txt` / `git-diff-check.txt` / `staged-final.txt` 保存原输出。
+- `resume-01/final-fingerprints.json` 保存8个实际脚本＋meta及两程序集SHA；93保护项0漂移，旧overlap SHA不变。
+- `resume-01/all-scoped-results.json` 精确索引12项本版PASS，其中8复用4续跑；旧Q05 Failed/Error单独保留。Q01以原bridge JSON为证，未虚构单独XML。
+- 最初两次validator shell调用失败（Windows PowerShell5默认RepositoryRoot及Git warning stderr处理）分别保留；显式根目录的pwsh成功。报告聚合首次误找不存在的单独Q01 XML后已改读现有JSON，未启动任何补测。

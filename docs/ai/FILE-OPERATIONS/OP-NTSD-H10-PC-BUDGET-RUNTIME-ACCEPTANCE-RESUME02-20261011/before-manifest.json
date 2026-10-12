@@ -1,0 +1,82 @@
+{
+  "time": "2026-10-11T11:35:03.709475+08:00",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs",
+      "sha256": "b3a289d85afbae428808df647261ecf68ccdb751779a74243988e16c4300a5c5",
+      "bytes": 253744,
+      "backup": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/backups/Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs",
+      "gitStatus": "M Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011.md",
+      "sha256": "d771a898afdd25a40a9f7725956cf32ab5dbd34e961683134c4307f2e084b5aa",
+      "bytes": 7080,
+      "backup": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/backups/docs/ai/TASKS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011.md",
+      "gitStatus": "?? docs/ai/TASKS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011.md"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001.md",
+      "sha256": "172ab8b9039fd1f535be68235a910181e210d54f8e885e43a56fbe58f7d6b727",
+      "bytes": 9147,
+      "backup": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/backups/docs/ai/CHANGE-RECORDS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001.md",
+      "gitStatus": "?? docs/ai/CHANGE-RECORDS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001.md"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "sha256": "d7d775c7c737f1e02bed30ed3e85c6fa63d79a5daec6fbf0564f3c528dc167de",
+      "bytes": 772382,
+      "backup": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/backups/docs/ai/CHANGE-LEDGER.md",
+      "gitStatus": "M docs/ai/CHANGE-LEDGER.md"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "sha256": "411ee5ecf35f3f5237e45ec384d538718f8b8fb32ffa52b3d8475b35e3d669a1",
+      "bytes": 1705250,
+      "backup": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/backups/docs/ai/STATE.md",
+      "gitStatus": "M docs/ai/STATE.md"
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "sha256": "07bf5ff8a876f364423d6ca7e2cfee617471562f1814f6f04b8999486b6f3efa",
+      "bytes": 423877,
+      "backup": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/backups/docs/ai/CURRENT-AUTHORITY.md",
+      "gitStatus": "M docs/ai/CURRENT-AUTHORITY.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "sha256": "c9b8324d3ca3e5e94caa94b4c84c4843a80e019aa71fdf108c827ac3058c8a90",
+      "bytes": 1644072,
+      "backup": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "gitStatus": "M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+      "sha256": "86981be6c7a3c408a2fca83b85fa838fdea134802be3763088840b83ccc5ab95",
+      "bytes": 16012,
+      "backup": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/backups/Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+      "gitStatus": "M Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "sha256": "64e5e107eae2904fd8b70a3818321395b4e7e126a03d547d307b3e3320ddd541",
+      "bytes": 264310,
+      "backup": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "gitStatus": "M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "sha256": "bcc8bb3f29927e5e76dfc5e250950e1021dab9491ee97bb480d8a2c53ba4287f",
+      "bytes": 371231,
+      "backup": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/backups/Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "gitStatus": "M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "sha256": "7112a784d31633f8ef95dcdbf9b3cc83fc98bbff014738e29a3ea4e75fd7e34b",
+      "bytes": 158529,
+      "backup": "artifacts/diagnostics/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011/resume-02/backups/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "gitStatus": "M docs/ai/FILE-OPERATIONS/INDEX.md"
+    }
+  ]
+}

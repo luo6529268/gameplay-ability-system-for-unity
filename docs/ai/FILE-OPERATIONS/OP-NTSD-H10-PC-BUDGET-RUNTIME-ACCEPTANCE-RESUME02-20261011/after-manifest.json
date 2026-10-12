@@ -1,0 +1,72 @@
+{
+  "time": "2026-10-11T11:53:09.175431+08:00",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs",
+      "beforeSha256": "b3a289d85afbae428808df647261ecf68ccdb751779a74243988e16c4300a5c5",
+      "afterSha256": "a833e450dbeb17fa3b9a1455dba1a81d6c268a525f8ba3dcb2fc166fbd9efe5b",
+      "bytes": 257242
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-20261011.md",
+      "beforeSha256": "d771a898afdd25a40a9f7725956cf32ab5dbd34e961683134c4307f2e084b5aa",
+      "afterSha256": "037a2f690110eeefe09bd468a271c0240b8abab03f39a31006fcc761a461d6c3",
+      "bytes": 8832
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-H10-PC-BUDGET-RUNTIME-ACCEPTANCE-001.md",
+      "beforeSha256": "172ab8b9039fd1f535be68235a910181e210d54f8e885e43a56fbe58f7d6b727",
+      "afterSha256": "23d817a0052ef22007a4e1c518e940c775ca7a7f9363eb2c8a8cce83d1bbe938",
+      "bytes": 13238
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "beforeSha256": "d7d775c7c737f1e02bed30ed3e85c6fa63d79a5daec6fbf0564f3c528dc167de",
+      "afterSha256": "119e899a4e17368aa58a1f21f6917c17d9e74c020250b4cfd120d7d7c7de66a9",
+      "bytes": 774134
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "beforeSha256": "411ee5ecf35f3f5237e45ec384d538718f8b8fb32ffa52b3d8475b35e3d669a1",
+      "afterSha256": "071a06b2cbc736d2108cc2c10dfd3628c8c3d87abe88a3edcca099838ce07db6",
+      "bytes": 1707002
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "beforeSha256": "07bf5ff8a876f364423d6ca7e2cfee617471562f1814f6f04b8999486b6f3efa",
+      "afterSha256": "14fda347f441cd9955d41a5841a0fa8002b14ddcd96d3faadd95c3963ec39712",
+      "bytes": 425629
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "beforeSha256": "c9b8324d3ca3e5e94caa94b4c84c4843a80e019aa71fdf108c827ac3058c8a90",
+      "afterSha256": "a9499ef418adc0680e12a87eba5b5c3fae776f63aeab45465be2ff3e2f896c99",
+      "bytes": 1645824
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+      "beforeSha256": "86981be6c7a3c408a2fca83b85fa838fdea134802be3763088840b83ccc5ab95",
+      "afterSha256": "6df7f4a9fc8809e1667033a31552955d13c9c045cac71274939e5bd79a564bae",
+      "bytes": 17734
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "beforeSha256": "64e5e107eae2904fd8b70a3818321395b4e7e126a03d547d307b3e3320ddd541",
+      "afterSha256": "17544d44ed3b4f2a09c36f04e50bccb99c1ac95d2ca8f4bcf86ceb21f0d6b15b",
+      "bytes": 266072
+    },
+    {
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "beforeSha256": "bcc8bb3f29927e5e76dfc5e250950e1021dab9491ee97bb480d8a2c53ba4287f",
+      "afterSha256": "4139e3aac318a5e885e86f8fdfc1d1a993ef083af294a3b34590531662d512e4",
+      "bytes": 372983
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "beforeSha256": "7112a784d31633f8ef95dcdbf9b3cc83fc98bbff014738e29a3ea4e75fd7e34b",
+      "afterSha256": "e5f322272cb7e5cc4585473586a9042c5638f0f878a3b21f89fbf0ed52098183",
+      "bytes": 160281
+    }
+  ],
+  "sourceKeptAtMeasuredVersion": true
+}

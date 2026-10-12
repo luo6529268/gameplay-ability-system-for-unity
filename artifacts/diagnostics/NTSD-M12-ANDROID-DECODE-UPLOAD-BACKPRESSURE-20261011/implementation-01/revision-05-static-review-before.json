@@ -1,0 +1,26 @@
+{
+  "time": "2026-10-11T17:40:36.916183+08:00",
+  "command": "audited incremental patch; no rollback/delete",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+      "sha256": "388f6fff25f30a9ae9201b3368d67ac1027cda5bf4f2329a5bec746d283c8603",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\backups\\revision-05-static-review-00.before.bin"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/App/AppManager.cs",
+      "sha256": "3212b9ce76f1a52bfb84507010297edda44f52d70e4575e4f88401351e06ae23",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\backups\\revision-05-static-review-01.before.bin"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs",
+      "sha256": "4f3ebcf04e24d7abece80270bade0a30077f685653d37fac37e4d3d9bea8bee8",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\backups\\revision-05-static-review-02.before.bin"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "sha256": "20c8329c004f7e2704b0726939ec9e44a0df63a0e78ae68be8107094d45b86d6",
+      "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\backups\\revision-05-static-review-03.before.bin"
+    }
+  ]
+}

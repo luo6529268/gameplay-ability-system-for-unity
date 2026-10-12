@@ -1,3 +1,11 @@
+> **2026-10-11 M12 手机优先有限预检：PLANNED / PRE_FLIGHT_READY_FOR_REVIEW。** Task NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011；Change NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-001。准确方案已形成：native PNG共享/显式OFF两路解码前按字节准入，128MiB普通权重＋超大单张独占上界439799644B为待审建议，非手机内存预算。703header/长度静态核验；真实clamp哈希临时字节另计，候选>128MiB为9项。M12不能单独解决大源/全量atlas驻留。主审需核准确Driver stage1/2/5与图片任务drain区别；本轮未读Driver/Q06方法体、未改脚本、未操作Unity/编译/测试/测量。10份真实治理前件已备份；[唯一完整方案](../../../artifacts/diagnostics/NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011/preflight-01/PLAN.md)。M12保持OPEN，下一为同Task独立审阅后准确派实施，不默认暂停或关闭；H10 CLOSED／Player ABANDONED及其余hold不恢复。以下保留历史时点。
+
+> **2026-10-11 用户方向更正：Android 手机优先。** 后续先以手机的 CPU、内存与加载峰值约束共用实现，PC再提高表现规格；Android验收后置不等于设计标准后置。M-12先补手机预算建议和实际必要性，具体档位/数值未冻结。本次仅文档；H10保持CLOSED、已取消Player路线与其它hold不恢复。
+
+[Android-first decision](../../../docs/ai/DECISIONS/NTSD-ANDROID-FIRST-OPTIMIZATION-BASELINE-20261011.md)
+
+> **2026-10-11 H10 CLOSED：按用户决定结束当前优化范围。** 用户取消新增Windows Player出包验收路线，未实施Task NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011与Change NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-001均ABANDONED；原因是范围取消，不是运行失败。第四processor待批事项撤销，三个新脚本/两个meta不创建，兼容提案不实施。PCM有界/逐局formal owned、同输入320MiB对象门及resume03隔离Editor三轮音频门按原scope保留；Player、整进程2/3GiB、目标8GB型号、完整千人预算、人工听感仍未验证，但不再是本次H10 active待办或结项前置。旧compat13/14、成本尖峰、失败/事件不追溯改PASS。决定：docs/ai/DECISIONS/NTSD-H10-USER-SCOPE-CLOSEOUT-20261011.md；结项：artifacts/diagnostics/NTSD-H10-WINDOWS-PLAYER-PROCESS-BUDGET-20261011/closeout-user-scope-01/REPORT.md。当前H10已结束，下一无自动启动项；H08/H07/M03/producer/H06等hold、33ms/十一阶段及全部原边界保持。下方旧OPEN/等待第四域/继续出包和旧统计只保留为被本决定替代的历史。
+
 > **2026-10-11 H10全目录音频账本完成：FULL_CATALOG_AUDIO_ENVELOPE_MEASURED。** Task NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 / Change NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 VERIFIED（仅Editor诊断）。真实330定义/1000cue，两轮public准备关闭唯一组1/1 PASS；每轮978formal+72generic去重228,918,567B（218.313758MiB），formal逐局归零、同72generic跨轮复用，最终仅精确释放新增72key/clip，原4clips及Menu clean8保持。首次资格FAIL及事件保留，修正资格/恢复检查/无音频所有权负控各1/1；测量后仅诊断guard哈希变化，生产冻结。71283保护无漂移。报告 artifacts/diagnostics/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011/REPORT.md。音频数字预算UNDECIDED、producer完整闭包未准入，H10父项OPEN；下一仅同H10预算/覆盖合同审阅，不自动其他点/Goal/队列。以下为此前时点。
 
 > 2026-10-11 NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 IN_PROGRESS / NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 PLANNED. H10 continues: complete real catalog/generic inventory, protected2resource fixture first, then one bounded2session audio-only envelope if safe. Production frozen; parent budget/coverage remain OPEN. No other point or Goal.
@@ -19,7 +27,7 @@ H07输入约12ms尚未解决、当前无新有据方案而暂缓；H07-LATE已�
 |---|---:|---|---|---|
 | P1／当前优先评审 | 1 | [M-03 Mesh物化与上传](android-mobile-readiness/m-03-dynamic-mesh-upload.md) | 高 | 第1项：复用已完成metadata/相机消重/共享绑定；评审当前命令物化与顶点准备剩余工作，不把GPU认证缺失当当前优化内容。 |
 | P1／当前优先评审 | 2 | [H-08 视觉预印与驻留内存](android-mobile-readiness/h-08-prebaked-visual-content-memory.md) | 高 | 第2项：先核当前纹理、图集、解码暂存的实际驻留与生命周期；预印/ATLAS资源实施另有准确范围，不等待AB整体迁移。 |
-| P1／当前优先评审 | 3 | [H-10 音频PCM与加载内存](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | 高 | 有界PCM与正式源每局所有权已接入；完整目录每轮218.313758MiB/两轮恢复通过，下一同H10数字预算与producer覆盖合同审阅，父项OPEN。 |
+| CLOSED／当前范围已结束 | —（原3） | [H-10 音频PCM与加载内存](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | 高 | 用户取消新增Player验收路线；PCM/owned/对象门与限定Editor证据保留，未测范围不列本项active后继。 |
 | P2／当前后续评审 | 4 | [M-12 解码上传字节背压](android-mobile-readiness/m-12-decode-upload-byte-backpressure.md) | 中 | 第4项：核解码到上传间的字节占用与释放，存在实际高峰后才定背压。 |
 | P2／当前后续评审 | 5 | [M-05 GameObject shell成本](android-mobile-readiness/m-05-gameobject-shell-cost.md) | 中 | 第5项：核active/visible/inactive/logic-only真实shell与组件成本。 |
 | P2／当前后续评审 | 6 | [M-01 worker吞吐与背压](android-mobile-readiness/m-01-dedicated-worker-throughput.md) | 中 | 第6项：核worker实际eligible/active/fallback/等待；不把默认开关当实际并行。 |
@@ -104,7 +112,7 @@ P1三项、P2五项、父目标保留两项、伴随保障六项、已评审暂�
 | M-12 | [解码上传字节背压](android-mobile-readiness/m-12-decode-upload-byte-backpressure.md) | 内存 | 中 | 区分待上传和仍被atlas持有的像素；保留UniTask，取消归还reservation |
 | H-01 | [内容部署](android-mobile-readiness/h-01-content-deployment.md) | 平台 | 中 | 后续Android阶段：保留本地AB策略草案；先共享内容合同再按依赖接入，未授权实施 |
 | H-08 | [视觉预印与驻留内存](android-mobile-readiness/h-08-prebaked-visual-content-memory.md) | 内存 | 中 | 先保守生产者闭包和生命周期，再预印/按局装载；已有共享绑定不是完整ATLAS实现 |
-| H-10 | [音频PCM与加载内存](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | 内存 | 中 | 有界PCM与formal每局释放已接入，完整音频对象账本已实测；producer闭包/数字预算待审，非整项关闭 |
+| H-10 | [音频PCM与加载内存](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | 内存 | 中（历史建议） | CLOSED（用户范围结项）；未实施Player路线ABANDONED，未测Player/进程/设备不再阻塞本项结束 |
 | H-04 | [IL2CPP与ARM64](android-mobile-readiness/h-04-il2cpp-arm64.md) | 平台 | 中 | 盘点AOT/native/stripping并冻结Development配置；不改第三方或包源 |
 | H-02 | [Android构建与冷启动](android-mobile-readiness/h-02-android-build-scene-closure.md) | 平台 | 中 | 沿用Menu/Battle顺序；Build Profile指记录化构建配置/脚本，不默认要求Unity6专有UI |
 | H-03 | [触屏固定tick输入](android-mobile-readiness/h-03-touch-input-fixed-tick.md) | 平台 | 中 | 复用现有Input Actions和FrameInputSet，处理多指/失焦释放；Prefab/Scene/Input Actions另批 |
@@ -265,7 +273,7 @@ M-12～M-15 六项；M-03 从中调高但不改旧 ID。高优先级表示安全
 | ID | 一句话说明 | 当前进度 | 独立方案与验收 | 最新留痕 | 更新 |
 |---|---|---|---|---|---|
 | `H-08` | 全量视觉预热与源纹理回退仍可能造成高驻留及启动峰值。 | `OPEN / SOURCE_FALLBACK_EXISTS / PREBAKE_PENDING` | [H-08 方案](android-mobile-readiness/h-08-prebaked-visual-content-memory.md) | 全量 sprites/textures/atlas sources；Auto 超 atlas 预算保留 SourceTexture2D | 2026-10-06 |
-| `H-10` | 完整目录音频对象账本已测量；预算/producer闭包仍开放。 | `OPEN / FULL_CATALOG_AUDIO_ENVELOPE_MEASURED / BUDGET_UNDECIDED` | [H-10 方案](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | 两轮各978formal+72generic/去重228918567B；formal逐局释放，generic复用后精确恢复；非RSS或绝对/切局峰值 | 2026-10-11 |
+| H-10 | 当前优化按用户范围结束，新增Player路线取消。 | CLOSED / USER_SCOPE_CLOSEOUT | [H-10方案](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | PCM/owned/320MiB同输入对象门/resume03限定音频门保留；Player/进程/8GB/千人/听感未验证，旧FAIL保留 | 2026-10-11 |
 | `H-11` | 多类预热/硬限/resolver封口与native Mesh再预热已聚焦通过，完整 0GC 尚未闭合。 | `OPEN / RUNTIME_PENDING / CACHE_PREWARM_AND_CAPACITY_GUARD_FOCUSED_PASS` | [H-11 方案](android-mobile-readiness/h-11-presentation-capacity-zero-gc.md) | [批次进度](battle-optimization-progress-tracker.md)；子批05新12/12、旧120/120；父项未关闭 | 2026-10-06 |
 | `M-03` | metadata/warm消重限定通过；22已补无authoring时GameConfig Foot生产入口，显式覆盖/禁用保持。 | `OPEN / RUNTIME_PENDING / FOOT_CONFIG_SCOPED_PASS` | [M-03 方案](android-mobile-readiness/m-03-dynamic-mesh-upload.md) | [批次进度](battle-optimization-progress-tracker.md)；22 32/32、1800camera每帧Foot2/Health2、三档catalog重放局部0B。20 FAIL/21诊断不改；有限选定链/A-B/关闭重进继续，全域0GC/1000AI/GPU/FPS/设备待验 | 2026-10-07 |
 | `H-07` | 缺少能覆盖当前代码、内容、插值及音频链的 1000 AI 性能证书。 | `OPEN / CURRENT_CERTIFICATE_MISSING` | [H-07 方案](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | 历史 Windows/Editor 压测不构成当前 Android 证书 | 2026-10-06 |
@@ -366,3 +374,16 @@ BATTLE_ALIGNMENT                 = USER_ACCEPTED_SCOPED_CLOSURE
 历史 `CURRENT_EDITOR_SELFCHECK=PASS(2026-09-05)` 仅保留为旧留痕，不作当前统一验收。
 优化文档整理本身不等于 Android 达标。后续总体启动授权已生效，但不取消明确的
 EXT-1/MONO/资源/Scene/配置专项门；未测获益和未运行的验收保持未知。
+
+
+## 2026-10-11 用户范围结项（当前终态）
+
+H10 CLOSED；未实施Player路线ABANDONED。用户取消新增出包验收条件，第四processor待批事项撤销，不再等答复或完整实施派发。三个新脚本/两个meta不创建，全部preflight/proposal/FAIL保留。已实施PCM/逐局formal owned、320MiB同输入对象门/resume03限定音频门按原scope保留；Player/2与3GiB进程/8GB型号/完整千人/人工听感仍未验证，不列本次active后继。旧compat13/14/成本尖峰/失败不改PASS。决定见docs/ai/DECISIONS/NTSD-H10-USER-SCOPE-CLOSEOUT-20261011.md，报告见既有Player输出根closeout-user-scope-01/REPORT.md。仅治理检查，无源码/资源/Settings/Unity/编译/测试/测量/build/Player/sampler；无下一项/Goal，其他hold与所有原边界不变。此前PLANNED/OPEN/等待第四域/继续出包仅为被本决定替代的历史，不再授执行权限。
+
+### 结项前字段快照（被本决定替代，仅历史）
+
+| P1／当前优先评审 | 3 | [H-10 音频PCM与加载内存](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | 高 | 有界PCM与正式源每局所有权已接入；完整目录每轮218.313758MiB/两轮恢复通过，下一同H10数字预算与producer覆盖合同审阅，父项OPEN。 |
+
+| H-10 | [音频PCM与加载内存](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | 内存 | 中 | 有界PCM与formal每局释放已接入，完整音频对象账本已实测；producer闭包/数字预算待审，非整项关闭 |
+
+| `H-10` | 完整目录音频对象账本已测量；预算/producer闭包仍开放。 | `OPEN / FULL_CATALOG_AUDIO_ENVELOPE_MEASURED / BUDGET_UNDECIDED` | [H-10 方案](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | 两轮各978formal+72generic/去重228918567B；formal逐局释放，generic复用后精确恢复；非RSS或绝对/切局峰值 | 2026-10-11 |
