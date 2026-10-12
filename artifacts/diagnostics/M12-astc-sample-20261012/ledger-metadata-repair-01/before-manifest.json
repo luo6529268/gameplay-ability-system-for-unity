@@ -1,0 +1,26 @@
+{
+  "utc": "2026-10-12T02:33:47.988167+00:00",
+  "operation": "OP-NTSD-M12-ASTC-SAMPLE-COMPARE-20261012",
+  "before": [
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-M12-ASTC-SAMPLE-COMPARE-001.md",
+      "bytes": 4495,
+      "sha256": "1640ecb9da74e11c9b21b2825412fcecfcf16c84d3c2b2a9bacc4c5d37890389",
+      "backup": "artifacts/diagnostics/M12-astc-sample-20261012/ledger-metadata-repair-01/0-NTSD-M12-ASTC-SAMPLE-COMPARE-001.md.before.txt"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/OP-NTSD-M12-ASTC-SAMPLE-COMPARE-20261012/RECORD.md",
+      "bytes": 3457,
+      "sha256": "ef58e1157be6bc469ac5bfbdc41f7ba21ed981e16509e24d5f67281d05590b21",
+      "backup": "artifacts/diagnostics/M12-astc-sample-20261012/ledger-metadata-repair-01/1-RECORD.md.before.txt"
+    },
+    {
+      "path": "artifacts/diagnostics/M12-astc-sample-20261012/REPORT.md",
+      "bytes": 8350,
+      "sha256": "7180fa7c045f697256db52ffe4397b8470af989caa24be8650a8e5d3c6c1a168",
+      "backup": "artifacts/diagnostics/M12-astc-sample-20261012/ledger-metadata-repair-01/2-REPORT.md.before.txt"
+    }
+  ],
+  "first_validator_error": "Only error: Record declares non-governed code-path artifacts/diagnostics/M12-astc-sample-20261012/compare_astc.py",
+  "resolution": "Existing validator domain has no governed project code changes. Use its supported NONE/GOVERNANCE_ONLY metadata only for project governance; explicitly retain artifact-code-path and real helper ownership/hash/changes. No script movement or validator changes."
+}

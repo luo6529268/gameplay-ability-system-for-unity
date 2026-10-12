@@ -1,0 +1,46 @@
+{
+  "head": "9fa291bf154269ae67ce34d3121ed40c7673440b",
+  "total": {
+    "files": 23989,
+    "bytes": 10827196173,
+    "MiB": 10325.62,
+    "GiB": 10.084
+  },
+  "A": {
+    "files": 1558,
+    "bytes": 454522618,
+    "MiB": 433.47,
+    "GiB": 0.423
+  },
+  "B": {
+    "files": 296,
+    "bytes": 1262360895,
+    "MiB": 1203.88,
+    "GiB": 1.176
+  },
+  "C": {
+    "files": 682,
+    "bytes": 2956166378,
+    "MiB": 2819.22,
+    "GiB": 2.753
+  },
+  "D": {
+    "files": 21453,
+    "bytes": 6154146282,
+    "MiB": 5869.05,
+    "GiB": 5.731
+  },
+  "tracked": 23052,
+  "ignored": 917,
+  "untracked": 20,
+  "duplicate_groups": 2114,
+  "duplicate_redundant_bytes": 1823991974,
+  "scan": {
+    "scanned": 33153,
+    "size_limit": 2097152,
+    "read_errors": []
+  },
+  "skipped_large_text_files": 345,
+  "retained_restore_copies": 85,
+  "deletions_executed": 0
+}

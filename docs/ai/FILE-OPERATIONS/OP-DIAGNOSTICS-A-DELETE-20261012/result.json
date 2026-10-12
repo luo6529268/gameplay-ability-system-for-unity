@@ -1,0 +1,58 @@
+{
+  "operation": "OP-DIAGNOSTICS-A-DELETE-20261012",
+  "status": "REJECTED",
+  "verified_at": "2026-10-12T10:33:34.024333+08:00",
+  "authorized_files": 1558,
+  "authorized_bytes": 454522618,
+  "deleted_files": 0,
+  "removed_bytes": 0,
+  "all_A_files_still_present": true,
+  "all_A_hashes_unchanged": true,
+  "A_missing": [],
+  "A_changed": [],
+  "deletion_journal_exists": false,
+  "retained_original_and_independent_backup_proofs": [
+    {
+      "original_source": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-BATTLE-HUD-NATIVE-RESOURCE-001\\green\\obj\\Debug\\net10.0\\Harness.AssemblyInfoInputs.cache",
+      "backup_source": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\OP-DIAGNOSTICS-A-DELETE-20261012\\restore-copies\\dde49b3bc20b02c45fde80747bbf404652061ff5d45010eb621b1dca36ff1de3.bin",
+      "sha256": "dde49b3bc20b02c45fde80747bbf404652061ff5d45010eb621b1dca36ff1de3",
+      "original_matches": true,
+      "backup_matches": true
+    },
+    {
+      "original_source": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-BATTLE-HUD-NATIVE-RESOURCE-001\\green\\obj\\Debug\\net10.0\\Harness.csproj.CoreCompileInputs.cache",
+      "backup_source": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\OP-DIAGNOSTICS-A-DELETE-20261012\\restore-copies\\5a543622a69f32c5e7847d7f407c0fcf75a25fe3198ee9db4f290d4d72c5c855.bin",
+      "sha256": "5a543622a69f32c5e7847d7f407c0fcf75a25fe3198ee9db4f290d4d72c5c855",
+      "original_matches": true,
+      "backup_matches": true
+    },
+    {
+      "original_source": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-MENU-LOOP-CAROUSEL-001\\compile-bin\\UnityEngine.UI.pdb",
+      "backup_source": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\OP-DIAGNOSTICS-A-DELETE-20261012\\restore-copies\\bc2fc80f3c2663d33a81d9542d4d9fb6549ae5dc9348bd1898b203731e0988f2.bin",
+      "sha256": "bc2fc80f3c2663d33a81d9542d4d9fb6549ae5dc9348bd1898b203731e0988f2",
+      "original_matches": true,
+      "backup_matches": true
+    },
+    {
+      "original_source": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-BATTLE-CONTROLS-LIFECYCLE-001\\harness-net10\\obj\\Release\\net10.0\\Harness.AssemblyInfoInputs.cache",
+      "backup_source": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\OP-DIAGNOSTICS-A-DELETE-20261012\\restore-copies\\e2f2269aecae82883b159a0339026378484c958b8df53e91654bdf8fce2a90ce.bin",
+      "sha256": "e2f2269aecae82883b159a0339026378484c958b8df53e91654bdf8fce2a90ce",
+      "original_matches": true,
+      "backup_matches": true
+    },
+    {
+      "original_source": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-INPUT-SEMANTICS-VALIDATION-001\\dat\\obj\\Release\\net10.0\\Harness.csproj.CoreCompileInputs.cache",
+      "backup_source": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\OP-DIAGNOSTICS-A-DELETE-20261012\\restore-copies\\e98384f837f605dbc3e41a94eecb48db29e025ca0b2c04a670f55fb40cc4ef95.bin",
+      "sha256": "e98384f837f605dbc3e41a94eecb48db29e025ca0b2c04a670f55fb40cc4ef95",
+      "original_matches": true,
+      "backup_matches": true
+    }
+  ],
+  "protected_files_checked": 22622,
+  "protected_missing": [],
+  "protected_metadata_changed": [],
+  "source_commit": "9fa291bf154269ae67ce34d3121ed40c7673440b",
+  "current_head": "9fa291bf154269ae67ce34d3121ed40c7673440b",
+  "runtime_or_compile_tests": 0,
+  "scope_verification_limit": "非A范围末审为存在性/大小/mtime比较，未第二次重读全部内容。"
+}

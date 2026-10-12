@@ -1,0 +1,21 @@
+# OP-NTSD-M12-ASTC-SAMPLE-COMPARE-20261012
+
+Status: VERIFIED_OFFLINE_ONLY
+Task: NTSD-M12-ASTC-SAMPLE-COMPARE-20261012
+Change: NTSD-M12-ASTC-SAMPLE-COMPARE-001
+Authorization: Direct current human request for six representative ASTC sample comparisons.
+Scope: append-only governance paths in before-manifest, CreateNew evidence under artifacts/diagnostics/M12-astc-sample-20261012 and the three named new governance records.
+Before: artifacts/diagnostics/M12-astc-sample-20261012/before-manifest.json; six real current governance backups verified byte/hash identical; Git status/staged evidence retained.
+Execution: guarded SHA checked UTF-8 append only; experiment script writes new files exclusively and invokes official Arm astcenc 5.6.0 on six independent derivatives. No file deletion/move/asset overwrite, Unity execution or settings changes.
+Reversibility: preserve originals and evidence; any future removal/restoration needs its own explicit recorded operation.
+
+Offline prepare helper ordinary input-path error retained in prepare-stage.log. Same scope correction: remove nonexistent vfs raw-DAT assumption; source DAT is current decoded_dat. Two existing own derivative PNGs will be verified and reused without overwrite. Actual helper preimage and repair manifest: artifacts/diagnostics/M12-astc-sample-20261012/prepare-repair-01/. No original changes or codec execution before this correction.
+
+Before report generation only: viewer uses native-resolution canvas plus CSS nearest zoom to bound backing memory. Actual helper preimage: viewer-memory-guard-01/. All 12 ASTC encode/decode results retained and not rerun.
+
+Offline HTML syntax repair: Node --check found an escaped-newline generation error. Initial syntax failure retained in visual-review-01/javascript-syntax-first.log. Before bytes and scope in viewer-syntax-repair-01/before-manifest.json; only the experiment helper string escaping changes, corrected comparison-final.html is CreateNew. No re-encoding or original/production changes.
+
+
+> 2026-10-12 FINAL OFFLINE ASTC SAMPLE: NTSD-M12-ASTC-SAMPLE-COMPARE-001 VERIFIED for this six-image offline experiment only. Twelve fixed-profile Arm astcenc 5.6.0 encodes and twelve decodes exit0; actual headers/payloads and 18 viewer image embeddings checked. RGBA 13,958,528B -> ASTC4x4 3,498,624B (-74.94%) / ASTC6x6 1,560,736B (-88.82%), no mips/resize. Pixel-art roles/fine lightning favor 4x4; 6x6 smoke is a candidate only; fire alpha/detail needs caution, not blanket promotion. All 7,722 exact protected paths hash identical. PNG/decoded DAT unchanged; no Unity/Play/P1/production loader/prebuild paging/device/peak-memory acceptance. Original helper/path and viewer syntax failures retained; corrected final viewer static syntax passes, browser file-URL preview rejected with no workaround. Parent M12 OPEN/defaultOFF/H08ON; automation stays paused. Evidence: artifacts/diagnostics/M12-astc-sample-20261012/REPORT.md and artifact-validation.json / protection-after.json.
+
+Validation receipts: 24 codec process exits0; 12 exact ASTC headers/hashes/lengths; 18 embedded images exact; Python parse and Node --check pass; 7,722 before/after hashes same. Tools/Validate-ChangeLedger.ps1 final log is captured separately before delivery. Parent/runtime/device/art acceptance is not promoted. All baseline/repair backups retained. External concurrent cleanup-review untracked additions observed, not authored or touched by this ASTC task.

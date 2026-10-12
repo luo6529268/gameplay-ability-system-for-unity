@@ -1,0 +1,47 @@
+{
+  "utc": "2026-10-12T02:36:11.472504+00:00",
+  "operation": "OP-NTSD-M12-ASTC-SAMPLE-COMPARE-20261012",
+  "before": [
+    {
+      "path": "artifacts/diagnostics/M12-astc-sample-20261012/REPORT.md",
+      "sha256": "db860aad0b42eebd0c264e232c6b8621e535cba6951e739a13e74c06ffe2ddbd",
+      "bytes": 9296,
+      "backup": "artifacts/diagnostics/M12-astc-sample-20261012/validation-closeout-before/0-REPORT.md.before.txt"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-M12-ASTC-SAMPLE-COMPARE-001.md",
+      "sha256": "889e6ea48f8d488d7a1ddbbcf138b5066d0d46bcf29103aab36e57be104620b6",
+      "bytes": 5094,
+      "backup": "artifacts/diagnostics/M12-astc-sample-20261012/validation-closeout-before/1-NTSD-M12-ASTC-SAMPLE-COMPARE-001.md.before.txt"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/OP-NTSD-M12-ASTC-SAMPLE-COMPARE-20261012/RECORD.md",
+      "sha256": "6042a8fe1cff77d07c920928a61bcd94c219c2fb8d710195ac017338008c2dcc",
+      "bytes": 4002,
+      "backup": "artifacts/diagnostics/M12-astc-sample-20261012/validation-closeout-before/2-RECORD.md.before.txt"
+    }
+  ],
+  "actual_validator": {
+    "utc": "2026-10-12T02:34:51.402344+00:00",
+    "command": [
+      "C:\\Users\\Logan\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe",
+      "-NoProfile",
+      "-File",
+      "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\Validate-ChangeLedger.ps1",
+      "-RepositoryRoot",
+      "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity"
+    ],
+    "exit_code": 0,
+    "summary": [
+      "Change ledger validation PASSED.",
+      "  Records: 1426",
+      "  Governed code files in diff: 0"
+    ],
+    "error_count": 0,
+    "errors": [],
+    "warning_count": 4551,
+    "log_bytes": 820414,
+    "log_sha256": "de3cbfedab026b296235e58df6ea01c7b1e7f3f15b03c880a58f672edf76618b"
+  },
+  "scope": "Append final actual validator evidence; no script or metadata change after successful validation"
+}

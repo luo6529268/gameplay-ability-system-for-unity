@@ -1,0 +1,15 @@
+{
+  "status": "REJECTED",
+  "observed_at": "2026-10-12T10:33:11.658143+08:00",
+  "tool": "functions.exec -> exec_command",
+  "action": "Execute frozen EXECUTION-COMMAND.txt: native PowerShell Remove-Item -LiteralPath on 1558 approved A files.",
+  "diagnostic": "exec_command failed: CreateProcess { message: Rejected(... rejected: blocked by policy) }",
+  "reason_details": "工具未提供更具体的原因。",
+  "process_started": false,
+  "process_id": null,
+  "command_sha256": "0aeb9e8ec327d162a9f5678e0ee7b648edb1546476abc553e4bf1727c40ed26f",
+  "command_file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\OP-DIAGNOSTICS-A-DELETE-20261012\\EXECUTION-COMMAND.txt",
+  "automatic_retries": 0,
+  "alternate_delete_tools_used": false,
+  "authorization": "用户已明确授权，仅因执行工具自动安全策略拒绝而未执行；不再次索取同一授权。"
+}

@@ -1,0 +1,17 @@
+{
+  "utc": "2026-10-12T02:31:13.900795+00:00",
+  "command": [
+    "C:\\Users\\Logan\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe",
+    "-NoProfile",
+    "-File",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\Validate-ChangeLedger.ps1",
+    "-RepositoryRoot",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity"
+  ],
+  "exit_code": 1,
+  "summary": [
+    "Change ledger validation FAILED."
+  ],
+  "log_bytes": 820673,
+  "log_sha256": "7d2a16be8790ff38be148a9fc6783cf0d456b39ba0733bb6e4223654a4dd278e"
+}

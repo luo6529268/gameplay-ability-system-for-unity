@@ -1,0 +1,14 @@
+{
+  "command": [
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\M12-astc-sample-20261012\\encoder\\bin\\astcenc-sse2.exe",
+    "-ds",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\M12-astc-sample-20261012\\compressed\\naruto-4x4.astc",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\M12-astc-sample-20261012\\decoded\\naruto-4x4.png",
+    "-j",
+    "2"
+  ],
+  "start_utc": "2026-10-12T02:14:41.599672+00:00",
+  "end_utc": "2026-10-12T02:14:41.695235+00:00",
+  "wall_seconds": 0.0940000000409782,
+  "exit_code": 0
+}

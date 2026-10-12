@@ -1,0 +1,156 @@
+$ErrorActionPreference = 'Stop'
+
+# Fixed, previously approved A manifest. No directory deletion or Git mutation.
+$repo = 'I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity'
+$op = Join-Path $repo 'docs\ai\FILE-OPERATIONS\OP-DIAGNOSTICS-A-DELETE-20261012'
+$manifestPath = Join-Path $op 'before-manifest.json'
+$expectedManifestHash = '309ce1797f05c60dfca266719e2c59ee6263ef97906241c7a6de7bd5f11932df'
+$commandPath = Join-Path $op 'MANUAL-COMMAND.txt'
+$commandIdentityPath = Join-Path $op 'manual-command-identity.json'
+$commandIdentity = Get-Content -LiteralPath $commandIdentityPath -Raw -Encoding UTF8 | ConvertFrom-Json
+if ((Get-FileHash -LiteralPath $commandPath -Algorithm SHA256).Hash.ToLowerInvariant() -ne $commandIdentity.command_sha256) { throw 'Manual command file changed.' }
+if ((Get-FileHash -LiteralPath $manifestPath -Algorithm SHA256).Hash.ToLowerInvariant() -ne $expectedManifestHash) { throw 'Approved A manifest changed.' }
+
+$manifest = Get-Content -LiteralPath $manifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
+$files = @($manifest.files)
+if ($files.Count -ne 1558 -or ($files | Measure-Object bytes -Sum).Sum -ne 454522618) { throw 'Unexpected A count or size.' }
+$diag = [IO.Path]::GetFullPath((Join-Path $repo 'artifacts\diagnostics'))
+$paths = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+foreach ($f in $files) {
+    $absolute = [IO.Path]::GetFullPath($f.absolute)
+    if (-not $absolute.StartsWith($diag + '\', [StringComparison]::OrdinalIgnoreCase) -or -not $paths.Add($absolute)) { throw 'Outside-root or duplicate A target.' }
+}
+
+# A separate manual attempt preserves the previous REJECTED record.
+$tag = 'manual-' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + [Guid]::NewGuid().ToString('N').Substring(0,8)
+$run = Join-Path $op $tag
+$operationId = 'OP-DIAGNOSTICS-A-' + $tag.ToUpperInvariant()
+[void](New-Item -ItemType Directory -Path $run)
+Copy-Item -LiteralPath $manifestPath -Destination (Join-Path $run 'before-manifest.json')
+Copy-Item -LiteralPath $commandPath -Destination (Join-Path $run 'COMMAND.txt')
+$parentRecord = Join-Path $op 'RECORD.md'
+$index = Join-Path $repo 'docs\ai\FILE-OPERATIONS\INDEX.md'
+Copy-Item -LiteralPath $parentRecord -Destination (Join-Path $run 'parent-record.before.bin')
+Copy-Item -LiteralPath $index -Destination (Join-Path $run 'index.before.bin')
+$record = Join-Path $run 'RECORD.md'
+$plannedCommands = foreach ($f in $files) { "Remove-Item -LiteralPath '" + $f.absolute.Replace("'", "''") + "' -Force -ErrorAction Stop" }
+$plannedCommands | Set-Content -LiteralPath (Join-Path $run 'planned-commands.txt') -Encoding UTF8
+$startTime = [DateTimeOffset]::UtcNow.ToOffset([TimeSpan]::FromHours(8)).ToString('o')
+@(
+    "# A manual deletion"
+    "Operation ID: $operationId"
+    "Status: PLANNED"
+    "Authorization: User explicitly requested A-only manual deletion and retention of recovery sources."
+    "Start: $startTime"
+    "Executor: human PowerShell; PID=$PID"
+    "Targets: before-manifest.json; 1558 files; 454522618 bytes."
+    "Recovery: source Git commit/blob plus retained original and independent restore-copies."
+    "Exact command: COMMAND.txt; exact per-file operations: planned-commands.txt."
+    "Existing record/index preimages: parent-record.before.bin, index.before.bin."
+    "No directories, B/C/D, Git index, commits or refs are deletion targets."
+) | Set-Content -LiteralPath $record -Encoding UTF8
+Add-Content -LiteralPath $parentRecord -Encoding UTF8 -Value ([Environment]::NewLine + "Manual attempt PLANNED: $operationId; record $tag/RECORD.md. Prior rejection retained.")
+Add-Content -LiteralPath $index -Encoding UTF8 -Value ([Environment]::NewLine + "- $operationId | PLANNED | [Record](OP-DIAGNOSTICS-A-DELETE-20261012/$tag/RECORD.md)")
+$writer = [IO.StreamWriter]::new((Join-Path $run 'journal.jsonl'), $false, [Text.UTF8Encoding]::new($false))
+$writer.AutoFlush = $true
+$deleted = 0
+$deletedBytes = [long]0
+
+function Write-ADeletionEvent($eventData) {
+    $writer.WriteLine(($eventData | ConvertTo-Json -Compress -Depth 8))
+    $writer.Flush()
+}
+function Assert-ADeletionFile($f) {
+    $resolved = [IO.Path]::GetFullPath((Resolve-Path -LiteralPath $f.absolute -ErrorAction Stop).ProviderPath)
+    if (-not $resolved.Equals($f.absolute, [StringComparison]::OrdinalIgnoreCase) -or -not $resolved.StartsWith($diag + '\', [StringComparison]::OrdinalIgnoreCase)) { throw 'Resolved target outside approved path.' }
+    $item = Get-Item -LiteralPath $resolved -Force
+    if ($item.PSIsContainer -or $item.Extension.ToLowerInvariant() -notin @('.dll','.pdb','.cache')) { throw 'Unexpected A target type.' }
+    $walk = $resolved
+    while ($true) {
+        $ancestor = Get-Item -LiteralPath $walk -Force
+        if (($ancestor.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) { throw 'Reparse point in target path.' }
+        if ($walk.Equals($diag, [StringComparison]::OrdinalIgnoreCase)) { break }
+        $walk = [IO.Path]::GetDirectoryName($walk)
+    }
+    if ($item.Length -ne $f.bytes -or (Get-FileHash -LiteralPath $resolved -Algorithm SHA256).Hash.ToLowerInvariant() -ne $f.sha256) { throw "A content changed: $resolved" }
+}
+function Assert-ARestoreCopies {
+    foreach ($g in $manifest.restore_copy_guards) {
+        foreach ($source in @($g.original_source, $g.backup_source)) {
+            if ($paths.Contains([IO.Path]::GetFullPath($source))) { throw 'Recovery source included in deletion set.' }
+            if ((Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash.ToLowerInvariant() -ne $g.sha256) { throw "Recovery source invalid: $source" }
+        }
+    }
+}
+
+try {
+    Write-ADeletionEvent @{status='PREFLIGHT'; time=$startTime; pid=$PID; operation=$operationId}
+    foreach ($f in $files) { Assert-ADeletionFile $f }
+    Assert-ARestoreCopies
+
+    $null = & git -C $repo cat-file -e ($manifest.source_commit + '^{commit}')
+    if ($LASTEXITCODE -ne 0) { throw 'Recovery Git commit unavailable.' }
+    $blobs = @($files | Where-Object restore_kind -eq 'git_blob' | Select-Object -ExpandProperty restore_blob -Unique)
+    $blobChecks = @($blobs | & git -C $repo cat-file --batch-check)
+    if ($LASTEXITCODE -ne 0 -or $blobChecks.Count -ne $blobs.Count) { throw 'Recovery Git object check failed.' }
+    for ($i=0; $i -lt $blobs.Count; $i++) {
+        if ($blobChecks[$i] -notmatch ('^' + $blobs[$i] + ' blob [0-9]+$')) { throw 'Recovery Git blob unavailable.' }
+    }
+
+    $outside = @(Get-ChildItem -LiteralPath $diag -Recurse -File -Force | Where-Object { -not $paths.Contains($_.FullName) } | ForEach-Object {
+        [pscustomobject]@{path=$_.FullName; bytes=$_.Length; ticks=$_.LastWriteTimeUtc.Ticks}
+    })
+    $outside | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $run 'outside-before.json') -Encoding UTF8
+    Add-Content -LiteralPath $record -Encoding UTF8 -Value "Status: RUNNING; all A paths/hashes and recovery sources passed preflight."
+
+    foreach ($f in $files) {
+        Assert-ADeletionFile $f
+        Write-ADeletionEvent @{status='ATTEMPT'; path=$f.absolute; bytes=$f.bytes; sha256=$f.sha256; time=[DateTimeOffset]::UtcNow.ToString('o')}
+        Remove-Item -LiteralPath $f.absolute -Force -ErrorAction Stop
+        if (Test-Path -LiteralPath $f.absolute) { throw 'A deletion postcondition failed.' }
+        $deleted++
+        $deletedBytes += [long]$f.bytes
+        Write-ADeletionEvent @{status='DELETED'; path=$f.absolute; count=$deleted; time=[DateTimeOffset]::UtcNow.ToString('o')}
+        if (($deleted % 250) -eq 0) { Write-Host "Deleted $deleted / 1558" }
+    }
+
+    Assert-ARestoreCopies
+    $null = & git -C $repo cat-file -e ($manifest.source_commit + '^{commit}')
+    if ($LASTEXITCODE -ne 0) { throw 'Recovery Git commit unavailable after deletion.' }
+    $remaining = @($files | Where-Object { Test-Path -LiteralPath $_.absolute })
+    if ($remaining.Count -ne 0) { throw 'Some A paths still exist.' }
+    $outsideChanges = @(foreach ($p in $outside) {
+        if (-not (Test-Path -LiteralPath $p.path -PathType Leaf)) {
+            [pscustomobject]@{path=$p.path; change='missing'}
+        } else {
+            $current = Get-Item -LiteralPath $p.path -Force
+            if ($current.Length -ne $p.bytes -or $current.LastWriteTimeUtc.Ticks -ne $p.ticks) {
+                [pscustomobject]@{path=$p.path; change='metadata_changed'}
+            }
+        }
+    })
+    $scopeStatus = if ($outsideChanges.Count -eq 0) { 'VERIFIED' } else { 'PARTIAL' }
+    $endTime = [DateTimeOffset]::UtcNow.ToOffset([TimeSpan]::FromHours(8)).ToString('o')
+    $result = [pscustomobject]@{operation=$operationId; status=$scopeStatus; start=$startTime; end=$endTime; pid=$PID; deleted=$deleted; removed_bytes=454522618; A_remaining=0; outside_checked=$outside.Count; outside_changes=$outsideChanges; recovery_copies_pass=$true; git_commit=$manifest.source_commit}
+    $result | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $run 'result.json') -Encoding UTF8
+    $files | ForEach-Object { [pscustomobject]@{path=$_.absolute; after='missing'; before_sha256=$_.sha256; restore_kind=$_.restore_kind; restore_source=$_.restore_source} } | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $run 'after-manifest.json') -Encoding UTF8
+    Write-ADeletionEvent @{status='COMPLETED'; deleted=$deleted; bytes=454522618; time=$endTime; outside_changes=$outsideChanges.Count}
+    Add-Content -LiteralPath $record -Encoding UTF8 -Value "Status: $scopeStatus; deleted=$deleted; removed_bytes=454522618; remaining=0; outside_changes=$($outsideChanges.Count); end=$endTime. See result.json."
+    Add-Content -LiteralPath $parentRecord -Encoding UTF8 -Value ([Environment]::NewLine + "Manual execution completed: $operationId; status=$scopeStatus; 1558 A files deleted; recovery retained; result $tag/result.json; outside metadata changes=$($outsideChanges.Count). Prior rejection was an earlier attempt.")
+    Add-Content -LiteralPath $index -Encoding UTF8 -Value ([Environment]::NewLine + "- $operationId | $scopeStatus | 1558 A files deleted; recovery retained; [Result](OP-DIAGNOSTICS-A-DELETE-20261012/$tag/result.json)")
+    Write-Host "A deletion completed: 1558 files, 433.47 MiB. Records: $run"
+    if ($outsideChanges.Count -gt 0) { Write-Warning 'Other files changed during the run; see outside_changes. Changes are observations, not attributed to this deletion.' }
+}
+catch {
+    $failureState = if ($deleted -gt 0) { 'PARTIAL' } else { 'FAILED' }
+    $failure = [pscustomobject]@{operation=$operationId; status=$failureState; deleted=$deleted; removed_bytes=$deletedBytes; error=$_.Exception.Message; time=[DateTimeOffset]::UtcNow.ToString('o')}
+    $failure | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $run 'failure.json') -Encoding UTF8
+    Write-ADeletionEvent @{status=$failureState; deleted=$deleted; error=$_.Exception.Message}
+    Add-Content -LiteralPath $record -Encoding UTF8 -Value "Status: $failureState; deleted=$deleted; see failure.json. No automatic retry."
+    Add-Content -LiteralPath $parentRecord -Encoding UTF8 -Value ([Environment]::NewLine + "Manual attempt failed/partial: $operationId; status=$failureState; deleted=$deleted; see $tag/failure.json.")
+    Add-Content -LiteralPath $index -Encoding UTF8 -Value ([Environment]::NewLine + "- $operationId | $failureState | deleted=$deleted; [Record](OP-DIAGNOSTICS-A-DELETE-20261012/$tag/RECORD.md)")
+    throw
+}
+finally {
+    $writer.Dispose()
+}

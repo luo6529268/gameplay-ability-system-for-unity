@@ -855,3 +855,20 @@ M12 correction-02 exact R03 evidence-label fix IN_PROGRESS; same Task/Change/Ope
 - OP-NTSD-M12-IMAGE-MEMORY-BATCH1-20261012 | IN_PROGRESS | first PNG/atlas/batch-memory implementation | [Record](OP-NTSD-M12-IMAGE-MEMORY-BATCH1-20261012/RECORD.md)
 
 > 2026-10-12 FINAL BATCH1: NTSD-M12-IMAGE-MEMORY-BATCH1-001 FOCUSED_TEST_PASS. Original Editor narrow compilation/domain reload succeeded after retained ordinary import/namespace corrections; final isolated fixture 12/12 Passed, 0 failed/skipped (job 18cd851285b64abca719b67b09f4760e). Native prewarm and match rebind use compact PNG; one managed page reused; whole-batch predecode plus actual-atlas guards installed. Original Menu loaded/active/clean8, nonPlay/idle/nontest; final Console 0 error/warning. Protected 2353 paths unchanged; 1869 old artifacts metadata unchanged, no content re-read in final audit; original 135746-byte diagnostic/Q/F/P1 prefix identical. Parent M12 OPEN, native byte gate DEFAULT_OFF/H08 ON, automation stays paused. No Play/P1/ABBA/build/device/Profiler/prebuild paging or original PNG/DAT changes. This completes the requested source/compile/focused batch, not runtime/device acceptance. Evidence: artifacts/diagnostics/M12-memory-batch1-20261012/REPORT.md. ChangeLedger validation result will be appended after execution.
+
+- OP-NTSD-M12-ASTC-SAMPLE-COMPARE-20261012 | RUNNING | offline six-image ASTC comparison, guarded governance append only | [Record](OP-NTSD-M12-ASTC-SAMPLE-COMPARE-20261012/RECORD.md)
+
+
+- [OP-DIAGNOSTICS-CLEANUP-REVIEW-20261012](OP-DIAGNOSTICS-CLEANUP-REVIEW-20261012/RECORD.md) - VERIFIED (inventory only); A 1558 files / 433.47 MiB recoverable build candidates; no deletion or move. [Report](OP-DIAGNOSTICS-CLEANUP-REVIEW-20261012/REPORT.md)
+
+- OP-NTSD-M12-ASTC-SAMPLE-COMPARE-20261012 | VERIFIED_OFFLINE_ONLY | six-image outputs complete; no source asset changes; closeout backups in closeout-before-manifest.json | [Record](OP-NTSD-M12-ASTC-SAMPLE-COMPARE-20261012/RECORD.md)
+
+
+- [OP-DIAGNOSTICS-A-DELETE-20261012](OP-DIAGNOSTICS-A-DELETE-20261012/RECORD.md) - PLANNED; explicitly approved A-only deletion of 1558 files / 433.47 MiB; B/C/D retained.
+
+
+- [OP-DIAGNOSTICS-A-DELETE-20261012](OP-DIAGNOSTICS-A-DELETE-20261012/RECORD.md) - REJECTED by exec_command policy before process start; 0 deleted, all1558 A files unchanged. [Result](OP-DIAGNOSTICS-A-DELETE-20261012/RESULT.md)
+
+- OP-DIAGNOSTICS-A-MANUAL-20261012-105104-BEFC360C | PLANNED | [Record](OP-DIAGNOSTICS-A-DELETE-20261012/manual-20261012-105104-befc360c/RECORD.md)
+
+- OP-DIAGNOSTICS-A-MANUAL-20261012-105104-BEFC360C | VERIFIED | 1558 A files deleted; recovery retained; [Result](OP-DIAGNOSTICS-A-DELETE-20261012/manual-20261012-105104-befc360c/result.json)

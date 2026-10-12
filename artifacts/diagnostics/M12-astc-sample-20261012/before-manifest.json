@@ -1,0 +1,53 @@
+{
+  "utc": "2026-10-12T02:08:16.040850+00:00",
+  "task": "NTSD-M12-ASTC-SAMPLE-COMPARE-20261012",
+  "change": "NTSD-M12-ASTC-SAMPLE-COMPARE-001",
+  "operation": "OP-NTSD-M12-ASTC-SAMPLE-COMPARE-20261012",
+  "head": "9fa291bf154269ae67ce34d3121ed40c7673440b",
+  "governance_backups": [
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "bytes": 456765,
+      "sha256": "3cb336911376cef7880a6c2292034d881830849221b2e82285f83413d429ddd9",
+      "backup": "artifacts/diagnostics/M12-astc-sample-20261012/before/docs/ai/CURRENT-AUTHORITY.md"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "bytes": 805843,
+      "sha256": "393c22df3d17df5d2782ca2431cf9d152c57b142e5a5585531bf80c3d2ad8246",
+      "backup": "artifacts/diagnostics/M12-astc-sample-20261012/before/docs/ai/CHANGE-LEDGER.md"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "bytes": 1738664,
+      "sha256": "59f3b9676c888a9a33b9db1ad152b8616d063bfd210a3f58129231f994b9b3b4",
+      "backup": "artifacts/diagnostics/M12-astc-sample-20261012/before/docs/ai/STATE.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1677509,
+      "sha256": "6755f5650f1a95fb2517f174a9107beef15a2566c651327e9b29819650b26e48",
+      "backup": "artifacts/diagnostics/M12-astc-sample-20261012/before/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "bytes": 384083,
+      "sha256": "bbfa0af105e11acf777f464a16a4c3ed847b8972906f3393c847ea76dfc97719",
+      "backup": "artifacts/diagnostics/M12-astc-sample-20261012/before/Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "bytes": 168456,
+      "sha256": "97623182697199a5a6273a7089acd134d9c8360b43a5ece3a1634b39ab52e259",
+      "backup": "artifacts/diagnostics/M12-astc-sample-20261012/before/docs/ai/FILE-OPERATIONS/INDEX.md"
+    }
+  ],
+  "allowed_script": "artifacts/diagnostics/M12-astc-sample-20261012/compare_astc.py",
+  "new_records": [
+    "docs/ai/CHANGE-RECORDS/NTSD-M12-ASTC-SAMPLE-COMPARE-001.md",
+    "docs/ai/TASKS/NTSD-M12-ASTC-SAMPLE-COMPARE-20261012.md",
+    "docs/ai/FILE-OPERATIONS/OP-NTSD-M12-ASTC-SAMPLE-COMPARE-20261012/RECORD.md"
+  ],
+  "output_root": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\M12-astc-sample-20261012",
+  "authorization": "Direct human: select representative character, skill and semitransparent effect images; compare ASTC 4x4 and 6x6 quality and actual size. Original PNG/DAT unchanged; no production loader, prebuild paging or P1."
+}

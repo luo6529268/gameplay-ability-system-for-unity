@@ -1,0 +1,41 @@
+<!-- CHANGE-RECORD
+id: NTSD-M12-ASTC-SAMPLE-COMPARE-001
+status: VERIFIED
+code-path: NONE
+change-kind: GOVERNANCE_ONLY
+artifact-code-path: artifacts/diagnostics/M12-astc-sample-20261012/compare_astc.py
+authority: Direct human ASTC 4x4/6x6 representative image comparison approval on 2026-10-12
+evidence: artifacts/diagnostics/M12-astc-sample-20261012/REPORT.md
+-->
+
+# Offline representative ASTC comparison
+
+Task: NTSD-M12-ASTC-SAMPLE-COMPARE-20261012
+Operation: OP-NTSD-M12-ASTC-SAMPLE-COMPARE-20261012
+Parent: M12 OPEN; byte DEFAULT_OFF, H08 ON, automation paused.
+
+Before: production native PNG preserves straight RGBA and creates RGBA32 runtime textures.
+After: standalone experiment only; six selected source images, two block sizes, fixed quality/profile, compressed blocks, decoded previews, visible/edge/alpha/composited metrics and actual byte counts.
+No production behavior change or default promotion.
+
+Exact code ownership: one new Python comparison script outside Assets. Inputs read-only; derivatives/encoder/archive/report/HTML/metrics live solely under the named experiment output.
+Invariants: original PNG/DAT, importers/meta, production C#, Scene/Config/Settings and all prior evidence are not edited. No Play/P1, prebuild paging, asset migration, package change, full catalog decode or device measurement.
+Risk: ASTC is lossy; software decode comparison cannot certify GPU/device quality or memory peak. Blank transparent regions must not dominate reported quality. Profile must match current source color interpretation and no alpha premultiplication is introduced.
+Acceptance: actual encode/decode of both variants for six exact sources; ASTC header dimensions/block size/payload validated; full source/dimensions retained; neutral/light/dark background and nearest zoom comparisons; source and protected hashes unchanged; no unknown file delta; ChangeLedger validation.
+Rollback: all source assets remain untouched; real preimages of appended governance documents in before-manifest. Do not automatically delete artifacts or restore files.
+
+Offline prepare helper ordinary input-path error retained in prepare-stage.log. Same scope correction: remove nonexistent vfs raw-DAT assumption; source DAT is current decoded_dat. Two existing own derivative PNGs will be verified and reused without overwrite. Actual helper preimage and repair manifest: artifacts/diagnostics/M12-astc-sample-20261012/prepare-repair-01/. No original changes or codec execution before this correction.
+
+Before report generation only: viewer uses native-resolution canvas plus CSS nearest zoom to bound backing memory. Actual helper preimage: viewer-memory-guard-01/. All 12 ASTC encode/decode results retained and not rerun.
+
+Offline HTML syntax repair: Node --check found an escaped-newline generation error. Initial syntax failure retained in visual-review-01/javascript-syntax-first.log. Before bytes and scope in viewer-syntax-repair-01/before-manifest.json; only the experiment helper string escaping changes, corrected comparison-final.html is CreateNew. No re-encoding or original/production changes.
+
+
+> 2026-10-12 FINAL OFFLINE ASTC SAMPLE: NTSD-M12-ASTC-SAMPLE-COMPARE-001 VERIFIED for this six-image offline experiment only. Twelve fixed-profile Arm astcenc 5.6.0 encodes and twelve decodes exit0; actual headers/payloads and 18 viewer image embeddings checked. RGBA 13,958,528B -> ASTC4x4 3,498,624B (-74.94%) / ASTC6x6 1,560,736B (-88.82%), no mips/resize. Pixel-art roles/fine lightning favor 4x4; 6x6 smoke is a candidate only; fire alpha/detail needs caution, not blanket promotion. All 7,722 exact protected paths hash identical. PNG/decoded DAT unchanged; no Unity/Play/P1/production loader/prebuild paging/device/peak-memory acceptance. Original helper/path and viewer syntax failures retained; corrected final viewer static syntax passes, browser file-URL preview rejected with no workaround. Parent M12 OPEN/defaultOFF/H08ON; automation stays paused. Evidence: artifacts/diagnostics/M12-astc-sample-20261012/REPORT.md and artifact-validation.json / protection-after.json.
+
+Validation receipts: 24 codec process exits0; 12 exact ASTC headers/hashes/lengths; 18 embedded images exact; Python parse and Node --check pass; 7,722 before/after hashes same. Tools/Validate-ChangeLedger.ps1 final log is captured separately before delivery. Parent/runtime/device/art acceptance is not promoted. All baseline/repair backups retained. External concurrent cleanup-review untracked additions observed, not authored or touched by this ASTC task.
+
+Final validator metadata correction: validator-final.log first failed solely because artifacts/diagnostics is outside the validator governed roots. No governed project script was edited. NONE / GOVERNANCE_ONLY describes only that validator domain; the actual new standalone Python helper remains explicitly recorded as artifact-code-path, exact ownership, backups and SHA in this Record. This does not classify the experiment itself as code-free or hide helper changes. No validator edit or file move; final recheck is validator-recheck01.log.
+
+
+Final actual governance check: Tools/Validate-ChangeLedger.ps1 -RepositoryRoot <this project> exit0 / PASSED; 1426 Records, 0 governed code files in diff, 0 errors, 4551 warnings. Full preserved log: validator-recheck01.log, SHA256 de3cbfedab026b296235e58df6ea01c7b1e7f3f15b03c880a58f672edf76618b. Warnings are retained; this is not a zero-warning claim. First invalid artifact-path metadata failure remains in validator-final.log; the supported no-governed-project-code metadata correction is fully disclosed. No source/codec changes after the successful check. Final scope audit: git-scope-final.json; HEAD unchanged, staging empty, own governance diff check exit0. External concurrent operation records are excluded from this task output.

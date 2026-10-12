@@ -1,0 +1,341 @@
+{
+  "utc": "2026-10-12T02:34:40.702698+00:00",
+  "head": "9fa291bf154269ae67ce34d3121ed40c7673440b",
+  "staged_bytes": 0,
+  "before_status_entries": 24,
+  "closeout_status_entries": 270,
+  "external_status_delta_count": 46,
+  "external_status_delta_groups": {
+    "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012": 29,
+    "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-CLEANUP-REVIEW-20261012": 17
+  },
+  "external_status_deltas": [
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/A-approved.json"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/EXECUTION-COMMAND.txt"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/RECORD.md"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/RESULT.md"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/after-manifest.json"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/before-manifest.json"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/execution-identity.json"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/final-append-0.before.bin"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/final-append-1.before.bin"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/final-append-2.before.bin"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/final-append-preimages.json"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/git-blob-proofs.json"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/git-blob-requests.txt"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/git-status-after.z"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/git-status-before.z"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/governance-before-manifest.json"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/governance-before/0-INDEX.md.bin"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/governance-before/1-RECORD.md.bin"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/governance-before/2-REPORT.md.bin"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/protected-metadata-before.json.gz"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/rejection.json"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/restore-copies/5a543622a69f32c5e7847d7f407c0fcf75a25fe3198ee9db4f290d4d72c5c855.bin"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/restore-copies/bc2fc80f3c2663d33a81d9542d4d9fb6549ae5dc9348bd1898b203731e0988f2.bin"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/restore-copies/dde49b3bc20b02c45fde80747bbf404652061ff5d45010eb621b1dca36ff1de3.bin"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/restore-copies/e2f2269aecae82883b159a0339026378484c958b8df53e91654bdf8fce2a90ce.bin"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/restore-copies/e98384f837f605dbc3e41a94eecb48db29e025ca0b2c04a670f55fb40cc4ef95.bin"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/result.json"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/staged-diff-before.patch"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-A-DELETE-20261012/working-diff-before.patch"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-CLEANUP-REVIEW-20261012/A-recoverable-build.json"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-CLEANUP-REVIEW-20261012/A-recoverable-build.tsv"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-CLEANUP-REVIEW-20261012/A-source-reference-recheck.json"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-CLEANUP-REVIEW-20261012/B-restore-before-replay.json"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-CLEANUP-REVIEW-20261012/B-restore-before-replay.tsv"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-CLEANUP-REVIEW-20261012/C-archive-first.json"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-CLEANUP-REVIEW-20261012/C-archive-first.tsv"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-CLEANUP-REVIEW-20261012/D-retain-paths.json"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-CLEANUP-REVIEW-20261012/INDEX.before.bin"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-CLEANUP-REVIEW-20261012/REPORT.md"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-CLEANUP-REVIEW-20261012/duplicate-groups.json"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-CLEANUP-REVIEW-20261012/index-append-plan.json"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-CLEANUP-REVIEW-20261012/inventory.json"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-CLEANUP-REVIEW-20261012/path-references.json"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-CLEANUP-REVIEW-20261012/summary.json"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-CLEANUP-REVIEW-20261012/verification-final.json"
+      }
+    },
+    {
+      "before": null,
+      "after": {
+        "status": "??",
+        "path": "docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-CLEANUP-REVIEW-20261012/verification.json"
+      }
+    }
+  ],
+  "external_policy": "Git path/status observed only; concurrent external operations not read/executed/reverted or attributed to ASTC",
+  "governance_diff_check_exit": 0,
+  "encoder_options_and_decode_profile_strict_check": "PASS all 12 pairs",
+  "protected_source_scope": "7722 exact files SHA SAME in protection-after.json; not all untracked/whole project",
+  "audit_first_error": "Expected only cleanup-review external paths; A-DELETE new records violated that expectation. Retained snapshot git-status-final.z, corrected audit records actual external deltas."
+}

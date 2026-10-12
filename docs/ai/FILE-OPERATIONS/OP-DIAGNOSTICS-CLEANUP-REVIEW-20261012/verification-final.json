@@ -1,0 +1,26 @@
+{
+  "time": "2026-10-12T10:20:37.377799+08:00",
+  "baseline_files": 23989,
+  "classification_overlap": 0,
+  "baseline_all_hashes_stable": true,
+  "baseline_original_metadata_drift": [],
+  "baseline_missing_paths": [],
+  "observed_concurrent_new_files": 163,
+  "concurrent_new_root": "artifacts/diagnostics/M12-astc-sample-20261012",
+  "concurrent_new_files_action": "全部排除清理清单并保留，实际数量可能继续增加。",
+  "A_and_restore_copy_metadata_rechecked": 1563,
+  "A_metadata_drift": [],
+  "all_restore_copy_paths_retained": true,
+  "A_source_files_scanned": 3272,
+  "A_source_exact_hits": 0,
+  "deletions": 0,
+  "moves": 0,
+  "task_source_changes": 0,
+  "unity_calls": 0,
+  "initial_guard": "首次末审的全目录无新增断言因并行新增而停止；原 verification.json 和异常事实保留，改按固定盘点范围与新增保护范围分别验收。",
+  "limits": [
+    "全目录末审为存在性/大小/mtime比较；没有第二次读取全部原件。",
+    "引用扫描不穷举动态或外部 I/O。",
+    "统计表仅覆盖盘点时的23989文件，不包含并行新增文件。"
+  ]
+}

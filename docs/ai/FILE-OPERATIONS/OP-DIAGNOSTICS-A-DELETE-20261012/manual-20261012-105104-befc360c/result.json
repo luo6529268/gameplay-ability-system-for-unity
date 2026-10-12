@@ -1,0 +1,16 @@
+﻿{
+    "operation":  "OP-DIAGNOSTICS-A-MANUAL-20261012-105104-BEFC360C",
+    "status":  "VERIFIED",
+    "start":  "2026-10-12T10:51:04.5898353+08:00",
+    "end":  "2026-10-12T10:51:59.8964144+08:00",
+    "pid":  90104,
+    "deleted":  1558,
+    "removed_bytes":  454522618,
+    "A_remaining":  0,
+    "outside_checked":  22641,
+    "outside_changes":  [
+
+                        ],
+    "recovery_copies_pass":  true,
+    "git_commit":  "9fa291bf154269ae67ce34d3121ed40c7673440b"
+}

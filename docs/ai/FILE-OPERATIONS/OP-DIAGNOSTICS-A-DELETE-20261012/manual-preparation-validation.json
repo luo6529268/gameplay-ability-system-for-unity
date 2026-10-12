@@ -1,0 +1,15 @@
+{
+  "checked_at": "2026-10-12T10:48:00.489943+08:00",
+  "kind": "READ_ONLY_PREPARATION_CHECK",
+  "syntax_errors": 0,
+  "remove_statement_count": 1,
+  "remove_statement": "Remove-Item -LiteralPath $f.absolute -Force -ErrorAction Stop",
+  "command_sha256": "4c9be928fb09a37b010af2a265ed25279b1fff3a74f472abeb6d7d99c3990f02",
+  "A_count": 1558,
+  "A_bytes": 454522618,
+  "A_and_restore_hash_changes": [],
+  "manual_command_invoked": false,
+  "manual_runs": 0,
+  "agent_deleted": 0,
+  "original_rejection_preserved": true
+}

@@ -1,0 +1,69 @@
+$ErrorActionPreference = 'Stop'
+$opRootPath = 'I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\docs\ai\FILE-OPERATIONS\OP-DIAGNOSTICS-A-DELETE-20261012'
+$diagRootPath = [IO.Path]::GetFullPath('I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics')
+$manifestFilePath = Join-Path $opRootPath 'before-manifest.json'
+$identity = Get-Content -LiteralPath (Join-Path $opRootPath 'execution-identity.json') -Raw | ConvertFrom-Json
+if ((Get-FileHash -LiteralPath $manifestFilePath -Algorithm SHA256).Hash.ToLowerInvariant() -ne $identity.manifest_sha256) { throw 'Frozen manifest hash mismatch' }
+$manifest = Get-Content -LiteralPath $manifestFilePath -Raw | ConvertFrom-Json
+$entries = @($manifest.files)
+if ($entries.Count -ne 1558) { throw 'Unexpected approved file count' }
+$sumBytes = ($entries | Measure-Object -Property bytes -Sum).Sum
+if ($sumBytes -ne 454522618) { throw 'Unexpected approved byte total' }
+$resolvedSet = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+foreach ($entry in $entries) {
+    $resolvedTarget = (Resolve-Path -LiteralPath $entry.absolute -ErrorAction Stop).ProviderPath
+    $resolvedTarget = [IO.Path]::GetFullPath($resolvedTarget)
+    if (-not $resolvedTarget.StartsWith($diagRootPath + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) { throw 'Deletion target outside approved diagnostics root' }
+    if (-not $resolvedTarget.Equals($entry.absolute, [StringComparison]::OrdinalIgnoreCase)) { throw 'Resolved target differs from frozen absolute path' }
+    if (-not $resolvedSet.Add($resolvedTarget)) { throw 'Duplicate approved deletion path' }
+    $item = Get-Item -LiteralPath $resolvedTarget -Force
+    if ($item.PSIsContainer -or $item.Extension.ToLowerInvariant() -notin @('.dll', '.pdb', '.cache')) { throw 'Unexpected target type' }
+    $walkPath = $item.FullName
+    while ($walkPath.StartsWith($diagRootPath, [StringComparison]::OrdinalIgnoreCase)) {
+        $walkItem = Get-Item -LiteralPath $walkPath -Force
+        if (($walkItem.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) { throw 'Reparse point in deletion path' }
+        if ($walkPath.Equals($diagRootPath, [StringComparison]::OrdinalIgnoreCase)) { break }
+        $walkPath = [IO.Path]::GetDirectoryName($walkPath)
+    }
+    if ($item.Length -ne $entry.bytes -or (Get-FileHash -LiteralPath $resolvedTarget -Algorithm SHA256).Hash.ToLowerInvariant() -ne $entry.sha256) { throw 'Approved target changed before execution' }
+}
+foreach ($guard in $manifest.restore_copy_guards) {
+    if (-not (Test-Path -LiteralPath $guard.original_source -PathType Leaf)) { throw 'Retained restore source missing' }
+    if ((Get-FileHash -LiteralPath $guard.original_source -Algorithm SHA256).Hash.ToLowerInvariant() -ne $guard.sha256) { throw 'Retained restore source changed' }
+    if ((Get-FileHash -LiteralPath $guard.backup_source -Algorithm SHA256).Hash.ToLowerInvariant() -ne $guard.sha256) { throw 'Independent restore backup invalid' }
+}
+$logPath = Join-Path $opRootPath 'deletion-journal.jsonl'
+if (Test-Path -LiteralPath $logPath) { throw 'Deletion journal already exists; refusing automatic replay' }
+$writer = [IO.StreamWriter]::new($logPath, $false, [Text.UTF8Encoding]::new($false))
+$writer.AutoFlush = $true
+$successCount = 0
+$started = [DateTimeOffset]::UtcNow.ToOffset([TimeSpan]::FromHours(8)).ToString('o')
+function WriteDeletionAudit($auditEntry) {
+    $writer.WriteLine(($auditEntry | ConvertTo-Json -Compress -Depth 8))
+    $writer.Flush()
+}
+try {
+    WriteDeletionAudit @{ status='RUNNING'; time=$started; pid=$PID; count=$entries.Count; bytes=$sumBytes; manifest_sha256=$identity.manifest_sha256 }
+    Add-Content -LiteralPath (Join-Path $opRootPath 'RECORD.md') -Value ([Environment]::NewLine + "实际状态: RUNNING；开始时间 " + $started + "；PowerShell PID " + $PID + "；全部1558目标路径、哈希和恢复副本守卫已通过。")
+    foreach ($entry in $entries) {
+        $timeNow = [DateTimeOffset]::UtcNow.ToOffset([TimeSpan]::FromHours(8)).ToString('o')
+        $item = Get-Item -LiteralPath $entry.absolute -Force -ErrorAction Stop
+        if ($item.Length -ne $entry.bytes -or (Get-FileHash -LiteralPath $entry.absolute -Algorithm SHA256).Hash.ToLowerInvariant() -ne $entry.sha256) { throw 'Target changed at deletion boundary' }
+        WriteDeletionAudit @{ status='ATTEMPT'; time=$timeNow; path=$entry.path; absolute=$entry.absolute; bytes=$entry.bytes; sha256=$entry.sha256; command='Remove-Item -LiteralPath <exact absolute path> -Force -ErrorAction Stop' }
+        Remove-Item -LiteralPath $entry.absolute -Force -ErrorAction Stop
+        if (Test-Path -LiteralPath $entry.absolute) { throw 'Deletion postcondition failed' }
+        $successCount++
+        WriteDeletionAudit @{ status='DELETED'; time=[DateTimeOffset]::UtcNow.ToOffset([TimeSpan]::FromHours(8)).ToString('o'); path=$entry.path; count=$successCount }
+        if (($successCount % 250) -eq 0) { Write-Output ("Deleted " + $successCount + " / " + $entries.Count) }
+    }
+    WriteDeletionAudit @{ status='COMPLETED'; time=[DateTimeOffset]::UtcNow.ToOffset([TimeSpan]::FromHours(8)).ToString('o'); deleted=$successCount; bytes=$sumBytes }
+    Write-Output ("Deletion completed: " + $successCount + " files, " + $sumBytes + " bytes")
+}
+catch {
+    WriteDeletionAudit @{ status='FAILED'; time=[DateTimeOffset]::UtcNow.ToOffset([TimeSpan]::FromHours(8)).ToString('o'); deleted=$successCount; error=$_.Exception.Message }
+    Add-Content -LiteralPath (Join-Path $opRootPath 'RECORD.md') -Value ([Environment]::NewLine + "实际状态: PARTIAL/FAILED；已删 " + $successCount + "；错误 " + $_.Exception.Message + "；未自动重试。")
+    throw
+}
+finally {
+    $writer.Dispose()
+}

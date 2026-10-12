@@ -1,0 +1,11 @@
+{
+  "operation": "OP-DIAGNOSTICS-A-DELETE-20261012",
+  "prepared_at": "2026-10-12T10:46:48.232935+08:00",
+  "purpose": "Human execution only; Codex did not execute this deletion command.",
+  "command_sha256": "4c9be928fb09a37b010af2a265ed25279b1fff3a74f472abeb6d7d99c3990f02",
+  "manifest_sha256": "309ce1797f05c60dfca266719e2c59ee6263ef97906241c7a6de7bd5f11932df",
+  "file_count": 1558,
+  "bytes": 454522618,
+  "prior_agent_attempt": "REJECTED; zero deletions; keep all previous evidence.",
+  "run_record_pattern": "manual-yyyyMMdd-HHmmss-<random>/RECORD.md"
+}

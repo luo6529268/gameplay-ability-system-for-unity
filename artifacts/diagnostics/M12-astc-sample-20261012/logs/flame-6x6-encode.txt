@@ -1,0 +1,39 @@
+Source image
+============
+
+    Source:                     I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\M12-astc-sample-20261012\inputs\flame-rgba.png
+    Color profile:              LDR
+    Dimensions:                 2D, 713x824
+    Components:                 4
+
+Compressor settings
+===================
+
+    Color profile:              LDR sRGB
+    Block size:                 6x6
+    Bitrate:                    3.56 bpp
+    RGB alpha scale weight:     4
+    Radius RGB alpha scale:     1 texels
+    R component weight:         1
+    G component weight:         1
+    B component weight:         1
+    A component weight:         1
+    Partition cutoff:           4 partitions
+    2 partition index cutoff:   82 partition ids
+    3 partition index cutoff:   60 partition ids
+    4 partition index cutoff:   30 partition ids
+    PSNR cutoff:                50.5294 dB
+    3 partition cutoff:         1.4
+    4 partition cutoff:         1.2
+    2 plane correlation cutoff: 0.95
+    Block mode centile cutoff:  94%
+    Candidate cutoff:           4 candidates
+    Refinement cutoff:          4 iterations
+    Compressor thread count:    2
+
+Performance metrics
+===================
+
+    Total time:                  0.7091 s
+    Coding time:                 0.6956 s
+    Coding rate:                 0.8446 MT/s

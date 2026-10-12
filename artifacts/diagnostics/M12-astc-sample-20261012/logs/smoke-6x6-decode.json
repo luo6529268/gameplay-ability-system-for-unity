@@ -1,0 +1,14 @@
+{
+  "command": [
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\M12-astc-sample-20261012\\encoder\\bin\\astcenc-sse2.exe",
+    "-ds",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\M12-astc-sample-20261012\\compressed\\smoke-6x6.astc",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\M12-astc-sample-20261012\\decoded\\smoke-6x6.png",
+    "-j",
+    "2"
+  ],
+  "start_utc": "2026-10-12T02:14:46.969346+00:00",
+  "end_utc": "2026-10-12T02:14:47.030902+00:00",
+  "wall_seconds": 0.0470000000204891,
+  "exit_code": 0
+}

@@ -1,0 +1,26 @@
+# Offline ASTC representative comparison
+
+Status: offline encode/decode completed; visual review follows.
+
+Six exact source PNGs. Arm astcenc 5.6.0 SSE2; sRGB, thorough, -a 1, -j 2. No resizing, mipmaps, alpha edits, atlas building or paging. Source straight RGBA matches the native PNG contract. Existing project color space is Gamma.
+
+Metrics exclude DAT separators and use original-only visible, semitransparent, edge and near-foreground masks. Global transparent area cannot inflate visible quality scores. Composite metrics use straight-alpha sRGB blending on black/white/gray/checker backgrounds. All original and decoded full sheets retained; ROI selection depends only on the original.
+
+|Sample|Dimensions|RGBA bytes|4x4 payload bytes|6x6 payload bytes|4x4 visible RGB PSNR|6x6 visible RGB PSNR|
+|---|---:|---:|---:|---:|---:|---:|
+|Naruto / character|799x1600|5113600|1280000|572448|34.43|23.84|
+|Sasuke / character|799x960|3068160|768000|343040|38.13|27.00|
+|Rasengan / compact skill|490x198|388080|98400|43296|40.39|29.22|
+|Chidori / thin lightning|327x580|758640|190240|85360|37.20|25.19|
+|Flame / fine alpha edges|713x824|2350048|589984|262752|34.38|25.65|
+|Smoke / broad semitransparency|1000x570|2280000|572000|253840|38.59|31.97|
+
+Totals: {"rgba_bytes": 13958528, "source_png_file_bytes": 334246, "4x4": {"payload_bytes": 3498624, "file_bytes": 3498720}, "6x6": {"payload_bytes": 1560736, "file_bytes": 1560832}}
+
+Every ASTC file is exactly payload + 16-byte header. GPU texture block payload is known; actual device allocations, driver padding, upload work and whole-process loading peaks are NOT_MEASURED. Decoded preview PNG file sizes are not compressed texture memory sizes.
+
+Original PNG/DAT, production loader, Scene/Settings and importers are not changed. No Unity, Play/P1, prebuild paging or Android/device measurements.
+
+Sources: [Arm encoder release and official checksum](https://github.com/ARM-software/astc-encoder/releases/tag/5.6.0), [Arm encoding guidance](https://github.com/ARM-software/astc-encoder/blob/5.6.0/Docs/Encoding.md).
+
+Detailed raw metrics: metrics.json. Interactive original-size/nearest zoom/alpha/background/difference viewer: comparison.html. Raw encode/decode commands and outputs: logs/.

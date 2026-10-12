@@ -1,0 +1,9 @@
+{
+  "reason": "Offline helper incorrectly assumed a raw DAT under vfs; current published DAT inputs are in decoded_dat. First prepare error retained; no encoding started, originals untouched. Correct this lookup and reuse two exact existing Naruto derivatives only after byte-equivalent pixel checks; do not overwrite them.",
+  "before_sha256": "bd210af66a3b938ccbbc4b8c6485587e1f9b9d754998ca63ac1ebb5dc1a9caa4",
+  "created_before_failure": [
+    "inputs/naruto-rgba.png",
+    "inputs/naruto-mask.png"
+  ],
+  "failure_log": "prepare-stage.log"
+}
