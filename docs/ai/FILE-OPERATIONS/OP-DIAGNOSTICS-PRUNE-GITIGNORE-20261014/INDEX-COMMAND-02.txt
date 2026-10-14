@@ -1,0 +1,60 @@
+$ErrorActionPreference='Stop'
+$env:GIT_OPTIONAL_LOCKS='0'
+$repoRoot=(Resolve-Path -LiteralPath '.').Path
+$opRoot=Join-Path $repoRoot 'docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014'
+$initial=Get-Content -LiteralPath (Join-Path $opRoot 'initial-state.json') -Raw|ConvertFrom-Json
+$preflight=Get-Content -LiteralPath (Join-Path $opRoot 'preflight-summary.json') -Raw|ConvertFrom-Json
+$ignore=Get-Content -LiteralPath (Join-Path $opRoot 'gitignore-receipt.json') -Raw|ConvertFrom-Json
+$rejection=Get-Content -LiteralPath (Join-Path $opRoot 'deletion-rejection.json') -Raw|ConvertFrom-Json
+if($rejection.Status -ne 'REJECTED' -or $rejection.ProcessStarted -or $rejection.DeletedFiles -ne 0){throw 'Unexpected filesystem cleanup state'}
+# Independent index-only operation; all local filesystem deletion remains rejected and is not retried.
+if(@(git diff --cached --name-only).Count -ne 0){throw 'User staging detected'}
+$indexHash=(Get-FileHash -LiteralPath $initial.IndexPath -Algorithm SHA256).Hash.ToLowerInvariant()
+if($indexHash -ne $initial.IndexBeforeSha256){throw 'Index identity changed; review before proceeding'}
+if((Get-FileHash -LiteralPath '.gitignore' -Algorithm SHA256).Hash.ToLowerInvariant() -ne $ignore.AfterSha256){throw '.gitignore drift'}
+$manifestPath=Join-Path $opRoot 'tracked-artifacts-before.json.gz'
+$expected=($preflight.ManifestIdentities|Where-Object Path -eq 'tracked-artifacts-before.json.gz').Sha256
+if((Get-FileHash -LiteralPath $manifestPath -Algorithm SHA256).Hash.ToLowerInvariant() -ne $expected){throw 'Tracked manifest drift'}
+$trackedBefore=@(git ls-files -- artifacts)
+if($trackedBefore.Count -ne $initial.TrackedArtifacts){throw 'Tracked set count drift'}
+$started=[DateTimeOffset]::Now.ToString('o')
+$plan=[pscustomobject]@{Operation=$initial.Operation;Status='RUNNING';StartedAt=$started;Pid=$PID;IndexPath=$initial.IndexPath;IndexBeforeSha256=$indexHash;IndexBackup=(Join-Path $initial.Recovery 'git-index.before.bin');TrackedManifestSha256=$expected;TrackedCount=$trackedBefore.Count;Commands=@('git rm -r --cached --quiet -- artifacts','git add -- .gitignore');WorkingFilesDeletedByGit=0;CommitOrPush=$false}
+$plan|ConvertTo-Json -Depth 4|Set-Content -LiteralPath (Join-Path $opRoot 'git-index-plan.json') -Encoding utf8NoBOM
+[IO.File]::AppendAllText((Join-Path $opRoot 'RECORD.md'),([Environment]::NewLine+'Git 索引操作开始：当前无用户暂存，索引 SHA 与完整备份相符，artifacts 跟踪清单已冻结。INDEX-COMMAND-02.txt：git rm -r --cached --quiet -- artifacts，然后仅暂存 .gitignore；本地诊断文件不由 Git 删除。'+[Environment]::NewLine),[Text.UTF8Encoding]::new($false))
+$rmOutput=@(git rm -r --cached --quiet -- artifacts 2>&1)
+$rmExit=$LASTEXITCODE
+$rmOutput|Set-Content -LiteralPath (Join-Path $opRoot 'git-rm-cached-output.txt') -Encoding utf8NoBOM
+if($rmExit -ne 0){throw "git rm --cached failed ($rmExit); do not retry automatically"}
+$addOutput=@(git add -- .gitignore 2>&1)
+$addExit=$LASTEXITCODE
+$addOutput|Set-Content -LiteralPath (Join-Path $opRoot 'git-add-ignore-output.txt') -Encoding utf8NoBOM
+if($addExit -ne 0){throw "git add .gitignore failed ($addExit); preserve partial index"}
+$staged=@(git -c core.quotepath=false diff --cached --name-status)
+if($LASTEXITCODE -ne 0){throw 'Staged inspection failed'}
+$expectedSet=[Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+foreach($p in $trackedBefore){$expectedSet.Add($p)|Out-Null}
+$rows=[Collections.Generic.List[object]]::new()
+$artifactDeletes=0
+$ignoreEdits=0
+foreach($line in $staged){
+ $parts=$line -split ([string][char]9),2
+ if($parts.Count -ne 2){throw "Unexpected staged line: $line"}
+ if($parts[0] -eq 'D' -and $expectedSet.Contains($parts[1])){$artifactDeletes++}
+ elseif($parts[0] -eq 'M' -and $parts[1] -eq '.gitignore'){$ignoreEdits++}
+ else{throw "Out-of-scope staging found: $line"}
+ $rows.Add([pscustomobject]@{Status=$parts[0];Path=$parts[1]})
+}
+if($artifactDeletes -ne $trackedBefore.Count -or $ignoreEdits -ne 1){throw 'Staged scope incomplete'}
+if(@(git ls-files -- artifacts).Count -ne 0){throw 'Artifacts still tracked'}
+if(@(git ls-files --others --exclude-standard -- artifacts).Count -ne 0){throw 'Artifacts still visible as new files'}
+$stagedPath=Join-Path $opRoot 'git-staged-paths.json.gz'
+$stream=[IO.File]::Open($stagedPath,[IO.FileMode]::CreateNew,[IO.FileAccess]::Write,[IO.FileShare]::None)
+$gzip=[IO.Compression.GZipStream]::new($stream,[IO.Compression.CompressionLevel]::Optimal)
+$writer=[IO.StreamWriter]::new($gzip,[Text.UTF8Encoding]::new($false))
+try{$writer.Write(($rows.ToArray()|ConvertTo-Json -Depth 3 -Compress))}finally{$writer.Dispose();$gzip.Dispose();$stream.Dispose()}
+git diff --cached --check -- .gitignore
+if($LASTEXITCODE -ne 0){throw '.gitignore staged whitespace check failed'}
+$receipt=[pscustomobject]@{Operation=$initial.Operation;Status='VERIFIED';StartedAt=$started;EndedAt=[DateTimeOffset]::Now.ToString('o');Pid=$PID;RmCachedExitCode=$rmExit;GitAddExitCode=$addExit;UntrackedFromIndex=$artifactDeletes;IgnoredArtifactsVisible=0;RemainingTrackedArtifacts=0;StagedIgnoreEdits=$ignoreEdits;OutOfScopeStagedPaths=0;IndexAfterSha256=(Get-FileHash -LiteralPath $initial.IndexPath -Algorithm SHA256).Hash.ToLowerInvariant();StageManifest=$stagedPath;StageManifestSha256=(Get-FileHash -LiteralPath $stagedPath -Algorithm SHA256).Hash.ToLowerInvariant();WorkingFilesDeletedByGit=0;CommitOrPush=$false;LocalRetentionVerification='Final filesystem check follows'}
+$receipt|ConvertTo-Json -Depth 4|Set-Content -LiteralPath (Join-Path $opRoot 'git-index-receipt.json') -Encoding utf8NoBOM
+[IO.File]::AppendAllText((Join-Path $opRoot 'RECORD.md'),([Environment]::NewLine+"Git 索引结果 VERIFIED：$artifactDeletes 项仅取消跟踪，.gitignore 已暂存；artifacts 跟踪/可见未跟踪均 0，范围外暂存 0，无提交/推送。准确逐项暂存清单与索引前后身份见 git-index-receipt.json/git-staged-paths.json.gz。"+[Environment]::NewLine),[Text.UTF8Encoding]::new($false))
+$receipt|ConvertTo-Json -Depth 4

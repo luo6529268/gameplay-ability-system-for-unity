@@ -1,0 +1,77 @@
+$ErrorActionPreference='Stop'
+$opRoot=(Resolve-Path -LiteralPath 'docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014').Path
+$repoRoot=(Resolve-Path -LiteralPath '.').Path
+$diagRoot=(Resolve-Path -LiteralPath 'artifacts/diagnostics').Path
+$summary=Get-Content -LiteralPath (Join-Path $opRoot 'preflight-summary.json') -Raw|ConvertFrom-Json
+$backup=Get-Content -LiteralPath (Join-Path $opRoot 'backup-receipt.json') -Raw|ConvertFrom-Json
+$manifestPath=Join-Path $opRoot 'removal-manifest.json.gz'
+$utf8=[Text.UTF8Encoding]::new($false)
+$nl=[Environment]::NewLine
+function Read-JsonGzip([string]$path){
+ $inputStream=[IO.File]::OpenRead($path)
+ $gzip=[IO.Compression.GZipStream]::new($inputStream,[IO.Compression.CompressionMode]::Decompress)
+ $reader=[IO.StreamReader]::new($gzip,[Text.UTF8Encoding]::new($false))
+ try{$content=$reader.ReadToEnd()}finally{$reader.Dispose();$gzip.Dispose();$inputStream.Dispose()}
+ return $content|ConvertFrom-Json
+}
+$expected=($summary.ManifestIdentities|Where-Object Path -eq 'removal-manifest.json.gz').Sha256
+if((Get-FileHash -LiteralPath $manifestPath -Algorithm SHA256).Hash.ToLowerInvariant() -ne $expected){throw 'Frozen manifest changed'}
+if($backup.Status -ne 'VERIFIED' -or $backup.ManifestSha256 -ne $expected -or $backup.VerifiedEntryCount -ne $summary.CleanupFiles){throw 'Backup verification missing/mismatched'}
+if((Get-FileHash -LiteralPath $backup.Archive -Algorithm SHA256).Hash.ToLowerInvariant() -ne $backup.ArchiveSha256){throw 'Recovery archive drift'}
+$items=@(Read-JsonGzip $manifestPath)
+$parents=[Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+foreach($item in $items){
+ $absolute=[IO.Path]::GetFullPath($item.AbsolutePath)
+ if(-not $absolute.StartsWith($diagRoot+[IO.Path]::DirectorySeparatorChar,[StringComparison]::OrdinalIgnoreCase)){throw 'Delete target escaped approved root'}
+ if([IO.Path]::GetRelativePath($repoRoot,$absolute).Replace('\','/') -ne $item.Path){throw 'Manifest relative/absolute mismatch'}
+ $currentParent=[IO.Path]::GetDirectoryName($absolute)
+ while($currentParent.StartsWith($diagRoot,[StringComparison]::OrdinalIgnoreCase)){
+  $parents.Add($currentParent)|Out-Null
+  if($currentParent -eq $diagRoot){break}
+  $currentParent=[IO.Path]::GetDirectoryName($currentParent)
+ }
+}
+foreach($parent in $parents){if(([IO.File]::GetAttributes($parent) -band [IO.FileAttributes]::ReparsePoint) -ne 0){throw "Reparse ancestor: $parent"}}
+$prechecked=0
+foreach($item in $items){
+ $file=Get-Item -LiteralPath $item.AbsolutePath
+ if($file.PSIsContainer -or ($file.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0){throw 'Invalid delete target type'}
+ if($file.Length -ne $item.Bytes -or $file.LastWriteTimeUtc.Ticks -ne $item.LastWriteUtcTicks){throw "Target drift: $($item.Path)"}
+ if((Get-FileHash -LiteralPath $item.AbsolutePath -Algorithm SHA256).Hash.ToLowerInvariant() -ne $item.Sha256){throw "Target SHA drift: $($item.Path)"}
+ $prechecked++
+ if(($prechecked%1000)-eq 0){Write-Output "Deletion preflight $prechecked / $($items.Count)"}
+}
+$started=[DateTimeOffset]::Now.ToString('o')
+$plan=[pscustomobject]@{Operation=$summary.Operation;Status='RUNNING';StartedAt=$started;Pid=$PID;Files=$items.Count;Bytes=$summary.CleanupBytes;ApprovedRoot=$diagRoot;Command='DELETE-COMMAND.txt';BackupArchive=$backup.Archive;BackupSha256=$backup.ArchiveSha256;ManifestSha256=$expected;DirectoriesDeleted=0}
+$plan|ConvertTo-Json|Set-Content -LiteralPath (Join-Path $opRoot 'delete-plan.json') -Encoding utf8NoBOM
+[IO.File]::AppendAllText((Join-Path $opRoot 'RECORD.md'),($nl+'删除开始：精确 SHA/路径/父目录重解析点与外部 ZIP 身份预检全部通过；delete-plan.json 保存开始时间/PID；DELETE-COMMAND.txt 为实际命令，逐项执行日志 delete-journal.jsonl。'+$nl),$utf8)
+$journalPath=Join-Path $opRoot 'delete-journal.jsonl'
+$journalStream=[IO.File]::Open($journalPath,[IO.FileMode]::CreateNew,[IO.FileAccess]::Write,[IO.FileShare]::Read)
+$journal=[IO.StreamWriter]::new($journalStream,$utf8)
+$journal.AutoFlush=$true
+$deleted=0
+[long]$removedBytes=0
+$failure=$null
+try{
+ foreach($item in $items){
+  $file=Get-Item -LiteralPath $item.AbsolutePath
+  if($file.Length -ne $item.Bytes -or $file.LastWriteTimeUtc.Ticks -ne $item.LastWriteUtcTicks){throw "Target changed after preflight: $($item.Path)"}
+  $journal.WriteLine(([pscustomobject]@{At=[DateTimeOffset]::Now.ToString('o');Path=$item.Path;Action='DELETE_ATTEMPT';Pid=$PID;Sha256=$item.Sha256}|ConvertTo-Json -Compress))
+  Remove-Item -LiteralPath $item.AbsolutePath -Force -ErrorAction Stop
+  if(Test-Path -LiteralPath $item.AbsolutePath){throw "Delete postcondition failed: $($item.Path)"}
+  $deleted++
+  $removedBytes+=$item.Bytes
+  $journal.WriteLine(([pscustomobject]@{At=[DateTimeOffset]::Now.ToString('o');Path=$item.Path;Action='DELETED';Bytes=$item.Bytes;BackupEntry=$item.Path}|ConvertTo-Json -Compress))
+  if(($deleted%1000)-eq 0){Write-Output "Deleted $deleted / $($items.Count)"}
+ }
+}catch{
+ $failure=$_.Exception.ToString()
+ $journal.WriteLine(([pscustomobject]@{At=[DateTimeOffset]::Now.ToString('o');Action='ERROR_STOP';Error=$failure;Deleted=$deleted}|ConvertTo-Json -Compress))
+}finally{$journal.Dispose();$journalStream.Dispose()}
+$remaining=@($items|Where-Object {Test-Path -LiteralPath $_.AbsolutePath}|Select-Object -ExpandProperty Path)
+$status=if($null -eq $failure -and $remaining.Count -eq 0 -and $deleted -eq $items.Count){'VERIFIED'}elseif($deleted -gt 0){'PARTIAL'}else{'FAILED'}
+$receipt=[pscustomobject]@{Operation=$summary.Operation;Status=$status;StartedAt=$started;EndedAt=[DateTimeOffset]::Now.ToString('o');Pid=$PID;DeletedFiles=$deleted;RemovedBytes=$removedBytes;RemainingTargetCount=$remaining.Count;RemainingTargets=$remaining;Failure=$failure;BackupArchive=$backup.Archive;BackupSha256=$backup.ArchiveSha256;DirectoryDeletes=0}
+$receipt|ConvertTo-Json -Depth 4|Set-Content -LiteralPath (Join-Path $opRoot 'delete-receipt.json') -Encoding utf8NoBOM
+[IO.File]::AppendAllText((Join-Path $opRoot 'RECORD.md'),($nl+"删除结果：$status；实际文件数=$deleted，字节=$removedBytes，目录删除=0；详见 delete-receipt.json 与逐项 delete-journal.jsonl。"+$nl),$utf8)
+$receipt|ConvertTo-Json -Depth 4
+if($status -ne 'VERIFIED'){throw 'Cleanup incomplete; preserve evidence and do not automatically retry'}

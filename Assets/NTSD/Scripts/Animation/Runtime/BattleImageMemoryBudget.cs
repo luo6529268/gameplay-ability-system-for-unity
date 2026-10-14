@@ -56,18 +56,35 @@ namespace NTSD.Animation
             }
         }
 
+        internal void AddCompressedImage(int width, int height, long fileBytes)
+        {
+            long payload = BattleAstcBlockData.PayloadBytes(width, height);
+            if (fileBytes != payload + BattleAstcBlockData.HeaderBytes)
+                throw new InvalidDataException("Compressed image budget length mismatch.");
+            SourceTextureBytes = checked(SourceTextureBytes + payload);
+            maximumUploadBytes = Math.Max(maximumUploadBytes, payload);
+            long work = checked(2 * fileBytes + 65536);
+            for (int i = 0; i < largestDecodeWork.Length; i++)
+            {
+                if (work <= largestDecodeWork[i]) continue;
+                long displaced = largestDecodeWork[i];
+                largestDecodeWork[i] = work;
+                work = displaced;
+            }
+        }
+
         internal void AddReadback(int width, int height)
         {
             RetainedPixelBytes = checked(RetainedPixelBytes + PixelBytes(width, height));
         }
 
-        internal void AddClampedCell(int width, int height)
+        internal void AddClampedCell(int width, int height, bool retainPixels = true)
         {
             long bytes = PixelBytes(width, height);
             checked
             {
                 SourceTextureBytes += bytes;
-                RetainedPixelBytes += bytes;
+                if (retainPixels) RetainedPixelBytes += bytes;
                 maximumUploadBytes = Math.Max(maximumUploadBytes, bytes);
                 maximumClampWorkBytes = Math.Max(maximumClampWorkBytes, 2 * bytes + 8);
             }

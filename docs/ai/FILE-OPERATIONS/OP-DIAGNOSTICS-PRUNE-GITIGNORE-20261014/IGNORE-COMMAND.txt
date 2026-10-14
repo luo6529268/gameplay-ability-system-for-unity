@@ -1,0 +1,30 @@
+$ErrorActionPreference='Stop'
+$env:GIT_OPTIONAL_LOCKS='0'
+$repoRoot=(Resolve-Path -LiteralPath '.').Path
+$opRoot=Join-Path $repoRoot 'docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014'
+$utf8=[Text.UTF8Encoding]::new($false)
+$preimages=Get-Content -LiteralPath (Join-Path $opRoot 'governance-preimages.json') -Raw|ConvertFrom-Json
+$before=$preimages|Where-Object Path -eq '.gitignore'
+$path=Join-Path $repoRoot '.gitignore'
+$bytes=[IO.File]::ReadAllBytes($path)
+$hash=[Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($bytes)).ToLowerInvariant()
+if($hash -ne $before.Sha256){throw '.gitignore preimage drift'}
+$text=$utf8.GetString($bytes)
+$nl=if($text.Contains(([string][char]13+[string][char]10))){[string][char]13+[string][char]10}else{[string][char]10}
+$addition=$nl+'# Local generated diagnostics and validation outputs'+$nl+'/artifacts/'+$nl
+$append=$utf8.GetBytes($addition)
+$combined=[byte[]]::new($bytes.Length+$append.Length)
+[Buffer]::BlockCopy($bytes,0,$combined,0,$bytes.Length)
+[Buffer]::BlockCopy($append,0,$combined,$bytes.Length,$append.Length)
+$plan=[pscustomobject]@{Operation='OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014';Path=$path;StartedAt=[DateTimeOffset]::Now.ToString('o');Pid=$PID;BeforeSha256=$hash;BeforeBytes=$bytes.Length;Addition=$addition;AfterSha256=[Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($combined)).ToLowerInvariant();AfterBytes=$combined.Length;Backup=$before.Backup;Command='IGNORE-COMMAND.txt'}
+$plan|ConvertTo-Json|Set-Content -LiteralPath (Join-Path $opRoot 'gitignore-plan.json') -Encoding utf8NoBOM
+[IO.File]::AppendAllText($path,$addition,$utf8)
+$after=[IO.File]::ReadAllBytes($path)
+if([Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($after)).ToLowerInvariant() -ne $plan.AfterSha256){throw '.gitignore write mismatch'}
+$probe=@(git check-ignore --no-index -v -- artifacts/diagnostics/ignore-verification-probe.txt artifacts/ignore-verification-probe.txt)
+if($LASTEXITCODE -ne 0 -or $probe.Count -ne 2 -or @($probe|Where-Object {$_ -notmatch '/artifacts/'}).Count -ne 0){throw 'Root ignore probe failed'}
+$receipt=[pscustomobject]@{Status='VERIFIED';EndedAt=[DateTimeOffset]::Now.ToString('o');Pid=$PID;BeforeSha256=$hash;AfterSha256=$plan.AfterSha256;OriginalPrefixPreserved=$true;Probe=$probe;Note='Only ignore rule applied; already tracked artifacts stay tracked until the separate audited index operation.'}
+$receipt|ConvertTo-Json|Set-Content -LiteralPath (Join-Path $opRoot 'gitignore-receipt.json') -Encoding utf8NoBOM
+[IO.File]::AppendAllText((Join-Path $opRoot 'RECORD.md'),($nl+'根 .gitignore 已追加 /artifacts/，原字节前缀保持，备份/计划/后验见 gitignore-plan.json 与 gitignore-receipt.json。此时尚未移除索引跟踪或删除文件。'+$nl),$utf8)
+git diff -- .gitignore
+$receipt|ConvertTo-Json

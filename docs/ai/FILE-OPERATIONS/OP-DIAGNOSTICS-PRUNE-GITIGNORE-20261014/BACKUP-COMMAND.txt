@@ -1,0 +1,62 @@
+$ErrorActionPreference='Stop'
+$opRoot=(Resolve-Path -LiteralPath 'docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014').Path
+$summary=Get-Content -LiteralPath (Join-Path $opRoot 'preflight-summary.json') -Raw|ConvertFrom-Json
+$recoveryRoot=$summary.Recovery
+$manifestPath=Join-Path $opRoot 'removal-manifest.json.gz'
+$expected=($summary.ManifestIdentities|Where-Object Path -eq 'removal-manifest.json.gz').Sha256
+if((Get-FileHash -LiteralPath $manifestPath -Algorithm SHA256).Hash.ToLowerInvariant() -ne $expected){throw 'Frozen manifest hash mismatch'}
+function Read-JsonGzip([string]$path){
+ $inputStream=[IO.File]::OpenRead($path)
+ $gzip=[IO.Compression.GZipStream]::new($inputStream,[IO.Compression.CompressionMode]::Decompress)
+ $reader=[IO.StreamReader]::new($gzip,[Text.UTF8Encoding]::new($false))
+ try{$content=$reader.ReadToEnd()}finally{$reader.Dispose();$gzip.Dispose();$inputStream.Dispose()}
+ return $content|ConvertFrom-Json
+}
+$items=@(Read-JsonGzip $manifestPath)
+$archivePath=Join-Path $recoveryRoot 'diagnostics-pruned-files.zip'
+if(Test-Path -LiteralPath $archivePath){throw 'Recovery ZIP already exists; refusing overwrite/retry'}
+$started=[DateTimeOffset]::Now.ToString('o')
+$plan=[pscustomobject]@{Operation=$summary.Operation;Status='BACKUP_RUNNING';StartedAt=$started;Pid=$PID;Archive=$archivePath;Files=$items.Count;Bytes=$summary.CleanupBytes;ManifestSha256=$expected;Command='BACKUP-COMMAND.txt'}
+$plan|ConvertTo-Json|Set-Content -LiteralPath (Join-Path $opRoot 'backup-plan.json') -Encoding utf8NoBOM
+[IO.File]::Copy($manifestPath,(Join-Path $recoveryRoot 'removal-manifest.json.gz'),$false)
+[IO.File]::Copy((Join-Path $opRoot 'preflight-summary.json'),(Join-Path $recoveryRoot 'preflight-summary.json'),$false)
+[IO.File]::Copy((Join-Path $opRoot 'tracked-artifacts-before.json.gz'),(Join-Path $recoveryRoot 'tracked-artifacts-before.json.gz'),$false)
+$archive=[IO.Compression.ZipFile]::Open($archivePath,[IO.Compression.ZipArchiveMode]::Create)
+$count=0
+try {
+ foreach($item in $items){
+  $info=Get-Item -LiteralPath $item.AbsolutePath
+  if($info.Length -ne $item.Bytes -or $info.LastWriteTimeUtc.Ticks -ne $item.LastWriteUtcTicks){throw "Source drift before archive: $($item.Path)"}
+  $entry=$archive.CreateEntry($item.Path,[IO.Compression.CompressionLevel]::Optimal)
+  $entry.LastWriteTime=[DateTimeOffset]::new($info.LastWriteTimeUtc)
+  $sourceStream=[IO.File]::OpenRead($item.AbsolutePath)
+  $destStream=$entry.Open()
+  try{$sourceStream.CopyTo($destStream)}finally{$destStream.Dispose();$sourceStream.Dispose()}
+  $count++
+  if(($count%500)-eq 0){Write-Output "Archived $count / $($items.Count)"}
+ }
+}finally{$archive.Dispose()}
+$verification=[Collections.Generic.List[object]]::new()
+$archive=[IO.Compression.ZipFile]::OpenRead($archivePath)
+try {
+ if($archive.Entries.Count -ne $items.Count){throw 'ZIP entry count mismatch'}
+ foreach($item in $items){
+  $entry=$archive.GetEntry($item.Path)
+  if($null -eq $entry -or $entry.Length -ne $item.Bytes){throw "ZIP entry missing/length mismatch: $($item.Path)"}
+  $stream=$entry.Open()
+  try{$hash=[Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($stream)).ToLowerInvariant()}finally{$stream.Dispose()}
+  if($hash -ne $item.Sha256){throw "ZIP decompression hash mismatch: $($item.Path)"}
+  $verification.Add([pscustomobject]@{Path=$item.Path;Bytes=$entry.Length;Sha256=$hash;Verified=$true})
+ }
+}finally{$archive.Dispose()}
+$verifiedAt=[DateTimeOffset]::Now.ToString('o')
+$verifyPath=Join-Path $recoveryRoot 'archive-entry-verification.json.gz'
+$stream=[IO.File]::Open($verifyPath,[IO.FileMode]::CreateNew,[IO.FileAccess]::Write,[IO.FileShare]::None)
+$gzip=[IO.Compression.GZipStream]::new($stream,[IO.Compression.CompressionLevel]::Optimal)
+$writer=[IO.StreamWriter]::new($gzip,[Text.UTF8Encoding]::new($false))
+try{$writer.Write(($verification.ToArray()|ConvertTo-Json -Depth 4 -Compress))}finally{$writer.Dispose();$gzip.Dispose();$stream.Dispose()}
+$receipt=[pscustomobject]@{Operation=$summary.Operation;Status='VERIFIED';StartedAt=$started;EndedAt=$verifiedAt;Pid=$PID;Archive=$archivePath;ArchiveSha256=(Get-FileHash -LiteralPath $archivePath -Algorithm SHA256).Hash.ToLowerInvariant();ArchiveBytes=(Get-Item -LiteralPath $archivePath).Length;SourceFiles=$items.Count;SourceBytes=$summary.CleanupBytes;VerifiedEntryCount=$verification.Count;EntryVerification=$verifyPath;EntryVerificationSha256=(Get-FileHash -LiteralPath $verifyPath -Algorithm SHA256).Hash.ToLowerInvariant();ManifestSha256=$expected;NoDeletionYet=$true}
+$receipt|ConvertTo-Json|Set-Content -LiteralPath (Join-Path $opRoot 'backup-receipt.json') -Encoding utf8NoBOM
+[IO.File]::Copy((Join-Path $opRoot 'backup-receipt.json'),(Join-Path $recoveryRoot 'backup-receipt.json'),$false)
+[IO.File]::AppendAllText((Join-Path $opRoot 'RECORD.md'),([Environment]::NewLine+'删除前外部 ZIP 备份完成，全部条目解压流 SHA-256/长度与冻结清单一致。backup-receipt.json 给出 ZIP 身份、精确计数/字节与逐项验证来源。命令文本 BACKUP-COMMAND.txt；此时仍未执行删除。'+[Environment]::NewLine),[Text.UTF8Encoding]::new($false))
+$receipt|ConvertTo-Json

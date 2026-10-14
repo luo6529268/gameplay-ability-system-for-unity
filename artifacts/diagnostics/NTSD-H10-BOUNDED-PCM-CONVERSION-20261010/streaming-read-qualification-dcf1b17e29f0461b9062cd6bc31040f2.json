@@ -1,8 +1,0 @@
-{
-  "result": false,
-  "errors": [
-    "Can't get data from streamed samples for audio clip \"H10StreamingQualification\". If you created the audio clip with AudioClip.Create, set the 'stream' argument to false, so you can access the data with 'AudioClip.GetData'. For a disk-based audio clip, change the load type to 'DecompressOnLoad', so you can access the data with 'AudioClip.GetData'."
-  ],
-  "samples": 8193,
-  "channels": 1
-}

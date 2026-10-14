@@ -1,7 +1,0 @@
-{
-  "operation": "OP-NTSD-M12-IMPLEMENTATION-20261011",
-  "path": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\REPORT.md",
-  "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\resume-01\\backups\\report-before-final-audit.bin",
-  "sha256": "108c804bbf9001078883b6a825a2e496fcca433ccf8ffc1545f5a2189c535b4e",
-  "reason": "Correct Q01 evidence link to actual JSON (standalone XML not saved), append final validator and integrity result"
-}

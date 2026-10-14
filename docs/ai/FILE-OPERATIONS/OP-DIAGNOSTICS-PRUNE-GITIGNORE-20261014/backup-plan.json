@@ -1,0 +1,11 @@
+{
+  "Operation": "OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014",
+  "Status": "BACKUP_RUNNING",
+  "StartedAt": "2026-10-14T19:35:38.9329095+08:00",
+  "Pid": 53608,
+  "Archive": "I:\\CodexRecovery\\Unity_GAS\\OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014\\diagnostics-pruned-files.zip",
+  "Files": 3653,
+  "Bytes": 5929910994,
+  "ManifestSha256": "0f72c9e0ad600618ec33af3a12e1e6bb4b7c125c032d0c5893978cb58d61cdd7",
+  "Command": "BACKUP-COMMAND.txt"
+}

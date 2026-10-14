@@ -111,6 +111,7 @@ namespace NTSD.Test.Editor
             var sources = new List<BattleAtlasSourcePixels>();
             var clamps = new Dictionary<string, Sprite>(StringComparer.Ordinal);
             var paths = new Dictionary<Sprite, string>();
+            var replacementResources = new HashSet<UnityEngine.Object>();
             var staged = references.GroupBy(r => r.id).ToDictionary(g => g.Key,
                 g => new List<Sprite>(new Sprite[g.Max(r => r.file.endFrame) + 1]));
             var single = typeof(CharacterAnimtorManager).GetMethod("ProcessAndCreateSpritesForCandidateAsync", HiddenStatic);
@@ -175,7 +176,8 @@ namespace NTSD.Test.Editor
                 {
                     var configs = references.GroupBy(r => r.id).ToDictionary(g => g.Key,
                         g => new LF2CharacterDataWrapper(g.Key, new LF2CharacterData { files = g.Select(r => r.file).ToList() }));
-                    var catalog = CharacterAnimtorManager.BuildBattleSpriteCatalog(configs, staged, paths);
+                    var catalog = CharacterAnimtorManager.BuildBattleSpriteCatalogWithReplacements(
+                        configs, staged, paths, candidate.DerivedPages, replacementResources);
                     foreach (var entry in catalog.Entries.Values)
                         Assert.That(entry.SharedTexture, Is.SameAs(entry.LegacySprite.texture));
                     result.catalog = catalog.Entries.OrderBy(p => p.Key.ToString()).Select(p =>
@@ -189,6 +191,7 @@ namespace NTSD.Test.Editor
                 int[] finalTextureIds = textures.Where(t => t != null).Select(t => t.GetInstanceID()).ToArray();
                 int[] finalSpriteIds = sprites.Where(t => t != null).Select(t => t.GetInstanceID()).ToArray();
                 CharacterAnimtorManager.DestroyStagedPresentation(sprites, textures);
+                CharacterAnimtorManager.DestroyStagedPresentation(null, replacementResources);
                 result.cleaned = sprites.All(s => s == null) && textures.All(t => t == null);
                 SaveCandidate("resume-01/stage-" + Guid.NewGuid().ToString("N") + ".json", new
                 {

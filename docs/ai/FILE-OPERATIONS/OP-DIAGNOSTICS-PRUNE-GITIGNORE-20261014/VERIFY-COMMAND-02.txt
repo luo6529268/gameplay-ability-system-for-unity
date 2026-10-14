@@ -1,0 +1,143 @@
+$ErrorActionPreference='Stop'
+$env:GIT_OPTIONAL_LOCKS='0'
+$repoRoot=(Resolve-Path -LiteralPath '.').Path
+$opRoot=Join-Path $repoRoot 'docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014'
+$pre=Get-Content -LiteralPath (Join-Path $opRoot 'preflight-summary.json') -Raw|ConvertFrom-Json
+$recoveryRoot=$pre.Recovery
+$rejection=Get-Content -LiteralPath (Join-Path $opRoot 'deletion-rejection.json') -Raw|ConvertFrom-Json
+$delete=[pscustomobject]@{Status='REJECTED';DeletedFiles=0;RemovedBytes=[long]0}
+$index=Get-Content -LiteralPath (Join-Path $opRoot 'git-index-receipt.json') -Raw|ConvertFrom-Json
+$backup=Get-Content -LiteralPath (Join-Path $opRoot 'backup-receipt.json') -Raw|ConvertFrom-Json
+if($rejection.Status -ne 'REJECTED' -or $rejection.ProcessStarted -or $index.Status -ne 'VERIFIED'){throw 'Rejection/index state mismatch'}
+function Read-JsonGzip([string]$path){
+ $inputStream=[IO.File]::OpenRead($path)
+ $gzip=[IO.Compression.GZipStream]::new($inputStream,[IO.Compression.CompressionMode]::Decompress)
+ $reader=[IO.StreamReader]::new($gzip,[Text.UTF8Encoding]::new($false))
+ try{$content=$reader.ReadToEnd()}finally{$reader.Dispose();$gzip.Dispose();$inputStream.Dispose()}
+ return $content|ConvertFrom-Json
+}
+$before=@(Read-JsonGzip (Join-Path $recoveryRoot 'artifact-metadata-before.json.gz'))
+$targets=@(Read-JsonGzip (Join-Path $opRoot 'removal-manifest.json.gz'))
+$protected=@(Read-JsonGzip (Join-Path $recoveryRoot 'original-resources-source-before.json.gz'))
+$finals=@(Read-JsonGzip (Join-Path $recoveryRoot 'final-evidence-before.json.gz'))
+$targetSet=[Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+foreach($target in $targets){$targetSet.Add($target.Path)|Out-Null}
+$current=@(Get-ChildItem -LiteralPath 'artifacts' -File -Recurse -Force)
+$currentMap=[Collections.Generic.Dictionary[string,object]]::new([StringComparer]::OrdinalIgnoreCase)
+foreach($file in $current){
+ $relative=[IO.Path]::GetRelativePath($repoRoot,$file.FullName).Replace('\','/')
+ $currentMap.Add($relative,[pscustomobject]@{Path=$relative;Bytes=[long]$file.Length;LastWriteUtcTicks=$file.LastWriteTimeUtc.Ticks;Attributes=[int]$file.Attributes})
+}
+$metadataDifferences=[Collections.Generic.List[object]]::new()
+$preserved=0
+foreach($old in $before){
+ if($false -and $targetSet.Contains($old.Path)){
+  if($currentMap.ContainsKey($old.Path)){$metadataDifferences.Add([pscustomobject]@{Path=$old.Path;Problem='target still exists'})}
+ }elseif(-not $currentMap.ContainsKey($old.Path)){$metadataDifferences.Add([pscustomobject]@{Path=$old.Path;Problem='retained file missing'})}
+ else{
+  $now=$currentMap[$old.Path]
+  if($now.Bytes -ne $old.Bytes -or $now.LastWriteUtcTicks -ne $old.LastWriteUtcTicks -or $now.Attributes -ne $old.Attributes){$metadataDifferences.Add([pscustomobject]@{Path=$old.Path;Problem='retained metadata changed'})}
+  $preserved++
+ }
+}
+$beforeSet=[Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+foreach($old in $before){$beforeSet.Add($old.Path)|Out-Null}
+foreach($path in $currentMap.Keys){if(-not $beforeSet.Contains($path)){$metadataDifferences.Add([pscustomobject]@{Path=$path;Problem='unexpected new artifact'})}}
+Write-Output "Retained artifact metadata checked: $preserved"
+Add-Type -TypeDefinition @'
+using System;
+using System.IO;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
+public sealed class DiagnosticHashObservation
+{
+    public string Path { get; set; }
+    public long Bytes { get; set; }
+    public string Sha256 { get; set; }
+    public string Error { get; set; }
+}
+public static class DiagnosticReadOnlyHashVerifier
+{
+    public static DiagnosticHashObservation[] Read(string root, string[] paths)
+    {
+        var observations = new DiagnosticHashObservation[paths.Length];
+        var prefix = System.IO.Path.GetFullPath(root) + System.IO.Path.DirectorySeparatorChar;
+        Parallel.For(0, paths.Length, new ParallelOptions { MaxDegreeOfParallelism = 4 }, i =>
+        {
+            var value = new DiagnosticHashObservation { Path = paths[i] };
+            observations[i] = value;
+            try
+            {
+                var absolute = System.IO.Path.GetFullPath(System.IO.Path.Combine(root, paths[i]));
+                if (!absolute.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                    throw new InvalidOperationException("Read-only path escaped repository");
+                var before = new FileInfo(absolute);
+                var length = before.Length;
+                var ticks = before.LastWriteTimeUtc.Ticks;
+                using (var stream = new FileStream(absolute, FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    value.Bytes = stream.Length;
+                    value.Sha256 = Convert.ToHexString(SHA256.HashData(stream)).ToLowerInvariant();
+                }
+                var after = new FileInfo(absolute);
+                if (after.Length != length || after.LastWriteTimeUtc.Ticks != ticks)
+                    throw new IOException("File changed during read-only hash verification");
+            }
+            catch (Exception error) { value.Error = error.ToString(); }
+        });
+        return observations;
+    }
+}
+'@
+$expected=[Collections.Generic.Dictionary[string,object]]::new([StringComparer]::OrdinalIgnoreCase)
+foreach($item in @($protected)+@($finals)+@($targets)){
+ if($expected.ContainsKey($item.Path)){if($expected[$item.Path].Sha256 -ne $item.Sha256){throw 'Conflicting protected identities'}}
+ else{$expected.Add($item.Path,$item)}
+}
+$paths=[string[]]@($expected.Keys)
+$hashObservations=[DiagnosticReadOnlyHashVerifier]::Read($repoRoot,$paths)
+$hashDifferences=[Collections.Generic.List[object]]::new()
+foreach($observation in $hashObservations){
+ $old=$expected[$observation.Path]
+ if($observation.Error -or $observation.Bytes -ne $old.Bytes -or $observation.Sha256 -ne $old.Sha256){$hashDifferences.Add($observation)}
+}
+Write-Output "Original/source/final SHA checks: $($hashObservations.Length)"
+$afterPatch=Join-Path $recoveryRoot 'working-tree-after.patch'
+$warnings=Join-Path $recoveryRoot 'working-tree-after-warnings.txt'
+git diff --binary "--output=$afterPatch" 2> $warnings
+if($LASTEXITCODE -ne 0){throw 'Final working diff capture failed'}
+$allowedHeaders=@('diff --git a/.gitignore b/.gitignore','diff --git a/docs/ai/FILE-OPERATIONS/INDEX.md b/docs/ai/FILE-OPERATIONS/INDEX.md','diff --git a/docs/ai/STATE.md b/docs/ai/STATE.md','diff --git a/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md b/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md')
+function Patch-Map([string]$path){
+ $map=[Collections.Generic.Dictionary[string,string]]::new([StringComparer]::Ordinal)
+ $text=[IO.File]::ReadAllText($path,[Text.UTF8Encoding]::new($false)).Replace(([string][char]13+[string][char]10),([string][char]10))
+ foreach($block in [regex]::Split($text,'(?m)(?=^diff --git )')){
+  if(-not $block.StartsWith('diff --git ')){continue}
+  $header=($block -split ([string][char]10),2)[0]
+  if($allowedHeaders -contains $header){continue}
+  $map.Add($header,[Convert]::ToHexString([Security.Cryptography.SHA256]::HashData([Text.UTF8Encoding]::new($false).GetBytes($block))).ToLowerInvariant())
+ }
+ return ,$map
+}
+$oldPatch=Patch-Map (Join-Path $recoveryRoot 'working-tree-before.patch')
+$newPatch=Patch-Map $afterPatch
+$patchKeys=[Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+foreach($key in $oldPatch.Keys){$patchKeys.Add($key)|Out-Null}
+foreach($key in $newPatch.Keys){$patchKeys.Add($key)|Out-Null}
+$patchDifferences=[Collections.Generic.List[string]]::new()
+foreach($key in $patchKeys){if(-not $oldPatch.ContainsKey($key) -or -not $newPatch.ContainsKey($key) -or $oldPatch[$key] -ne $newPatch[$key]){$patchDifferences.Add($key)}}
+$trackedCount=@(git ls-files -- artifacts).Count
+$visibleUntracked=@(git ls-files --others --exclude-standard -- artifacts).Count
+$outsideStaged=@(git diff --cached --name-only -- . ':!artifacts')
+$stagedOkay=$outsideStaged.Count -eq 1 -and $outsideStaged[0] -eq '.gitignore'
+$nowIndexHash=(Get-FileHash -LiteralPath (Get-Content -LiteralPath (Join-Path $opRoot 'initial-state.json') -Raw|ConvertFrom-Json).IndexPath -Algorithm SHA256).Hash.ToLowerInvariant()
+$indexStable=$nowIndexHash -eq $index.IndexAfterSha256
+$actualBytes=[long](($current|Measure-Object Length -Sum).Sum)
+$expectedBytes=$pre.ArtifactsBeforeBytes-$delete.RemovedBytes
+$expectedCount=$pre.ArtifactsBeforeFiles-$delete.DeletedFiles
+$success=$metadataDifferences.Count -eq 0 -and $hashDifferences.Count -eq 0 -and $patchDifferences.Count -eq 0 -and $current.Count -eq $expectedCount -and $actualBytes -eq $expectedBytes -and $trackedCount -eq 0 -and $visibleUntracked -eq 0 -and $stagedOkay -and $indexStable
+$recoveryFiles=@(Get-ChildItem -LiteralPath $recoveryRoot -File -Recurse)
+$result=[pscustomobject]@{Operation=$pre.Operation;Status=$(if($success){'VERIFIED'}else{'FAILED'});VerifiedAt=[DateTimeOffset]::Now.ToString('o');Pid=$PID;BeforeFiles=$pre.ArtifactsBeforeFiles;BeforeBytes=$pre.ArtifactsBeforeBytes;AfterFiles=$current.Count;AfterBytes=$actualBytes;DeletedFiles=$delete.DeletedFiles;RemovedBytes=$delete.RemovedBytes;PreservedArtifactMetadataChecked=$preserved;MetadataDifferences=$metadataDifferences.ToArray();OriginalResourceAndSourceShaChecks=$protected.Count;KeyFinalEvidenceShaChecks=$finals.Count;RejectedDeleteTargetShaChecks=$targets.Count;ActualDeletedFiles=0;PhysicalCleanupStatus='REJECTED; no process started';HashDifferences=$hashDifferences.ToArray();OtherTrackedDirtyDiffBlocks=$oldPatch.Count;OtherTrackedDirtyDiffDifferences=$patchDifferences.ToArray();TrackedArtifacts=$trackedCount;VisibleUntrackedArtifacts=$visibleUntracked;StagingOutsideArtifacts=$outsideStaged;IndexStableAfterUntrack=$indexStable;RecoveryArchive=$backup.Archive;ArchiveBytes=$backup.ArchiveBytes;ArchiveSha256=$backup.ArchiveSha256;RecoveryDirectoryBytes=[long](($recoveryFiles|Measure-Object Length -Sum).Sum);UntrackedFromGitIndex=$index.UntrackedFromIndex;SourceGameCodeModified=$false;OriginalAssetsModified=$false;UnityRun=$false;P1Run=$false;CommitOrPush=$false;Limit='全部60962诊断文件做存在性/大小/mtime/属性检查；关键407项、原资源/指定源码6854项与被拒绝的3653删除目标做新鲜SHA检查。文件删除0，不把备份准备说成清理完成。'}
+$result|ConvertTo-Json -Depth 6|Set-Content -LiteralPath (Join-Path $opRoot 'verification-final.json') -Encoding utf8NoBOM
+[IO.File]::AppendAllText((Join-Path $opRoot 'RECORD.md'),([Environment]::NewLine+"最终技术核验：$($result.Status)；$preserved 保留诊断文件元数据无变化，$($protected.Count) 原资源/指定源码与 $($finals.Count) 关键证据 SHA 检查，$($oldPatch.Count) 其余既有 tracked dirty diff blocks 保持；详情 verification-final.json。"+[Environment]::NewLine),[Text.UTF8Encoding]::new($false))
+$result|ConvertTo-Json -Depth 6
+if(-not $success){throw 'Final verification failed; preserve receipts and investigate without automatic restore'}

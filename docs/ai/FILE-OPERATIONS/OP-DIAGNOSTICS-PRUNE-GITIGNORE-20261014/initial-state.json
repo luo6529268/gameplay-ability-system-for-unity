@@ -1,0 +1,13 @@
+{
+  "Operation": "OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014",
+  "StartedAt": "2026-10-14T19:15:43.5397543+08:00",
+  "Pid": 33400,
+  "Repo": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity",
+  "Recovery": "I:\\CodexRecovery\\Unity_GAS\\OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014",
+  "Head": "c115ccfbb83d5336dbdf82cb039199cb73873e72",
+  "IndexPath": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/.git/index",
+  "IndexBeforeSha256": "267d13c85b965b6af2a3c5d247af28473ccedd21100691dabdb8aab000f0bfea",
+  "StagedPaths": [],
+  "TrackedArtifacts": 21697,
+  "UserAuthorization": "现在，I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics 这个目录太多文件了，导致我提交git上，要过滤很多，并且内存占用也大，你看看能不能删除一些不必要的，并且在直接过滤掉artifacts，避免上传到git上"
+}

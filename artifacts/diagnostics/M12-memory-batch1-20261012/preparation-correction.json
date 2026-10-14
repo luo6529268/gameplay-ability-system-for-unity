@@ -1,3 +1,0 @@
-{
-  "event": "Initial overbroad dirty/untracked byte-hash loop was stopped before any script/governance edit. It had opened historical artifact bytes including raw captures for hashing only. No content was printed, parsed or replayed. Replaced with metadata-only historical artifact protection; exact source/asset/Scene bytes remain SHA protected. This does not retroactively authorize historical raw reads."
-}

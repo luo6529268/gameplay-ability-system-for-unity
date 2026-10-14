@@ -1,8 +1,0 @@
-{
-  "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\fixtures\\e5f2fb2fb54b4f5d89d4d8115183bb60\\guard.png",
-  "preimage": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\fixtures\\e5f2fb2fb54b4f5d89d4d8115183bb60\\guard.png.6eabcb7f02b34027b64dc98b72d87ec7.before",
-  "before": "1458A4DF7C8A14363ADA0322C38EACEA3F29F505EC88DF60FDE8DC670C3A7DE3",
-  "after": "F59942BEB1F35DEA4141D365B35EB89704D6135FA54FDA0CBEAE53730977FAAF",
-  "reason": "M12 controlled same-owner TOCTOU negative fixture",
-  "operation": "replace exact owned fixture"
-}

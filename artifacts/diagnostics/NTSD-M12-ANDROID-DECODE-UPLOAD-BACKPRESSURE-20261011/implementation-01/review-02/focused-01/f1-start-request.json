@@ -1,9 +1,0 @@
-{
-  "type": "run_tests",
-  "params": {
-    "mode": "EditMode",
-    "testNames": [
-      "NTSD.Test.M12DecodeUploadBackpressureEditorTests.R02_AdmissionStopPrecedesFailureReturn"
-    ]
-  }
-}

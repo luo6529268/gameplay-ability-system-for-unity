@@ -1,0 +1,73 @@
+$ErrorActionPreference='Stop'
+$env:GIT_OPTIONAL_LOCKS='0'
+$repoRoot=(Resolve-Path -LiteralPath '.').Path
+$opRoot=Join-Path $repoRoot 'docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014'
+$pre=Get-Content -LiteralPath (Join-Path $opRoot 'preflight-summary.json') -Raw|ConvertFrom-Json
+$verify=Get-Content -LiteralPath (Join-Path $opRoot 'verification-final.json') -Raw|ConvertFrom-Json
+$manual=Get-Content -LiteralPath (Join-Path $opRoot 'manual-preparation-02.json') -Raw|ConvertFrom-Json
+$utf8=[Text.UTF8Encoding]::new($false)
+$nl=[Environment]::NewLine
+if($verify.Status -ne 'VERIFIED' -or $verify.ActualDeletedFiles -ne 0 -or $manual.InvokedByCodex -or $manual.ManualRunCount -ne 0){throw 'Delivery scope state mismatch'}
+$report=@'
+# Diagnostics 清理与 Git 忽略结果
+
+Operation: OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014
+Task: NTSD-DIAGNOSTICS-PRUNE-GITIGNORE-20261014
+整体状态: PARTIAL；Git 部分完成，文件删除被自动审批拒绝。
+
+根 .gitignore:85 已追加 /artifacts/。21,697 个 artifacts 路径已经仅从 Git 索引移除，本地内容保留；artifacts 当前已跟踪数 0、普通可见未跟踪数 0，暂存区只含这些取消跟踪记录与 .gitignore。尚未提交/推送，需要随下一次提交纳入 .gitignore 和取消跟踪记录。这一次会显示大量暂存删除，后续新诊断输出默认忽略。
+
+曾进入提交历史的 artifacts 仍在历史内，本次未重写历史。只读本地远端缓存快照 origin/NTSD_2.8_C++ 含23,052个artifacts路径，当前本地比该缓存多2个提交；未联网 fetch，不能把缓存说成当前远端状态。忽略和取消跟踪不会消除历史对象，也不保证旧提交中的文件不会随未推送历史传输。
+
+磁盘清理尚未执行。精确清理清单如下，删除潜力合计3,653文件 / 5,929,910,994字节 / 5.5227 GiB：
+
+| 内容 | 文件数 | MiB |
+| --- | ---: | ---: |
+| ASTC 编码前翻转生成的派生暂存 PNG | 1,402 | 3,430.57 |
+| 已被 final-02 取代的全角色依赖/预算中间分析 | 1,521 | 1,969.22 |
+| 已被有效/最终结果取代的选择器试跑输出 | 652 | 67.17 |
+| 重复编译 DLL/PDB/cache | 78 | 188.24 |
+
+这些是诊断生成文件，正式源 PNG、DAT、已部署 ASTC、旧分页和生产加载链保留。保留最终报告、完整50角色/八角色依赖与预算、实际菜单/战斗测试证据、1080p 对比图、capture 输入、所有 before/revisions 回滚件以及历史 Profiler 原始采样；保留当前 selector/results-03、memory/final-02、delivery-inventory-01 和各最终编译目录。具体边界见 scope-review.json、DEPENDENCY-REVIEW.txt。
+
+完整恢复包在仓库外：
+I:/CodexRecovery/Unity_GAS/OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014/diagnostics-pruned-files.zip
+
+ZIP 大小358,875,990字节（342.25 MiB），3,653个条目均逐项解压流核对 SHA-256 和长度通过。ZIP SHA-256：
+32326855661ed08f7ae0975bc364037d7ba2540993b66024bdff12812920ed7e
+整份恢复目录连同原Git索引、文档前件和工作区diff约375 MiB；当前因此增加了本地备份占用，不能报告已释放5.52 GiB。实际执行清单后 diagnostics 预计从18.6188 GiB降至13.0961 GiB、文件数60,962降至57,309；该值是预测，不是实测删除结果。
+
+自动审批在 exec_command 的 CreateProcess 阶段拒绝按清单删除，原因仅为 blocked by policy，没有更多理由；进程未启动、PID无、删除0文件/0字节。原始可观察错误与命令身份保存在 deletion-rejection.json；未换shell/解释器/工具绕过。初始 DELETE-COMMAND.txt 是被拒绝命令的准确证据，不代表已执行。
+
+给用户的普通文本 MANUAL-COMMAND.txt 已准备好：复制全文到本机 PowerShell 可手动执行，它会自动定位项目，另建唯一 manual 子操作和索引，重新核对ZIP/清单/全部目标SHA，再按LiteralPath逐文件删除，记录尝试/结果/失败和范围外元数据。PowerShell Parser 0错误、仅1个 LiteralPath Remove-Item 语句，身份见 manual-preparation-02.json。Codex 未调用该文本，没有 manual 子操作或删除执行日志。用户运行后以新 manual 的 result.json/delete-receipt.json 为准；执行失败保留现场，不自动重试。恢复说明见 RESTORE.md。
+
+本轮最终技术核验通过：60,962诊断文件的存在性/大小/mtime/属性均保持；6,854原资源/指定源码、407关键最终结果、3,653被拒绝删除目标共10,914项新鲜SHA无差异；19个其他既有tracked dirty diff块保持。没有Unity/P1/项目编译测试/生产代码或资源改动，无提交推送。全部保留文件的元数据核对不等于全部保留文件再次逐字节复核；证据粒度见 verification-final.json。
+
+执行审计：FREEZE/IGNORE/BACKUP/INDEX-COMMAND-02/VERIFY-COMMAND-02 为实际成功命令文本；DELETE-COMMAND 是未启动的被拒绝尝试；原 INDEX-COMMAND/VERIFY-COMMAND 仅先前方案未调用。初始化两条 git diff --output 参数失败已在 RECORD 更正，后继成功保存工作区patch；不影响目标文件。旧A清理也已刷新为后继用户手动 VERIFIED，本轮未重跑旧A。
+
+Git 忽略只影响普通提交的当前文件树。新检出工作区要运行诊断工具时，需要生成或复制对应本地capture/分析输入；游戏正式资源路径保持。原资源/全量加载回退/no P1与当前M12预算和生产状态不变。
+'@
+$futureGiB=[math]::Round(($pre.DiagnosticsBeforeBytes-$pre.CleanupBytes)/1GB,4).ToString('F4',[Globalization.CultureInfo]::InvariantCulture)
+$report=$report.Replace('13.0961',$futureGiB)
+[IO.File]::WriteAllText((Join-Path $opRoot 'REPORT.md'),$report+$nl,$utf8)
+$summary='2026-10-14 OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014 PARTIAL: root /artifacts/ ignore applied and21697 paths untracked from index; local all60962 files retained, artifacts tracked/visible-untracked0, only.gitignore plus artifacts deletions staged,no commit/push/history rewrite. Exact3653file/5929910994B(5.5227GiB) cleanup manifest and external342.25MiB ZIP all-entry SHA verified; filesystem deletion CreateProcess blocked by policy,0 files/bytes/process, no bypass. Fresh6854original/source+407final+3653target SHA all equal,60962file metadata and19other dirty diffs unchanged. Human manual text prepared/parser0errors/not invoked, fresh child audit on manual execution. OriginalPNG/DAT/ASTC/oldpages/fullfallback/noP1/currentM12budget retained. Report docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014/REPORT.md; recovery I:/CodexRecovery/Unity_GAS/OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014.'
+$preimages=Get-Content -LiteralPath (Join-Path $opRoot 'governance-preimages.json') -Raw|ConvertFrom-Json
+$appendReceipts=[Collections.Generic.List[object]]::new()
+foreach($relative in @('docs/ai/STATE.md','Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md')){
+ $absolute=Join-Path $repoRoot $relative
+ $old=$preimages|Where-Object Path -eq $relative
+ if((Get-FileHash -LiteralPath $absolute -Algorithm SHA256).Hash.ToLowerInvariant() -ne $old.Sha256){throw "Governance concurrent edit: $relative"}
+ [IO.File]::AppendAllText($absolute,($nl+$nl+'> '+$summary+$nl),$utf8)
+ $appendReceipts.Add([pscustomobject]@{Path=$relative;BeforeSha256=$old.Sha256;Backup=$old.Backup;AfterSha256=(Get-FileHash -LiteralPath $absolute -Algorithm SHA256).Hash.ToLowerInvariant();Action='append-only delivery note'})
+}
+[IO.File]::AppendAllText((Join-Path $repoRoot 'docs/ai/FILE-OPERATIONS/INDEX.md'),($nl+$nl+'- OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014 - PARTIAL: Git 忽略与21697取消跟踪 VERIFIED；文件删除 CreateProcess blocked by policy /0，3653文件5.5227GiB仅已冻结备份。手动命令未调用；无原资源/源码/P1/提交/推送/历史改写。 [Report](OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014/REPORT.md)。'+$nl),$utf8)
+[IO.File]::AppendAllText((Join-Path $opRoot 'RECORD.md'),($nl+$nl+'最终状态: PARTIAL（Git 子操作 VERIFIED；filesystem delete REJECTED，actual0）。最终技术核验 verification-final.json 为“拒绝后数据仍完整和 Git 结果正确”，不是删除成功。MANUAL-COMMAND.txt 仅准备/解析，0错误/单一LiteralPath删除语句，尚未调用/无manual子目录；首版命令性能小修前件保存在外部manual-command-revision-01.before.txt。任务已标PARTIAL，STATE/handoff/INDEX追加本结果；REPORT.md 给出完整边界、历史提交限制和外部恢复来源。'+$nl),$utf8)
+$appendReceipts.ToArray()|ConvertTo-Json -Depth 4|Set-Content -LiteralPath (Join-Path $opRoot 'delivery-doc-receipts.json') -Encoding utf8NoBOM
+$cachedOutside=@(git diff --cached --name-only -- . ':!artifacts')
+if($cachedOutside.Count -ne 1 -or $cachedOutside[0] -ne '.gitignore'){throw 'Unexpected staging at delivery'}
+git diff --check -- .gitignore docs/ai/STATE.md Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md docs/ai/FILE-OPERATIONS/INDEX.md
+if($LASTEXITCODE -ne 0){throw 'Delivery document whitespace failed'}
+$files=@(Get-ChildItem -LiteralPath $opRoot -File|Where-Object Name -ne 'delivery-file-index.json')
+$deliveryManifest=foreach($file in $files){[pscustomobject]@{Path=$file.Name;Bytes=$file.Length;Sha256=(Get-FileHash -LiteralPath $file.FullName -Algorithm SHA256).Hash.ToLowerInvariant()}}
+$deliveryManifest|ConvertTo-Json -Depth 4|Set-Content -LiteralPath (Join-Path $opRoot 'delivery-file-index.json') -Encoding utf8NoBOM
+[pscustomobject]@{OverallStatus='PARTIAL';GitStatus='VERIFIED';FilesystemDeletion='REJECTED;0';ManualInvoked=$false;Report=(Join-Path $opRoot 'REPORT.md');ManifestFiles=$files.Count;StagedOutsideArtifacts=$cachedOutside;DiagnosticsFilesRemain=$verify.AfterFiles;DiagnosticsGiBRemain=[math]::Round($verify.AfterBytes/1GB,4);PotentialGiBFreed=[math]::Round($pre.CleanupBytes/1GB,4);ForecastDiagnosticsGiB=$futureGiB}|ConvertTo-Json

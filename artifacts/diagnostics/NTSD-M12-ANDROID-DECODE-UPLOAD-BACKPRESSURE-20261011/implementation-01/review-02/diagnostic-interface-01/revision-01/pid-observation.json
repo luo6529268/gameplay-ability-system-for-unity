@@ -1,8 +1,0 @@
-{
-  "pid": 39108,
-  "processName": "Unity",
-  "responding": true,
-  "command": "Get-Process -Id 39108 | Select-Object Id,ProcessName,Responding",
-  "parametersCollected": false,
-  "environmentCollected": false
-}

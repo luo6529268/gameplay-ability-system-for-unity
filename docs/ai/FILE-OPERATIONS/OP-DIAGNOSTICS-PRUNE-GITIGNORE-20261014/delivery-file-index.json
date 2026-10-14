@@ -1,0 +1,182 @@
+[
+  {
+    "Path": "BACKUP-COMMAND.txt",
+    "Bytes": 5167,
+    "Sha256": "16639f2752a1a30e090338146c081959b714893716cb297a23272ddc6d68f6eb"
+  },
+  {
+    "Path": "backup-plan.json",
+    "Bytes": 449,
+    "Sha256": "6ee2f9923f73e352ee0deb5e6bb6215f4cb662fc541cad679112c42794281f34"
+  },
+  {
+    "Path": "backup-receipt.json",
+    "Bytes": 876,
+    "Sha256": "9eaf97a1859816eb8048a60da662f5b96ed9b3ff4209d84d873a99baf7f7fd45"
+  },
+  {
+    "Path": "DELETE-COMMAND.txt",
+    "Bytes": 6357,
+    "Sha256": "b6a0b2a31196c0a2720add75eca838d7d3ab5c0521f7e536c56bdf660eb5da02"
+  },
+  {
+    "Path": "deletion-rejection.json",
+    "Bytes": 856,
+    "Sha256": "e4be1a82f81c77cbc370f7b945000a022a7b7b81a6b46aa1594b4fca8c566294"
+  },
+  {
+    "Path": "DELIVERY-COMMAND.txt",
+    "Bytes": 9840,
+    "Sha256": "068832f776cf8a68924fc725741356532c95c7c97d77bfff09001357968dfbb3"
+  },
+  {
+    "Path": "delivery-doc-receipts.json",
+    "Bytes": 816,
+    "Sha256": "deb07580ff376402ee77c84eab60dc040a4f3917d99018343e6830510550937b"
+  },
+  {
+    "Path": "DEPENDENCY-REVIEW.txt",
+    "Bytes": 1286,
+    "Sha256": "3521c52b87bf34b3c27cd0b00f27173ed5b5fd334074483099b7be5b9cb36a17"
+  },
+  {
+    "Path": "FREEZE-COMMAND.txt",
+    "Bytes": 11706,
+    "Sha256": "c38277ad64d1b830479720e4f96e3d2a03ecbc8fd3d52de3970f11e757a1ac4b"
+  },
+  {
+    "Path": "git-history-boundary.json",
+    "Bytes": 308,
+    "Sha256": "c6716b5038aaf914b3948581c632ee9b21c085de66197c8d04257f8bef6058ed"
+  },
+  {
+    "Path": "git-index-plan.json",
+    "Bytes": 729,
+    "Sha256": "f8002a4c05f75359731f38b0804cdde5956e12d9704c63d4783940f5ce36a040"
+  },
+  {
+    "Path": "git-index-receipt.json",
+    "Bytes": 904,
+    "Sha256": "8b7cd1a3fbb97e629d279ad7cb31a07c45fd497bb02da33da050a4bc7bc69dc3"
+  },
+  {
+    "Path": "git-staged-paths.json.gz",
+    "Bytes": 165831,
+    "Sha256": "3a2d182a6113d476ab05744fd5366d356902015170c2233886b2d3d8bb014d42"
+  },
+  {
+    "Path": "gitignore-plan.json",
+    "Bytes": 673,
+    "Sha256": "5aaddfc117b0b5782b91f525e6a7902a1bd4a5c160335ccc843321e48d6e01c8"
+  },
+  {
+    "Path": "gitignore-receipt.json",
+    "Bytes": 611,
+    "Sha256": "5c34f9ea663f20108cbf671d5db6ee5eb6d11d2f8c1183ffada1ad8ae9a20fcb"
+  },
+  {
+    "Path": "governance-preimages.json",
+    "Bytes": 1570,
+    "Sha256": "867af84893367009944e480894a4806b089e3d344373c924e47829acbca5c23e"
+  },
+  {
+    "Path": "IGNORE-COMMAND.txt",
+    "Bytes": 2843,
+    "Sha256": "595ed4ee35bb026791a7000950f8f75045092f2c9eb39b80d3130e6089fd4dd3"
+  },
+  {
+    "Path": "INDEX-COMMAND-02.txt",
+    "Bytes": 6076,
+    "Sha256": "c0971c2bab8f98ec05ff1f1c47b262a27efa7b9046cefa44d7a1f6f42cf26090"
+  },
+  {
+    "Path": "INDEX-COMMAND.txt",
+    "Bytes": 5908,
+    "Sha256": "69cbcecb29c287e34dfd7e78b88b9a5816c98206a853c99af70cd5a2e302b29f"
+  },
+  {
+    "Path": "initial-state.json",
+    "Bytes": 895,
+    "Sha256": "5012610ca6b42594b67ec9932e29e5ebfbbfd8b3e9bd1a6ab1e3be303c076b46"
+  },
+  {
+    "Path": "MANUAL-COMMAND.txt",
+    "Bytes": 13570,
+    "Sha256": "9e44bfad0b97ee3cb96e332255f6071769ba3e4dff4c297fb6efe816b6bb755d"
+  },
+  {
+    "Path": "manual-preparation-02.json",
+    "Bytes": 451,
+    "Sha256": "becfd21a752dd8454685fd9c74c9b33e4a65994a40de475f2fa3fff1f80ac1fb"
+  },
+  {
+    "Path": "manual-preparation.json",
+    "Bytes": 570,
+    "Sha256": "50dff6d3d2b998178f7c0973300ae30bcb7b9c845289658402de81cc8f73cf06"
+  },
+  {
+    "Path": "manual-revision-plan.json",
+    "Bytes": 399,
+    "Sha256": "705f6abc62101cbec6eb25ae328c0076a59988f507aedc8dccad691029e86f4d"
+  },
+  {
+    "Path": "preflight-summary.json",
+    "Bytes": 1508,
+    "Sha256": "65b4c48025237e7aeac92215126be73374df240f8d6b66f4f828e0b9b04b9fe8"
+  },
+  {
+    "Path": "RECORD.md",
+    "Bytes": 5880,
+    "Sha256": "87403472f21f702c670baa12999d41e259f350ad9844225e84e4773aeba423af"
+  },
+  {
+    "Path": "removal-manifest.json.gz",
+    "Bytes": 279526,
+    "Sha256": "0f72c9e0ad600618ec33af3a12e1e6bb4b7c125c032d0c5893978cb58d61cdd7"
+  },
+  {
+    "Path": "report-arithmetic-correction.json",
+    "Bytes": 437,
+    "Sha256": "544cd5d4c0a2c48cbf8ad1a1deeed43a5d1d047a72c5dea918f302e8bd749108"
+  },
+  {
+    "Path": "REPORT.md",
+    "Bytes": 4702,
+    "Sha256": "d6b00dca101403ed3d3d6d44bde006ef07fdbe87c38a4a5e7f19fefd5469b4f4"
+  },
+  {
+    "Path": "RESTORE.md",
+    "Bytes": 2002,
+    "Sha256": "0958f3ddbcbccfa722f38062c44fa818c89910a8e2092967902b5c66a83ffc14"
+  },
+  {
+    "Path": "scope-review.json",
+    "Bytes": 9697,
+    "Sha256": "7bb0eb2efedb7dc3ceceea80d6db86a427710563dfced04720de66a755417808"
+  },
+  {
+    "Path": "task-delivery-plan.json",
+    "Bytes": 369,
+    "Sha256": "66ef2e19a690859e4bdd54d192725251fc86a4dd2a0850ea0ee19ca55c6d1a1e"
+  },
+  {
+    "Path": "tracked-artifacts-before.json.gz",
+    "Bytes": 1753233,
+    "Sha256": "4d6d3eab77aa8c5f87a0a3a352da3f2d02c58dfde6f9960db229e0c3599dd5e5"
+  },
+  {
+    "Path": "verification-final.json",
+    "Bytes": 1552,
+    "Sha256": "0d4c0f738c0bfd7218431bf99b59d1b06d3ecf4226d9bc1738022486e27fb6b0"
+  },
+  {
+    "Path": "VERIFY-COMMAND-02.txt",
+    "Bytes": 11037,
+    "Sha256": "211942ea0d4f92f1370345278fc90e9b034cacb3aa557cfb793b2311c58a2508"
+  },
+  {
+    "Path": "VERIFY-COMMAND.txt",
+    "Bytes": 10767,
+    "Sha256": "06244683253b839221cde7759c059cf9c65e7753f9c0dc3655b238ba5ee04ad5"
+  }
+]

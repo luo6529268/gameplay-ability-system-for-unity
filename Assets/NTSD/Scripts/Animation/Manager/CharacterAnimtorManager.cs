@@ -24,7 +24,7 @@ namespace NTSD.Animation
     /// 角色动画管理器 - Odin Inspector 增强版
     /// 支持在Inspector中查看和调试数据
     /// </summary>
-    public class CharacterAnimtorManager : MMSingleton<CharacterAnimtorManager>
+    public partial class CharacterAnimtorManager : MMSingleton<CharacterAnimtorManager>
     {
         public bool IsPrewarmCompleted { get; private set; }
         public event System.Action PrewarmCompleted;
@@ -136,7 +136,8 @@ namespace NTSD.Animation
                 loader.CacheResult(candidateKey, candidate);
                 loader.CacheResult(locatorKey, candidateKey);
 
-                if (!IsLoganPublicationCurrent(candidate))
+                if (!IsLoganPublicationCurrent(candidate) ||
+                    (useMatchImageResidency && publishedImageLoadPlan?.Phase != BattleImageLoadPhase.Menu))
                 {
                     bool committed = await LoadLoganContentWithScopeAsync(candidate, GameDataManager.Instance,
                         CharacterUIResourceManager.Instance, text =>
@@ -146,7 +147,8 @@ namespace NTSD.Animation
                                 if (!CanContinueConfiguredContent(generation)) break;
                                 callback(text);
                             }
-                        }, () => CanContinueConfiguredContent(generation));
+                        }, () => CanContinueConfiguredContent(generation),
+                        useMatchImageResidency ? BattleImageLoadPlan.Menu() : null);
                     RequireConfiguredContentScope(generation);
                     RequireProjectModeCurrent(modeSnapshot);
                     if (!committed) throw new OperationCanceledException("Configured content publication was cancelled.");
@@ -191,7 +193,7 @@ namespace NTSD.Animation
                 if (!string.IsNullOrEmpty(config.characterData.small) && ui.GetSmallSprite(entry.Id) == null)
                     return false;
             }
-            return true;
+            return IsPublishedImagePlanConsistent();
         }
 
         public async UniTask<string> ValidateConfiguredContentForBattleAsync()
@@ -230,6 +232,7 @@ namespace NTSD.Animation
             internal bool Cancelled;
             internal bool Committed;
             internal bool ReuseNativeBodySheets;
+            internal bool UseAstcTextures;
             internal NativeDecodeAdmission Admission;
             internal BattleImageMemoryBudget MemoryBudget;
             internal NativeDecodeAdmission Metrics;
@@ -240,6 +243,12 @@ namespace NTSD.Animation
             internal GameDataManager Data;
             internal CharacterUIResourceManager UI;
             internal Func<bool> CanContinue;
+            internal Func<bool> PublicationBoundary;
+            internal BattleImageLoadPlan ImagePlan;
+            internal bool ReuseDefinitionPublication;
+            internal Dictionary<int, CharacterUISprites> ReusedUi;
+            internal readonly HashSet<Sprite> BorrowedUiSprites = new HashSet<Sprite>();
+            internal readonly HashSet<UnityEngine.Object> BorrowedUiResources = new HashSet<UnityEngine.Object>();
             internal readonly HashSet<Sprite> Sprites = new HashSet<Sprite>();
             internal readonly HashSet<Texture2D> Textures = new HashSet<Texture2D>();
             internal readonly HashSet<UnityEngine.Object> Resources = new HashSet<UnityEngine.Object>();
@@ -493,23 +502,32 @@ namespace NTSD.Animation
         }
 
         private async UniTask<bool> LoadLoganContentWithScopeAsync(LoganVisualContentCandidate candidate,
-            GameDataManager data, CharacterUIResourceManager ui, Action<string> onProgressText, Func<bool> canContinue)
+            GameDataManager data, CharacterUIResourceManager ui, Action<string> onProgressText, Func<bool> canContinue,
+            BattleImageLoadPlan imagePlan = null, Func<bool> publicationBoundary = null)
         {
             if (candidate == null || data == null || ui == null)
                 throw new ArgumentException("A bound candidate and live publication owners are required.");
-            if (spritePrewarmDisposed || !NativeContentBoundaryIsOpen())
+            Func<bool> boundary = publicationBoundary ?? NativeContentBoundaryIsOpen;
+            if (spritePrewarmDisposed || !boundary())
                 throw new InvalidOperationException("Native content cannot change across an active battle boundary.");
             CancelNativeContentPrewarm();
             int requestVersion = nativeLoadRequestVersion;
             await WaitForNativePrewarmDrainAsync();
             if (requestVersion != nativeLoadRequestVersion || spritePrewarmDisposed ||
-                !NativeContentBoundaryIsOpen() || (canContinue != null && !canContinue())) return false;
+                !boundary() || (canContinue != null && !canContinue())) return false;
             ReleaseCancelledNativeContentStaging();
             var operation = new NativePrewarmOperation { Candidate = candidate, Data = data, UI = ui, CanContinue = canContinue,
+                ImagePlan = imagePlan, PublicationBoundary = boundary,
                 ReuseNativeBodySheets = reuseNativeBodySheetsForDiagnostics,
+                UseAstcTextures = candidate.AstcTextures != null && SystemInfo.SupportsTextureFormat(TextureFormat.ASTC_4x4),
                 Admission = useNativeDecodeAdmission ? new NativeDecodeAdmission(nativeDecodeBudget, nativeDecodeMaximum) : null,
                 Metrics = new NativeDecodeAdmission(nativeDecodeBudget, nativeDecodeMaximum),
                 DecodeStarted = NativeDecodeStartedForDiagnostics, BeforeUpload = NativeBeforeUploadForDiagnostics };
+            if (imagePlan != null && IsLoganPublicationCurrent(candidate))
+            {
+                operation.ReuseDefinitionPublication = true;
+                operation.ReusedUi = CaptureReusableNativeUi(operation, TotalCharacterFrameConfig);
+            }
             LastNativeDecodeAdmission = operation.Admission ?? operation.Metrics;
             nativePrewarmOperations.Add(operation);
             activeNativePrewarm = operation;
@@ -571,28 +589,42 @@ namespace NTSD.Animation
         private async UniTask<Dictionary<int, CharacterUISprites>> PrepareNativeUISpritesAsync(
             NativePrewarmOperation operation, Dictionary<int, LF2CharacterDataWrapper> configs, Action<string> progress)
         {
+            if (operation.ReusedUi != null)
+                return operation.ReusedUi;
             var result = new Dictionary<int, CharacterUISprites>();
+            var sharedTextures = new Dictionary<(string path, string hash), Texture2D>();
             foreach (var config in configs.Values)
             {
                 if (!CanCompleteSpritePrewarmInvocation(operation.Invocation)) throw new OperationCanceledException();
                 Sprite head = null;
                 Sprite small = null;
                 if (!string.IsNullOrEmpty(config.characterData.head))
-                    head = await LoadNativeUISpriteAsync(operation, config.characterData.head, progress);
+                    head = await LoadNativeUISpriteAsync(operation, config.characterData.head, progress, sharedTextures);
                 if (!string.IsNullOrEmpty(config.characterData.small))
-                    small = await LoadNativeUISpriteAsync(operation, config.characterData.small, progress);
+                    small = await LoadNativeUISpriteAsync(operation, config.characterData.small, progress, sharedTextures);
                 if (head != null || small != null)
                     result.Add(config.characterId, new CharacterUISprites { HeadSprite = head, SmallSprite = small });
             }
             return result;
         }
 
-        private async UniTask<Sprite> LoadNativeUISpriteAsync(NativePrewarmOperation operation, string path, Action<string> progress)
+        private async UniTask<Sprite> LoadNativeUISpriteAsync(NativePrewarmOperation operation, string path, Action<string> progress,
+            Dictionary<(string path, string hash), Texture2D> sharedTextures)
         {
             if (!CanCompleteSpritePrewarmInvocation(operation.Invocation)) throw new OperationCanceledException();
             progress?.Invoke(FormatLoadingResourcePath(path));
             if (!CanCompleteSpritePrewarmInvocation(operation.Invocation)) throw new OperationCanceledException();
             string hash = operation.Candidate.GetImageSha256(path);
+            var key = (BattleAtlasLayoutPlanner.NormalizePath(Path.GetFullPath(path)), hash);
+            if ((operation.UseAstcTextures || operation.ImagePlan != null) &&
+                sharedTextures.TryGetValue(key, out Texture2D shared))
+            {
+                Sprite reused = Sprite.Create(shared, new Rect(0, 0, shared.width, shared.height),
+                    new Vector2(0.5f, 0.5f), 100f);
+                operation.Sprites.Add(reused);
+                reused.name = Path.GetFileNameWithoutExtension(path);
+                return reused;
+            }
             BeginNativePrewarmWork();
             BMPLoader.BmpData pixels = null;
             try
@@ -610,6 +642,7 @@ namespace NTSD.Animation
             if (pixels.PngPixels != null) texture.SetPixels32(pixels.PngPixels);
             else texture.SetPixels(pixels.Pixels);
             texture.Apply();
+            if (operation.UseAstcTextures || operation.ImagePlan != null) sharedTextures.Add(key, texture);
             Sprite sprite = Sprite.Create(texture, new Rect(0, 0, pixels.Width, pixels.Height), new Vector2(0.5f, 0.5f), 100f);
             operation.Sprites.Add(sprite);
             sprite.name = Path.GetFileNameWithoutExtension(path);
@@ -630,7 +663,9 @@ namespace NTSD.Animation
         {
             if (!CanCompleteSpritePrewarmInvocation(operation.Invocation) || operation.Data == null || operation.UI == null)
                 return false;
-            GameDataManager.PreparedObjectPublication objects = operation.Data.PrepareObjectPublication(operation.Candidate);
+            if (operation.ReusedUi != null && !IsBorrowedNativeUiCurrent(operation)) return false;
+            GameDataManager.PreparedObjectPublication objects = operation.ReuseDefinitionPublication
+                ? null : operation.Data.PrepareObjectPublication(operation.Candidate);
             var previousUiHeads = new Dictionary<Sprite, int>(legacyOwnedUiHeads);
             foreach (var entry in publishedUiHeadIds) previousUiHeads[entry.Key] = entry.Value;
             var nextUiHeads = new Dictionary<Sprite, int>();
@@ -648,6 +683,8 @@ namespace NTSD.Animation
                 var oldResources = new HashSet<UnityEngine.Object>(publishedOwnedResources);
                 oldSprites.UnionWith(legacyOwnedUiSprites);
                 oldResources.UnionWith(legacyOwnedUiResources);
+                oldSprites.ExceptWith(operation.BorrowedUiSprites);
+                oldResources.ExceptWith(operation.BorrowedUiResources);
                 previous = new SpritePublicationOwnership(previousCatalog, oldSprites, oldResources);
                 retiredSpritePublications.EnsureCapacity(retiredSpritePublications.Count + 1);
             }
@@ -656,7 +693,9 @@ namespace NTSD.Animation
             // Alignment contract: NTSD28-B11-SOURCE-ATOMIC-PUBLICATION-001
             // All allocations and input checks precede this no-await publication. Retirement follows UI rebinding.
             if (previous != null) retiredSpritePublications[previousCatalog] = previous;
-            operation.Data.CommitObjectPublication(objects);
+            operation.Sprites.UnionWith(operation.BorrowedUiSprites);
+            operation.Resources.UnionWith(operation.BorrowedUiResources);
+            if (objects != null) operation.Data.CommitObjectPublication(objects);
             operation.UI.CommitNativeSprites(uiSprites, operation.Candidate.SourceCacheKey);
             TotalCharacterFrameConfig = configs;
             MergedSprites = sprites;
@@ -667,6 +706,7 @@ namespace NTSD.Animation
             pendingCharacterFrameConfig = null;
             PublishedVisualContentKey = operation.Candidate.SourceCacheKey;
             publishedLoganCandidate = operation.Candidate;
+            publishedImageLoadPlan = operation.ImagePlan ?? BattleImageLoadPlan.FullCatalogue(configs.Keys);
             publishedUiHeadIds = nextUiHeads;
             LastAtlasDiagnostic = diagnostic ?? string.Empty;
             operation.Committed = true;
@@ -834,6 +874,8 @@ namespace NTSD.Animation
         {
             if (rootIds == null || rootIds.Count == 0)
                 return;
+            if (publishedImageLoadPlan?.Phase == BattleImageLoadPhase.Menu)
+                throw new InvalidOperationException("Match images must be published before central bindings.");
             if (driver == null || driver.World == null || spritePrewarmDisposed ||
                 activeNativePrewarm != null || !IsPrewarmCompleted ||
                 !BattleVisualBindingBoundaryAllows(driver.LifecycleState, driver.World.ObjectCount,
@@ -843,7 +885,9 @@ namespace NTSD.Animation
 
             int generation = driver.PreparationGeneration;
             var world = driver.World;
-            HashSet<int> ids = CollectBattleVisualDependencyIds(TotalCharacterFrameConfig, rootIds);
+            HashSet<int> ids = publishedImageLoadPlan?.Phase == BattleImageLoadPhase.Match
+                ? new HashSet<int>(publishedImageLoadPlan.DefinitionIds)
+                : CollectBattleVisualDependencyIds(TotalCharacterFrameConfig, rootIds);
             var previousAtlas = new HashSet<UnityEngine.Object>();
             foreach (BattleSpriteEntry entry in SpriteCatalog.Entries.Values)
             {
@@ -870,12 +914,14 @@ namespace NTSD.Animation
                 device.SupportsRgba32Sampling, device.SupportsCopyTexture,
                 device.AtlasMemoryBudgetBytes < 0 ? device.AtlasMemoryBudgetBytes :
                     Math.Max(0, device.AtlasMemoryBudgetBytes - retainedAtlasBytes));
+            bool compressedPublication = SpriteCatalog.Entries.Values.Any(entry => BattleAstcTextures.IsCompressed(entry.SharedTexture));
             var memoryBudget = new BattleImageMemoryBudget(EstimateOwnedImageBytes());
             var qualifiedSources = new Dictionary<Texture2D, BMPLoader.VerifiedImageLayout?>();
             var decodedSources = new Dictionary<Texture2D, Color32[]>();
             BMPLoader.VerifiedImageLayout? QualifySource(Texture2D texture, string path)
             {
-                if (publishedLoganCandidate == null)
+                if (publishedLoganCandidate == null ||
+                    publishedLoganCandidate.DerivedPages?.IsPagePath(path) == true)
                     return null;
                 LoganVisualContentCandidate.ImageInput image = null;
                 if (CommonVisualCatalog.TryGetSpark(0, out var spark) && spark.Texture == texture)
@@ -898,11 +944,17 @@ namespace NTSD.Animation
             }
             void CheckMatchSources(IEnumerable<KeyValuePair<string, Texture2D>> sources)
             {
+                if (compressedPublication)
+                {
+                    memoryBudget.ReserveAtlas(0);
+                    return;
+                }
                 var counted = new HashSet<Texture2D>();
                 var atlasPaths = new HashSet<string>(StringComparer.Ordinal);
                 foreach (var source in sources)
                 {
                     Texture2D texture = source.Value;
+                    if (BattleAstcTextures.IsCompressed(texture)) continue;
                     if (counted.Add(texture))
                     {
                         if (texture.isReadable)
@@ -927,6 +979,7 @@ namespace NTSD.Animation
             }
             Color32[] DecodeSource(Texture2D texture, string path)
             {
+                if (BattleAstcTextures.IsCompressed(texture)) return null;
                 if (decodedSources.TryGetValue(texture, out Color32[] pixels))
                     return pixels;
                 if (texture.isReadable)
@@ -943,7 +996,7 @@ namespace NTSD.Animation
                     decodedSources.Add(texture, pixels);
                 return pixels;
             }
-            bool sharedBindings = MatchCentralBindingsEnabledForDiagnostics;
+            bool sharedBindings = MatchCentralBindingsEnabledForDiagnostics && !compressedPublication;
             string[] atlasArguments = sharedBindings ? null : new[]
             {
                 BattleRenderingPolicyResolver.AtlasModeArgument,
@@ -1023,6 +1076,9 @@ namespace NTSD.Animation
             var exclusions = new HashSet<string>(StringComparer.Ordinal);
             var selectedPaths = new HashSet<string>(StringComparer.Ordinal);
             var selectedIds = new HashSet<int>(ids);
+            bool compressedPublication = catalog.Entries.Values.Any(entry => BattleAstcTextures.IsCompressed(entry.SharedTexture));
+            bool sourceOnly = compressedPublication || BattleRenderingPolicyResolver.ResolveAtlas(
+                capabilities, 0, config, arguments).RequestedMode == BattleAtlasPolicyMode.SourceTexture2D;
             BattleSpriteCentralBinding SourceBinding(Texture2D texture, Rect rect, Rect uv)
             {
                 return new BattleSpriteCentralBinding(
@@ -1031,6 +1087,11 @@ namespace NTSD.Animation
             void AddSource(string path, Texture2D texture)
             {
                 path = BattleAtlasLayoutPlanner.NormalizePath(path);
+                if (sourceOnly)
+                {
+                    exclusions.Add(path);
+                    return;
+                }
                 if (sourceTextures.TryGetValue(path, out Texture2D existing))
                 {
                     if (existing != texture && !exclusions.Contains(path))
@@ -1076,7 +1137,8 @@ namespace NTSD.Animation
                 if (selectedIds.Contains(pair.Key.VisualDataId))
                     selectedPaths.Add(BattleAtlasLayoutPlanner.NormalizePath(entry.SourceSheetPath));
             }
-            beforePixelRead?.Invoke(EnumerateSelectedMatchSources(catalog, common, selectedPaths));
+            if (!sourceOnly)
+                beforePixelRead?.Invoke(EnumerateSelectedMatchSources(catalog, common, selectedPaths));
             foreach (BattleSpriteEntry entry in catalog.Entries.Values)
             {
                 string path = BattleAtlasLayoutPlanner.NormalizePath(entry.SourceSheetPath);
@@ -2026,8 +2088,12 @@ namespace NTSD.Animation
             }
             BattleContentSource source = native?.Candidate.Catalog.Source;
             Dictionary<int, LF2CharacterDataWrapper> configSource =
-                native != null ? native.Candidate.CopyCharacterConfigs() : pendingCharacterFrameConfig ?? TotalCharacterFrameConfig;
+                native != null
+                    ? native.ReuseDefinitionPublication ? TotalCharacterFrameConfig : native.Candidate.CopyCharacterConfigs()
+                    : pendingCharacterFrameConfig ?? TotalCharacterFrameConfig;
             var stagedConfigs = new Dictionary<int, LF2CharacterDataWrapper>(configSource);
+            if (native?.ImagePlan?.Phase == BattleImageLoadPhase.Menu)
+                return await LoadNativeMenuImagesAsync(native, stagedConfigs, onProgressText);
             var stagedSprites = new Dictionary<int, List<Sprite>>(stagedConfigs.Count);
             var stagedCreatedSprites = native?.Sprites ?? new HashSet<Sprite>();
             var stagedTextures = native?.Textures ?? new HashSet<Texture2D>();
@@ -2040,7 +2106,9 @@ namespace NTSD.Animation
             var allFileInfos =
                 new List<(int characterId, SpriteFileInfo fileInfo, HashSet<int> ownedEffectivePics)>();
 
-            foreach (var config in stagedConfigs.Values)
+            IEnumerable<LF2CharacterDataWrapper> bodyConfigs = native?.ImagePlan != null
+                ? native.ImagePlan.SelectBodyConfigs(stagedConfigs) : stagedConfigs.Values;
+            foreach (var config in bodyConfigs)
             {
                 int characterId = config.characterId;
                 int totalSpriteCount = config.characterData.files.Count > 0
@@ -2069,9 +2137,11 @@ namespace NTSD.Animation
             {
                 long oldPublicationBytes = EstimateOwnedImageBytes();
                 BattleRenderingDeviceCapabilities capabilities = BattleRenderingDeviceCapabilities.FromSystem();
+                LastSelectedBodySheetDeclarationCount = allFileInfos.Count;
                 native.MemoryBudget = await RunNativeImageBudgetPreflightAsync(native, allFileInfos,
                     stagedConfigs, oldPublicationBytes, capabilities.AtlasMemoryBudgetBytes, capabilities.MaxTextureSize);
                 if (!CanCompleteSpritePrewarmInvocation(invocation)) return false;
+                LastNativeImageMemoryBudget = native.MemoryBudget;
                 Debug.Log("[Image batch budget] " + native.MemoryBudget.Describe());
             }
 
@@ -2085,12 +2155,13 @@ namespace NTSD.Animation
             if (native != null) BeginNativePrewarmWork();
             try
             {
-                if (native != null && native.ReuseNativeBodySheets)
+                if (native != null && (native.ReuseNativeBodySheets || native.Candidate.DerivedPages != null || native.UseAstcTextures))
                 {
-                    foreach (NativeBodySheetGroup group in BuildNativeBodySheetGroups(allFileInfos, native.Candidate))
+                    foreach (NativeBodySheetGroup group in BuildNativeBodySheetGroupsWithReuse(
+                        allFileInfos, native.Candidate, native.ReuseNativeBodySheets, native.UseAstcTextures))
                     {
                         if (!CanCompleteSpritePrewarmInvocation(invocation)) break;
-                        NativeBodyDecodeRequest request = await AcquireNativeDecodeAsync(native,
+                        NativeBodyDecodeRequest request = group.Astc != null ? null : await AcquireNativeDecodeAsync(native,
                             group.Members[0].fileInfo.filePath, group.ExpectedSha256, group.Members.Max(item => checked((long)item.fileInfo.width * item.fileInfo.height)));
                         try
                         {
@@ -2215,8 +2286,8 @@ namespace NTSD.Animation
             BattleCommonVisualCatalog commonVisualCatalog = BattleCommonVisualCatalog.Empty;
             try
             {
-                stagedCatalog = BuildBattleSpriteCatalog(
-                    stagedConfigs, stagedSprites, clampedSourcePathsBySprite);
+                stagedCatalog = BuildBattleSpriteCatalogWithReplacements(
+                    stagedConfigs, stagedSprites, clampedSourcePathsBySprite, native?.Candidate.DerivedPages, stagedResources);
                 if (native != null) BeginNativePrewarmWork();
                 try
                 {
@@ -2296,6 +2367,15 @@ namespace NTSD.Animation
                         out string commonSourceDiagnostic))
                 {
                     throw new InvalidOperationException(commonSourceDiagnostic);
+                }
+
+                // Alignment contract: NTSD-M12-DAT-SPRITE-PAGING-PILOT-001. Pages are already packed.
+                if (native?.Candidate.DerivedPages != null)
+                    forcedCommonSource2DPaths.AddRange(native.Candidate.DerivedPages.Pages.Select(page => page.Path));
+                if (native?.UseAstcTextures == true)
+                {
+                    forcedCommonSource2DPaths.AddRange(stagedAtlasSources.Select(pixels => pixels.Path));
+                    stagedAtlasSources.Clear();
                 }
 
                 if (!TryBuildUnifiedCentralAtlasPublication(
@@ -3061,6 +3141,9 @@ namespace NTSD.Animation
         private sealed class NativeBodySheetGroup
         {
             internal string ExpectedSha256;
+            internal BattleDerivedSpritePages.Chunk DerivedChunk;
+            internal readonly List<BattleDerivedSpritePages.Chunk> MemberChunks = new List<BattleDerivedSpritePages.Chunk>();
+            internal BattleAstcTextures.Entry Astc;
             internal readonly List<(int characterId, SpriteFileInfo fileInfo, HashSet<int> ownedEffectivePics)> Members =
                 new List<(int characterId, SpriteFileInfo fileInfo, HashSet<int> ownedEffectivePics)>();
         }
@@ -3069,22 +3152,57 @@ namespace NTSD.Animation
             List<(int characterId, SpriteFileInfo fileInfo, HashSet<int> ownedEffectivePics)> files,
             LoganVisualContentCandidate candidate)
         {
+            return BuildNativeBodySheetGroupsWithReuse(files, candidate, true);
+        }
+
+        private static List<NativeBodySheetGroup> BuildNativeBodySheetGroupsWithReuse(
+            List<(int characterId, SpriteFileInfo fileInfo, HashSet<int> ownedEffectivePics)> files,
+            LoganVisualContentCandidate candidate, bool reuse, bool useAstcTextures = false)
+        {
             var result = new List<NativeBodySheetGroup>();
             var groups = new Dictionary<(string path, string hash), NativeBodySheetGroup>();
+            void Add((int characterId, SpriteFileInfo fileInfo, HashSet<int> ownedEffectivePics) item,
+                string hash, BattleDerivedSpritePages.Chunk chunk)
+            {
+                string path = BattleAtlasLayoutPlanner.NormalizePath(Path.GetFullPath(item.fileInfo.filePath));
+                BattleAstcTextures.Entry astc = null;
+                if (useAstcTextures) candidate.AstcTextures?.TryGet(path, hash, out astc);
+                var key = astc != null && chunk == null ? (astc.FilePath, astc.FileSha256) : (path, hash);
+                NativeBodySheetGroup group;
+                if (!reuse || !groups.TryGetValue(key, out group))
+                {
+                    group = new NativeBodySheetGroup { ExpectedSha256 = hash, DerivedChunk = chunk, Astc = astc };
+                    if (reuse) groups.Add(key, group);
+                    result.Add(group);
+                }
+                else if ((group.DerivedChunk == null) != (chunk == null) ||
+                    (chunk != null && (group.DerivedChunk.Page.Width != chunk.Page.Width ||
+                        group.DerivedChunk.Page.Height != chunk.Page.Height)))
+                    throw new InvalidDataException("Conflicting derived page identity: " + path);
+                // Alignment contract: NTSD-M12-MATCH-IMAGE-RESIDENCY-001. Shared texture, per-DAT frame mapping.
+                group.Members.Add(item);
+                group.MemberChunks.Add(chunk);
+            }
             foreach (var item in files)
             {
                 if (candidate.IsMissingBodySheet(item.fileInfo.filePath)) continue;
-                string path = BattleAtlasLayoutPlanner.NormalizePath(Path.GetFullPath(item.fileInfo.filePath));
-                string hash = candidate.GetImageSha256(item.fileInfo.filePath);
-                // All members belong to this one captured native source and processing policy.
-                var key = (path, hash);
-                if (!groups.TryGetValue(key, out NativeBodySheetGroup group))
+                if (candidate.DerivedPages != null &&
+                    candidate.DerivedPages.TryGetSource(item.fileInfo.filePath, out var mapped))
                 {
-                    group = new NativeBodySheetGroup { ExpectedSha256 = hash };
-                    groups.Add(key, group);
-                    result.Add(group);
+                    mapped.RequireBinding(item.characterId, item.fileInfo);
+                    foreach (var chunk in mapped.Chunks)
+                    {
+                        int first = checked(item.fileInfo.startFrame + chunk.FirstLocalPic);
+                        int last = checked(first + chunk.Count - 1);
+                        var owned = new HashSet<int>(item.ownedEffectivePics.Where(pic => pic >= first && pic <= last));
+                        if (owned.Count == 0) continue;
+                        var info = new SpriteFileInfo(chunk.Page.Path, first, last,
+                            item.fileInfo.width, item.fileInfo.height, chunk.Columns, chunk.Rows);
+                        Add((item.characterId, info, owned), chunk.Page.Sha256, chunk);
+                    }
+                    continue;
                 }
-                group.Members.Add(item);
+                Add(item, candidate.GetImageSha256(item.fileInfo.filePath), null);
             }
             return result;
         }
@@ -3115,6 +3233,11 @@ namespace NTSD.Animation
             foreach (UnityEngine.Object resource in resources)
             {
                 if (resource == null) continue;
+                if (resource is Texture2D compressed && BattleAstcTextures.IsCompressed(compressed))
+                {
+                    bytes = checked(bytes + BattleAstcBlockData.PayloadBytes(compressed.width, compressed.height));
+                    continue;
+                }
                 int width, height, depth, mipCount;
                 bool readable;
                 if (resource is Texture2D texture)
@@ -3142,6 +3265,10 @@ namespace NTSD.Animation
             List<(int characterId, SpriteFileInfo fileInfo, HashSet<int> ownedEffectivePics)> declarations,
             Dictionary<int, LF2CharacterDataWrapper> configs, long oldBytes, long atlasLimit, int maxTextureSize)
         {
+            BattleAtlasPolicyDecision policy = BattleRenderingPolicyResolver.ResolveAtlas(
+                BattleRenderingDeviceCapabilities.FromSystem(), 0, NTSD.App.GameConfig.Instance);
+            if (policy.RequestedMode == BattleAtlasPolicyMode.SourceTexture2D)
+                atlasLimit = 0;
             BeginNativePrewarmWork();
             try
             {
@@ -3181,6 +3308,13 @@ namespace NTSD.Animation
             void Add(string path, string hash, bool retained, bool readable, bool atlas)
             {
                 BMPLoader.VerifiedImageLayout layout = Qualify(path, hash);
+                if (operation.UseAstcTextures && operation.Candidate.AstcTextures.TryGet(path, hash, out var compressed))
+                {
+                    if (compressed.Width != layout.Width || compressed.Height != layout.Height)
+                        throw new InvalidDataException("ASTC source geometry mismatch: " + path);
+                    budget.AddCompressedImage(compressed.Width, compressed.Height, compressed.FileBytes);
+                    return;
+                }
                 budget.AddImage(layout, retained, readable);
                 if (atlas && BattleAtlasLayoutPlanner.IsPageEligible(layout.Width, layout.Height))
                     atlasPaths.Add(BattleAtlasLayoutPlanner.NormalizePath(path));
@@ -3190,9 +3324,24 @@ namespace NTSD.Animation
                 SpriteFileInfo info = declaration.fileInfo;
                 if (operation.Candidate.IsMissingBodySheet(info.filePath)) continue;
                 string hash = operation.Candidate.GetImageSha256(info.filePath);
+                if (operation.Candidate.DerivedPages != null &&
+                    operation.Candidate.DerivedPages.TryGetSource(info.filePath, out var mapped))
+                {
+                    mapped.RequireBinding(declaration.characterId, info);
+                    foreach (var chunk in mapped.Chunks)
+                    {
+                        string pageKey = chunk.Page.Path + "|" + chunk.Page.Sha256;
+                        if (!operation.ReuseNativeBodySheets || physicalBodies.Add(pageKey))
+                            Add(chunk.Page.Path, chunk.Page.Sha256, false, false, false);
+                    }
+                    continue;
+                }
                 BMPLoader.VerifiedImageLayout layout = Qualify(info.filePath, hash);
-                if (!operation.ReuseNativeBodySheets || physicalBodies.Add(Path.GetFullPath(info.filePath) + "|" + hash))
-                    Add(info.filePath, hash, true, false, true);
+                string physicalKey = Path.GetFullPath(info.filePath) + "|" + hash;
+                if (operation.UseAstcTextures && operation.Candidate.AstcTextures.TryGet(info.filePath, hash, out var astc))
+                    physicalKey = astc.FilePath + "|" + astc.FileSha256;
+                if (!operation.ReuseNativeBodySheets || physicalBodies.Add(physicalKey))
+                    Add(info.filePath, hash, !operation.UseAstcTextures, false, !operation.UseAstcTextures);
                 if (!layout.IsPng) continue;
                 ResolveEffectiveGrid(info, layout.Width, layout.Height, out int row, out int col);
                 foreach (int pic in declaration.ownedEffectivePics)
@@ -3202,28 +3351,38 @@ namespace NTSD.Animation
                     long x = checked(index % col * ((long)info.width + 1));
                     long y = checked(layout.Height - (index / col + 1) * ((long)info.height + 1) + 1);
                     if (x >= 0 && y >= 0 && x + info.width <= layout.Width && y + info.height <= layout.Height) continue;
-                    budget.AddClampedCell(info.width, info.height);
-                    if (BattleAtlasLayoutPlanner.IsPageEligible(info.width, info.height)) extraClampPages++;
+                    budget.AddClampedCell(info.width, info.height, !operation.UseAstcTextures);
+                    if (!operation.UseAstcTextures && BattleAtlasLayoutPlanner.IsPageEligible(info.width, info.height)) extraClampPages++;
                 }
             }
             var candidate = operation.Candidate;
-            if (candidate.SparkInput != null)
-                Add(candidate.SparkInput.Image.Path, candidate.SparkInput.Image.Sha256, true, false, true);
-            if (candidate.WordsInput != null)
-                foreach (var image in candidate.WordsInput.Images) Add(image.Path, image.Sha256, true, false, true);
-            if (candidate.KillIconInput != null)
+            if (operation.ImagePlan?.Phase != BattleImageLoadPhase.Menu && candidate.SparkInput != null)
+                Add(candidate.SparkInput.Image.Path, candidate.SparkInput.Image.Sha256, !operation.UseAstcTextures, false, !operation.UseAstcTextures);
+            if (operation.ImagePlan?.Phase != BattleImageLoadPhase.Menu && candidate.WordsInput != null)
+                foreach (var image in candidate.WordsInput.Images) Add(image.Path, image.Sha256, !operation.UseAstcTextures, false, !operation.UseAstcTextures);
+            if (operation.ImagePlan?.Phase != BattleImageLoadPhase.Menu && candidate.KillIconInput != null)
             {
                 var icons = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                 foreach (var image in candidate.KillIconInput.Images)
                     if (image != null && icons.Add(image.Path + "|" + image.Sha256))
                         Add(image.Path, image.Sha256, false, false, false);
             }
-            foreach (var config in configs.Values)
+            var uiSources = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            void AddUi(string path)
             {
-                if (!string.IsNullOrEmpty(config.characterData.head))
-                    Add(config.characterData.head, candidate.GetImageSha256(config.characterData.head), false, true, false);
-                if (!string.IsNullOrEmpty(config.characterData.small))
-                    Add(config.characterData.small, candidate.GetImageSha256(config.characterData.small), false, true, false);
+                if (string.IsNullOrEmpty(path)) return;
+                string hash = candidate.GetImageSha256(path);
+                if ((!operation.UseAstcTextures && operation.ImagePlan == null) ||
+                    uiSources.Add(Path.GetFullPath(path) + "|" + hash))
+                    Add(path, hash, false, true, false);
+            }
+            if (operation.ReusedUi == null)
+            {
+                foreach (var config in configs.Values)
+                {
+                    AddUi(config.characterData.head);
+                    AddUi(config.characterData.small);
+                }
             }
             // Before pixel hashes exist, each eligible source/clamp may consume one full page.
             // The actual atlas is checked against both this reservation and the batch limits.
@@ -3273,6 +3432,58 @@ namespace NTSD.Animation
                     onProgressText?.Invoke(FormatLoadingResourcePath(item.fileInfo.filePath));
                     if (!canMaterialize()) return (0, 0);
                 }
+                if (group.Astc != null)
+                {
+                    BattleAstcTextures.Entry entry = group.Astc;
+                    byte[] compressed = await UniTask.RunOnThreadPool(entry.ReadVerifiedFile);
+                    await UniTask.SwitchToMainThread();
+                    if (!canMaterialize()) return (0, 0);
+                    pendingBytes = compressed.LongLength;
+                    accounting.AddPendingPixels(pendingBytes);
+                    plans = new BodySheetSpritePlan[group.Members.Count];
+                    for (int i = 0; i < group.Members.Count; i++)
+                    {
+                        var item = group.Members[i];
+                        BattleDerivedSpritePages.Chunk chunk = group.MemberChunks[i];
+                        plans[i] = chunk == null
+                            ? PrepareCompressedBodySheetSpritePlan(item.fileInfo, item.ownedEffectivePics, entry)
+                            : new BodySheetSpritePlan
+                            {
+                                Col = chunk.Columns,
+                                Rects = chunk.Rects.Select(rect => (Rect?)rect).ToArray(),
+                                ClampedCells = new Dictionary<int, string>(),
+                                DerivedPagePath = chunk.Page.Path,
+                                ContentRects = chunk.ContentRects.ToArray(),
+                            };
+                    }
+                    await uploadSemaphore.WaitAsync();
+                    uploadHeld = true;
+                    await UniTask.SwitchToMainThread();
+                    if (!canMaterialize()) return (0, 0);
+                    if (native.BeforeUpload != null) await native.BeforeUpload();
+                    if (!canMaterialize()) return (0, 0);
+                    var compressedTexture = new Texture2D(entry.Width, entry.Height, TextureFormat.ASTC_4x4, false);
+                    stagedTextures.Add(compressedTexture);
+                    compressedTexture.filterMode = FilterMode.Point;
+                    compressedTexture.wrapMode = TextureWrapMode.Clamp;
+                    compressedTexture.name = Path.GetFileNameWithoutExtension(filePath);
+                    BattleAstcTextures.Upload(compressedTexture, entry, compressed);
+                    for (int i = 0; i < group.Members.Count; i++)
+                    {
+                        if (!canMaterialize()) return (created, 0);
+                        var item = group.Members[i];
+                        created += CreateBodySheetSprites(item.fileInfo, item.ownedEffectivePics,
+                            stagedSprites[item.characterId], stagedCreatedSprites, stagedTextures,
+                            stagedAtlasSources, clampedSpritesByContent, clampedSourcePathsBySprite,
+                            plans[i], null, compressedTexture, false);
+                    }
+                    accounting.RemovePendingPixels(pendingBytes);
+                    pendingBytes = 0;
+                    compressed = null;
+                    plans = null;
+                    completed = true;
+                    return (created, 0);
+                }
                 bmpData = await UniTask.RunOnThreadPool(() =>
                 {
                     native.DecodeStarted?.Invoke(filePath);
@@ -3299,7 +3510,17 @@ namespace NTSD.Animation
                     var item = group.Members[i];
                     try
                     {
-                        plans[i] = PrepareBodySheetSpritePlan(item.fileInfo, item.ownedEffectivePics, bmpData, pixels, source);
+                        BattleDerivedSpritePages.Chunk chunk = group.MemberChunks[i];
+                        plans[i] = chunk == null
+                            ? PrepareBodySheetSpritePlan(item.fileInfo, item.ownedEffectivePics, bmpData, pixels, source)
+                            : new BodySheetSpritePlan
+                            {
+                                Col = chunk.Columns,
+                                Rects = chunk.Rects.Select(rect => (Rect?)rect).ToArray(),
+                                ClampedCells = new Dictionary<int, string>(),
+                                DerivedPagePath = chunk.Page.Path,
+                                ContentRects = chunk.ContentRects.ToArray(),
+                            };
                         if (plans[i] == null) failed++;
                     }
                     catch (Exception error)
@@ -3316,8 +3537,7 @@ namespace NTSD.Animation
                     pendingBytes -= floatBytes;
                     accounting.RemovePendingPixels(floatBytes);
                 }
-                cpuSemaphore.Release();
-                cpuHeld = false;
+                // Keep the CPU permit until upload finishes so decoded buffers cannot queue unboundedly.
                 await uploadSemaphore.WaitAsync();
                 uploadHeld = true;
                 await UniTask.SwitchToMainThread();
@@ -3326,7 +3546,7 @@ namespace NTSD.Animation
                 if (!canMaterialize()) return (0, 0);
                 retainedStart = stagedAtlasSources.Count;
                 Texture2D texture = CreateBodySheetTexture(filePath, textureWidth, textureHeight,
-                    pixels, stagedTextures, stagedAtlasSources);
+                    pixels, stagedTextures, stagedAtlasSources, group.DerivedChunk == null && !native.UseAstcTextures);
                 for (int i = 0; i < group.Members.Count; i++)
                 {
                     var item = group.Members[i];
@@ -3335,7 +3555,7 @@ namespace NTSD.Animation
                     created += CreateBodySheetSprites(item.fileInfo, item.ownedEffectivePics,
                         stagedSprites[item.characterId], stagedCreatedSprites, stagedTextures,
                         stagedAtlasSources, clampedSpritesByContent, clampedSourcePathsBySprite,
-                        plans[i], pixels, texture);
+                        plans[i], pixels, texture, !native.UseAstcTextures);
                 }
                 accounting.RecordRetained(stagedAtlasSources, retainedStart);
                 retainedStart = -1;
@@ -3373,6 +3593,24 @@ namespace NTSD.Animation
             internal int Col;
             internal Rect?[] Rects;
             internal Dictionary<int, string> ClampedCells;
+            internal string DerivedPagePath;
+            internal Rect[] ContentRects;
+        }
+
+        private static BodySheetSpritePlan PrepareCompressedBodySheetSpritePlan(
+            SpriteFileInfo info, ISet<int> owned, BattleAstcTextures.Entry entry)
+        {
+            ResolveEffectiveGrid(info, entry.Width, entry.Height, out int row, out int col);
+            Rect?[] rects = BuildIndexedSpriteRects(info, entry.Width, entry.Height, row, col, false);
+            for (int i = 0; i < rects.Length; i++)
+            {
+                if (owned == null || !owned.Contains(info.startFrame + i)) continue;
+                long x = (long)(i % col) * (info.width + 1L);
+                long y = entry.Height - (i / col + 1L) * (info.height + 1L) + 1;
+                if (x < 0 || y < 0 || x + info.width > entry.Width || y + info.height > entry.Height)
+                    throw new InvalidDataException("Clamped native cells must retain the RGBA compatibility path.");
+            }
+            return new BodySheetSpritePlan { Col = col, Rects = rects, ClampedCells = new Dictionary<int, string>() };
         }
 
         private static BodySheetSpritePlan PrepareBodySheetSpritePlan(
@@ -3438,9 +3676,10 @@ namespace NTSD.Animation
         }
 
         private static Texture2D CreateBodySheetTexture(string filePath, int textureWidth, int textureHeight,
-            Color32[] processedSheet, HashSet<Texture2D> stagedTextures, List<BattleAtlasSourcePixels> stagedAtlasSources)
+            Color32[] processedSheet, HashSet<Texture2D> stagedTextures, List<BattleAtlasSourcePixels> stagedAtlasSources,
+            bool retainForAtlas = true)
         {
-            stagedAtlasSources.Add(new BattleAtlasSourcePixels(
+            if (retainForAtlas) stagedAtlasSources.Add(new BattleAtlasSourcePixels(
                 filePath,
                 textureWidth,
                 textureHeight,
@@ -3460,7 +3699,7 @@ namespace NTSD.Animation
             List<Sprite> allSprites, HashSet<Sprite> stagedCreatedSprites, HashSet<Texture2D> stagedTextures,
             List<BattleAtlasSourcePixels> stagedAtlasSources, Dictionary<string, Sprite> clampedSpritesByContent,
             Dictionary<Sprite, string> clampedSourcePathsBySprite, BodySheetSpritePlan plan,
-            Color32[] processedSheet, Texture2D texture)
+            Color32[] processedSheet, Texture2D texture, bool retainForAtlas = true)
         {
             int created = 0;
             int textureWidth = texture.width, textureHeight = texture.height;
@@ -3501,7 +3740,7 @@ namespace NTSD.Animation
                             new Vector2(0.5f, 0f), 100f, 0, SpriteMeshType.FullRect);
                         stagedCreatedSprites.Add(clampedSprite);
                         string virtualPath = NativeClampedCellSourcePath(clampedHash);
-                        stagedAtlasSources.Add(new BattleAtlasSourcePixels(
+                        if (retainForAtlas) stagedAtlasSources.Add(new BattleAtlasSourcePixels(
                             virtualPath, spriteWidth, spriteHeight, clampedPixels));
                         clampedSourcePathsBySprite.Add(clampedSprite, virtualPath);
                         clampedSpritesByContent.Add(clampedHash, clampedSprite);
@@ -3515,7 +3754,12 @@ namespace NTSD.Animation
                 if (!spriteRect.HasValue)
                     continue;
 
-                Vector2 pivot = ComputeIndexedSpritePivot(
+                // Alignment contract: NTSD-M12-TRANSPARENT-TRIM-001. Anchor remains on the native full canvas.
+                Rect content = plan.ContentRects == null
+                    ? new Rect(0, 0, spriteWidth, spriteHeight) : plan.ContentRects[i];
+                Vector2 pivot = plan.DerivedPagePath != null
+                    ? new Vector2((spriteWidth * 0.5f - content.x) / content.width, -content.y / content.height)
+                    : ComputeIndexedSpritePivot(
                     fileInfo,
                     textureWidth,
                     textureHeight,
@@ -3531,6 +3775,8 @@ namespace NTSD.Animation
                     SpriteMeshType.FullRect
                 );
                 sprite.name = $"sprite_{i / col}_{i % col}";
+                if (plan.DerivedPagePath != null)
+                    clampedSourcePathsBySprite.Add(sprite, plan.DerivedPagePath);
                 stagedCreatedSprites.Add(sprite);
                 allSprites[targetIndex] = sprite;
                 created++;
@@ -3669,7 +3915,16 @@ namespace NTSD.Animation
             Dictionary<int, List<Sprite>> spritesByVisualDataId,
             IReadOnlyDictionary<Sprite, string> clampedSourcePathsBySprite = null)
         {
+            return BuildBattleSpriteCatalogWithReplacements(configs, spritesByVisualDataId, clampedSourcePathsBySprite, null, null);
+        }
+
+        internal static BattleSpriteCatalog BuildBattleSpriteCatalogWithReplacements(
+            Dictionary<int, LF2CharacterDataWrapper> configs, Dictionary<int, List<Sprite>> spritesByVisualDataId,
+            IReadOnlyDictionary<Sprite, string> clampedSourcePathsBySprite, BattleDerivedSpritePages derivedPages,
+            HashSet<UnityEngine.Object> ownedResources)
+        {
             var builder = new BattleSpriteCatalogBuilder();
+            var replacements = new Dictionary<BattleDerivedSpritePages.Chunk, BattleSpriteReplacementFrame[]>();
 
             foreach (var config in configs.Values)
             {
@@ -3726,9 +3981,28 @@ namespace NTSD.Animation
                             clampedSourcePathsBySprite.TryGetValue(legacySprite,
                                 out string clampedSourcePath))
                         {
+                            // Sprite.pivot is expressed in the cropped rectangle; recover the exact integer canvas offset.
+                            var content = new Rect(
+                                Mathf.RoundToInt(fileInfo.width * 0.5f - legacySprite.pivot.x),
+                                Mathf.RoundToInt(-legacySprite.pivot.y),
+                                legacySprite.rect.width, legacySprite.rect.height);
                             builder.Add(visualDataId, effectivePic, clampedSourcePath,
                                 legacySprite.texture, legacySprite.rect,
-                                new Vector2(0.5f, 0f), legacySprite);
+                                new Vector2(0.5f, 0f), legacySprite,
+                                new Vector2(fileInfo.width, fileInfo.height), content);
+                            if (derivedPages != null && derivedPages.TryGetSource(fileInfo.filePath, out var mapped))
+                            {
+                                var chunk = mapped.Chunks.First(c => localPic >= c.FirstLocalPic && localPic < c.FirstLocalPic + c.Count);
+                                if (chunk.ReplacementPatches != null)
+                                {
+                                    if (!replacements.TryGetValue(chunk, out var frames))
+                                    {
+                                        frames = BattleSpriteReplacementFrame.Create(legacySprite.texture, legacySprite.rect, chunk.ReplacementPatches, ownedResources);
+                                        replacements.Add(chunk, frames);
+                                    }
+                                    builder.SetReplacementFrame(visualDataId, effectivePic, frames[localPic - chunk.FirstLocalPic]);
+                                }
+                            }
                             continue;
                         }
                         if (texture == null || localPic >= rects.Length ||
@@ -4549,7 +4823,8 @@ namespace NTSD.Animation
             if (spritePrewarmDisposed || invocation != spritePrewarmGeneration) return false;
             return activeNativePrewarm == null || activeNativePrewarm.Invocation != invocation ||
                 (!activeNativePrewarm.Cancelled && activeNativePrewarm.Data != null && activeNativePrewarm.UI != null &&
-                    NativeContentBoundaryIsOpen() && (activeNativePrewarm.CanContinue?.Invoke() ?? true));
+                    (activeNativePrewarm.PublicationBoundary?.Invoke() ?? NativeContentBoundaryIsOpen()) &&
+                    (activeNativePrewarm.CanContinue?.Invoke() ?? true));
         }
 
         internal void MarkSpritePrewarmDestroyedForSelfCheck()
@@ -4604,6 +4879,9 @@ namespace NTSD.Animation
             IsPrewarmCompleted = true;
             PublishedVisualContentKey = null;
             publishedLoganCandidate = null;
+            publishedImageLoadPlan = null;
+            LastNativeImageMemoryBudget = null;
+            LastSelectedBodySheetDeclarationCount = 0;
             publishedUiHeadIds.Clear();
             LastAtlasDiagnostic = atlasDiagnostic ?? string.Empty;
             TryRetireCatalogIfUnbound(previousCatalog);
@@ -4797,6 +5075,9 @@ namespace NTSD.Animation
                 DestroyStagedPresentation(ownership.Sprites, ownership.Resources);
             retiredSpritePublications.Clear();
             spriteCatalogRendererBindings.Clear();
+            publishedImageLoadPlan = null;
+            LastNativeImageMemoryBudget = null;
+            LastSelectedBodySheetDeclarationCount = 0;
         }
 
         private void InvalidateSpriteCatalog()

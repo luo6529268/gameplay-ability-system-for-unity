@@ -1,0 +1,111 @@
+$ErrorActionPreference='Stop'
+$env:GIT_OPTIONAL_LOCKS='0'
+$repoRoot=(Resolve-Path -LiteralPath '.').Path
+$opRoot=Join-Path $repoRoot 'docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014'
+$initial=Get-Content -LiteralPath (Join-Path $opRoot 'initial-state.json') -Raw|ConvertFrom-Json
+$recoveryRoot=$initial.Recovery
+$diagRoot=(Resolve-Path -LiteralPath 'artifacts/diagnostics').Path
+$utf8=[Text.UTF8Encoding]::new($false)
+$nl=[Environment]::NewLine
+function Write-JsonGzip([string]$path,$value) {
+ if(Test-Path -LiteralPath $path){throw "Audit output already exists: $path"}
+ $stream=[IO.File]::Open($path,[IO.FileMode]::CreateNew,[IO.FileAccess]::Write,[IO.FileShare]::None)
+ $gzip=[IO.Compression.GZipStream]::new($stream,[IO.Compression.CompressionLevel]::Optimal)
+ $writer=[IO.StreamWriter]::new($gzip,[Text.UTF8Encoding]::new($false))
+ try{$writer.Write(($value|ConvertTo-Json -Depth 8 -Compress))}finally{$writer.Dispose();$gzip.Dispose();$stream.Dispose()}
+}
+$scopes=[Collections.Generic.List[object]]::new()
+foreach($n in @('01','02')){$scopes.Add([pscustomobject]@{Prefix="artifacts/diagnostics/M12-astc-eight-role-20261013/astc-full-candidate-$n/prepared/";Kind='PreparedPng';Reason='ASTC 编码前翻转后的派生暂存 PNG，工具由正式源 PNG 重新生成，不是运行输入'})}
+foreach($n in 1..11){$scopes.Add([pscustomobject]@{Prefix=('artifacts/diagnostics/M12-full-image-coverage-20261014/memory-worker/results-{0:d2}/' -f $n);Kind='SupersededAnalysis';Reason='全角色依赖/预算迭代中间结果，memory-worker/final-02 与 delivery-inventory-01 已取代'})}
+$scopes.Add([pscustomobject]@{Prefix='artifacts/diagnostics/M12-full-image-coverage-20261014/memory-worker/final-01/';Kind='SupersededAnalysis';Reason='早期 final-01 已被 RGBA 预算纠正后的 final-02 取代'})
+foreach($n in @('results-01','results-02','toverify','toverify-corrected','stress-cases-01','desktop-cases-01','desktop-cases-02')){$scopes.Add([pscustomobject]@{Prefix="artifacts/diagnostics/M12-full-image-coverage-20261014/selector-worker/$n/";Kind='SupersededSelector';Reason='选择器试跑输出，保留 results-03/final-01/desktop-cases-03/production-budget-delivery-01'})}
+foreach($n in 1..14){$scopes.Add([pscustomobject]@{Prefix=('artifacts/diagnostics/M12-match-image-residency-20261013/compile-{0:d2}/' -f $n);Kind='IntermediateBinary';Reason='重复窄编译 DLL/PDB/cache；源码、RSP、日志保留；最终 compile-15 保留'})}
+foreach($n in 1..2){$scopes.Add([pscustomobject]@{Prefix=('artifacts/diagnostics/M12-astc-eight-role-20261013/compile-{0:d2}/' -f $n);Kind='IntermediateBinary';Reason='重复窄编译 DLL/PDB/cache；最终 compile-03 保留'})}
+foreach($n in @('build','build-budget-admission-01')){$scopes.Add([pscustomobject]@{Prefix="artifacts/diagnostics/M12-full-image-coverage-20261014/selector-worker/$n/";Kind='IntermediateBinary';Reason='试验构建 DLL/PDB/cache；最终 build-stable-final-01 保留'})}
+$scopes|ConvertTo-Json -Depth 3|Set-Content -LiteralPath (Join-Path $opRoot 'scope-review.json') -Encoding utf8NoBOM
+$reparse=@(Get-ChildItem -LiteralPath 'artifacts' -Recurse -Force -Attributes ReparsePoint)
+if($reparse.Count -ne 0){throw 'Artifact reparse point found'}
+$stageRows=@(git -c core.quotepath=false ls-files --stage -- artifacts)
+if($LASTEXITCODE -ne 0){throw 'git index enumeration failed'}
+$tracked=[Collections.Generic.Dictionary[string,object]]::new([StringComparer]::OrdinalIgnoreCase)
+foreach($line in $stageRows){
+ $parts=$line -split ([string][char]9),2
+ if($parts.Count -ne 2 -or $parts[0] -notmatch '^(\d+) ([0-9a-f]+) 0$'){throw "Unexpected index entry: $line"}
+ if($Matches[1] -ne '100644' -and $Matches[1] -ne '100755'){throw 'Unsupported file mode'}
+ $tracked.Add($parts[1],[pscustomobject]@{Mode=$Matches[1];Blob=$Matches[2]})
+}
+if($tracked.Count -ne $initial.TrackedArtifacts){throw 'Tracked scope drift'}
+if(@(git diff --name-only -- artifacts).Count -ne 0 -or @(git diff --cached --name-only).Count -ne 0){throw 'Modified/staged artifact or user staging found'}
+$files=@(Get-ChildItem -LiteralPath 'artifacts' -File -Recurse -Force|Sort-Object FullName)
+$metadata=[Collections.Generic.List[object]]::new()
+$removals=[Collections.Generic.List[object]]::new()
+$trackedManifest=[Collections.Generic.List[object]]::new()
+$hashCount=0
+$diagnosticCount=0
+[long]$diagnosticBytes=0
+foreach($file in $files){
+ $relative=[IO.Path]::GetRelativePath($repoRoot,$file.FullName).Replace('\','/')
+ $isDiagnostic=$relative.StartsWith('artifacts/diagnostics/',[StringComparison]::OrdinalIgnoreCase)
+ if($isDiagnostic){$diagnosticCount++;$diagnosticBytes+=$file.Length}
+ $row=[pscustomobject]@{Path=$relative;AbsolutePath=$file.FullName;Bytes=[long]$file.Length;LastWriteUtcTicks=$file.LastWriteTimeUtc.Ticks;Attributes=[int]$file.Attributes;Sha256=$null;GitTracked=$tracked.ContainsKey($relative);GitBlob=$null;GitMode=$null;GitStatus=$null;CleanupKind=$null;CleanupReason=$null}
+ if($row.GitTracked){$row.GitBlob=$tracked[$relative].Blob;$row.GitMode=$tracked[$relative].Mode;$row.GitStatus='tracked; index=HEAD; worktree clean'}
+ else{$row.GitStatus='untracked or already ignored; exact bytes backed up if selected'}
+ foreach($scope in $scopes){
+  if($relative.StartsWith($scope.Prefix,[StringComparison]::OrdinalIgnoreCase)){
+   $allowed=switch($scope.Kind){'PreparedPng'{$file.Extension -ieq '.png'} 'IntermediateBinary'{$file.Extension -iin @('.dll','.pdb','.cache')} default{$file.Extension -iin @('.json','.csv','.tsv','.txt','.md')}}
+   if($allowed){$row.CleanupKind=$scope.Kind;$row.CleanupReason=$scope.Reason}
+   break
+  }
+ }
+ if($row.GitTracked -or $row.CleanupKind){
+  $row.Sha256=(Get-FileHash -LiteralPath $file.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+  $fresh=Get-Item -LiteralPath $file.FullName
+  if($fresh.Length -ne $row.Bytes -or $fresh.LastWriteTimeUtc.Ticks -ne $row.LastWriteUtcTicks){throw "File drift during hash: $relative"}
+  $hashCount++
+  if(($hashCount%2000)-eq 0){Write-Output "Hashed $hashCount tracked/cleanup files"}
+ }
+ $metadata.Add($row)
+ if($row.GitTracked){$trackedManifest.Add($row)}
+ if($row.CleanupKind){
+  $absolute=[IO.Path]::GetFullPath($file.FullName)
+  if(-not $absolute.StartsWith($diagRoot+[IO.Path]::DirectorySeparatorChar,[StringComparison]::OrdinalIgnoreCase)){throw 'Cleanup path escaped diagnostics'}
+  $removals.Add($row)
+ }
+}
+if($trackedManifest.Count -ne $tracked.Count){throw 'Tracked local files missing; refusing index change'}
+if($removals.Count -eq 0){throw 'No cleanup candidates'}
+Write-JsonGzip (Join-Path $recoveryRoot 'artifact-metadata-before.json.gz') ($metadata.ToArray())
+Write-JsonGzip (Join-Path $opRoot 'tracked-artifacts-before.json.gz') ($trackedManifest.ToArray())
+Write-JsonGzip (Join-Path $opRoot 'removal-manifest.json.gz') ($removals.ToArray())
+$originals=Get-Content -LiteralPath 'artifacts/diagnostics/M12-match-image-residency-20261013/protected-before.json' -Raw|ConvertFrom-Json
+$protected=[Collections.Generic.List[object]]::new()
+foreach($entry in $originals){
+ $absolute=Join-Path $repoRoot $entry.path
+ $hash=(Get-FileHash -LiteralPath $absolute -Algorithm SHA256).Hash.ToLowerInvariant()
+ if($hash -ne $entry.sha256 -or (Get-Item -LiteralPath $absolute).Length -ne $entry.bytes){throw "Previously protected resource drift: $($entry.path)"}
+ $protected.Add([pscustomobject]@{Path=$entry.path;Bytes=$entry.bytes;Sha256=$hash})
+}
+foreach($relative in @('Tools/Audit-NtsdFullImageCoverage.py','Tools/NTSD28ImageDependencyTests/Program.cs','Assets/NTSD/Scripts/Test/Editor/M12MatchImageSceneFlowEditorTests.cs','Assets/NTSD/Content/LoganRuntime/derived_astc/manifest.json','Assets/NTSD/Content/LoganRuntime/derived_sprite_pages/manifest.json')){
+ if(-not ($protected.Path -contains $relative)){
+ $protected.Add([pscustomobject]@{Path=$relative;Bytes=(Get-Item -LiteralPath $relative).Length;Sha256=(Get-FileHash -LiteralPath $relative -Algorithm SHA256).Hash.ToLowerInvariant()})
+ }
+}
+Write-JsonGzip (Join-Path $recoveryRoot 'original-resources-source-before.json.gz') ($protected.ToArray())
+$keepDirs=@('artifacts/diagnostics/M12-full-image-coverage-20261014/delivery-inventory-01/','artifacts/diagnostics/M12-full-image-coverage-20261014/memory-worker/final-02/','artifacts/diagnostics/M12-full-image-coverage-20261014/selector-worker/final-01/','artifacts/diagnostics/M12-full-image-coverage-20261014/selector-worker/desktop-cases-03/','artifacts/diagnostics/M12-full-image-coverage-20261014/selector-worker/production-budget-delivery-01/','artifacts/diagnostics/M12-match-image-residency-20261013/complete-dependencies-01/')
+$keepExact=@('artifacts/diagnostics/M12-full-image-coverage-20261014/REPORT.md','artifacts/diagnostics/M12-full-image-coverage-20261014/ALL-50-ROLES.md','artifacts/diagnostics/M12-full-image-coverage-20261014/validation-delivery-01.json','artifacts/diagnostics/M12-full-image-coverage-20261014/unity-scene-flow-02.xml','artifacts/diagnostics/M12-full-image-coverage-20261014/unity-scene-flow-02.log','artifacts/diagnostics/M12-match-image-residency-20261013/REPORT.md','artifacts/diagnostics/M12-match-image-residency-20261013/validation-final.json','artifacts/diagnostics/M12-match-image-residency-20261013/unity-scene-flow-08.xml','artifacts/diagnostics/M12-match-image-residency-20261013/unity-scene-flow-08.log','artifacts/diagnostics/M12-astc-eight-role-20261013/eight-role-audit-worker/capture/role-resource-capture.json')
+$kept=[Collections.Generic.List[object]]::new()
+foreach($row in $metadata){
+ $needed=$keepExact -contains $row.Path
+ if(-not $needed){foreach($prefix in $keepDirs){if($row.Path.StartsWith($prefix,[StringComparison]::OrdinalIgnoreCase)){$needed=$true;break}}}
+ if($needed){
+  if($row.CleanupKind){throw 'Cleanup overlaps final evidence'}
+  $kept.Add([pscustomobject]@{Path=$row.Path;Bytes=$row.Bytes;Sha256=(Get-FileHash -LiteralPath $row.AbsolutePath -Algorithm SHA256).Hash.ToLowerInvariant()})
+ }
+}
+Write-JsonGzip (Join-Path $recoveryRoot 'final-evidence-before.json.gz') ($kept.ToArray())
+$groups=foreach($group in ($removals|Group-Object CleanupKind)){[pscustomobject]@{Kind=$group.Name;Files=$group.Count;Bytes=[long](($group.Group|Measure-Object Bytes -Sum).Sum)}}
+$manifestIdentities=foreach($path in @('tracked-artifacts-before.json.gz','removal-manifest.json.gz','scope-review.json')){[pscustomobject]@{Path=$path;Sha256=(Get-FileHash -LiteralPath (Join-Path $opRoot $path) -Algorithm SHA256).Hash.ToLowerInvariant();Bytes=(Get-Item -LiteralPath (Join-Path $opRoot $path)).Length}}
+$summary=[pscustomobject]@{Operation=$initial.Operation;Status='MANIFEST_FROZEN';FrozenAt=[DateTimeOffset]::Now.ToString('o');Pid=$PID;ArtifactsBeforeFiles=$files.Count;ArtifactsBeforeBytes=[long](($files|Measure-Object Length -Sum).Sum);DiagnosticsBeforeFiles=$diagnosticCount;DiagnosticsBeforeBytes=$diagnosticBytes;TrackedArtifacts=$trackedManifest.Count;CleanupFiles=$removals.Count;CleanupBytes=[long](($removals|Measure-Object Bytes -Sum).Sum);Groups=@($groups);OriginalResourceAndSourceFiles=$protected.Count;KeyFinalEvidenceFiles=$kept.Count;ManifestIdentities=@($manifestIdentities);Recovery=$recoveryRoot}
+$summary|ConvertTo-Json -Depth 6|Set-Content -LiteralPath (Join-Path $opRoot 'preflight-summary.json') -Encoding utf8NoBOM
+[IO.File]::AppendAllText((Join-Path $opRoot 'RECORD.md'),($nl+'精确范围已冻结，见 preflight-summary.json、scope-review.json、removal-manifest.json.gz、tracked-artifacts-before.json.gz；命令文本 FREEZE-COMMAND.txt。未执行删除/忽略/索引修改。保留 selector/results-03 及全部最终编译目录。原资源逐项核对通过；键证据额外哈希冻结。'+$nl),$utf8)
+$summary|ConvertTo-Json -Depth 6

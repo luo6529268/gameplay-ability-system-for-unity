@@ -1,4 +1,0 @@
-# GC归因03首次发现失败
-
-原Editor import后编译期间误提交新test job b2444c7261e94cd492a35883cdc7eb73，终态succeeded但实际XML total=0，不算执行/PASS。原XML SHA753E7DD7664334E831A04977B1D7FA44EDBA72EB75D210CDB46319F6A4BB7B21保留。
-Console实际编译错误：AiDecisionSoAShadowEditorTests.cs(1690,34) CS1061，新增归因输出rows.Select缺System.Linq。仅补该using，不改runtime/原验收；下一等待编译且确认新测试可发现后精确单case执行。

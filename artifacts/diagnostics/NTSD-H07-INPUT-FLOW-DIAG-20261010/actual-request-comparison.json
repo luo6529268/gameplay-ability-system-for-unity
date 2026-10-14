@@ -1,9 +1,0 @@
-{
-  "requestDifferences": {
-    "outputPath": [
-      "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/windows/00-combat1000-off/report.json",
-      "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/windows/00-combat1000-input-on/report.json"
-    ]
-  },
-  "timingScopeNote": "Request equality does not mean diagnostic-owner equality; this window has all input boundary timing plus Profiler and per-tick marker instrumentation."
-}

@@ -534,6 +534,9 @@ namespace NTSD.Simulation
                 BattleVisualResourceKey.FromEntity(new BattleSpriteKey(
                     LF2Entity.ResolveCurrentDataObjectId(entity),
                     entity.GetRenderPicIndex())));
+            Vector2 spriteSize = CaptureRendererSpriteSize(renderer);
+            ResolveLegacyEntityCanvasMetrics(entity.Sprite?.CurrentEntry, renderer.sprite,
+                ref spriteSize, ref descriptor);
             int visualDataId = descriptor.HasLogicalResourceKey &&
                                descriptor.LogicalResourceKey.IsEntitySprite
                 ? descriptor.LogicalResourceKey.EntitySpriteKey.VisualDataId
@@ -553,9 +556,25 @@ namespace NTSD.Simulation
                 renderer.sortingLayerID,
                 0,
                 renderer.transform.position,
-                CaptureRendererSpriteSize(renderer),
+                spriteSize,
                 renderState,
                 descriptor));
+        }
+
+        internal static void ResolveLegacyEntityCanvasMetrics(BattleSpriteEntry entry, Sprite actualSprite,
+            ref Vector2 size, ref BattleSpriteValueDescriptor descriptor)
+        {
+            if (entry == null || actualSprite == null || entry.LegacySprite != actualSprite ||
+                !descriptor.HasLogicalResourceKey || !descriptor.LogicalResourceKey.IsEntitySprite ||
+                descriptor.LogicalResourceKey.EntitySpriteKey != entry.Key ||
+                entry.ContentRect == new Rect(0, 0, entry.PixelWidth, entry.PixelHeight))
+                return;
+
+            // Alignment contract: NTSD-M12-TRANSPARENT-TRIM-001. Compare native canvas metrics after proving sprite identity.
+            size = new Vector2(entry.PixelWidth, entry.PixelHeight);
+            descriptor = new BattleSpriteValueDescriptor(descriptor.RequiresSprite, descriptor.HasSprite,
+                descriptor.SpriteInstanceId, descriptor.TextureInstanceId, descriptor.MaterialInstanceId,
+                descriptor.PixelRect, entry.Pivot, descriptor.LogicalResourceKey);
         }
 
         internal void RecordLegacyHitRecordProbe(

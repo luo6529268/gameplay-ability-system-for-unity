@@ -1,9 +1,0 @@
-{
-  "mode": "EditMode",
-  "testNames": [
-    "NTSD.Test.Editor.NTSD28OriginalCatchSkillCompletionEditorTests.HeldSkillWithoutCaughtTargetKeepsNativeAbort",
-    "NTSD.Test.Editor.NTSD28OriginalCatchSkillCompletionEditorTests.LostVictimCatchUsesAuthoredHeldSkillCompletion",
-    "NTSD.Test.Editor.NTSD28RasenganCommonRegressionEditorTests.HeldRasenganAttackAndTerminationMatchesSelectedReference"
-  ],
-  "includeFailedTests": true
-}

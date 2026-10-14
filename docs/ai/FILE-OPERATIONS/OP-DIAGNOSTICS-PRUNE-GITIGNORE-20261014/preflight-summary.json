@@ -1,0 +1,55 @@
+{
+  "Operation": "OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014",
+  "Status": "MANIFEST_FROZEN",
+  "FrozenAt": "2026-10-14T19:35:13.9565205+08:00",
+  "Pid": 48824,
+  "ArtifactsBeforeFiles": 60962,
+  "ArtifactsBeforeBytes": 19991148495,
+  "DiagnosticsBeforeFiles": 60962,
+  "DiagnosticsBeforeBytes": 19991148495,
+  "TrackedArtifacts": 21697,
+  "CleanupFiles": 3653,
+  "CleanupBytes": 5929910994,
+  "Groups": [
+    {
+      "Kind": "IntermediateBinary",
+      "Files": 78,
+      "Bytes": 197382662
+    },
+    {
+      "Kind": "PreparedPng",
+      "Files": 1402,
+      "Bytes": 3597214201
+    },
+    {
+      "Kind": "SupersededAnalysis",
+      "Files": 1521,
+      "Bytes": 2064881042
+    },
+    {
+      "Kind": "SupersededSelector",
+      "Files": 652,
+      "Bytes": 70433089
+    }
+  ],
+  "OriginalResourceAndSourceFiles": 6854,
+  "KeyFinalEvidenceFiles": 407,
+  "ManifestIdentities": [
+    {
+      "Path": "tracked-artifacts-before.json.gz",
+      "Sha256": "4d6d3eab77aa8c5f87a0a3a352da3f2d02c58dfde6f9960db229e0c3599dd5e5",
+      "Bytes": 1753233
+    },
+    {
+      "Path": "removal-manifest.json.gz",
+      "Sha256": "0f72c9e0ad600618ec33af3a12e1e6bb4b7c125c032d0c5893978cb58d61cdd7",
+      "Bytes": 279526
+    },
+    {
+      "Path": "scope-review.json",
+      "Sha256": "7bb0eb2efedb7dc3ceceea80d6db86a427710563dfced04720de66a755417808",
+      "Bytes": 9697
+    }
+  ],
+  "Recovery": "I:\\CodexRecovery\\Unity_GAS\\OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014"
+}

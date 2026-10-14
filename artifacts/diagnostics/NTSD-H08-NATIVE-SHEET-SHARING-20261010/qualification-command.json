@@ -1,9 +1,0 @@
-{
-  "tool": "run_tests",
-  "params": {
-    "mode": "EditMode",
-    "testNames": [
-      "NTSD.Test.NTSD28B11AtomicPublicationEditorTests.NativeSheetReuse_DestroyCallbackQualificationOnly"
-    ]
-  }
-}

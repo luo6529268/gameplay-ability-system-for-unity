@@ -170,6 +170,8 @@ namespace NTSD.App
 
                 SceneManager.SetActiveScene(scene);
 
+                MatchConfig imageMatch = CurrentMatchConfig;
+                string imageMatchFingerprint = MatchImageConfigurationFingerprint(imageMatch);
                 try
                 {
                     simulationDriver.ApplyMatchConfig(CurrentMatchConfig);
@@ -203,6 +205,11 @@ namespace NTSD.App
                             visualRoots.Add(player.characterId);
                     }
                 }
+                if (!await contentManager.PrepareBattleImagesAsync(simulationDriver, visualRoots) ||
+                    this == null || !MatchImageConfigurationStillCurrent(
+                        imageMatch, imageMatchFingerprint, CurrentMatchConfig) ||
+                    !simulationDriver.IsBattlePreparationCurrent(preparationGeneration, preparationWorld))
+                    throw new System.OperationCanceledException("Match image preparation was superseded.");
                 contentManager.PrepareBattleCentralBindings(simulationDriver, visualRoots);
                 simulationDriver.PrepareBattleRuntimeServices();
                 SetupBattleCharacters(scene);
@@ -287,6 +294,18 @@ namespace NTSD.App
             }
 
             eventSystem.gameObject.SetActive(true);
+        }
+
+        internal static string MatchImageConfigurationFingerprint(MatchConfig match)
+        {
+            return match == null ? string.Empty : JsonUtility.ToJson(match);
+        }
+
+        internal static bool MatchImageConfigurationStillCurrent(MatchConfig expected, string fingerprint,
+            MatchConfig current)
+        {
+            return ReferenceEquals(expected, current) && string.Equals(fingerprint,
+                MatchImageConfigurationFingerprint(current), System.StringComparison.Ordinal);
         }
 
         private void SetupBattleCharacters(Scene battleScene)
@@ -509,6 +528,9 @@ namespace NTSD.App
                         return;
                     try
                     {
+                        CharacterAnimtorManager images = CharacterAnimtorManager.TryGetInstance();
+                        if (images != null && !images.TryReleaseBattleImagesForMenu(out string imageDiagnostic))
+                            Debug.LogWarning("[AppManager] " + imageDiagnostic);
                         menuUi?.EnableMenuUiCamera(true);
                         if (returnToCharacterSelection)
                         {

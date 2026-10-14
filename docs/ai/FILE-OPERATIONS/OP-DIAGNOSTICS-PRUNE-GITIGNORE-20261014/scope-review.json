@@ -1,0 +1,197 @@
+[
+  {
+    "Prefix": "artifacts/diagnostics/M12-astc-eight-role-20261013/astc-full-candidate-01/prepared/",
+    "Kind": "PreparedPng",
+    "Reason": "ASTC 编码前翻转后的派生暂存 PNG，工具由正式源 PNG 重新生成，不是运行输入"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-astc-eight-role-20261013/astc-full-candidate-02/prepared/",
+    "Kind": "PreparedPng",
+    "Reason": "ASTC 编码前翻转后的派生暂存 PNG，工具由正式源 PNG 重新生成，不是运行输入"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-full-image-coverage-20261014/memory-worker/results-01/",
+    "Kind": "SupersededAnalysis",
+    "Reason": "全角色依赖/预算迭代中间结果，memory-worker/final-02 与 delivery-inventory-01 已取代"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-full-image-coverage-20261014/memory-worker/results-02/",
+    "Kind": "SupersededAnalysis",
+    "Reason": "全角色依赖/预算迭代中间结果，memory-worker/final-02 与 delivery-inventory-01 已取代"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-full-image-coverage-20261014/memory-worker/results-03/",
+    "Kind": "SupersededAnalysis",
+    "Reason": "全角色依赖/预算迭代中间结果，memory-worker/final-02 与 delivery-inventory-01 已取代"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-full-image-coverage-20261014/memory-worker/results-04/",
+    "Kind": "SupersededAnalysis",
+    "Reason": "全角色依赖/预算迭代中间结果，memory-worker/final-02 与 delivery-inventory-01 已取代"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-full-image-coverage-20261014/memory-worker/results-05/",
+    "Kind": "SupersededAnalysis",
+    "Reason": "全角色依赖/预算迭代中间结果，memory-worker/final-02 与 delivery-inventory-01 已取代"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-full-image-coverage-20261014/memory-worker/results-06/",
+    "Kind": "SupersededAnalysis",
+    "Reason": "全角色依赖/预算迭代中间结果，memory-worker/final-02 与 delivery-inventory-01 已取代"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-full-image-coverage-20261014/memory-worker/results-07/",
+    "Kind": "SupersededAnalysis",
+    "Reason": "全角色依赖/预算迭代中间结果，memory-worker/final-02 与 delivery-inventory-01 已取代"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-full-image-coverage-20261014/memory-worker/results-08/",
+    "Kind": "SupersededAnalysis",
+    "Reason": "全角色依赖/预算迭代中间结果，memory-worker/final-02 与 delivery-inventory-01 已取代"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-full-image-coverage-20261014/memory-worker/results-09/",
+    "Kind": "SupersededAnalysis",
+    "Reason": "全角色依赖/预算迭代中间结果，memory-worker/final-02 与 delivery-inventory-01 已取代"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-full-image-coverage-20261014/memory-worker/results-10/",
+    "Kind": "SupersededAnalysis",
+    "Reason": "全角色依赖/预算迭代中间结果，memory-worker/final-02 与 delivery-inventory-01 已取代"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-full-image-coverage-20261014/memory-worker/results-11/",
+    "Kind": "SupersededAnalysis",
+    "Reason": "全角色依赖/预算迭代中间结果，memory-worker/final-02 与 delivery-inventory-01 已取代"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-full-image-coverage-20261014/memory-worker/final-01/",
+    "Kind": "SupersededAnalysis",
+    "Reason": "早期 final-01 已被 RGBA 预算纠正后的 final-02 取代"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-full-image-coverage-20261014/selector-worker/results-01/",
+    "Kind": "SupersededSelector",
+    "Reason": "选择器试跑输出，保留 results-03/final-01/desktop-cases-03/production-budget-delivery-01"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-full-image-coverage-20261014/selector-worker/results-02/",
+    "Kind": "SupersededSelector",
+    "Reason": "选择器试跑输出，保留 results-03/final-01/desktop-cases-03/production-budget-delivery-01"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-full-image-coverage-20261014/selector-worker/toverify/",
+    "Kind": "SupersededSelector",
+    "Reason": "选择器试跑输出，保留 results-03/final-01/desktop-cases-03/production-budget-delivery-01"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-full-image-coverage-20261014/selector-worker/toverify-corrected/",
+    "Kind": "SupersededSelector",
+    "Reason": "选择器试跑输出，保留 results-03/final-01/desktop-cases-03/production-budget-delivery-01"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-full-image-coverage-20261014/selector-worker/stress-cases-01/",
+    "Kind": "SupersededSelector",
+    "Reason": "选择器试跑输出，保留 results-03/final-01/desktop-cases-03/production-budget-delivery-01"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-full-image-coverage-20261014/selector-worker/desktop-cases-01/",
+    "Kind": "SupersededSelector",
+    "Reason": "选择器试跑输出，保留 results-03/final-01/desktop-cases-03/production-budget-delivery-01"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-full-image-coverage-20261014/selector-worker/desktop-cases-02/",
+    "Kind": "SupersededSelector",
+    "Reason": "选择器试跑输出，保留 results-03/final-01/desktop-cases-03/production-budget-delivery-01"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-match-image-residency-20261013/compile-01/",
+    "Kind": "IntermediateBinary",
+    "Reason": "重复窄编译 DLL/PDB/cache；源码、RSP、日志保留；最终 compile-15 保留"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-match-image-residency-20261013/compile-02/",
+    "Kind": "IntermediateBinary",
+    "Reason": "重复窄编译 DLL/PDB/cache；源码、RSP、日志保留；最终 compile-15 保留"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-match-image-residency-20261013/compile-03/",
+    "Kind": "IntermediateBinary",
+    "Reason": "重复窄编译 DLL/PDB/cache；源码、RSP、日志保留；最终 compile-15 保留"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-match-image-residency-20261013/compile-04/",
+    "Kind": "IntermediateBinary",
+    "Reason": "重复窄编译 DLL/PDB/cache；源码、RSP、日志保留；最终 compile-15 保留"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-match-image-residency-20261013/compile-05/",
+    "Kind": "IntermediateBinary",
+    "Reason": "重复窄编译 DLL/PDB/cache；源码、RSP、日志保留；最终 compile-15 保留"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-match-image-residency-20261013/compile-06/",
+    "Kind": "IntermediateBinary",
+    "Reason": "重复窄编译 DLL/PDB/cache；源码、RSP、日志保留；最终 compile-15 保留"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-match-image-residency-20261013/compile-07/",
+    "Kind": "IntermediateBinary",
+    "Reason": "重复窄编译 DLL/PDB/cache；源码、RSP、日志保留；最终 compile-15 保留"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-match-image-residency-20261013/compile-08/",
+    "Kind": "IntermediateBinary",
+    "Reason": "重复窄编译 DLL/PDB/cache；源码、RSP、日志保留；最终 compile-15 保留"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-match-image-residency-20261013/compile-09/",
+    "Kind": "IntermediateBinary",
+    "Reason": "重复窄编译 DLL/PDB/cache；源码、RSP、日志保留；最终 compile-15 保留"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-match-image-residency-20261013/compile-10/",
+    "Kind": "IntermediateBinary",
+    "Reason": "重复窄编译 DLL/PDB/cache；源码、RSP、日志保留；最终 compile-15 保留"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-match-image-residency-20261013/compile-11/",
+    "Kind": "IntermediateBinary",
+    "Reason": "重复窄编译 DLL/PDB/cache；源码、RSP、日志保留；最终 compile-15 保留"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-match-image-residency-20261013/compile-12/",
+    "Kind": "IntermediateBinary",
+    "Reason": "重复窄编译 DLL/PDB/cache；源码、RSP、日志保留；最终 compile-15 保留"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-match-image-residency-20261013/compile-13/",
+    "Kind": "IntermediateBinary",
+    "Reason": "重复窄编译 DLL/PDB/cache；源码、RSP、日志保留；最终 compile-15 保留"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-match-image-residency-20261013/compile-14/",
+    "Kind": "IntermediateBinary",
+    "Reason": "重复窄编译 DLL/PDB/cache；源码、RSP、日志保留；最终 compile-15 保留"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-astc-eight-role-20261013/compile-01/",
+    "Kind": "IntermediateBinary",
+    "Reason": "重复窄编译 DLL/PDB/cache；最终 compile-03 保留"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-astc-eight-role-20261013/compile-02/",
+    "Kind": "IntermediateBinary",
+    "Reason": "重复窄编译 DLL/PDB/cache；最终 compile-03 保留"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-full-image-coverage-20261014/selector-worker/build/",
+    "Kind": "IntermediateBinary",
+    "Reason": "试验构建 DLL/PDB/cache；最终 build-stable-final-01 保留"
+  },
+  {
+    "Prefix": "artifacts/diagnostics/M12-full-image-coverage-20261014/selector-worker/build-budget-admission-01/",
+    "Kind": "IntermediateBinary",
+    "Reason": "试验构建 DLL/PDB/cache；最终 build-stable-final-01 保留"
+  }
+]

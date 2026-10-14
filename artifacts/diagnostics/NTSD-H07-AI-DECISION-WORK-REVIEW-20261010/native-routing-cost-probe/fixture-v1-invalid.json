@@ -1,6 +1,0 @@
-{
-  "status": "INVALID_FIXTURE",
-  "nunitPassed": true,
-  "reason": "default Authority400; 600 rejected per window; elapsed/checksum not 1000 registered evidence",
-  "correctiveRerun": "once with DesktopExtended1024 and explicit registration assertions; no rerun to find gain"
-}

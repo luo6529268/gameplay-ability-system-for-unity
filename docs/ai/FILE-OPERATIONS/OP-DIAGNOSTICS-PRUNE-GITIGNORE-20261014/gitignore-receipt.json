@@ -1,0 +1,13 @@
+{
+  "Status": "VERIFIED",
+  "EndedAt": "2026-10-14T19:22:17.7717704+08:00",
+  "Pid": 47268,
+  "BeforeSha256": "4896e092e034f7267be74f3563af16415e1865c035848f4e09f4a2d58603ef33",
+  "AfterSha256": "fe52e699e3a1a08b5256c4971df806f055c1cc1b7ff7763f11f659edcbab7bb2",
+  "OriginalPrefixPreserved": true,
+  "Probe": [
+    ".gitignore:85:/artifacts/\tartifacts/diagnostics/ignore-verification-probe.txt",
+    ".gitignore:85:/artifacts/\tartifacts/ignore-verification-probe.txt"
+  ],
+  "Note": "Only ignore rule applied; already tracked artifacts stay tracked until the separate audited index operation."
+}

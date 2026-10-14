@@ -1,0 +1,14 @@
+{
+  "PreparedAt": "2026-10-14T19:44:48.7744087+08:00",
+  "Sha256": "9e44bfad0b97ee3cb96e332255f6071769ba3e4dff4c297fb6efe816b6bb755d",
+  "Bytes": 13570,
+  "ParserErrors": [],
+  "ParserErrorCount": 0,
+  "RemoveItemCount": 1,
+  "RemoveItemText": [
+    "Remove-Item -LiteralPath $item.AbsolutePath -Force -ErrorAction Stop"
+  ],
+  "InvokedByCodex": false,
+  "ManualRunCount": 0,
+  "Revision": "01 optimized metadata root resolution only"
+}

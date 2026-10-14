@@ -1,0 +1,17 @@
+{
+  "Operation": "OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014",
+  "Status": "RUNNING",
+  "StartedAt": "2026-10-14T19:38:52.0737789+08:00",
+  "Pid": 53384,
+  "IndexPath": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/.git/index",
+  "IndexBeforeSha256": "267d13c85b965b6af2a3c5d247af28473ccedd21100691dabdb8aab000f0bfea",
+  "IndexBackup": "I:\\CodexRecovery\\Unity_GAS\\OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014\\git-index.before.bin",
+  "TrackedManifestSha256": "4d6d3eab77aa8c5f87a0a3a352da3f2d02c58dfde6f9960db229e0c3599dd5e5",
+  "TrackedCount": 21697,
+  "Commands": [
+    "git rm -r --cached --quiet -- artifacts",
+    "git add -- .gitignore"
+  ],
+  "WorkingFilesDeletedByGit": 0,
+  "CommitOrPush": false
+}

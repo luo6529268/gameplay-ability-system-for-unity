@@ -1,0 +1,17 @@
+{
+  "Operation": "OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014",
+  "Status": "VERIFIED",
+  "StartedAt": "2026-10-14T19:35:38.9329095+08:00",
+  "EndedAt": "2026-10-14T19:36:12.1209211+08:00",
+  "Pid": 53608,
+  "Archive": "I:\\CodexRecovery\\Unity_GAS\\OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014\\diagnostics-pruned-files.zip",
+  "ArchiveSha256": "32326855661ed08f7ae0975bc364037d7ba2540993b66024bdff12812920ed7e",
+  "ArchiveBytes": 358875990,
+  "SourceFiles": 3653,
+  "SourceBytes": 5929910994,
+  "VerifiedEntryCount": 3653,
+  "EntryVerification": "I:\\CodexRecovery\\Unity_GAS\\OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014\\archive-entry-verification.json.gz",
+  "EntryVerificationSha256": "69d63c86c7419d1cbd4bc86cf310a921272a9aad6752b4085a2bf9ed7d56ec85",
+  "ManifestSha256": "0f72c9e0ad600618ec33af3a12e1e6bb4b7c125c032d0c5893978cb58d61cdd7",
+  "NoDeletionYet": true
+}

@@ -1,0 +1,13 @@
+{
+  "Operation": "OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014",
+  "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\.gitignore",
+  "StartedAt": "2026-10-14T19:22:17.6774772+08:00",
+  "Pid": 47268,
+  "BeforeSha256": "4896e092e034f7267be74f3563af16415e1865c035848f4e09f4a2d58603ef33",
+  "BeforeBytes": 1519,
+  "Addition": "\r\n# Local generated diagnostics and validation outputs\r\n/artifacts/\r\n",
+  "AfterSha256": "fe52e699e3a1a08b5256c4971df806f055c1cc1b7ff7763f11f659edcbab7bb2",
+  "AfterBytes": 1588,
+  "Backup": "I:\\CodexRecovery\\Unity_GAS\\OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014\\before\\.gitignore",
+  "Command": "IGNORE-COMMAND.txt"
+}

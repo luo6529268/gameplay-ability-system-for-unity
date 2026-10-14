@@ -1,9 +1,0 @@
-{
-  "mode": "EditMode",
-  "testNames": [
-    "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.StaleLiveTargetSurvivesFailedScan",
-    "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.CachedInvalidLiveTargetSurvivesOneDriverTick"
-  ],
-  "includeDetails": true,
-  "includeFailedTests": true
-}

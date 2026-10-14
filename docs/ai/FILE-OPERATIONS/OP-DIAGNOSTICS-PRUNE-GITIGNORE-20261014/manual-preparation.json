@@ -1,0 +1,14 @@
+{
+  "PreparedAt": "2026-10-14T19:43:23.4947177+08:00",
+  "Command": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014\\MANUAL-COMMAND.txt",
+  "Bytes": 13517,
+  "Sha256": "ddd98720b1fd5ffb6beee48bd6d2532cd1fb2505e5462da48c35dac82010a996",
+  "ParserErrors": [],
+  "ParserErrorCount": 0,
+  "RemoveItemCommandCount": 1,
+  "RemoveItemText": [
+    "Remove-Item -LiteralPath $item.AbsolutePath -Force -ErrorAction Stop"
+  ],
+  "InvokedByCodex": false,
+  "ManualChildDirectoryCount": 0
+}

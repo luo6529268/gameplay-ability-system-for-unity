@@ -383,3 +383,7 @@ User confirmed: using NTSD.exe to verify; Logan is restoration and should exhibi
 ## 2026-10-11 用户范围结项（当前终态）
 
 H10 CLOSED；未实施Player路线ABANDONED。用户取消新增出包验收条件，第四processor待批事项撤销，不再等答复或完整实施派发。三个新脚本/两个meta不创建，全部preflight/proposal/FAIL保留。已实施PCM/逐局formal owned、320MiB同输入对象门/resume03限定音频门按原scope保留；Player/2与3GiB进程/8GB型号/完整千人/人工听感仍未验证，不列本次active后继。旧compat13/14/成本尖峰/失败不改PASS。决定见docs/ai/DECISIONS/NTSD-H10-USER-SCOPE-CLOSEOUT-20261011.md，报告见既有Player输出根closeout-user-scope-01/REPORT.md。仅治理检查，无源码/资源/Settings/Unity/编译/测试/测量/build/Player/sampler；无下一项/Goal，其他hold与所有原边界不变。此前PLANNED/OPEN/等待第四域/继续出包仅为被本决定替代的历史，不再授执行权限。
+
+## NTSD-M12-IMAGE-BUDGET-ACCEPTANCE-20261014
+
+用户接受当前图片内存预算，保留现版；进一步内存深优化等手机实测依据。下一步全目录覆盖验收仅为建议，非自动改写全部资源。详 [接受决定](DECISIONS/NTSD-M12-IMAGE-BUDGET-ACCEPTANCE-20261014.md)。

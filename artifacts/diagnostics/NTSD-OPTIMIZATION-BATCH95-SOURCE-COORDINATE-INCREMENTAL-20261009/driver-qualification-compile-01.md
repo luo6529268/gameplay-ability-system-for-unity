@@ -1,4 +1,0 @@
-# Driver资格新增测试编译修订
-2026-10-09，原Editor导入新增同95测试后报告四个CS0246/CS0103：ProductionEntityStressMode缺少NTSD.Animation.Rendering.Editor引用。补充新增using，并根据当前真实定义将新增测试的LockstepSimulationSettings限定名改为NTSD.Simulation域的已引用类型。仅修新增测试，runtime/原断言不变；不是有效功能RED，不计作测试失败或性能结果。
-
-后续原Editor一项CS1061：新增fixture统计循环误用World.Capacity，当前实际公开诊断接口为RuntimeSlotCapacityForDiagnostics。仅改新循环真实接口；保留此编译修订事实。按换行规范化移除本轮新增block和四个using后，与before-driver-qualification-01原dirty文件内容完全相同，原37局部及其它旧测试未改变。

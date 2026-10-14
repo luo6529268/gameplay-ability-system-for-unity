@@ -1202,8 +1202,24 @@ namespace NTSD.Animation
         public float PixelWidth { get; }
         public float PixelHeight { get; }
         public Vector2 Pivot { get; }
+        public Rect ContentRect { get; }
+        public BattleSpriteReplacementFrame ReplacementFrame { get; }
         public Sprite LegacySprite { get; }
         public BattleSpriteCentralBinding CentralBinding { get; }
+
+        public BattleSpriteEntry(
+            BattleSpriteKey key, string sourceSheetPath, Texture2D sharedTexture,
+            Rect pixelRect, Vector2 pivot, Sprite legacySprite)
+            : this(key, sourceSheetPath, sharedTexture, pixelRect, pivot, legacySprite, null, null)
+        {
+        }
+
+        internal BattleSpriteEntry(
+            BattleSpriteKey key, string sourceSheetPath, Texture2D sharedTexture,
+            Rect pixelRect, Vector2 pivot, Sprite legacySprite, BattleSpriteCentralBinding centralBinding)
+            : this(key, sourceSheetPath, sharedTexture, pixelRect, pivot, legacySprite, centralBinding, null, null)
+        {
+        }
 
         public BattleSpriteEntry(
             BattleSpriteKey key,
@@ -1211,7 +1227,9 @@ namespace NTSD.Animation
             Texture2D sharedTexture,
             Rect pixelRect,
             Vector2 pivot,
-            Sprite legacySprite)
+            Sprite legacySprite,
+            Vector2? logicalCanvasSize,
+            Rect? contentRect)
             : this(
                 key,
                 sourceSheetPath,
@@ -1219,7 +1237,7 @@ namespace NTSD.Animation
                 pixelRect,
                 pivot,
                 legacySprite,
-                CreateSourceBinding(sharedTexture, pixelRect))
+                CreateSourceBinding(sharedTexture, pixelRect), logicalCanvasSize, contentRect)
         {
         }
 
@@ -1230,14 +1248,24 @@ namespace NTSD.Animation
             Rect pixelRect,
             Vector2 pivot,
             Sprite legacySprite,
-            BattleSpriteCentralBinding centralBinding)
+            BattleSpriteCentralBinding centralBinding,
+            Vector2? logicalCanvasSize = null,
+            Rect? contentRect = null)
         {
             Key = key;
             SourceSheetPath = sourceSheetPath ?? string.Empty;
             SharedTexture = sharedTexture;
             PixelRect = pixelRect;
-            PixelWidth = pixelRect.width;
-            PixelHeight = pixelRect.height;
+            // Alignment contract: NTSD-M12-TRANSPARENT-TRIM-001. Logical dimensions never shrink with storage.
+            Vector2 canvas = logicalCanvasSize ?? pixelRect.size;
+            Rect content = contentRect ?? new Rect(Vector2.zero, canvas);
+            if (canvas.x <= 0f || canvas.y <= 0f ||
+                content.width != pixelRect.width || content.height != pixelRect.height ||
+                content.x < 0f || content.y < 0f || content.xMax > canvas.x || content.yMax > canvas.y)
+                throw new ArgumentOutOfRangeException(nameof(contentRect));
+            PixelWidth = canvas.x;
+            PixelHeight = canvas.y;
+            ContentRect = content;
             Pivot = pivot;
             LegacySprite = legacySprite;
             CentralBinding = centralBinding;
@@ -1253,16 +1281,30 @@ namespace NTSD.Animation
                 : Rect.zero;
         }
 
+        private BattleSpriteEntry(BattleSpriteEntry source, BattleSpriteReplacementFrame frame)
+        {
+            Key = source.Key; SourceSheetPath = source.SourceSheetPath; SharedTexture = source.SharedTexture;
+            PixelRect = source.PixelRect; NormalizedUv = source.NormalizedUv; PixelWidth = source.PixelWidth;
+            PixelHeight = source.PixelHeight; Pivot = source.Pivot; ContentRect = source.ContentRect;
+            LegacySprite = source.LegacySprite; CentralBinding = source.CentralBinding; ReplacementFrame = frame;
+        }
+
+        internal BattleSpriteEntry WithReplacementFrame(BattleSpriteReplacementFrame frame) => new BattleSpriteEntry(this, frame);
+
         internal BattleSpriteEntry WithCentralBinding(BattleSpriteCentralBinding centralBinding)
         {
-            return new BattleSpriteEntry(
+            if (ReplacementFrame != null && (centralBinding.Mode != BattleSpriteCentralBindingMode.SourceTexture2D ||
+                centralBinding.Texture != SharedTexture || centralBinding.NormalizedUv != NormalizedUv))
+                throw new InvalidOperationException("Replacement base and patch coordinates cannot be rebound independently.");
+            var result = new BattleSpriteEntry(
                 Key,
                 SourceSheetPath,
                 SharedTexture,
                 PixelRect,
                 Pivot,
                 LegacySprite,
-                centralBinding);
+                centralBinding, new Vector2(PixelWidth, PixelHeight), ContentRect);
+            return ReplacementFrame == null ? result : result.WithReplacementFrame(ReplacementFrame);
         }
 
         private static BattleSpriteCentralBinding CreateSourceBinding(Texture2D texture, Rect pixelRect)
@@ -1493,7 +1535,9 @@ namespace NTSD.Animation
             Texture2D sharedTexture,
             Rect pixelRect,
             Vector2 pivot,
-            Sprite legacySprite)
+            Sprite legacySprite,
+            Vector2? logicalCanvasSize = null,
+            Rect? contentRect = null)
         {
             if (visualDataId < 0)
                 throw new ArgumentOutOfRangeException(nameof(visualDataId));
@@ -1517,7 +1561,16 @@ namespace NTSD.Animation
                 sharedTexture,
                 pixelRect,
                 pivot,
-                legacySprite));
+                legacySprite, logicalCanvasSize, contentRect));
+        }
+
+        internal void SetReplacementFrame(int visualDataId, int effectivePic, BattleSpriteReplacementFrame frame)
+        {
+            var key = new BattleSpriteKey(visualDataId, effectivePic);
+            BattleSpriteEntry entry = _entries[key];
+            if (frame == null || frame.Texture != entry.SharedTexture || frame.BaseRect != entry.PixelRect)
+                throw new InvalidOperationException("Replacement resource differs from the catalog base.");
+            _entries[key] = entry.WithReplacementFrame(frame);
         }
 
         public BattleSpriteCatalog Publish()

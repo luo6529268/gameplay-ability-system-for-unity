@@ -1,8 +1,0 @@
-{
-  "cause": "CS0246 in new test only: rendering type lacks namespace",
-  "path": "Assets/NTSD/Scripts/Test/Editor/M12DecodeUploadBackpressureEditorTests.cs",
-  "before_sha256": "80e1d7ffba68d1e285473aa6d7a20db6f7ff48d6f487cdef2ea0dd23fbeebcf2",
-  "backup": "artifacts/diagnostics/M12-memory-batch1-20261012/rebind-review-01/test-before-namespace-fix.cs.backup",
-  "fix": "Fully qualify NTSD.Animation.Rendering.BattleRenderingDeviceCapabilities in new appended test only",
-  "old_test_prefix_untouched": true
-}

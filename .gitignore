@@ -80,3 +80,6 @@ crashlytics-build.properties
 # MCP config (may contain API keys)
 .mcp.json
 .factory/mcp.json
+
+# Local generated diagnostics and validation outputs
+/artifacts/

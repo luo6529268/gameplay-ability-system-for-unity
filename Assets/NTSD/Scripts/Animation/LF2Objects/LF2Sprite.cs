@@ -11,6 +11,8 @@ namespace NTSD.Animation.LF2Objects
     public class LF2Sprite
     {
         private SpriteRenderer _renderer;
+        private Material _borrowedBodyMaterial;
+        private bool _replacementMaterialBound;
         private List<Sprite> _sprites;
         private BattleSpriteCatalog _catalog;
         private int _visualDataId = int.MinValue;
@@ -60,6 +62,7 @@ namespace NTSD.Animation.LF2Objects
             BattleSpriteCatalog catalog = null,
             int visualDataId = int.MinValue)
         {
+            RestoreBorrowedBodyMaterial();
             _renderer = renderer;
             _sprites = sprites;
             _startFrame = startFrame;
@@ -158,6 +161,14 @@ namespace NTSD.Animation.LF2Objects
                 return;
 
             _renderer.sprite = resolvedSprite;
+            var replacement = _currentEntry?.ReplacementFrame;
+            if (replacement != null)
+            {
+                if (!_replacementMaterialBound) _borrowedBodyMaterial = _renderer.sharedMaterial;
+                _renderer.sharedMaterial = replacement.LegacyMaterial;
+                _replacementMaterialBound = true;
+            }
+            else RestoreBorrowedBodyMaterial();
             if (resolvedSprite == null)
             {
                 _renderer.enabled = false;
@@ -245,11 +256,20 @@ namespace NTSD.Animation.LF2Objects
             _currentEntry = null;
         }
 
+        private void RestoreBorrowedBodyMaterial()
+        {
+            if (_replacementMaterialBound && _renderer != null)
+                _renderer.sharedMaterial = _borrowedBodyMaterial;
+            _borrowedBodyMaterial = null;
+            _replacementMaterialBound = false;
+        }
+
         private void ClearResolvedRendererSprite()
         {
             if (_renderer == null)
                 return;
 
+            RestoreBorrowedBodyMaterial();
             _renderer.sprite = null;
             _renderer.enabled = false;
         }
@@ -410,6 +430,7 @@ namespace NTSD.Animation.LF2Objects
 
         public void Reset()
         {
+            RestoreBorrowedBodyMaterial();
             _sprites = null;
             _catalog = null;
             _visualDataId = int.MinValue;

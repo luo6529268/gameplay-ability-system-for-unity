@@ -1,7 +1,0 @@
-{
-  "path": "Temp\\Goal18_LastTestResults.xml",
-  "backup": "artifacts\\diagnostics\\NTSD-M12-ANDROID-DECODE-UPLOAD-BACKPRESSURE-20261011\\implementation-01\\backups\\q05-testxml.before.bin",
-  "sha256": "69d99285736bc57b2269dd1145574b3e57df0de109593cba54fb55ed9b2a2d2c",
-  "reason": "existing result writer may replace XML during this exact single named test; no old Goal resumed",
-  "time": "2026-10-11T17:52:10.413977+08:00"
-}

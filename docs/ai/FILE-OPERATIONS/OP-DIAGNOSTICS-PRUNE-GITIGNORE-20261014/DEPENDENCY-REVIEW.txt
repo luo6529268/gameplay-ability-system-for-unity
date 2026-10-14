@@ -1,0 +1,7 @@
+只读独立核对已完成，Luna 无文件写入/删除/Git权限，主代理已审阅：
+1. Tools/Build-NtsdAstcTextures.py 的 prepared 由当前源图执行 FLIP_TOP_BOTTOM 重新生成，encode_one 消费；两个既有 prepared 不是默认运行输入。只清理其 1402 个 PNG，blocks/rawdecode/upright/logs/manifest 保留。
+2. Tools/Audit-NtsdFullImageCoverage.py 默认 capture/common 输入保留，旧 Audit-NtsdMatchImageResidency.py 依赖 result-10-final/selection/capture 保留。
+3. selector-worker/results-03、final-01、desktop-cases-03、production-budget-delivery-01，memory-worker/final-02、delivery-inventory-01、八角色 complete-dependencies-01 保留。最终编译 compile-15/compile-03/full compile-01/stable build 保留。
+4. 过期/错误预算 results-01..11、早期 final-01、旧 selector 输出可再生成，旧报告提及这些中间路径仅为历史证据，清理后可按 ZIP 原路径恢复。
+5. 原资源/旧分页、所有 before/revisions 回滚件、1080p 对比、Profiler 原始样本、I:/build 偏差事件均排除。
+6. 旧 A 清理记录已刷新：历史自动尝试 REJECTED 保留，但后续用户手动操作 OP-DIAGNOSTICS-A-MANUAL-20261012-105104-BEFC360C 已 VERIFIED/1558 个删除。本轮未重跑旧 A。

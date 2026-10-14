@@ -1766,9 +1766,8 @@ namespace NTSD.Animation.Rendering
                     return BattleCentralEntityDiagnosticReason.MissingTextureOrMaterial;
                 if (!binding.IsValid)
                     return BattleCentralEntityDiagnosticReason.InvalidCentralBinding;
-                Material material = binding.Mode == BattleSpriteCentralBindingMode.AtlasTextureArray
-                    ? featureArrayMaterial
-                    : featureMaterial;
+                Material material = entry.ReplacementFrame != null ? entry.ReplacementFrame.CentralMaterial :
+                    binding.Mode == BattleSpriteCentralBindingMode.AtlasTextureArray ? featureArrayMaterial : featureMaterial;
                 bool expectsArray = binding.Mode == BattleSpriteCentralBindingMode.AtlasTextureArray;
                 if (!BattleSpriteMaterialContract.IsDeclaredCentralMaterial(material, expectsArray))
                     return BattleCentralEntityDiagnosticReason.MissingTextureOrMaterial;
@@ -1780,10 +1779,10 @@ namespace NTSD.Animation.Rendering
                     new Vector2(entry.PixelWidth, entry.PixelHeight),
                     entry.Pivot,
                     command.Color,
-                    (int)command.RenderState.MaterialSemantic,
-                    binding.AtlasSlice,
+                    entry.ReplacementFrame != null ? BattleSpriteReplacementFrame.MaterialVariant : (int)command.RenderState.MaterialSemantic,
+                    entry.ReplacementFrame != null ? entry.ReplacementFrame.Index : binding.AtlasSlice,
                     binding.Mode,
-                    binding.AtlasPageIndex);
+                    binding.AtlasPageIndex, entry.ContentRect);
                 return BattleCentralEntityDiagnosticReason.None;
             }
 

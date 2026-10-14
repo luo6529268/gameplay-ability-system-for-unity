@@ -12,6 +12,7 @@ namespace NTSD.Simulation.Presentation
         private readonly Shader builtInSpriteShader;
         private readonly Shader centralTextureShader;
         private readonly Shader centralArrayShader;
+        private readonly Shader replacementShader;
         private readonly int colorId;
 
         public BattleSpriteMaterialClassifier()
@@ -22,6 +23,7 @@ namespace NTSD.Simulation.Presentation
                 BattleSpriteMaterialContract.CentralTextureShaderName);
             centralArrayShader = Shader.Find(
                 BattleSpriteMaterialContract.CentralArrayShaderName);
+            replacementShader = Resources.Load<Shader>("BattleD0Replacement");
             colorId = Shader.PropertyToID("_Color");
         }
 
@@ -34,7 +36,7 @@ namespace NTSD.Simulation.Presentation
             if (shader == null ||
                 (shader != builtInSpriteShader &&
                  shader != centralTextureShader &&
-                 shader != centralArrayShader))
+                 shader != centralArrayShader && shader != replacementShader))
             {
                 return BattleSpriteMaterialSemantic.Unsupported;
             }
@@ -57,7 +59,7 @@ namespace NTSD.Simulation.Presentation
             Shader expectedShader = textureArray
                 ? centralArrayShader
                 : centralTextureShader;
-            return material.shader == expectedShader &&
+            return (material.shader == expectedShader || (!textureArray && material.shader == replacementShader)) &&
                    Classify(material) ==
                    BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha;
         }

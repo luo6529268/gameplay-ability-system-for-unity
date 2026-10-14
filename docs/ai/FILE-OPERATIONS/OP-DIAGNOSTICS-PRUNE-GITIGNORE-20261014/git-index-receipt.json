@@ -1,0 +1,20 @@
+{
+  "Operation": "OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014",
+  "Status": "VERIFIED",
+  "StartedAt": "2026-10-14T19:38:52.0737789+08:00",
+  "EndedAt": "2026-10-14T19:39:43.6792745+08:00",
+  "Pid": 53384,
+  "RmCachedExitCode": 0,
+  "GitAddExitCode": 0,
+  "UntrackedFromIndex": 21697,
+  "IgnoredArtifactsVisible": 0,
+  "RemainingTrackedArtifacts": 0,
+  "StagedIgnoreEdits": 1,
+  "OutOfScopeStagedPaths": 0,
+  "IndexAfterSha256": "bfce3b7b48b221f1bf2926cc4edb6e628d1a53326688ea4959e581cc28870183",
+  "StageManifest": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014\\git-staged-paths.json.gz",
+  "StageManifestSha256": "3a2d182a6113d476ab05744fd5366d356902015170c2233886b2d3d8bb014d42",
+  "WorkingFilesDeletedByGit": 0,
+  "CommitOrPush": false,
+  "LocalRetentionVerification": "Final filesystem check follows"
+}

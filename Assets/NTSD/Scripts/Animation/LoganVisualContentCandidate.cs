@@ -273,6 +273,8 @@ namespace NTSD.Animation
         public NativeWordsInput WordsInput { get; }
         public NativeSparkInput SparkInput { get; }
         public NativeKillIconInput KillIconInput { get; }
+        internal BattleDerivedSpritePages DerivedPages { get; }
+        internal BattleAstcTextures AstcTextures { get; }
         public LoganContentIdentity ContentIdentity => Catalog.ContentIdentity;
         public ReadOnlyCollection<ImageInput> Images { get; }
         public string VisualFingerprint { get; }
@@ -280,22 +282,28 @@ namespace NTSD.Animation
 
         private LoganVisualContentCandidate(LoganObjectCatalog catalog, List<ImageInput> images,
             NativeWordsInput wordsInput, NativeKillIconInput killIconInput,
-            NativeSparkInput sparkInput)
+            NativeSparkInput sparkInput, BattleDerivedSpritePages derivedPages, BattleAstcTextures astcTextures)
         {
             Catalog = catalog;
             WordsInput = wordsInput;
             KillIconInput = killIconInput;
             SparkInput = sparkInput;
+            DerivedPages = derivedPages;
+            AstcTextures = astcTextures;
             Images = images.AsReadOnly();
             imageHashes = images.ToDictionary(image => image.Path, image => image.Sha256, StringComparer.Ordinal);
             using (var bytes = new MemoryStream())
             {
                 using (var writer = new BinaryWriter(bytes, Encoding.UTF8, true))
                 {
-                    writer.Write(sparkInput != null ? "LOGAN_VISUAL_INPUTS_V4" :
+                    writer.Write(astcTextures != null ? "LOGAN_VISUAL_INPUTS_V6" :
+                        derivedPages != null ? "LOGAN_VISUAL_INPUTS_V5" :
+                        sparkInput != null ? "LOGAN_VISUAL_INPUTS_V4" :
                         killIconInput != null ? "LOGAN_VISUAL_INPUTS_V3" :
                         wordsInput == null ? "LOGAN_VISUAL_INPUTS_V1" : "LOGAN_VISUAL_INPUTS_V2");
                     writer.Write(catalog.DefinitionFingerprint);
+                    if (derivedPages != null) writer.Write(derivedPages.Fingerprint);
+                    if (astcTextures != null) writer.Write(astcTextures.Fingerprint);
                     foreach (ImageInput image in images)
                     {
                         writer.Write(Path.GetRelativePath(catalog.Source.ImageRoot, image.Path).Replace('\\', '/'));
@@ -351,10 +359,21 @@ namespace NTSD.Animation
             foreach (string path in paths)
                 images.Add(new ImageInput(path,
                     bodySheetPaths.Contains(path) && !requiredUiPaths.Contains(path)));
+            var derivedPages = BattleDerivedSpritePages.Capture(catalog, configs);
+            if (derivedPages != null)
+            {
+                foreach (var page in derivedPages.Pages)
+                {
+                    var image = new ImageInput(page.Path);
+                    if (!string.Equals(image.Sha256, page.Sha256, StringComparison.OrdinalIgnoreCase))
+                        throw new InvalidDataException("Derived page changed during capture: " + page.Path);
+                    images.Add(image);
+                }
+            }
             var candidate = new LoganVisualContentCandidate(catalog, images,
                 NativeWordsInput.Capture(source, allowUnavailable: true),
                 NativeKillIconInput.Capture(source, catalog.ModeComboInput?.KnockoutFeed),
-                NativeSparkInput.Capture(source));
+                NativeSparkInput.Capture(source), derivedPages, BattleAstcTextures.Capture(source, images));
             candidate.AssertInputsCurrent();
             return candidate;
         }
@@ -362,6 +381,14 @@ namespace NTSD.Animation
         /// <summary>Load-time freshness gate. Do not call from a simulation tick.</summary>
         public void AssertInputsCurrent()
         {
+            if (!string.Equals(BattleDerivedSpritePages.CurrentManifestFingerprint(Catalog.Source),
+                    DerivedPages?.Fingerprint, StringComparison.OrdinalIgnoreCase))
+                throw new InvalidDataException("Derived page selection changed after candidate capture.");
+            DerivedPages?.AssertInputsCurrent();
+            if (!string.Equals(BattleAstcTextures.CurrentFingerprint(Catalog.Source),
+                    AstcTextures?.Fingerprint, StringComparison.OrdinalIgnoreCase))
+                throw new InvalidDataException("ASTC selection changed after candidate capture.");
+            AstcTextures?.AssertInputsCurrent();
             Catalog.ModeComboInput?.AssertInputsCurrent();
             NativeWordsInput currentWords = NativeWordsInput.Capture(Catalog.Source, allowUnavailable: true);
             if (!string.Equals(currentWords?.InputFingerprint, WordsInput?.InputFingerprint,

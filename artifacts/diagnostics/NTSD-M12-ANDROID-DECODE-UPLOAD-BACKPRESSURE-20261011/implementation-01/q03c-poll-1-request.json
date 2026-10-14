@@ -1,8 +1,0 @@
-{
-  "type": "get_test_job",
-  "params": {
-    "job_id": "25c7bd12d82d43f4b1d096615e25b7ef",
-    "include_details": true,
-    "include_failed_tests": true
-  }
-}

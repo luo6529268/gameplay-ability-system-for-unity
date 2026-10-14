@@ -1,2 +1,0 @@
-{"time": "2026-10-11T13:00:45.951134+08:00", "tool": "get_editor_state", "params": {}, "evidence": "editor-readonly-state.json"}
-{"time": "2026-10-11T13:00:45.978647+08:00", "tool": "manage_scene", "params": {"action": "get_loaded_scenes"}, "evidence": "editor-readonly-scenes.json"}

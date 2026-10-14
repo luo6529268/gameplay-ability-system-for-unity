@@ -1,0 +1,161 @@
+$ErrorActionPreference='Stop'
+$env:GIT_OPTIONAL_LOCKS='0'
+$manualRepoRoot='I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity'
+Set-Location -LiteralPath $manualRepoRoot
+$manualRepoResolved=(Resolve-Path -LiteralPath '.').Path
+$parentOpRoot=(Resolve-Path -LiteralPath 'docs/ai/FILE-OPERATIONS/OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014').Path
+$manualStamp=[DateTimeOffset]::Now.ToString('yyyyMMdd-HHmmss')
+$manualSuffix=[Guid]::NewGuid().ToString('N').Substring(0,8)
+$manualOperationId="OP-DIAGNOSTICS-PRUNE-MANUAL-$manualStamp-$manualSuffix"
+$manualRoot=Join-Path $parentOpRoot "manual-$manualStamp-$manualSuffix"
+if(Test-Path -LiteralPath $manualRoot){throw 'Manual operation path exists'}
+[IO.Directory]::CreateDirectory($manualRoot)|Out-Null
+$utf8=[Text.UTF8Encoding]::new($false)
+$nl=[Environment]::NewLine
+foreach($name in @('preflight-summary.json','backup-receipt.json','removal-manifest.json.gz')){
+ [IO.File]::Copy((Join-Path $parentOpRoot $name),(Join-Path $manualRoot $name),$false)
+}
+$manualSource=Join-Path $parentOpRoot 'MANUAL-COMMAND.txt'
+[IO.File]::Copy($manualSource,(Join-Path $manualRoot 'EXECUTED-COMMAND.txt'),$false)
+$manualSourceHash=(Get-FileHash -LiteralPath $manualSource -Algorithm SHA256).Hash.ToLowerInvariant()
+$operationsIndex=(Resolve-Path -LiteralPath 'docs/ai/FILE-OPERATIONS/INDEX.md').Path
+$indexBefore=Join-Path $manualRoot 'operations-index.before.bin'
+[IO.File]::Copy($operationsIndex,$indexBefore,$false)
+$indexBeforeHash=(Get-FileHash -LiteralPath $operationsIndex -Algorithm SHA256).Hash.ToLowerInvariant()
+if((Get-FileHash -LiteralPath $indexBefore -Algorithm SHA256).Hash.ToLowerInvariant() -ne $indexBeforeHash){throw 'Manual index preimage mismatch'}
+$manualStart=[DateTimeOffset]::Now.ToString('o')
+$manualRecord=@(
+ "# $manualOperationId",
+ '',
+ '状态: PLANNED',
+ '执行者: 用户手动 PowerShell；Codex 未调用此手动命令。',
+ '来源: 用户2026-10-14要求清理不必要 diagnostics。主操作 OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014 自动删除 CreateProcess 被 blocked by policy 拒绝；本记录是独立后继，原拒绝保留。',
+ "开始: $manualStart / PID: $PID",
+ '精确目标: removal-manifest.json.gz 原3653文件；不扩大到目录、其他资源或 Git。',
+ '恢复: backup-receipt.json 指向仓库外已验证 ZIP；执行前再次核对 ZIP、清单、全部目标 SHA/类型/父目录。',
+ "实际命令证据: EXECUTED-COMMAND.txt / SHA-256 $manualSourceHash",
+ "操作索引前件: operations-index.before.bin / SHA-256 $indexBeforeHash",
+ '失败策略: 首差即停、记录未执行/部分执行，不自动重试、不覆盖恢复、不提交推送。',
+ ''
+)
+[IO.File]::WriteAllText((Join-Path $manualRoot 'RECORD.md'),($manualRecord -join $nl),$utf8)
+[IO.File]::AppendAllText($operationsIndex,($nl+"- $manualOperationId - PLANNED 用户手动精确清理后继；原自动拒绝保留。 [Record](OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014/manual-$manualStamp-$manualSuffix/RECORD.md)。"+$nl),$utf8)
+$manualBefore=@(Get-ChildItem -LiteralPath 'artifacts/diagnostics' -File -Recurse -Force|ForEach-Object {
+ [pscustomobject]@{Path=[IO.Path]::GetRelativePath($manualRepoResolved,$_.FullName).Replace('\','/');Bytes=[long]$_.Length;LastWriteUtcTicks=$_.LastWriteTimeUtc.Ticks;Attributes=[int]$_.Attributes}
+})
+$manualMetadataStream=[IO.File]::Open((Join-Path $manualRoot 'diagnostics-metadata-before.json.gz'),[IO.FileMode]::CreateNew,[IO.FileAccess]::Write,[IO.FileShare]::None)
+$manualMetadataGzip=[IO.Compression.GZipStream]::new($manualMetadataStream,[IO.Compression.CompressionLevel]::Optimal)
+$manualMetadataWriter=[IO.StreamWriter]::new($manualMetadataGzip,$utf8)
+try{$manualMetadataWriter.Write(($manualBefore|ConvertTo-Json -Depth 3 -Compress))}finally{$manualMetadataWriter.Dispose();$manualMetadataGzip.Dispose();$manualMetadataStream.Dispose()}
+try {
+$ErrorActionPreference='Stop'
+$opRoot=$manualRoot
+$repoRoot=(Resolve-Path -LiteralPath '.').Path
+$diagRoot=(Resolve-Path -LiteralPath 'artifacts/diagnostics').Path
+$summary=Get-Content -LiteralPath (Join-Path $opRoot 'preflight-summary.json') -Raw|ConvertFrom-Json
+$summary.Operation=$manualOperationId
+$backup=Get-Content -LiteralPath (Join-Path $opRoot 'backup-receipt.json') -Raw|ConvertFrom-Json
+$manifestPath=Join-Path $opRoot 'removal-manifest.json.gz'
+$utf8=[Text.UTF8Encoding]::new($false)
+$nl=[Environment]::NewLine
+function Read-JsonGzip([string]$path){
+ $inputStream=[IO.File]::OpenRead($path)
+ $gzip=[IO.Compression.GZipStream]::new($inputStream,[IO.Compression.CompressionMode]::Decompress)
+ $reader=[IO.StreamReader]::new($gzip,[Text.UTF8Encoding]::new($false))
+ try{$content=$reader.ReadToEnd()}finally{$reader.Dispose();$gzip.Dispose();$inputStream.Dispose()}
+ return $content|ConvertFrom-Json
+}
+$expected=($summary.ManifestIdentities|Where-Object Path -eq 'removal-manifest.json.gz').Sha256
+if((Get-FileHash -LiteralPath $manifestPath -Algorithm SHA256).Hash.ToLowerInvariant() -ne $expected){throw 'Frozen manifest changed'}
+if($backup.Status -ne 'VERIFIED' -or $backup.ManifestSha256 -ne $expected -or $backup.VerifiedEntryCount -ne $summary.CleanupFiles){throw 'Backup verification missing/mismatched'}
+if((Get-FileHash -LiteralPath $backup.Archive -Algorithm SHA256).Hash.ToLowerInvariant() -ne $backup.ArchiveSha256){throw 'Recovery archive drift'}
+$items=@(Read-JsonGzip $manifestPath)
+$parents=[Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+foreach($item in $items){
+ $absolute=[IO.Path]::GetFullPath($item.AbsolutePath)
+ if(-not $absolute.StartsWith($diagRoot+[IO.Path]::DirectorySeparatorChar,[StringComparison]::OrdinalIgnoreCase)){throw 'Delete target escaped approved root'}
+ if([IO.Path]::GetRelativePath($repoRoot,$absolute).Replace('\','/') -ne $item.Path){throw 'Manifest relative/absolute mismatch'}
+ $currentParent=[IO.Path]::GetDirectoryName($absolute)
+ while($currentParent.StartsWith($diagRoot,[StringComparison]::OrdinalIgnoreCase)){
+  $parents.Add($currentParent)|Out-Null
+  if($currentParent -eq $diagRoot){break}
+  $currentParent=[IO.Path]::GetDirectoryName($currentParent)
+ }
+}
+foreach($parent in $parents){if(([IO.File]::GetAttributes($parent) -band [IO.FileAttributes]::ReparsePoint) -ne 0){throw "Reparse ancestor: $parent"}}
+$prechecked=0
+foreach($item in $items){
+ $file=Get-Item -LiteralPath $item.AbsolutePath
+ if($file.PSIsContainer -or ($file.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0){throw 'Invalid delete target type'}
+ if($file.Length -ne $item.Bytes -or $file.LastWriteTimeUtc.Ticks -ne $item.LastWriteUtcTicks){throw "Target drift: $($item.Path)"}
+ if((Get-FileHash -LiteralPath $item.AbsolutePath -Algorithm SHA256).Hash.ToLowerInvariant() -ne $item.Sha256){throw "Target SHA drift: $($item.Path)"}
+ $prechecked++
+ if(($prechecked%1000)-eq 0){Write-Output "Deletion preflight $prechecked / $($items.Count)"}
+}
+$started=[DateTimeOffset]::Now.ToString('o')
+$plan=[pscustomobject]@{Operation=$summary.Operation;Status='RUNNING';StartedAt=$started;Pid=$PID;Files=$items.Count;Bytes=$summary.CleanupBytes;ApprovedRoot=$diagRoot;Command='EXECUTED-COMMAND.txt';BackupArchive=$backup.Archive;BackupSha256=$backup.ArchiveSha256;ManifestSha256=$expected;DirectoriesDeleted=0}
+$plan|ConvertTo-Json|Set-Content -LiteralPath (Join-Path $opRoot 'delete-plan.json') -Encoding utf8NoBOM
+[IO.File]::AppendAllText((Join-Path $opRoot 'RECORD.md'),($nl+'删除开始：精确 SHA/路径/父目录重解析点与外部 ZIP 身份预检全部通过；delete-plan.json 保存开始时间/PID；EXECUTED-COMMAND.txt 为实际命令，逐项执行日志 delete-journal.jsonl。'+$nl),$utf8)
+$journalPath=Join-Path $opRoot 'delete-journal.jsonl'
+$journalStream=[IO.File]::Open($journalPath,[IO.FileMode]::CreateNew,[IO.FileAccess]::Write,[IO.FileShare]::Read)
+$journal=[IO.StreamWriter]::new($journalStream,$utf8)
+$journal.AutoFlush=$true
+$deleted=0
+[long]$removedBytes=0
+$failure=$null
+try{
+ foreach($item in $items){
+  $file=Get-Item -LiteralPath $item.AbsolutePath
+  if($file.Length -ne $item.Bytes -or $file.LastWriteTimeUtc.Ticks -ne $item.LastWriteUtcTicks){throw "Target changed after preflight: $($item.Path)"}
+  $journal.WriteLine(([pscustomobject]@{At=[DateTimeOffset]::Now.ToString('o');Path=$item.Path;Action='DELETE_ATTEMPT';Pid=$PID;Sha256=$item.Sha256}|ConvertTo-Json -Compress))
+  Remove-Item -LiteralPath $item.AbsolutePath -Force -ErrorAction Stop
+  if(Test-Path -LiteralPath $item.AbsolutePath){throw "Delete postcondition failed: $($item.Path)"}
+  $deleted++
+  $removedBytes+=$item.Bytes
+  $journal.WriteLine(([pscustomobject]@{At=[DateTimeOffset]::Now.ToString('o');Path=$item.Path;Action='DELETED';Bytes=$item.Bytes;BackupEntry=$item.Path}|ConvertTo-Json -Compress))
+  if(($deleted%1000)-eq 0){Write-Output "Deleted $deleted / $($items.Count)"}
+ }
+}catch{
+ $failure=$_.Exception.ToString()
+ $journal.WriteLine(([pscustomobject]@{At=[DateTimeOffset]::Now.ToString('o');Action='ERROR_STOP';Error=$failure;Deleted=$deleted}|ConvertTo-Json -Compress))
+}finally{$journal.Dispose();$journalStream.Dispose()}
+$remaining=@($items|Where-Object {Test-Path -LiteralPath $_.AbsolutePath}|Select-Object -ExpandProperty Path)
+$status=if($null -eq $failure -and $remaining.Count -eq 0 -and $deleted -eq $items.Count){'VERIFIED'}elseif($deleted -gt 0){'PARTIAL'}else{'FAILED'}
+$receipt=[pscustomobject]@{Operation=$summary.Operation;Status=$status;StartedAt=$started;EndedAt=[DateTimeOffset]::Now.ToString('o');Pid=$PID;DeletedFiles=$deleted;RemovedBytes=$removedBytes;RemainingTargetCount=$remaining.Count;RemainingTargets=$remaining;Failure=$failure;BackupArchive=$backup.Archive;BackupSha256=$backup.ArchiveSha256;DirectoryDeletes=0}
+$receipt|ConvertTo-Json -Depth 4|Set-Content -LiteralPath (Join-Path $opRoot 'delete-receipt.json') -Encoding utf8NoBOM
+[IO.File]::AppendAllText((Join-Path $opRoot 'RECORD.md'),($nl+"删除结果：$status；实际文件数=$deleted，字节=$removedBytes，目录删除=0；详见 delete-receipt.json 与逐项 delete-journal.jsonl。"+$nl),$utf8)
+$receipt|ConvertTo-Json -Depth 4
+if($status -ne 'VERIFIED'){throw 'Cleanup incomplete; preserve evidence and do not automatically retry'}
+
+$manualTargets=[Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+foreach($target in $items){$manualTargets.Add($target.Path)|Out-Null}
+$manualAfter=@(Get-ChildItem -LiteralPath 'artifacts/diagnostics' -File -Recurse -Force)
+$manualAfterMap=[Collections.Generic.Dictionary[string,object]]::new([StringComparer]::OrdinalIgnoreCase)
+foreach($file in $manualAfter){
+ $relative=[IO.Path]::GetRelativePath($repoRoot,$file.FullName).Replace('\','/')
+ $manualAfterMap.Add($relative,[pscustomobject]@{Bytes=[long]$file.Length;Ticks=$file.LastWriteTimeUtc.Ticks;Attributes=[int]$file.Attributes})
+}
+$outsideChanges=[Collections.Generic.List[object]]::new()
+foreach($old in $manualBefore){
+ if($manualTargets.Contains($old.Path)){continue}
+ if(-not $manualAfterMap.ContainsKey($old.Path)){$outsideChanges.Add([pscustomobject]@{Path=$old.Path;Problem='missing outside cleanup set'})}
+ else{
+  $now=$manualAfterMap[$old.Path]
+  if($now.Bytes -ne $old.Bytes -or $now.Ticks -ne $old.LastWriteUtcTicks -or $now.Attributes -ne $old.Attributes){$outsideChanges.Add([pscustomobject]@{Path=$old.Path;Problem='metadata changed outside cleanup set; writer unknown'})}
+ }
+}
+$manualFinalStatus=if($outsideChanges.Count -eq 0){'VERIFIED'}else{'PARTIAL'}
+$manualResult=[pscustomobject]@{Operation=$manualOperationId;ParentOperation='OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014';Status=$manualFinalStatus;Executor='Human user via PowerShell';EndedAt=[DateTimeOffset]::Now.ToString('o');Pid=$PID;DeletedFiles=$deleted;RemovedBytes=$removedBytes;OutsideMetadataChanges=$outsideChanges.ToArray();RecoveryArchive=$backup.Archive;RecoverySha256=$backup.ArchiveSha256;GitIndexModified=$false;P1Run=$false}
+$manualResult|ConvertTo-Json -Depth 5|Set-Content -LiteralPath (Join-Path $manualRoot 'result.json') -Encoding utf8NoBOM
+[IO.File]::AppendAllText((Join-Path $manualRoot 'RECORD.md'),($nl+"最终状态: $manualFinalStatus；用户手动实际删除 $deleted 文件 / $removedBytes 字节，范围外元数据变化 $($outsideChanges.Count)；详见 result.json。"+$nl),$utf8)
+[IO.File]::AppendAllText((Join-Path $parentOpRoot 'RECORD.md'),($nl+"后继用户手动结果：$manualOperationId / $manualFinalStatus；删除 $deleted 文件 / $removedBytes 字节；原自动 REJECTED 是历史尝试，未被覆盖。结果路径 $manualRoot/result.json。"+$nl),$utf8)
+[IO.File]::AppendAllText($operationsIndex,($nl+"- $manualOperationId - $manualFinalStatus：用户手动删除 $deleted 文件/$removedBytes 字节，恢复包保留；范围外元数据变化 $($outsideChanges.Count)。"+$nl),$utf8)
+$manualResult|ConvertTo-Json -Depth 5
+if($manualFinalStatus -ne 'VERIFIED'){throw 'Manual deletion complete but outside changes require investigation; do not rerun'}
+} catch {
+ $manualFailure=[pscustomobject]@{Operation=$manualOperationId;Status='FAILED_OR_PARTIAL';ObservedAt=[DateTimeOffset]::Now.ToString('o');Pid=$PID;Error=$_.Exception.ToString();ReceiptExists=(Test-Path -LiteralPath (Join-Path $manualRoot 'delete-receipt.json'));NoAutomaticRetry=$true}
+ $manualFailure|ConvertTo-Json -Depth 4|Set-Content -LiteralPath (Join-Path $manualRoot 'failure.json') -Encoding utf8NoBOM
+ [IO.File]::AppendAllText((Join-Path $manualRoot 'RECORD.md'),($nl+'失败/部分执行已停止，详见 failure.json 与已有 delete-receipt/journal；保留现场，不盲目重跑。'+$nl),$utf8)
+ throw
+}
+

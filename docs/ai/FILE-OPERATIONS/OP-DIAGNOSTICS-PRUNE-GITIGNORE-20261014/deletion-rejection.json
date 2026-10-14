@@ -1,0 +1,20 @@
+{
+  "Operation": "OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014",
+  "Status": "REJECTED",
+  "ObservedAt": "2026-10-14T19:38:50.7582986+08:00",
+  "Tool": "exec_command",
+  "Phase": "CreateProcess",
+  "Reason": "blocked by policy",
+  "ObservedError": "exec_command failed: CreateProcess { message: Rejected(... rejected: blocked by policy) }",
+  "DetailedPolicyReasonProvided": false,
+  "ProcessStarted": false,
+  "Pid": null,
+  "TargetFiles": 3653,
+  "DeletedFiles": 0,
+  "RemovedBytes": 0,
+  "CommandEvidence": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\OP-DIAGNOSTICS-PRUNE-GITIGNORE-20261014\\DELETE-COMMAND.txt",
+  "CommandSha256": "b6a0b2a31196c0a2720add75eca838d7d3ab5c0521f7e536c56bdf660eb5da02",
+  "DeletePlanExists": false,
+  "DeleteJournalExists": false,
+  "RetryOrAlternateShell": false
+}

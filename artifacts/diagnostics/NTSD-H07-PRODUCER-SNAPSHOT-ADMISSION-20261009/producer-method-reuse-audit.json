@@ -1,9 +1,0 @@
-{
-  "symbol": "private void RefreshCharacterInputSnapshotsAfterProducer(",
-  "currentPath": "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
-  "baselinePath": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009\\before-01\\Assets\\NTSD\\Scripts\\Simulation\\Core\\SimulationWorld.cs",
-  "equal": true,
-  "currentMethodSha256": "b3548a0a2d21804a1c93bc5b6c6533bf8766d9b593b5419b73d79e89a1ed51db",
-  "baselineMethodSha256": "b3548a0a2d21804a1c93bc5b6c6533bf8766d9b593b5419b73d79e89a1ed51db",
-  "reuseScope": "Exact producer refresh method only; current 15 guard/input/RNG/local GC tests included in fresh 44/44; historical full test suite not claimed current"
-}

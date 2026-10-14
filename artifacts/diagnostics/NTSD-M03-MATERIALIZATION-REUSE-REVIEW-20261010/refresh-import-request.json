@@ -1,9 +1,0 @@
-{
-  "type": "refresh_unity",
-  "params": {
-    "scope": "all",
-    "wait_for_ready": false,
-    "compile": "request",
-    "mode": "force"
-  }
-}

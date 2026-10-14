@@ -1,0 +1,19 @@
+# OP-NTSD-M12-TRANSPARENT-TRIM-20261013
+Status: VERIFIED
+Executor: currentmainagent and bounded luna asset helper
+Task: NTSD-M12-TRANSPARENT-TRIM-20261013
+Change: NTSD-M12-TRANSPARENT-TRIM-001
+
+Human latest instruction: 那就开始处理啊; prior accepted1080p visual baseline and requested further optimization. Scope: crop only exact zero-RGBA transparent margins of Kirin and shared Sui source frames, lossless derived pages <=2048, keep win2 as accepted. Explicit per-frame contentRects in bottom-left original canvas. Native DAT/full canvas/center/mount/logic remain unchanged. One Sprite and one central quad per logical frame; mirror crop offsets for FlipX/FlipY, legacy Sprite pivot adjusted. Immutable catalog keeps native PixelWidth/Height and carries ContentRect through central binding and rebind. New optional metadata defaults full canvas for old manifests. Exact frame aliases remain opt-in. Retain originalPNG/DAT and every previouspage, beforeimages and current accepted manifest. No P1/Play/build/device/ASTC/Scene/settings/plugin changes, no global render rewrite. Common-base-plus-patch evaluated only after trim; do not introduce multiple overlapping alpha draws without exact representation and evidence. New assets staged offline then independently verified before deployment. Lifecycle uses existing decode/staged ownership/catalog/binding/reset/shutdown; no manager/queue/worker/cache/borrower added. Tests: source reconstruction exactRGBA, schema malformed-offset/size/default/alias guards, native dimensions and Legacy/central flipped geometry, actual deployed allpages materialization and rebind, 1080p real GPU comparisons with actual backend; unchanged shader. Rollback: exact preimages, retained pages; no deletion automatically executed.
+
+Exact code/doc/manifest preimages: artifacts/diagnostics/M12-transparent-trim-20261013/before-manifest.json. New helper/test/pages create-new; generated exact assets manifest registered before Assets deployment. Planned APIs: Node read/hash, write preimages then scoped edits; Python helper staging-only; hidden originalproject D3D11 batch after sameLibrary occupancy guard. Preserve all unrelated editors and dirty work. Actual receipts appended at execution.
+
+DEPLOYMENT PLANNED: exact10PNG+10GUIDmeta create-new list in deployment-plan.json; onlyderivedmanifest replacement after independent fullRGBA source reconstruction. Old19pages/metas retained. Candidate18pages112077376B,88keys.
+
+DEPLOYED:10newPNG+10newGUIDmeta andmanifest only. Independent88/88RGBAreadback PASS/50,211,450pixels. Firstmanifest edit callback accidentally returned Promise; guard rejected before write, recordedPARTIAL then synchronouscallback succeeded. deployment-plan/receipt/events retain exact scope. Tests pending.
+
+Before edit Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs: exactsnapshot diagnostic-path-before.json; pass entry.ContentRect through same diagnostic resolver construction only.
+
+Before edit Assets/NTSD/Scripts/Simulation/Stage/SimulationStageRenderModule.cs: legacy-probe-before.json exactpreimage; body-only parity metric normalization and matchingidentity negative tests. Batch01 originalGPU remains relevant to unchangedrenderpath; subsequentcompile/focused pass required for newdiagnostic fix.
+
+FINAL VERIFIED fileoperation: exact10PNG+10GUIDmeta created, manifest replaced, oldpages/sourcePNG/DAT retained. Sourcecode/docpreimages and everywrite plan/receipt preserved. Newmetadata importfields normalized byUnity withGUID unchanged, protected86 noneunexpected. actualoriginalprojecttwohiddenbatchIDs10476/48132 exited normally perprocesssnapshot;nativeexitcode notdirectlycaptured, finalXML34Passed. Full commands/results/failedpartialevents inREPORT and JSON receipts. No deletes/moves/restore/reset/commit/push.

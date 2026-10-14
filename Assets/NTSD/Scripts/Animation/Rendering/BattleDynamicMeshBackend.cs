@@ -555,6 +555,7 @@ namespace NTSD.Animation.Rendering
                    (next.BindingMode != BattleSpriteCentralBindingMode.AtlasPageTexture2D ||
                     current.AtlasPageIndex == next.AtlasPageIndex) &&
                    (next.BindingMode == BattleSpriteCentralBindingMode.AtlasTextureArray ||
+                    next.MaterialVariant == BattleSpriteReplacementFrame.MaterialVariant ||
                     current.AtlasSlice == next.AtlasSlice);
         }
 
@@ -729,6 +730,18 @@ namespace NTSD.Animation.Rendering
                 float right = left + width;
                 float bottom = command.Position.y - pivot.y * height;
                 float top = bottom + height;
+                Rect content = resource.ContentRect;
+                if (content.width > 0f && content.height > 0f &&
+                    content != new Rect(Vector2.zero, pixelSize))
+                {
+                    // Alignment contract: NTSD-M12-TRANSPARENT-TRIM-001. Mirror the crop inside the native canvas.
+                    float offsetX = command.FlipX ? pixelSize.x - content.xMax : content.x;
+                    float offsetY = command.FlipY ? pixelSize.y - content.yMax : content.y;
+                    left += offsetX * NTSDRenderSpace.UnitsPerPixelX * NTSDRenderSpace.BattleVisualScale;
+                    bottom += offsetY * NTSDRenderSpace.UnitsPerPixelY * NTSDRenderSpace.BattleVisualScale;
+                    right = left + content.width * NTSDRenderSpace.UnitsPerPixelX * NTSDRenderSpace.BattleVisualScale;
+                    top = bottom + content.height * NTSDRenderSpace.UnitsPerPixelY * NTSDRenderSpace.BattleVisualScale;
+                }
                 float z = command.Position.z;
 
                 Rect uv = resource.NormalizedUv;

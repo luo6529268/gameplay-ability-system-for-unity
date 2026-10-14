@@ -142,6 +142,23 @@ namespace NTSD.Animation.Rendering
             int atlasSlice = 0,
             BattleSpriteCentralBindingMode bindingMode = BattleSpriteCentralBindingMode.SourceTexture2D,
             int atlasPageIndex = -1)
+            : this(texture, material, normalizedUv, pixelSize, pivot, color, materialVariant,
+                atlasSlice, bindingMode, atlasPageIndex, null)
+        {
+        }
+
+        public BattleCentralResolvedResource(
+            Texture texture,
+            Material material,
+            Rect normalizedUv,
+            Vector2 pixelSize,
+            Vector2 pivot,
+            Color32 color,
+            int materialVariant,
+            int atlasSlice,
+            BattleSpriteCentralBindingMode bindingMode,
+            int atlasPageIndex,
+            Rect? contentRect)
         {
             Texture = texture;
             Material = material;
@@ -153,6 +170,7 @@ namespace NTSD.Animation.Rendering
             AtlasSlice = atlasSlice;
             BindingMode = bindingMode;
             AtlasPageIndex = atlasPageIndex;
+            ContentRect = contentRect ?? new Rect(Vector2.zero, pixelSize);
         }
 
         public Texture Texture { get; }
@@ -160,6 +178,7 @@ namespace NTSD.Animation.Rendering
         public Rect NormalizedUv { get; }
         public Vector2 PixelSize { get; }
         public Vector2 Pivot { get; }
+        public Rect ContentRect { get; }
         public Color32 Color { get; }
         public int MaterialVariant { get; }
         public int AtlasSlice { get; }
@@ -180,7 +199,7 @@ namespace NTSD.Animation.Rendering
                 MaterialVariant,
                 AtlasSlice,
                 BindingMode,
-                AtlasPageIndex);
+                AtlasPageIndex, ContentRect);
         }
     }
 
@@ -938,9 +957,12 @@ namespace NTSD.Animation.Rendering
         {
             bool expectsArray =
                 binding.Mode == BattleSpriteCentralBindingMode.AtlasTextureArray;
-            Material material = expectsArray ? arrayMaterial : fallbackMaterial;
+            BattleSpriteReplacementFrame replacement = signature.ReplacementFrame;
+            Material material = replacement != null ? replacement.CentralMaterial : expectsArray ? arrayMaterial : fallbackMaterial;
             bool materialContractValid = IsConfiguredMaterialContractValid(material, expectsArray);
-            if (!binding.IsValid || !materialContractValid)
+            if (!binding.IsValid || !materialContractValid ||
+                (replacement != null && (binding.Mode != BattleSpriteCentralBindingMode.SourceTexture2D ||
+                 binding.Texture != replacement.Texture || binding.AtlasContentPixelRect != replacement.BaseRect)))
             {
                 return BattleCentralResourceTemplate.UnresolvedWithSignature(
                     signature,
@@ -953,7 +975,7 @@ namespace NTSD.Animation.Rendering
                 binding.Texture,
                 material,
                 binding.NormalizedUv,
-                binding.AtlasSlice,
+                replacement != null ? replacement.Index : binding.AtlasSlice,
                 binding.Mode,
                 binding.AtlasPageIndex);
         }
@@ -1263,6 +1285,8 @@ namespace NTSD.Animation.Rendering
             {
                 if (!TracksMaterial)
                     return true;
+                if (Signature.ReplacementFrame != null)
+                    return ReferenceEquals(Material, Signature.ReplacementFrame.CentralMaterial);
                 Material currentMaterial =
                     BindingMode == BattleSpriteCentralBindingMode.AtlasTextureArray
                         ? currentArrayMaterial
@@ -1311,10 +1335,10 @@ namespace NTSD.Animation.Rendering
                     Signature.PixelSize,
                     Signature.Pivot,
                     command.Color,
-                    (int)Signature.MaterialSemantic,
+                    Signature.ReplacementFrame != null ? BattleSpriteReplacementFrame.MaterialVariant : (int)Signature.MaterialSemantic,
                     AtlasSlice,
                     BindingMode,
-                    AtlasPageIndex);
+                    AtlasPageIndex, Signature.ContentRect);
                 return BattleCentralResourceStatus.Resolved;
             }
         }
@@ -1361,6 +1385,9 @@ namespace NTSD.Animation.Rendering
 
             public Vector2 Pivot { get; }
             public Vector2 PixelSize { get; }
+            public BattleSpriteReplacementFrame ReplacementFrame => (TrustedResourceIdentity as BattleSpriteEntry)?.ReplacementFrame;
+            public Rect ContentRect => TrustedResourceIdentity is BattleSpriteEntry entry
+                ? entry.ContentRect : new Rect(Vector2.zero, PixelSize);
             public BattleSpriteMaterialSemantic MaterialSemantic { get; }
             private BattleRenderCommandType CommandType { get; }
             private int VisualDataId { get; }
